@@ -899,6 +899,10 @@
         {
           "name": "a highlight that TRAVELS along a length",
           "source": "docs/portable/OPERATOR-RULINGS.md:3329 (E99 s99)"
+        },
+        {
+          "name": "Traced state along a schematic",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:655"
         }
       ],
       "does": "On its word a light runs along one stretch of a drawn line, from one datum to another, and holds there lit; the rest of the line keeps its ink. It moves because it travels (E99 s99); a comet head may ride its leading edge.",
@@ -908,7 +912,7 @@
         "SPANS"
       ],
       "author": {
-        "key": "species[] {\"kind\": \"lit_stretch\", \"at\", \"dur\", \"from\", \"to\", \"series\"?, \"color\"?, \"comet\"?} on a ledger row; from/to are two datum indices or two 0..1 x-fractions",
+        "key": "species[] {\"kind\": \"lit_stretch\", \"at\", \"dur\", \"from\", \"to\", \"series\"?, \"color\"?, \"comet\"?, \"phase_ink\"?} on a ledger row; from/to are two datum indices or two 0..1 x-fractions",
         "example": "{\"kind\": \"lit_stretch\", \"at\": 10.62, \"dur\": 1.56, \"from\": 53, \"to\": 139, \"comet\": True}",
         "example_source": "content/video_engine/tests/golden/build_golden_sources.py (lit-stretch-crash)",
         "check": "species"
@@ -959,6 +963,11 @@
         {
           "token": "comet",
           "means": "`comet: true`: a bright head with a halo rides the light's leading edge (A13) and fades once it lands.",
+          "source_set": null
+        },
+        {
+          "token": "phase_ink",
+          "means": "A55 (USE-WHEN :655, 'we are here' on a phase model): on a schematic whose phases name an `ink`, the light paints each phase it passes in it; refused beside `color` or off a schematic",
           "source_set": null
         }
       ],
@@ -1695,6 +1704,126 @@
       "proof": {
         "golden": null,
         "test": "content/video_engine/tests/test_page_performs.py::test_m21_the_deployed_life_runs_from_the_last_data_mark_to_the_exit_or_the_undraw",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "page_species:datum_badge",
+      "axis": "page_species",
+      "token": "datum_badge",
+      "title": "The datum badge: a tick or a cross on the datum it judges",
+      "aliases": [
+        {
+          "name": "✓ / ✗ badges on tiles or data",
+          "source": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md:106"
+        },
+        {
+          "name": "✓ / ✗ badges",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:995"
+        },
+        {
+          "name": "Axis-free \"Market\" motif with repeated X marks",
+          "source": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md:85"
+        }
+      ],
+      "does": "On its word a filled disc springs in ON a datum - a tick for what held, a cross for what failed - on a line page's datum or a schematic's turning point; a list sweeps in left to right. No words, no value.",
+      "when": null,
+      "when_source": null,
+      "serves": [
+        "RETRACTS"
+      ],
+      "author": {
+        "key": "species[] {\"kind\": \"datum_badge\", \"at\", \"dur\", \"glyph\": \"tick\"|\"cross\", \"target\": {\"kind\": \"datum\", \"series\"?, \"index\"} | {\"kind\": \"vertex\", \"index\"} | [up to 12 of them], \"keep\"?} on a ledger LINE row (a vertex only on a schematic, a datum never on one)",
+        "example": "{\"kind\": \"datum_badge\", \"at\": 9.55, \"dur\": 1.375, \"glyph\": \"cross\", \"target\": [{\"kind\": \"vertex\", \"index\": 1}, {\"kind\": \"vertex\", \"index\": 3}, {\"kind\": \"vertex\", \"index\": 5}, {\"kind\": \"vertex\", \"index\": 7}]}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py (schematic-motif)",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "the disc springs in",
+          "does": "a disc in the neg ink (cross) or the pos ink (tick) pops about the datum from 0.3 of its size with the failed link's overshoot, fading up; a list's discs follow one another left to right",
+          "trigger": "the species' `at`, each target STAGGER_S after the one before",
+          "dials": {
+            "D_PX": "42",
+            "STAGGER_S": "0.03",
+            "FAIL_POP_FROM": "0.3",
+            "FAIL_MP": "0.3",
+            "FAIL_POP_S": "0.83"
+          }
+        },
+        {
+          "name": "the mark is struck",
+          "does": "the X's two strokes (white) or the check's two strokes (charcoal) are drawn across the disc; then the badge holds on its datum, carried by a rescale, and glows in its own ink",
+          "trigger": "CHIP.CROSS_S from the disc's word",
+          "dials": {
+            "CROSS_S": "0.5",
+            "FAIL_X": "0.53",
+            "FAIL_X_W": "0.12",
+            "TICK_W": "0.2",
+            "GLOW_K": "0.5"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "Bravos JPN 06:40 (nB1eXWQlW58): X badges pinning two endpoints, a filled crimson disc, a white X",
+          "became": "the badge on a datum, its size",
+          "record": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:995",
+          "tie": "recorded"
+        },
+        {
+          "source": "Bravos JPN 09:09 (the \"Market\" motif): an X on every turning point, swept in left to right",
+          "became": "the vertex target and the stagger",
+          "record": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:989",
+          "tie": "recorded"
+        },
+        {
+          "source": "P71 T17's failed-link disc (species/flow.mjs FLOW.FAIL_*) and P71 T12's check badge (species/chip.mjs CHIP)",
+          "became": "the cross's and the tick's discs, marks and pop - one law, reused",
+          "record": "content/video_engine/scripts/species/flow.mjs",
+          "tie": "recorded"
+        }
+      ],
+      "options": [
+        {
+          "token": "glyph",
+          "means": "`tick` (what held: T12's positive disc, a charcoal check) or `cross` (what failed: T17's neg disc, a white X).",
+          "source_set": "DATUM_BADGE_GLYPHS"
+        },
+        {
+          "token": "target",
+          "means": "`{kind: datum, series?, index}` a line page's datum; `{kind: vertex, index}` the k-th turning point of a schematic (the motif's eight); or a list of up to 12, swept in in its order.",
+          "source_set": "DATUM_BADGE_TARGETS"
+        }
+      ],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "lpPaintDatumBadges",
+        "also": [
+          "lpBuildDatumBadges",
+          "lpBadgePose",
+          "LP_BADGE"
+        ],
+        "note": "build_scene_timeline_f._validate_datum_badge / check_datum_badge; ledger_page.series_vertices"
+      },
+      "doctrine": [
+        "P71 T20",
+        "E99 s109 (1)",
+        "E99 s130",
+        "E99 s128",
+        "E99 s106",
+        "R26-219"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "schematic-motif",
+        "test": "content/video_engine/tests/test_schematic_illustrations.py::test_the_motif_is_axis_free_and_an_x_lands_on_each_named_vertex",
         "first_use": null
       },
       "callable": {

@@ -5,7 +5,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { LIT, litStretchPts, litLength, litCut, litClipX, litPose, litLeave, litPathD, litDrawnX,
-         paintLitStretch } from "../../scripts/species/lit_stretch.mjs";
+         litXRange, litPhaseParts, paintLitStretch } from "../../scripts/species/lit_stretch.mjs";
 
 const near = (a, b, eps = 1e-6) => Math.abs(a - b) <= eps;
 /* lpPointsNow's own shape: the PAGE's datum index and the point in the chart's viewBox */
@@ -153,6 +153,37 @@ test("THE PAINTER hides the light when an edge leaves the window, and fades it o
   assert.equal(b.g.a.opacity, "0.500");
   paintLitStretch(b, 16, { paths: [] }, ctx(line(101)));
   assert.equal(b.g.a.opacity, "0");
+});
+
+// ---------------------------------------------------------------- P71 T20 / A55: the traced state
+test("litXRange cuts a path at two x and keeps its own order (a light that runs right to left too)", () => {
+  const pts = [[100, 0], [200, 10], [300, 20], [400, 30]];
+  assert.deepEqual(litXRange(pts, 150, 350), [[[150, 5], [200, 10], [300, 20], [350, 25]]]);
+  const back = litXRange([...pts].reverse(), 150, 350);
+  assert.deepEqual(back, [[[350, 25], [300, 20], [200, 10], [150, 5]]], "reversed: the same piece, in travel order");
+  assert.deepEqual(litXRange(pts, 500, 600), [], "outside: nothing");
+  assert.deepEqual(litXRange(pts, 100.2, 100.4), [], "a sliver under MIN_LEN is nothing (E50)");
+});
+
+test("litPhaseParts shares the lit path out: each inked phase its own pieces, the rest the light's", () => {
+  const pts = [[0, 0], [100, 0], [200, 0], [300, 0], [400, 0]];
+  const parts = litPhaseParts(pts, [{ x0: 100, x1: 200 }, { x0: 300, x1: 350 }]);
+  assert.deepEqual(parts.inked, [[[[100, 0], [200, 0]]], [[[300, 0], [350, 0]]]]);
+  assert.deepEqual(parts.rest, [[[0, 0], [100, 0]], [[200, 0], [300, 0]], [[350, 0], [400, 0]]]);
+});
+
+test("THE PAINTER with phase cores: each phase lit in its own core, the head in the ink of the phase it is in", () => {
+  const pts = line(101), st = { paths: [] };
+  const segs = [{ x0: 100, x1: 400, ink: "var(--lp-pos)", core: rec() }, { x0: 400, x1: 900, ink: "var(--lp-neg)", core: rec() }];
+  const b = Object.assign(built({ comet: true, from: 0, to: 100 }), { segs, col: "#F5B72E" });
+  paintLitStretch(b, 10 + 0.25 * 2 * LIT.TRAVEL, st, ctx(pts));   /* the head a little way in: inside the first phase */
+  assert.ok(segs[0].core.a.d.startsWith("M100.0"), segs[0].core.a.d);
+  assert.equal(segs[1].core.a.d, "", "a phase the head has not reached is dark");
+  assert.equal(b.core.a.d, "", "every lit part is inside an inked phase");
+  assert.equal(b.head.a.fill, "var(--lp-pos)");
+  paintLitStretch(b, 20, st, ctx(pts));
+  assert.ok(segs[1].core.a.d.endsWith("900.0 200.0"), segs[1].core.a.d);
+  assert.equal(b.head.a.fill, "var(--lp-neg)", "the head wears its phase's ink");
 });
 
 test("the painter reaches the engine ONLY through ctx and its state - no clock, no random, no DOM of its own", async () => {

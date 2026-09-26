@@ -1148,15 +1148,16 @@ def bar_style_error(page: dict, value: Any, builder: str) -> str | None:
 #   E99 s125 (a REAL series laid over a schematic, on its own labelled axis) is P71's. Nothing here prevents it: the
 # shape is `spec.series[0]` on x in [0, 1], and `spec.schematic` names its phases in the same fractions.
 SCHEMATIC_KEY = "schematic"
-SCHEMATIC_SHAPES = ("hype", "waves", "debt_cycle")
-SCHEMATIC_NAMES = {"hype": "Hype cycle", "waves": "Phase waves", "debt_cycle": "Debt cycle"}   # the series' name (the record;
+SCHEMATIC_SHAPES = ("hype", "waves", "debt_cycle", "candles", "motif")   # P71 T20: + the two illustrations
+SCHEMATIC_NAMES = {"hype": "Hype cycle", "waves": "Phase waves", "debt_cycle": "Debt cycle",
+                   "candles": "Price action", "motif": "Motif"}   # the series' name (the record;
 #   the page writes no end tag - the title names the one shape, s120 (3))
 SCHEMATIC_N = 121                          # the generated points: x steps of 1/120 - a dense line, never a bars page
 SCHEMATIC_N_RANGE = (STORY_MAX_VALUES + 1, 401)   # fewer than the story ceiling would read as a story page's values
 SCHEMATIC_PHASES_MAX = 6
 SCHEMATIC_NAME_MAX = 40
 SCHEMATIC_FIELDS = ("shape", "phases", "n", "name", "color")
-SCHEMATIC_PHASE_FIELDS = ("name", "from", "to", "side")
+SCHEMATIC_PHASE_FIELDS = ("name", "from", "to", "side", "ink")   # P71 T20 / A55: + the phase's own ink (the comet paints it)
 SCHEMATIC_SIDES = ("above", "below")      # a phase's name over or under the curve (absent: the engine's concavity rule)
 SCHEMATIC_INKS = ("teal", "crimson", "cobalt", "amber")   # E67's electric inks (the engine's LP_CYCLE)
 SCHEMATIC_INK = "teal"                    # declared, so the lone line never takes a SIGN colour: a shape rises, it gains nothing
@@ -1170,6 +1171,30 @@ SCHEMATIC_DATA_KEYS = ("series", "pts", "bars", "panels", "tiers", "shares", "pr
 SCHEMATIC_AXES_KEPT = ("ylabel", "name_clear", "readability")   # words and the page's own profile; every other axes key is a value
 SCHEMATIC_TEXT_SPECIES = {"bracket": ("label", "sub"), "figure": ("text", "sub"), "note": ("text",), "span": ("label",)}
 DIGIT_RE = re.compile(r"\d")
+# ---- P71 T20 (was P69 T62; the Bravos harvest v2 T8, T46, A14, A55) / E99 s109 (1): ILLUSTRATIONS DRAWN AS SCHEMATICS ----
+#   `candles` (T8, BUB 04:47.3): candlestick bodies and wicks GENERATED along a GHOST wave - price action as an
+# illustration, never a series. The line the page draws is the ghost (context: `deemph`, it never blooms, E99 s117); the
+# candles ride it, each printing as the pen passes its x, green up / red down in the page's sign inks. `schematic_candles`
+# generates them from the ghost (pure: an integer LCG jitters them, never a float hash), the spec carries them, the player
+# draws them - no value is written, and the tag stays.
+#   `motif` (T46, JPN 09:09-09:11 "Market"): an AXIS-FREE rising wave named by one word (the page's title): no axis rule,
+# no tick, no label on either side - a `ylabel` beside it is refused by name. Its turning points are where a
+# `datum_badge` lands (`vertex: k`, `schematic_vertices`) - the X at each named vertex.
+#   A phase may name its `ink` (A55): a `lit_stretch` with `phase_ink: true` paints each phase it passes in that ink.
+#   Neither illustration names phases (a price chart and a motif are not phase models): `phases` is optional on these two
+# and still required on the three phase models.
+SCHEMATIC_ILLUSTRATIONS = ("candles", "motif")   # phases optional: absent is none (an empty list is still refused)
+SCHEMATIC_AXIS_FREE = ("motif",)                 # the player draws no axis rule (the spec block's `axis_free`)
+SCHEMATIC_GHOST = "deemph"                       # the candles' ghost wave: context, never blooms (E99 s117)
+SCHEMATIC_PHASE_INKS = SCHEMATIC_INKS + ("pos", "neg")   # A55: a phase's ink - E67's four, or a sign ink (BOOM 09:45-10:04 green / red)
+SCHEMATIC_CANDLES = 30          # [MEASURED: ~30 candles across the panel, BUB 04:47.3 frame_0025.jpg]
+SCHEMATIC_CANDLE_OC = 0.5       # open / close read off the ghost at the candle's pitch edges (a candle spans its own stretch of the wave)
+SCHEMATIC_CANDLE_JITTER = 0.07  # [DERIVED, the frame read against BUB 04:47.3: bodies 7-17 % of the panel] a body's ends wander this far off the ghost (price action, not a trace)
+SCHEMATIC_CANDLE_WICK = (0.015, 0.06)   # a wick reaches this far past its body (min, max; the LCG picks between)
+SCHEMATIC_CANDLE_BODY_MIN = 0.025        # a body never thinner than this (a doji would hide its colour: the first frame read drew "+" marks)
+SCHEMATIC_CANDLE_SEED = 7120             # the LCG's seed (P71 T20): fixed, so the same object draws the same candles
+SCHEMATIC_ILLUSTRATION_DOMAIN = (-0.08, 1.08)   # [DERIVED, the first frame read] an illustration that names no phase needs no room
+#                                          for names: the shape fills its plot (JPN 09:09's motif fills its panel)
 
 
 def _smooth01(u: float) -> float:
@@ -1194,7 +1219,18 @@ def _debt_cycle_y(x: float) -> float:
     return rise - fall + 0.04 * math.sin(12.0 * math.pi * x) * (1.0 - 0.6 * _smooth01((x - 0.8) / 0.1))
 
 
-SCHEMATIC_FORMS = {"hype": _hype_y, "waves": _waves_y, "debt_cycle": _debt_cycle_y}
+def _candles_y(x: float) -> float:
+    """The candles' GHOST wave: one and a half cycles from a trough (BUB 04:35-04:47's sine, left faded under the candles)."""
+    return 0.5 - 0.3 * math.cos(3.0 * math.pi * x)
+
+
+def _motif_y(x: float) -> float:
+    """The motif: a wave of growing swings on a rising trend, from a trough at the bottom-left to past its last peak on a
+    rise (JPN 09:09 "Market") - eight interior turning points."""
+    return 0.1 + 0.55 * x - (0.1 + 0.12 * x) * math.cos(2.0 * math.pi * 4.4 * x)
+
+
+SCHEMATIC_FORMS = {"hype": _hype_y, "waves": _waves_y, "debt_cycle": _debt_cycle_y, "candles": _candles_y, "motif": _motif_y}
 
 
 def schematic_series(schematic: dict) -> dict:
@@ -1203,9 +1239,67 @@ def schematic_series(schematic: dict) -> dict:
     n = int(schematic.get("n") or SCHEMATIC_N)
     f = SCHEMATIC_FORMS[str(schematic["shape"])]
     xs = [i / (n - 1) for i in range(n)]
+    ghost = str(schematic["shape"]) == "candles"   # P71 T20: the candles' line is their ghost - context, never an ink of its own
     return {"name": str(schematic.get("name") or SCHEMATIC_NAMES[str(schematic["shape"])]),
-            "color": str(schematic.get("color") or SCHEMATIC_INK),
+            "color": SCHEMATIC_GHOST if ghost else str(schematic.get("color") or SCHEMATIC_INK),
             "pts": [[round(x, 4), round(min(1.0, max(0.0, f(x))), 4)] for x in xs]}
+
+
+def schematic_vertices(schematic: dict) -> list[int]:
+    """P71 T20: the generated series' INTERIOR turning points, as indices into its points - where the slope changes sign
+    (a flat run turns at its first point). The player reads the same rule off the same numbers (lpSchematicVertices), so a
+    `datum_badge` naming `vertex: k` lands on the k-th. Pure."""
+    return series_vertices(schematic_series(schematic)["pts"])
+
+
+def series_vertices(pts: list) -> list[int]:
+    """The interior turning points of a run of [x, y] points (schematic_vertices' rule, on any points): the index where the
+    slope changes sign, a flat run turning at its first point. Pure."""
+    out: list[int] = []
+    sign, start = 0, 0   # the last non-zero slope's sign, and the index its run of flat steps began at
+    for k in range(1, len(pts)):
+        d = pts[k][1] - pts[k - 1][1]
+        if d == 0:
+            continue
+        s = 1 if d > 0 else -1
+        if sign and s != sign:
+            out.append(start)
+        sign, start = s, k
+    return out
+
+
+def _lcg(seed: int):
+    """A 31-bit linear congruential generator: the same floats on every platform (no float hash, no `random` state)."""
+    state = seed & 0x7FFFFFFF
+    while True:
+        state = (1103515245 * state + 12345) & 0x7FFFFFFF
+        yield state / 2147483648.0
+
+
+def schematic_candles(schematic: dict) -> list[list[float]]:
+    """P71 T20: the candles along the ghost wave - [x, open, high, low, close] each (4 dp), SCHEMATIC_CANDLES of them
+    centred on their pitch. Open and close are the ghost's own y SCHEMATIC_CANDLE_OC of a pitch before and after the
+    centre, each wandering +-SCHEMATIC_CANDLE_JITTER; the wicks reach past the body; a body is never thinner than
+    SCHEMATIC_CANDLE_BODY_MIN. Everything stays inside [0, 1] (the shape's room). Pure and deterministic."""
+    n, r = SCHEMATIC_CANDLES, _lcg(SCHEMATIC_CANDLE_SEED)
+    lo, hi = SCHEMATIC_CANDLE_WICK
+    out: list[list[float]] = []
+    for k in range(n):
+        x = (k + 0.5) / n
+        o = _candles_y(x - SCHEMATIC_CANDLE_OC / n) + (2.0 * next(r) - 1.0) * SCHEMATIC_CANDLE_JITTER
+        c = _candles_y(x + SCHEMATIC_CANDLE_OC / n) + (2.0 * next(r) - 1.0) * SCHEMATIC_CANDLE_JITTER
+        if abs(c - o) < SCHEMATIC_CANDLE_BODY_MIN:   # keep its colour readable: widen about the middle, the way it leaned
+            m, s = (o + c) / 2.0, (1.0 if c >= o else -1.0)
+            o, c = m - s * SCHEMATIC_CANDLE_BODY_MIN / 2.0, m + s * SCHEMATIC_CANDLE_BODY_MIN / 2.0
+        o, c = _unit(o), _unit(c)
+        h = _unit(max(o, c) + lo + (hi - lo) * next(r))
+        low = _unit(min(o, c) - lo - (hi - lo) * next(r))
+        out.append([round(x, 4), round(o, 4), round(h, 4), round(low, 4), round(c, 4)])
+    return out
+
+
+def _unit(v: float) -> float:
+    return min(1.0, max(0.0, v))
 
 
 def with_schematic(series: dict) -> dict:
@@ -1223,8 +1317,23 @@ def schematic_block(schematic: dict) -> dict:
         entry = {"name": str(p["name"]), "from": float(to_number(p["from"])), "to": float(to_number(p["to"]))}
         if p.get("side") in SCHEMATIC_SIDES:
             entry["side"] = p["side"]
+        if p.get("ink") in SCHEMATIC_PHASE_INKS:   # P71 T20 / A55 (absent: not one key)
+            entry["ink"] = p["ink"]
         phases.append(entry)
-    return {"shape": str(schematic["shape"]), "tag": SCHEMATIC_TAG, "phases": phases}
+    block = {"shape": str(schematic["shape"]), "tag": SCHEMATIC_TAG, "phases": phases}
+    if block["shape"] == "candles":   # P71 T20: the candles the player draws along the ghost (only on this shape)
+        block["candles"] = schematic_candles(schematic)
+    if block["shape"] in SCHEMATIC_AXIS_FREE:   # P71 T20: the motif draws no axis rule (only on this shape)
+        block["axis_free"] = True
+    return block
+
+
+def schematic_domain(schematic: dict) -> tuple:
+    """The page's y domain round the shape: SCHEMATIC_DOMAIN (room for the phase names), or - P71 T20 - an illustration
+    that names no phase fills its plot (SCHEMATIC_ILLUSTRATION_DOMAIN)."""
+    if schematic.get("shape") in SCHEMATIC_ILLUSTRATIONS and not schematic.get("phases"):
+        return SCHEMATIC_ILLUSTRATION_DOMAIN
+    return SCHEMATIC_DOMAIN
 
 
 def _schematic_phase_errors(phases: Any) -> list[str]:
@@ -1263,6 +1372,9 @@ def _schematic_phase_errors(phases: Any) -> list[str]:
         if "side" in p and p["side"] not in SCHEMATIC_SIDES:
             errs.append(f"{where}: side must be above or below (the name over or under the curve; absent = the "
                         "curve's own shape decides)")
+        if "ink" in p and p["ink"] not in SCHEMATIC_PHASE_INKS:   # P71 T20 / A55
+            errs.append(f"{where}: ink must be one of {'|'.join(SCHEMATIC_PHASE_INKS)} (the ink a `lit_stretch` with "
+                        "`phase_ink` paints this phase in; absent = the light's own)")
     return errs
 
 
@@ -1297,7 +1409,23 @@ def _validate_schematic(series: dict, variant: str) -> list[str]:
         errs.append("schematic: name must be a non-empty string (the series' name on record - never drawn; absent = the shape's own)")
     if "color" in sch and sch["color"] not in SCHEMATIC_INKS:
         errs.append(f"schematic: color must be one of {'|'.join(SCHEMATIC_INKS)} (absent = {SCHEMATIC_INK})")
+    errs += _schematic_illustration_errors(series, sch)
+    if sch.get("shape") in SCHEMATIC_ILLUSTRATIONS and "phases" not in sch:   # P71 T20: an illustration names no phases
+        return errs
     return errs + _schematic_phase_errors(sch.get("phases"))
+
+
+def _schematic_illustration_errors(series: dict, sch: dict) -> list[str]:
+    """P71 T20: the two illustrations' own refusals, by name. A candles schematic's line is its ghost (context) and its
+    bodies wear the sign inks, so it takes no `color`; the motif is axis-free, so a `ylabel` beside it has no axis."""
+    errs: list[str] = []
+    if sch.get("shape") == "candles" and "color" in sch:
+        errs.append("schematic: a candles schematic takes no color - its line is the ghost wave (context, never "
+                    "bloomed, E99 s117) and each candle wears the page's sign ink, up or down")
+    if sch.get("shape") in SCHEMATIC_AXIS_FREE and "ylabel" in series:
+        errs.append(f"'ylabel' beside a {sch.get('shape')}: the motif is axis-free - no axis rule, no tick, no label "
+                    f"on either side; the page's title names it in one word ({SCHEMATIC_RULING})")
+    return errs
 
 
 def schematic_text_errors(page: dict, species: list) -> list[str]:
@@ -3296,7 +3424,7 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
         spec.update(_dense_block(series))
         if isinstance(series.get(SCHEMATIC_KEY), dict):   # P70 T2: the shape, its phases and its tag (absent: not one key)
             spec[SCHEMATIC_KEY] = schematic_block(series[SCHEMATIC_KEY])
-            spec["axes"]["domain"] = list(SCHEMATIC_DOMAIN)   # the shape floats with its names' room; no tick writes it
+            spec["axes"]["domain"] = list(schematic_domain(series[SCHEMATIC_KEY]))   # the shape floats with its names' room; no tick writes it
         if isinstance(series.get(Y2_KEY), dict):   # P71 T13 / s102: the second axis (absent: not one key)
             spec[Y2_KEY] = y2_block(series)
             if y2_warnings(series):

@@ -142,6 +142,37 @@ export const litLeave = (lv, t) => (lv && Number.isFinite(+lv.at) ? minJerk(lit0
 
 export const litPathD = (pts) => (pts || []).map(([x, y], k) => (k ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ");
 
+/* P71 T20 / A55: THE PART OF A LIT PATH INSIDE [xa, xb] - its pieces (each a polyline, cut at the two x), in its own order.
+   A schematic's x runs one way along its line, so a phase is an x range. Pieces shorter than MIN_LEN are nothing. */
+export const litXRange = (pts, xa, xb) => {
+  const out = [];
+  let cur = null;
+  for (let k = 1; k < (pts || []).length; k++) {
+    const p = pts[k - 1], q = pts[k], dx = q[0] - p[0];
+    let t0 = 0, t1 = 1;
+    if (dx === 0) { if (p[0] < xa || p[0] > xb) { cur = null; continue; } }
+    else { const a = (xa - p[0]) / dx, b = (xb - p[0]) / dx; t0 = Math.max(0, Math.min(a, b)); t1 = Math.min(1, Math.max(a, b)); }
+    if (t0 >= t1) { cur = null; continue; }   /* outside, or touching the range at one point (the piece before already ends there) */
+    const at = (u) => [p[0] + dx * u, p[1] + (q[1] - p[1]) * u];
+    if (cur && t0 === 0) cur.push(at(t1));
+    else { cur = [at(t0), at(t1)]; out.push(cur); }
+    if (t1 < 1) cur = null;
+  }
+  return out.filter((piece) => litLength(piece) >= LIT.MIN_LEN);
+};
+
+/* ... and the whole lit path shared out: each inked phase's pieces (`segs` [{x0, x1}], x0 < x1, in the order built) and
+   the REST - the pieces outside every inked phase, which the light's own core paints */
+export const litPhaseParts = (pts, segs) => {
+  const inked = (segs || []).map((sg) => litXRange(pts, sg.x0, sg.x1));
+  const edges = [...(segs || [])].sort((a, b) => a.x0 - b.x0);
+  const rest = [];
+  let from = -Infinity;
+  for (const sg of edges) { if (sg.x0 > from) rest.push(...litXRange(pts, from, sg.x0)); from = Math.max(from, sg.x1); }
+  rest.push(...litXRange(pts, from, Infinity));
+  return { inked, rest };
+};
+
 /* THE PAINTER (P69 T36). `sd` is the perform layer's built light (`g`, the lit `core` path, the comet `head` or null,
    the series `si`, the declaration `sp` and its resolved `leave`), `st` the page state and `ctx` the PAGE species
    context - `pointsNow` is lpPointsNow, handed in by name, so `node --test` calls this with recorders and no DOM. */
@@ -154,12 +185,17 @@ export const paintLitStretch = (sd, t, st, ctx) => {
   const S = spanActiveState(st);
   const lit = litClipX(litCut(full, pose.u * litLength(full)), litDrawnX((S && S.paths) || [], sd.si));
   if (lit.length < 2 || litLength(lit) < LIT.MIN_LEN) { hide(); return; }
-  sd.core.setAttribute("d", litPathD(lit));
+  if (sd.segs) {   /* P71 T20 / A55: the traced state - each inked phase's stretch in its own core, the rest in the light's */
+    const parts = litPhaseParts(lit, sd.segs);
+    sd.core.setAttribute("d", parts.rest.map(litPathD).join(" "));
+    sd.segs.forEach((sg, k) => sg.core.setAttribute("d", parts.inked[k].map(litPathD).join(" ")));
+  } else sd.core.setAttribute("d", litPathD(lit));
   sd.g.setAttribute("opacity", (1 - lv).toFixed(3));
   if (sd.head) {
     const [hx, hy] = lit[lit.length - 1];
     sd.head.setAttribute("cx", hx.toFixed(1)); sd.head.setAttribute("cy", hy.toFixed(1));
     sd.head.setAttribute("opacity", pose.head.toFixed(3));
+    if (sd.segs) { const sg = sd.segs.find((q) => hx >= q.x0 && hx <= q.x1); sd.head.setAttribute("fill", sg ? sg.ink : sd.col); }   /* A55: the head wears its phase's ink */
   }
 };
 

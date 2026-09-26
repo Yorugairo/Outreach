@@ -870,7 +870,7 @@ PAGE_SPECIES += (SPECIES_LIT_STRETCH,)
 SPECIES_WHEN[SPECIES_LIT_STRETCH] = ("the sentence WALKS one stretch of a drawn line ('the fall', 'the run-up') at the proof "
                                      "or the turn - a light travels it on the word and holds; never when the whole line "
                                      "is the claim, the stretch is undrawn, or the light would only sit")
-LIT_STRETCH_KEYS = ("kind", "at", "dur", "id", "from", "to", "series", "color", "comet", "panel")
+LIT_STRETCH_KEYS = ("kind", "at", "dur", "id", "from", "to", "series", "color", "comet", "panel", "phase_ink")   # P71 T20 / A55: + phase_ink
 PANEL_SPECIES += (SPECIES_LIT_STRETCH,)   # P69 T36: a light travels a line on ONE panel of a panels page (`panel: <i>`; row 21)
 # P69 T37 - SOLO, THE ON-WORD ISOLATE (the Bravos harvest v2's rank 2: A12 "peers ghost, one series stays lit", 8 of 9
 # videos; A49 "one bar ignites, the rest dim"). A PAGE species: on its word every OTHER series of a line page, or every
@@ -990,6 +990,29 @@ LENS_KEYS = ("kind", "at", "dur", "from", "to", "series", "zoom", *ROW_PATH_KEYS
 LENS_ZOOM_DEFAULT = 1.0   # species/lens.mjs LENS.ZOOM - Bravos measured (STK 557.5: k 1.0 explains 84 % of the in-glass ink)
 LENS_ZOOM_MAX = 4.0       # species/lens.mjs LENS.ZOOM_MAX - [DERIVED] a ceiling, not a finding
 LENS_BUILDERS = ("dense-line",)   # the pages whose marks are a drawn LINE the glass can redraw
+# P71 T20 (was P69 T62; the Bravos harvest v2's A14 "a tick / an X on tiles or data", n=4; T46's X at each vertex) - THE
+# DATUM BADGE. A PAGE species: on its word a filled disc springs in ON a datum - a tick (what held) or a cross (what
+# failed) struck across it - on a line page's datum (`{kind: datum, series?, index}`, JPN 06:40 "X pins the two
+# endpoints") or on a SCHEMATIC's turning point (`{kind: vertex, index}`: the k-th, ledger_page.schematic_vertices - the
+# motif's X at each named vertex, JPN 09:09). A list of targets sweeps in left to right in its order, DATUM_BADGE_STAGGER_S
+# apart. The cross is T17's failed-link disc (the neg ink, a white X); the tick is T12's check badge (the pos ink, a
+# charcoal check). It WRITES no words and carries no value; it is ink on its page, so it leaves with it
+# (PAGE_BOUND_SPECIES). Its truth (hard, `check_datum_badge`): a datum the page has, a vertex the shape has; a datum is
+# never named on a schematic (it has no data - name the vertex) and a vertex never on a data page.
+SPECIES_DATUM_BADGE = "datum_badge"
+SPECIES_KINDS += (SPECIES_DATUM_BADGE,)
+PAGE_SPECIES += (SPECIES_DATUM_BADGE,)
+PAGE_BOUND_SPECIES += (SPECIES_DATUM_BADGE,)   # R26-219: a mark on the page's data leaves with the page
+SPECIES_WHEN[SPECIES_DATUM_BADGE] = ("RETRACTS, at the turn: a set JUDGED item by item on the chart - a tick for what held, "
+                                     "an X for what failed ('none of these calls played out'), on the datum or the "
+                                     "turning point the sentence judges; never an X over a picture (keep it on the data)")
+DATUM_BADGE_KEYS = ("kind", "at", "dur", "glyph", "target", "keep", *ROW_PATH_KEYS, "leave_at", "leave_s", "leave_clamped")
+DATUM_BADGE_GLYPHS = ("tick", "cross")      # T12's check and T17's X - what held, what failed
+DATUM_BADGE_TARGETS = ("datum", "vertex")   # a line page's datum, a schematic's turning point
+DATUM_BADGE_MAX = 12                        # [DERIVED: JPN 09:09's eight, with room] past this a row is a table, not a verdict
+DATUM_BADGE_STAGGER_S = 0.03                # [MEASURED: JPN 09:09.50-09:09.70, eight discs left to right in ~0.2 s] - the engine's LP_BADGE.STAGGER_S
+DATUM_BADGE_BUILDERS = ("dense-line",)      # the pages whose marks are data on a drawn line (a schematic is one)
+
 # P71 T14 (was P69 T55; RESCOPED by the BOOM frame verification, VERIFY.md row T32) - THE DECADE RULER. A STAGE species:
 # a full-width ruler (a tick a year, a taller one each five, the tallest each decade under a large faded numeral) enters
 # at the stage's right edge, SCROLLS left from `from` and lands with its `settle` decades framed, then holds - a GROUND
@@ -2193,6 +2216,7 @@ SPECIES_TARGETS[SPECIES_LIT_STRETCH] = ()   # P69 T36: like the span, a lit stre
 SPECIES_TARGETS[SPECIES_LEVEL_JOIN] = ()   # P71 T10: a level join names its two ends as DATA; the chart owns where they are
 SPECIES_TARGETS[SPECIES_RULER] = ()   # P71 T14: the ruler is the stage's full width at its line - it points at nothing
 SPECIES_TARGETS[SPECIES_LENS] = ()   # P71 T32: a lens names its stands as DATA (`from`, `to`); the chart owns where they are
+SPECIES_TARGETS[SPECIES_DATUM_BADGE] = ()   # P71 T20: a badge names its datum or vertex itself (`_validate_datum_badge`); the chart owns where it is
 SPECIES_TARGETS[SPECIES_SOLO] = SPECIES_TARGETS[SPECIES_UNSOLO] = ()   # P69 T37: a solo names a series or a bar by index; the chart owns where it is
 SPECIES_TARGETS[SPECIES_AXIS_TAG] = ()   # P71 T9: a tag names its x as the page's own value (a tick, a datum, a bar); the chart owns where it is
 SPECIES_TARGETS[SPECIES_FREEZE] = ("datum", "point", "region")   # P69 T49: the ONE thing the light comes on at - a datum (a
@@ -4379,6 +4403,13 @@ def _validate_lit_stretch(entry: dict) -> list[str]:
         errs.append(f"lit_stretch: color must be one of {'|'.join(BRACKET_COLORS)} (absent = the relight's sunflower)")
     if "comet" in entry and not isinstance(entry["comet"], bool):
         errs.append("lit_stretch: comet must be true or false (true: a bright head rides the light's leading edge, A13)")
+    if "phase_ink" in entry:   # P71 T20 / A55: the traced state - each phase the light passes in that phase's own ink
+        if not isinstance(entry["phase_ink"], bool):
+            errs.append("lit_stretch: phase_ink must be true or false (true: on a schematic, the light paints each phase it "
+                        "passes in the phase's own `ink`, A55)")
+        elif entry["phase_ink"] and "color" in entry:
+            errs.append("lit_stretch: phase_ink and color - the phases name the inks the light paints (A55); a colour of "
+                        "the light's own would be a second answer. Name one")
     extra = sorted(k for k in entry if k not in LIT_STRETCH_KEYS + ROW_PATH_KEYS)
     if extra:
         errs.append(f"lit_stretch: {', '.join(map(repr, extra))} - a lit stretch writes nothing and takes only "
@@ -6272,6 +6303,8 @@ def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
         errs += _validate_level_join(entry)
     if kind == SPECIES_LENS:          # P71 T32
         errs += _validate_lens(entry)
+    if kind == SPECIES_DATUM_BADGE:   # P71 T20
+        errs += _validate_datum_badge(entry)
     if kind == SPECIES_BALANCE:       # P70 T7
         errs += _validate_balance(entry)
     if kind == SPECIES_RULER:         # P71 T14
@@ -7114,7 +7147,7 @@ def _stamp_morph_page_fields(scenes: list[dict]) -> list[str]:
     return notes
 
 
-TIP_MARK_KINDS = ("ring", "callout")   # the species that draw an ellipse round their datum
+TIP_MARK_KINDS = ("ring", "callout", "datum_badge")   # the species that draw an ellipse round their datum (P71 T20: or a disc over it)
 
 
 def stamp_tip_marks(scenes: list[dict]) -> list[str]:
@@ -7133,12 +7166,15 @@ def stamp_tip_marks(scenes: list[dict]) -> list[str]:
         ser = pg.get("series") or []
         marked: set[int] = set()
         for sp in sc.get("species") or []:
-            tg = sp.get("target") or {}
-            if sp.get("kind") not in TIP_MARK_KINDS or tg.get("kind") != "datum":
+            if sp.get("kind") not in TIP_MARK_KINDS:
                 continue
-            si = int(tg.get("series") or 0)
-            if 0 <= si < len(ser) and int(tg.get("index") or 0) >= len(ser[si].get("pts") or []) - 2:
-                marked.add(si)
+            tgt = sp.get("target")
+            for tg in tgt if isinstance(tgt, list) else [tgt or {}]:   # P71 T20: a datum_badge may name a list of data
+                if not isinstance(tg, dict) or tg.get("kind") != "datum":
+                    continue
+                si = int(tg.get("series") or 0)
+                if 0 <= si < len(ser) and int(tg.get("index") or 0) >= len(ser[si].get("pts") or []) - 2:
+                    marked.add(si)
         if marked:
             pg["tip_mark"] = sorted(marked)
             notes.append(f"{sc.get('scene_id', '?')}: tip_mark={sorted(marked)} stamped - a ring or callout marks the line's last datum, so its name keeps clear")
@@ -7607,6 +7643,101 @@ def check_lens(world: dict, row_species: list) -> list[str]:
     return []
 
 
+def _datum_badge_target_errors(t, where: str) -> list[str]:
+    """One target's grammar: {kind: datum, series?, index} or {kind: vertex, index} (the shape's own - no series)."""
+    if not isinstance(t, dict) or t.get("kind") not in DATUM_BADGE_TARGETS:
+        return [f"{where}: a target is {{kind: datum, series?, index}} or {{kind: vertex, index}}, not {t!r}"]
+    errs: list[str] = []
+    if not _is_index(t.get("index")):
+        errs.append(f"{where}: index must be a non-negative integer - the datum (or the turning point) it lands on, "
+                    f"not {t.get('index')!r}")
+    if t["kind"] == "vertex" and "series" in t:
+        errs.append(f"{where}: a vertex is the shape's own turning point - a schematic draws ONE line, so it names no series")
+    elif "series" in t and not _is_index(t["series"]):
+        errs.append(f"{where}: series must be a non-negative integer series index")
+    extra = sorted(k for k in t if k not in ("kind", "index", "series"))
+    if extra:
+        errs.append(f"{where}: {', '.join(map(repr, extra))} - a target takes only kind|index|series")
+    return errs
+
+
+def _validate_datum_badge(entry: dict) -> list[str]:
+    """P71 T20: a `datum_badge`'s own fields - its `glyph` (tick | cross) and its `target`: ONE target or a list of up to
+    DATUM_BADGE_MAX, each {kind: datum, series?, index} or {kind: vertex, index}, none named twice. It writes no words and
+    carries no value: any other key is refused by name (P71's review finding 7). The page it lands on is
+    `check_datum_badge`'s."""
+    errs: list[str] = []
+    if entry.get("glyph") not in DATUM_BADGE_GLYPHS:
+        errs.append(f"datum_badge: glyph must be one of {'|'.join(DATUM_BADGE_GLYPHS)} - a tick for what held, an X for what "
+                    f"failed (A14), not {entry.get('glyph')!r}")
+    tgt = entry.get("target")
+    targets = tgt if isinstance(tgt, list) else [tgt] if isinstance(tgt, dict) else []
+    if not targets:
+        errs.append("datum_badge: a badge names its datum - `target: {kind: datum, series?, index}` or `{kind: vertex, "
+                    "index}` (a schematic's turning point), or a list of them")
+    elif len(targets) > DATUM_BADGE_MAX:
+        errs.append(f"datum_badge: {len(targets)} targets - at most {DATUM_BADGE_MAX} in one sweep (past that the row is a "
+                    "table, not a verdict)")
+    else:
+        for k, t in enumerate(targets):
+            errs += _datum_badge_target_errors(t, f"datum_badge: target[{k}]" if isinstance(tgt, list) else "datum_badge: target")
+        keys = [(t.get("kind"), t.get("series", 0) if t.get("kind") == "datum" else None, t.get("index"))
+                for t in targets if isinstance(t, dict)]
+        twice = sorted({str(k) for k in keys if keys.count(k) > 1})
+        if twice:
+            errs.append(f"datum_badge: {', '.join(twice)} named twice - one badge per datum")
+    extra = sorted(k for k in entry if k not in DATUM_BADGE_KEYS)
+    if extra:
+        errs.append(f"datum_badge: {', '.join(map(repr, extra))} - a badge writes no words and carries no value; it takes "
+                    f"only {'|'.join(k for k in DATUM_BADGE_KEYS if k not in ('kind', 'at', 'dur') + tuple(ROW_PATH_KEYS))} "
+                    "(a figure or a note says what was judged)")
+    return errs
+
+
+def check_datum_badge(world: dict, row_species: list) -> None:
+    """P71 T20: a row's `datum_badge`s on the page they land on - TRUTH rules, refused by name (ValueError): the badge
+    stands on a ledger LINE page (the page standing at its word, a recast's included); a datum target names a series and
+    a datum the page has, and never a schematic's (a shape has no data - its turning points are `vertex`); a vertex target
+    names a turning point the SHAPE has (ledger_page.series_vertices on the page's own generated line) and only on a
+    schematic. A malformed badge is the grammar's to refuse (validate_species), by name."""
+    sps = [sp for sp in (row_species or []) if isinstance(sp, dict) and sp.get("kind") == SPECIES_DATUM_BADGE
+           and not _validate_datum_badge(sp)]
+    if not sps:
+        return
+    if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER:
+        raise ValueError(f"datum_badge at {sps[0].get('at')}: a badge stands on a datum on a ledger page - this row's "
+                         f"world is a {(world or {}).get('kind') or 'plate'}")
+    for sp in sps:
+        where = f"datum_badge at {sp.get('at')}"
+        page = _lj_state(world, row_species, sp)
+        builder = str(page.get("builder") or "")
+        if builder not in DATUM_BADGE_BUILDERS:
+            raise ValueError(f"{where}: a {builder or 'plate'} page - a badge lands on a LINE page's datum or a schematic's "
+                             f"turning point ({'|'.join(DATUM_BADGE_BUILDERS)})")
+        shape = isinstance(page.get(LPG.SCHEMATIC_KEY), dict)
+        ser = page.get("series") or []
+        tgt = sp["target"]
+        for t in tgt if isinstance(tgt, list) else [tgt]:
+            i = int(t["index"])
+            if t["kind"] == "vertex":
+                if not shape:
+                    raise ValueError(f"{where}: vertex {i} - a vertex is a schematic's turning point, and this page draws "
+                                     "data: name the datum (`{kind: datum, series, index}`)")
+                n = len(LPG.series_vertices((ser[0] if ser else {}).get("pts") or []))
+                if i >= n:
+                    raise ValueError(f"{where}: vertex {i} - the shape turns {n} times (vertices 0..{n - 1})")
+                continue
+            if shape:
+                raise ValueError(f"{where}: datum {i} on a schematic - a schematic has no data ({LPG.SCHEMATIC_RULING}); "
+                                 "a mark on the shape names its turning point (`{kind: vertex, index}`)")
+            si = int(t.get("series") or 0)
+            if si >= len(ser):
+                raise ValueError(f"{where}: series {si} is not on the page (its series are 0..{len(ser) - 1})")
+            pts = ser[si].get("pts") or []
+            if i >= len(pts):
+                raise ValueError(f"{where}: datum {i} is past the series' last datum ({len(pts) - 1}, series {si})")
+
+
 def _cross_honesty(page: dict, sp: dict) -> list[str]:
     """P69 T50 / E99 s100 + s106: the census X on a treemap is judged by the two honesty tests, and a failure is a
     REPORT with its numbers, never a refusal (E53 s1's census exception (b) and (c) are superseded by them):
@@ -7650,8 +7781,30 @@ def check_schematic(world: dict, row_species: list) -> None:
     meet. ValueError names every one; a page with no schematic is untouched."""
     page = world.get("page") if isinstance(world, dict) and world.get("kind") == SPECIES_LEDGER else None
     errs = LPG.schematic_text_errors(page if isinstance(page, dict) else {}, row_species)
+    errs += _phase_ink_errors(page if isinstance(page, dict) else {}, row_species)   # P71 T20 / A55
     if errs:
         raise ValueError("; ".join(errs))
+
+
+def _phase_ink_errors(page: dict, row_species: list) -> list[str]:
+    """P71 T20 / A55: a `lit_stretch` with `phase_ink: true` paints each phase of a SCHEMATIC it passes in that phase's
+    `ink` - refused by name on a page with no schematic, and where no phase the stretch crosses names an ink (the light
+    would be the plain light it already is)."""
+    out: list[str] = []
+    for sp in row_species or []:
+        if not (isinstance(sp, dict) and sp.get("kind") == SPECIES_LIT_STRETCH and sp.get("phase_ink") is True):
+            continue
+        sch = page.get(LPG.SCHEMATIC_KEY)
+        if not isinstance(sch, dict):
+            out.append(f"lit_stretch at {sp.get('at')}: phase_ink on a page with no schematic - the phases it paints are a "
+                       "schematic's (A55); a light on data takes one `color`")
+            continue
+        a, b = sorted((float(sp.get("from") or 0.0), float(sp.get("to") or 0.0)))
+        inked = [p for p in sch.get("phases") or [] if p.get("ink") and float(p["from"]) < b and float(p["to"]) > a]
+        if not inked:
+            out.append(f"lit_stretch at {sp.get('at')}: phase_ink, but no phase it passes names an ink ({a:g}..{b:g}) - "
+                       "name each phase's `ink` on the schematic (A55), or drop phase_ink")
+    return out
 
 
 def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir: Path, sid: str | None = None) -> None:
@@ -7675,6 +7828,7 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     for _lj_note in check_level_join(world, row_species):   # P71 T10: a join's ends, its unit, its truth; a WARN on the rule
         print(f"  [WARN] {_lj_note.removeprefix('WARN ')}")
     check_lens(world, row_species)            # P71 T32: a lens magnifies a line the page draws, at data it has
+    check_datum_badge(world, row_species)     # P71 T20: a badge lands on a datum the page has, or a turning point the shape has
     check_schematic(world, row_species)       # P70 T2: a schematic writes no figure it cannot source (E99 s109 (1))
     for sp in (row_species or []):   # P48 T5: a morph moves the area under a line into another - both sides are line pages, or the refusal names the verb to use
         if isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") == "morph":

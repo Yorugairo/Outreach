@@ -82,7 +82,7 @@ ACT_SPECIES = {
     "BREAKS": ("burst", "stack", "burst:stop", "placeholder", "axis capsule"),
     "SPANS": ("bracket", "spread", "relight", "span", "lit_stretch", "level_join", "ruler"),   # P69 T36: a light that TRAVELS the stretch the sentence walks (E99 s99)
     "SETS": ("chart_to:park", "figure", "retitle", "chapter"),   # P70 T9: a long form's named act, one pill held over it (A34)
-    "RETRACTS": ("retitle", "squiggle"),
+    "RETRACTS": ("retitle", "squiggle", "datum_badge"),   # P71 T20: a set judged item by item - a tick for what held, an X for what failed (A14)
 }
 # ... and what it names as pending, by task (s5), so the line says where the better species is.
 ACT_PENDING = {

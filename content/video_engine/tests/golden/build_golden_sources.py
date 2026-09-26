@@ -4601,6 +4601,102 @@ SURFACES.update({"schematic-hype-trough": schematic_hype_trough})
 FRAME_T.update({"schematic-hype-trough": round(SCHEMATIC_LIT_AT + 0.5 * SCHEMATIC_LIT_DUR * 0.8, 3)})   # u 0.50 of the head's run (TRAVEL 0.8): 12.395
 
 
+# ---- P71 T20 (was P69 T62) / E99 s109 (1): ILLUSTRATIONS DRAWN AS SCHEMATICS ----------------------------------------------
+#   schematic-candles  THE CANDLES (the Bravos harvest v2 T8, BUB 04:47.3 "The stock can theoretically go up and up and
+#                      up"): a TEST-BED beat - T8 serves no H row (BRAVOS-USE-WHEN :574), so it is built for the catalogue
+#                      on s109 (1). The page draws the ghost wave to its first peak on the build, and the rest of it on
+#                      the word (8.0 s, 2.4 s); each candle prints as the pen crosses it. Judged half way through the
+#                      word: the candles along the wave up to the pen and none past it, green up / red down, the ghost
+#                      grey and unbloomed, no number anywhere, the tag under the axis.
+#   schematic-motif    THE MOTIF (T46, JPN 09:09 "Market") with an X at each named vertex (A14): H row 24's words - "More
+#                      bullish: builders with sold-out order books are not a house of cards" - shifted by -710.0 s so the
+#                      page has built first; on "not" (719.55 -> 9.55) an X lands on each of the rising wave's four
+#                      TROUGHS, left to right (the dips were not the collapse the sentence refuses). One word names the
+#                      line ("Memory", the page's title); no axis rule, no tick, no label; the tag stays. Judged with every
+#                      X struck and settled.
+CANDLES_ID = "ev-candles-schematic"
+CANDLES_PLATE = f"ledger:{CANDLES_ID}:line::right;idle=live"
+CANDLES_OBJECT = {
+    "title": "Price action",
+    "sub": "How a stock moves - an illustration, not a chart",
+    "src": "Shape: candlesticks along a wave - a schematic, no data",
+    "schematic": {"shape": "candles"},
+}
+CANDLES_WORD_AT, CANDLES_WORD_DUR = 8.0, 2.4   # the test-bed's word: the rest of the wave draws, and its candles print
+
+
+def schematic_candles() -> tuple[dict, dict]:
+    """P71 T20: the candles along the ghost wave, through the compiler's own path (validated, built, stamped, checked)."""
+    import tempfile
+    import build_scene_timeline_f as BST
+    peak = LPG.schematic_vertices(CANDLES_OBJECT["schematic"])[0]   # the ghost's first peak - where the build beat stops
+    last = len(LPG.schematic_series(CANDLES_OBJECT["schematic"])["pts"]) - 1
+    species = [{"kind": "build_to", "at": 0.0, "dur": 0.4, "series": 0, "target": {"kind": "datum", "index": peak}},
+               {"kind": "build_to", "at": CANDLES_WORD_AT, "dur": CANDLES_WORD_DUR, "series": 0,
+                "target": {"kind": "datum", "index": last}}]
+    assert not BST.validate_species(species, (0, 0, 0), CANDLES_PLATE), BST.validate_species(species, (0, 0, 0), CANDLES_PLATE)
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        with tempfile.TemporaryDirectory() as td:
+            objects = Path(td) / "evidence/objects"
+            objects.mkdir(parents=True)
+            (objects / f"{CANDLES_ID}.series.json").write_text(json.dumps(CANDLES_OBJECT), encoding="utf-8")
+            world = BST.world_for_plate(CANDLES_PLATE, (0, 0, 0), Path(td))
+        BST.stamp_full_stage(world["page"])
+    finally:
+        BST.ASPECT = saved
+    BST.check_schematic(world, species)
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: candlesticks printed along a ghost wave, a shape and not a series (schematic, test-bed)",
+                     scenes, {}, "16:9"), _base_uris()
+
+
+MOTIF_ID = "ev-memory-motif"
+MOTIF_PLATE = f"ledger:{MOTIF_ID}:line::right;idle=live"
+MOTIF_OBJECT = {
+    "title": "Memory",
+    "src": "Shape: a rising wave - a schematic, no data",
+    "schematic": {"shape": "motif"},
+}
+MOTIF_SHIFT = -710.0
+MOTIF_BADGE_AT = round(719.55 + MOTIF_SHIFT, 3)           # "not" (H take 719.55)
+MOTIF_BADGE_DUR = round(720.925 - 719.55, 3)             # "not a house of cards." (719.55-720.925, the H take)
+MOTIF_VERTICES = [1, 3, 5, 7]                            # the four troughs (vertex 0 is the first peak)
+
+
+def schematic_motif() -> tuple[dict, dict]:
+    """P71 T20: the axis-free motif with an X on each named vertex, through the compiler's own path."""
+    import tempfile
+    import build_scene_timeline_f as BST
+    species = [{"kind": "datum_badge", "at": MOTIF_BADGE_AT, "dur": MOTIF_BADGE_DUR, "glyph": "cross",
+                "target": [{"kind": "vertex", "index": k} for k in MOTIF_VERTICES]}]
+    assert not BST.validate_species(species, (0, 0, 0), MOTIF_PLATE), BST.validate_species(species, (0, 0, 0), MOTIF_PLATE)
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        with tempfile.TemporaryDirectory() as td:
+            objects = Path(td) / "evidence/objects"
+            objects.mkdir(parents=True)
+            (objects / f"{MOTIF_ID}.series.json").write_text(json.dumps(MOTIF_OBJECT), encoding="utf-8")
+            world = BST.world_for_plate(MOTIF_PLATE, (0, 0, 0), Path(td))
+        BST.stamp_full_stage(world["page"])
+    finally:
+        BST.ASPECT = saved
+    BST.check_datum_badge(world, species)
+    BST.check_schematic(world, species)
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: the axis-free motif, an X landing on each named trough (schematic + datum_badge)",
+                     scenes, {}, "16:9"), _base_uris()
+
+
+SURFACES.update({"schematic-candles": schematic_candles, "schematic-motif": schematic_motif})
+FRAME_T.update({"schematic-candles": round(CANDLES_WORD_AT + 0.125 * CANDLES_WORD_DUR, 3),   # an eighth into the word (the pen law is front-loaded - 22 of 30 printed): 8.3
+                "schematic-motif": round(MOTIF_BADGE_AT + 1.25, 3)})                        # every X struck and settled: 10.8
+
+
 # ---- P70 T13: THE DRIFT-HOLD on a real held card -------------------------------------------------------------------
 #   drift-hold-tripwire  Steel and Paper H row 22's board (dock-h-tripwire-board) as the chart card it is: the committed
 #                        object's own checklist (ev-tripwire-board-v1 - read, never re-typed), thrown (paper) into the

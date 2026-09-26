@@ -472,13 +472,21 @@
         {
           "name": "a shape, not a series",
           "source": "docs/portable/OPERATOR-RULINGS.md:3349"
+        },
+        {
+          "name": "Candlesticks over a ghost wave",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:571"
+        },
+        {
+          "name": "Axis-free \"Market\" motif with X marks",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:989"
         }
       ],
-      "does": "A line page drawn from a named closed form, not from data: the hype cycle, phase waves or the debt cycle, its phases named along the curve in the line's ink, no value on either axis, and the tag 'a shape, not a series'.",
+      "does": "A line page drawn from a named closed form, not from data: a phase model (hype, waves, debt cycle) or an illustration (candles along a ghost wave, an axis-free motif); no value on the page, the tag 'a shape, not a series'.",
       "when": "a phase model carrying the narrative, named as a model - 'the world's art carrying the narrative' (E99 s109 (1)); never with axis values, figures it cannot source, or without the mark that it is 'a shape, not a series'",
       "when_source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:565",
       "author": {
-        "key": "series object (evidence/objects/*.series.json) \"schematic\": {\"shape\": \"hype\"|\"waves\"|\"debt_cycle\", \"phases\": [{\"name\", \"from\", \"to\", \"side\"?}], \"n\"?, \"name\"?, \"color\"?} IN PLACE OF \"series\" on a line page (ledger:<series-id>:line)",
+        "key": "series object (evidence/objects/*.series.json) \"schematic\": {\"shape\": \"hype\"|\"waves\"|\"debt_cycle\"|\"candles\"|\"motif\", \"phases\": [{\"name\", \"from\", \"to\", \"side\"?}], \"n\"?, \"name\"?, \"color\"?} IN PLACE OF \"series\" on a line page (ledger:<series-id>:line)",
         "example": "{\"schematic\": {\"shape\": \"hype\", \"phases\": [{\"name\": \"Peak of inflated expectations\", \"from\": 0.12, \"to\": 0.3}, {\"name\": \"Trough of disillusionment\", \"from\": 0.3, \"to\": 0.48}]}}",
         "example_source": "content/video_engine/tests/golden/build_golden_sources.py",
         "check": "none"
@@ -502,6 +510,17 @@
             "GAP_EM": "0.4",
             "WRAP_K": "1.25"
           }
+        },
+        {
+          "name": "the candles print (candles)",
+          "does": "each candle (a wick high to low, a body open to close in the sign ink) fades in as the pen crosses its pitch, its body growing from the open, never ahead of the pen; the ghost under them is faded context",
+          "trigger": "the pen's drawn x (the stroke's own dash) - a build_to on the word moves it",
+          "dials": {
+            "SCHEMATIC_CANDLES": "30",
+            "CANDLE_BODY": "0.62",
+            "WICK_PX": "3",
+            "GHOST_A": "0.45"
+          }
         }
       ],
       "blends": [
@@ -516,6 +535,12 @@
           "became": "no value on the page, the tag, the digit refusal",
           "record": "docs/portable/OPERATOR-RULINGS.md:3349",
           "tie": "recorded"
+        },
+        {
+          "source": "Bravos BUB 04:47.3 (candles over a ghost wave) and JPN 09:09-09:11 (the \"Market\" motif)",
+          "became": "the two illustrations: generated candles, the axis-free wave",
+          "record": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:571",
+          "tie": "recorded"
         }
       ],
       "options": [
@@ -523,6 +548,16 @@
           "token": "schematic",
           "means": "{shape, phases, n?, name?, color?} in place of `series`, generated on x 0..1; data, a unit, a rule, a tick or a domain beside it refused; a digit in a bracket/figure/note/span needs its `src`",
           "source_set": "SCHEMATIC_KEY"
+        },
+        {
+          "token": "candles",
+          "means": "T8 (USE-WHEN :571, rarely; price action as illustration): 30 candles generated along a ghost wave, green up / red down, no value; phases optional, a `color` refused",
+          "source_set": "SCHEMATIC_SHAPES"
+        },
+        {
+          "token": "motif",
+          "means": "T46 (USE-WHEN :989, the close strips the chart to a symbol): an axis-free rising wave, its 8 turning points a `datum_badge` names by `vertex`; a `ylabel` refused; the title names it",
+          "source_set": "SCHEMATIC_SHAPES"
         }
       ],
       "dials": null,
@@ -533,9 +568,11 @@
         "also": [
           "lpSchematicAxis",
           "lpPaintSchematic",
-          "LP_SCHEMATIC"
+          "LP_SCHEMATIC",
+          "lpSchematicCandles",
+          "lpSchematicVertices"
         ],
-        "note": "buildLedgerLine behind pg.schematic; ledger_page.schematic_series / _validate_schematic / schematic_text_errors; build_scene_timeline_f.check_schematic"
+        "note": "buildLedgerLine behind pg.schematic; ledger_page.schematic_series / _validate_schematic / schematic_candles / schematic_vertices; build_scene_timeline_f.check_schematic"
       },
       "doctrine": [
         "E99 s109",

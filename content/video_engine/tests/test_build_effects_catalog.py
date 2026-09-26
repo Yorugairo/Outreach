@@ -465,11 +465,14 @@ def test_every_wired_card_is_in_a_recipe():
     # P71 T32's pedestal (camera:pedestal) and lens (page_species:lens) are tested alone in test_pedestal_and_lens.py (the
     # lens pinned by the lens-over-the-line golden, H row 22's soft June); the pedestal's recipe is P71 T34's
     # `the-hidden-base` (the plan breaks the P69 T80 <-> T44 circle there), and no body row adopts either before P71-HG1.
+    # P71 T20's datum badge (page_species:datum_badge) is tested alone in test_schematic_illustrations.py and pinned by the
+    # schematic-motif golden (H row 24's "not a house of cards", the X on the motif's troughs); no committed beat plays it
+    # and no recipe composes it before P71-HG1 (its candidate recipes are R14's two verdict panels and R19, P71 T34 / T35).
     assert uncovered == ["camera:pedestal", "dock_option:moves", "page_builder:bars+segments",
                          "page_builder:combo+segments", "page_builder:line+break", "page_builder:line+schematic",
                          "page_builder:progress",
                          "page_enter:surface",
-                         "page_species:explode", "page_species:lens", "page_species:member",
+                         "page_species:datum_badge", "page_species:explode", "page_species:lens", "page_species:member",
                          "plate_option:bar_style",
                          "plate_option:build", "plate_option:caption_room", "plate_option:domain", "plate_option:readability",
                          "plate_option:room", "species:balance", "species:chapter", "species:equation", "species:freeze"], uncovered

@@ -436,6 +436,9 @@ SPECIES_EVENTS["lit_stretch"] = ("at", "end")
 # edges are events, as the lit stretch's are: it leaves on its word and lands (the far ring, the figure) at its end.
 # What it does after that is standing ink (s91) and earns nothing.
 SPECIES_EVENTS["level_join"] = ("at", "end")
+# P71 T20: THE DATUM BADGE springs in on its word (a list sweeps in over ~0.2 s, one landing) - ONE event; what it does
+# after that is a mark standing on the data (s91) and earns nothing.
+SPECIES_EVENTS["datum_badge"] = ("at",)
 # P71 T32: THE LENS's glass TRAVELS - it rises onto the line on its word, walks the stretch and leaves by its end (s99): both
 # edges are events. The magnified line inside it is the page's own ink seen closer, and earns nothing of its own.
 SPECIES_EVENTS["lens"] = ("at", "end")
@@ -3775,8 +3778,8 @@ EMPTY_PLOT_FAIL_S = 4.0    # ... and past four the chart has stopped proving any
 EMPTY_PLOT_EPS_S = 0.01    # two stretches of ink closer than this are one (the compiler's 2 dp clocks)
 # authoring/shapes.PLOT_MARKS less `undraw` (it takes ink, it lays none) - MIRRORED, since shapes imports this module
 PLOT_INK_MARKS = ("callout", "bracket", "figure", "spread", "relight", "peel", "span", "ring", "lit_stretch", "freeze",
-                  "explode", "member", "level_join")   # P71 T10: the join is ink on the plot
-PLOT_HELD_MARKS = ("lit_stretch", "level_join")   # authoring/shapes.HELD_MARKS: a light that has landed stands to the page's end (P71 T10: and a join)
+                  "explode", "member", "level_join", "datum_badge")   # P71 T10: the join is ink on the plot; P71 T20: the badge on its datum
+PLOT_HELD_MARKS = ("lit_stretch", "level_join", "datum_badge")   # authoring/shapes.HELD_MARKS: a light that has landed stands to the page's end (P71 T10: and a join)
 NO_PLOT_BUILDERS = ("share", "treemap", "object")   # no axes: the engine's E64 axis hand-over has nothing to hand them
 LINE_INK_BUILDERS = ("dense-line", "story")         # the builders whose ink can be lines alone - capped, then undrawn
 STATELESS_VERBS = ("park", "compare")              # a transform on the standing chart, never a state change

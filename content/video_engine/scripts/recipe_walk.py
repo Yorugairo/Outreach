@@ -87,7 +87,7 @@ DEFAULT_EXIT = "wipe_left"   # scene_evidence_timeline.schema.json: `scene.exit`
 PAGE_SPECIES_KINDS = frozenset({"build_to", "chart_to", "retitle", "figure", "note", "bracket",
                                 "span", "spread", "peel", "relight", "undraw", "cross",
                                 "lit_stretch", "explode", "member", "solo", "unsolo",
-                                "panel_focus", "axis_tag", "level_join", "lens"})   # P71 T9: page_species:axis_tag; P71 T10: page_species:level_join; P69 T47: T36's card is page_species:lit_stretch - the walk named it species:; P70 T4: so is T8b's panel_focus
+                                "panel_focus", "axis_tag", "level_join", "lens", "datum_badge"})   # P71 T9: page_species:axis_tag; P71 T10: page_species:level_join; P69 T47: T36's card is page_species:lit_stretch - the walk named it species:; P70 T4: so is T8b's panel_focus
 
 # Same-instant order: what a viewer meets first (derive_seeds.py KIND_RANK, widened for the classes it folded).
 CLS_RANK = {"cut": 0, "world": 1, "page_enter": 2, "idle": 3, "dock_enter": 5, "arrival": 6,

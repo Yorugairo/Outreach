@@ -1122,6 +1122,37 @@ async function mount(doc) {
 
   const litPathD = (pts) => (pts || []).map(([x, y], k) => (k ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ");
 
+  /* P71 T20 / A55: THE PART OF A LIT PATH INSIDE [xa, xb] - its pieces (each a polyline, cut at the two x), in its own order.
+     A schematic's x runs one way along its line, so a phase is an x range. Pieces shorter than MIN_LEN are nothing. */
+  const litXRange = (pts, xa, xb) => {
+    const out = [];
+    let cur = null;
+    for (let k = 1; k < (pts || []).length; k++) {
+      const p = pts[k - 1], q = pts[k], dx = q[0] - p[0];
+      let t0 = 0, t1 = 1;
+      if (dx === 0) { if (p[0] < xa || p[0] > xb) { cur = null; continue; } }
+      else { const a = (xa - p[0]) / dx, b = (xb - p[0]) / dx; t0 = Math.max(0, Math.min(a, b)); t1 = Math.min(1, Math.max(a, b)); }
+      if (t0 >= t1) { cur = null; continue; }   /* outside, or touching the range at one point (the piece before already ends there) */
+      const at = (u) => [p[0] + dx * u, p[1] + (q[1] - p[1]) * u];
+      if (cur && t0 === 0) cur.push(at(t1));
+      else { cur = [at(t0), at(t1)]; out.push(cur); }
+      if (t1 < 1) cur = null;
+    }
+    return out.filter((piece) => litLength(piece) >= LIT.MIN_LEN);
+  };
+
+  /* ... and the whole lit path shared out: each inked phase's pieces (`segs` [{x0, x1}], x0 < x1, in the order built) and
+     the REST - the pieces outside every inked phase, which the light's own core paints */
+  const litPhaseParts = (pts, segs) => {
+    const inked = (segs || []).map((sg) => litXRange(pts, sg.x0, sg.x1));
+    const edges = [...(segs || [])].sort((a, b) => a.x0 - b.x0);
+    const rest = [];
+    let from = -Infinity;
+    for (const sg of edges) { if (sg.x0 > from) rest.push(...litXRange(pts, from, sg.x0)); from = Math.max(from, sg.x1); }
+    rest.push(...litXRange(pts, from, Infinity));
+    return { inked, rest };
+  };
+
   /* THE PAINTER (P69 T36). `sd` is the perform layer's built light (`g`, the lit `core` path, the comet `head` or null,
      the series `si`, the declaration `sp` and its resolved `leave`), `st` the page state and `ctx` the PAGE species
      context - `pointsNow` is lpPointsNow, handed in by name, so `node --test` calls this with recorders and no DOM. */
@@ -1134,12 +1165,17 @@ async function mount(doc) {
     const S = spanActiveState(st);
     const lit = litClipX(litCut(full, pose.u * litLength(full)), litDrawnX((S && S.paths) || [], sd.si));
     if (lit.length < 2 || litLength(lit) < LIT.MIN_LEN) { hide(); return; }
-    sd.core.setAttribute("d", litPathD(lit));
+    if (sd.segs) {   /* P71 T20 / A55: the traced state - each inked phase's stretch in its own core, the rest in the light's */
+      const parts = litPhaseParts(lit, sd.segs);
+      sd.core.setAttribute("d", parts.rest.map(litPathD).join(" "));
+      sd.segs.forEach((sg, k) => sg.core.setAttribute("d", parts.inked[k].map(litPathD).join(" ")));
+    } else sd.core.setAttribute("d", litPathD(lit));
     sd.g.setAttribute("opacity", (1 - lv).toFixed(3));
     if (sd.head) {
       const [hx, hy] = lit[lit.length - 1];
       sd.head.setAttribute("cx", hx.toFixed(1)); sd.head.setAttribute("cy", hy.toFixed(1));
       sd.head.setAttribute("opacity", pose.head.toFixed(3));
+      if (sd.segs) { const sg = sd.segs.find((q) => hx >= q.x0 && hx <= q.x1); sd.head.setAttribute("fill", sg ? sg.ink : sd.col); }   /* A55: the head wears its phase's ink */
     }
   };
 
@@ -12958,7 +12994,7 @@ async function mount(doc) {
        highlighted page splits one series into a muted history and a live tail (two paths, one si, one slot, so the
        pair draws together as the one line it is) - defensive rather than reachable through the compiler, which needs
        exactly ONE series for the highlight split and at least TWO for this mode. */
-    if (SCH) lpSchematicTag(st, pg, SCH, { mx, L, R, T, B, W, P });   /* P70 T2: the tag and the phases, named */
+    if (SCH) lpSchematicTag(st, pg, SCH, { mx, my, L, R, T, B, W, P });   /* P70 T2: the tag and the phases, named; P71 T20: `my` for the candles */
     if (BK) lpDrawBreak(st, BK, { T, B, W, R, L, P, fs: brkFs, tickY: B + (P ? 52 : LFT ? LFT.xtick_dy : 32),   /* P69 T66: the cut, its `//`, the gap written, the eras named */
                                   style: PHONE ? "font-size:" + brkFs + "px" : null });
     if (pgBuildLines(pg)) {
@@ -13279,6 +13315,10 @@ async function mount(doc) {
     PAD_U: 6,         /* two words never stand closer than this, chart units */
     WEIGHT: 400,      /* the model's words in the regular face (Bravos HIS 04:24): the end tag's 700 and the line stay the loudest things */
     SLIDE: Object.freeze([0, -0.25, 0.25, -0.5, 0.5, -0.75, 0.75, -1, 1]),   /* the fit's slides along the stretch, in the name's own widths (past 0.5 it stands beside a peak, not over it) */
+    /* P71 T20: THE CANDLES (BUB 04:47.3, frame_0025.jpg: ~30 bodies with thin wicks over a faded wave) */
+    CANDLE_BODY: 0.62,   /* a body's width as a share of its pitch [MEASURED ~0.6 on BUB's panel: the bodies stand a little over their own width apart] */
+    WICK_PX: 3,          /* the wick's stroke in stage px (a hairline beside the body, never a second body) */
+    GHOST_A: 0.45,       /* the ghost wave's stroke opacity [DERIVED: BUB 04:47.3's wave, faded under the candles] - context, never bloomed */
   });
   const lpSchematicAxis = (st, L, T, B, pj) => {
     const e = lpEl("line", "ax", st.chart, { x1: L, x2: L, y1: T, y2: B });
@@ -13350,6 +13390,11 @@ async function mount(doc) {
                        { opacity: 0, style: "font-size:" + fu.toFixed(2) + "px;font-style:italic" });
     const tagBox = lpSchematicBBox(tag, lpSchematicEst([tagText], fu, g.W - g.R, tagY, "end"));
     lpMark(st, "schematic", "schematic", tag, { x: g.W - g.R, y: tagY, box: tagBox });
+    /* P71 T20: THE MOTIF is axis-free (JPN 09:09 "Market") - the base rule and the bare y rule are hidden, never removed
+       (their marks keep the plot's geometry for every reader); the tag stays: it is what the page IS (s109 (1)) */
+    if (SCH.axis_free) for (const k of ["axis", "yaxis"]) { const m = st.markBy && st.markBy[k]; if (m && m.el) m.el.setAttribute("visibility", "hidden"); }
+    const candles = SCH.candles ? lpSchematicCandles(st, SCH.candles, g) : [];   /* P71 T20: the candles along the ghost */
+    if (SCH.candles) rec.p.style.strokeOpacity = String(LP_SCHEMATIC.GHOST_A);   /* ... which fades under them (the pen's own opacity is untouched) */
     const placed = [tagBox, ...lpSchematicObstacles(st, fu)], phases = [];
     const top = g.T - LP_SCHEMATIC.GAP_EM * fu, floor = g.B - LP_SCHEMATIC.GAP_EM * fu;   /* a name stays inside the plot's band */
     (SCH.phases || []).forEach((ph, i) => {
@@ -13383,8 +13428,40 @@ async function mount(doc) {
       lpMark(st, "phase:" + i, "phase", nm.el, geom);
       phases.push(Object.assign({ el: nm.el, name: String(ph.name || ""), lines: nm.lines }, geom));
     });
-    st.schematic = { shape: SCH.shape, si: rec.si | 0, tag, phases };
+    st.schematic = { shape: SCH.shape, si: rec.si | 0, tag, phases, candles, vertices: lpSchematicVertices(rec) };   /* P71 T20: + the candles and the turning points */
     st.paint = lpPaintSchematic;   /* the builder's own build step (lpPaintChart calls it after the line's pen) */
+  };
+  /* P71 T20: THE TURNING POINTS of the drawn shape - ledger_page.series_vertices' rule on the same numbers (the series' own
+     data): the index where the slope changes sign, a flat run turning at its first point. [{i, x, y}] in chart units -
+     where a `datum_badge` naming `{kind: vertex, index: k}` lands. */
+  const lpSchematicVertices = (rec) => {
+    const v = rec.data || [], out = [];
+    let sign = 0, start = 0;
+    for (let k = 1; k < v.length; k++) {
+      const d = v[k][1] - v[k - 1][1];
+      if (d === 0) continue;
+      const s = d > 0 ? 1 : -1;
+      if (sign && s !== sign) out.push(start);
+      sign = s; start = k;
+    }
+    return out.map((i) => ({ i, x: rec.pts[i][0], y: rec.pts[i][1] }));
+  };
+  /* P71 T20: THE CANDLES (the Bravos harvest v2 T8, BUB 04:47.3) - [x, open, high, low, close] each, generated along the
+     ghost wave by ledger_page.schematic_candles (no value: the y map is the shape's own [0, 1]). A wick from the high to
+     the low and a body from the open to the close, in the page's sign ink (up: --lp-pos, down: --lp-neg), in a group over
+     the ghost line. Each prints as the pen passes it (lpPaintSchematic): the body grows from its open to its close. */
+  const lpSchematicCandles = (st, cs, g) => {
+    const k = st.stagePx > 0 ? st.stagePx : 1, pitch = (g.mx(1) - g.mx(0)) / Math.max(1, cs.length);
+    const bw = pitch * LP_SCHEMATIC.CANDLE_BODY, grp = lpEl("g", "lp-candles", st.chart, {});
+    return cs.map(([x, o, h, l, c]) => {
+      const cx = g.mx(+x), up = +c >= +o, ink = up ? "var(--lp-pos)" : "var(--lp-neg)", yo = g.my(+o), yc = g.my(+c);
+      const cg = lpEl("g", "lp-candle", grp, { opacity: 0 });
+      lpEl("line", "lp-candle-wick", cg, { x1: cx.toFixed(1), x2: cx.toFixed(1), y1: g.my(+h).toFixed(1), y2: g.my(+l).toFixed(1),
+        style: "stroke:" + ink + ";stroke-width:" + (LP_SCHEMATIC.WICK_PX / k).toFixed(2) + "px;stroke-linecap:butt" });
+      const body = lpEl("rect", "lp-candle-body", cg, { x: (cx - bw / 2).toFixed(1), y: Math.min(yo, yc).toFixed(1), width: bw.toFixed(1),
+        height: Math.abs(yc - yo).toFixed(1), style: "fill:" + ink + ";stroke:none" });
+      return { g: cg, body, x: cx, x0: cx - pitch / 2, x1: cx + pitch / 2, up, yo, yc };
+    });
   };
   /* how far the shape's stroke is drawn this frame, in chart x - read off its own dash, so a seek is the play */
   const lpSchematicDrawnX = (st) => {
@@ -13401,6 +13478,12 @@ async function mount(doc) {
     const xd = lpSchematicDrawnX(cs);
     for (const ph of S.phases)   /* a name lands as the pen draws its stretch: in from the stretch's start, whole at its middle */
       ph.el.setAttribute("opacity", (xd === null ? 0 : clamp01((xd - ph.x0) / Math.max(1, ph.xc - ph.x0))).toFixed(2));
+    for (const cd of S.candles || []) {   /* P71 T20: a candle prints as the pen crosses its pitch - never ahead of it - its body growing from the open */
+      const u = xd === null ? 0 : clamp01((xd - cd.x0) / Math.max(1e-6, cd.x1 - cd.x0)), h = Math.abs(cd.yc - cd.yo) * u;
+      cd.g.setAttribute("opacity", u.toFixed(2));
+      cd.body.setAttribute("height", h.toFixed(1));
+      cd.body.setAttribute("y", (cd.yc < cd.yo ? cd.yo - h : cd.yo).toFixed(1));
+    }
   };
   /* RACE (bar-chart-race): ranked horizontal bars per period. EVERYTHING is a smooth function of u (period units):
      a value eases (smoothstep) between consecutive period values over the WHOLE period - exact at every period,
@@ -16632,6 +16715,76 @@ async function mount(doc) {
              A: [q.cx, yT], B: [q.cx, yB], fits: L.cost <= 0, above: !!L.above, main, glow, notches: main.notches, names, bi, si: 0, key: "" };
   };
   let lpLensSeq = 0;   /* P71 T32: the lens's clipPath ids - unique in the document (two worlds), never read by a pixel */
+  /* P71 T20 / A55: the lits block's phase cores - one per phase of the page's schematic that names an `ink`, in chart x */
+  const lpLitPhaseSegs = (st, pg, g, sw) => {
+    const inks = ((pg && pg.schematic && pg.schematic.phases) || []).map((p) => (p && p.ink ? PS_PAL[p.ink] || null : null));
+    return (st.schematic.phases || []).map((ph, i) => ({ ph, ink: inks[i] })).filter((q) => q.ink).map(({ ph, ink }) => {
+      const core = lpEl("path", "lp-lit-core lp-lit-phase", g, { d: "", fill: "none", stroke: ink });
+      core.style.strokeWidth = (sw * LIT.CORE_K).toFixed(2) + "px"; core.style.strokeLinecap = "round"; core.style.strokeLinejoin = "round";
+      core.style.filter = "drop-shadow(0 0 " + (sw * LIT.GLOW_K).toFixed(2) + "px " + lpInkA(lpVarHex(ink), LIT.GLOW_A) + ")";
+      return { x0: Math.min(ph.x0, ph.x1), x1: Math.max(ph.x0, ph.x1), ink, core };
+    });
+  };
+  /* ---- P71 T20 (was P69 T62; the Bravos harvest v2's A14, and T46's X at each vertex) - THE DATUM BADGE ----------------
+     A filled disc springs in ON a datum on its word - a tick struck in it (what held) or a cross (what failed) - on a line
+     page's datum (`{kind: datum, series, index}`, JPN 06:40 "X pins the two endpoints") or on a schematic's turning point
+     (`{kind: vertex, index}`, st.schematic.vertices - the motif's X at each named vertex, JPN 09:09). A list sweeps in left
+     to right in its order, STAGGER_S apart. No new law: the CROSS is T17's failed-link disc (FLOW.FAIL_*: the neg ink, a
+     white X at FAIL_X of the radius, popping from FAIL_POP_FROM with FAIL_MP over FAIL_POP_S) and the TICK is T12's check
+     badge (CHIP.TICK_INK, CHIP.CHECK_MARK drawn on CHIP.TICK at TICK_W) on the same pop; the strokes are struck over
+     CHIP.CROSS_S (chipStrokes / chipTickStrokes) and the disc fades up on CHIP.FADE_S. It sits on the chart's perform
+     surface - the layer of what it annotates (2026-09-08) - at the datum's position THIS frame (lpDatumNow: a rescale
+     carries it), sized in stage px through the page's scale, and glows in its own ink (E99 s130: a filled mark glows). It
+     writes no words; it leaves with its page (pageLeave, R26-219). */
+  const LP_BADGE = Object.freeze({
+    D_PX: 42,         /* the disc's diameter, stage px [MEASURED: JPN 06:40 (nB1eXWQlW58 -ss 400), 28 px at 720 = 42 per 1080; the motif's
+                         at 09:09 are 36 on a panel drawn smaller - p71-t20/scripts/measure_badge.py] */
+    STAGGER_S: 0.03,  /* a list sweeps in left to right this far apart [MEASURED: JPN 09:09.50-09:09.70, eight discs in ~0.2 s at 29.97 fps] */
+    GLOW_K: 0.5,      /* the halo's reach, in the disc's radii, in its own ink (E99 s130) [DERIVED: JPN 06:40's soft rim, the frame read] */
+    GLOW_A: 0.6,      /* ... at this alpha */
+  });
+  const lpBadgePose = (at, t) => {   /* the landing at t of a mark whose word is `at`: null before it */
+    if (!(t >= at)) return null;
+    const d = t - at;
+    return { u: clamp01(d / CHIP.CROSS_S), fade: clamp01(d / CHIP.FADE_S),
+             scale: FLOW.FAIL_POP_FROM + (1 - FLOW.FAIL_POP_FROM) * springPop(clamp01(d / FLOW.FAIL_POP_S), FLOW.FAIL_MP) };
+  };
+  const lpBuildDatumBadges = (st, scene, surf) => {
+    const k = st.stagePx > 0 ? st.stagePx : 1, r = LP_BADGE.D_PX / 2 / k, S = st.schematic;
+    return pageSpecies(scene, "datum_badge").map((sp) => {
+      const tick = sp.glyph === "tick", disc = tick ? CHIP.TICK_INK : FLOW.FAIL_INK, ink = tick ? CHIP.CHECK_MARK : FLOW.FAIL_MARK;
+      const sw = (tick ? CHIP.TICK_W : FLOW.FAIL_X_W) * r, a = FLOW.FAIL_X, f = (v) => v.toFixed(2);
+      const seg = (p, q) => "M" + f(p[0] * r) + " " + f(p[1] * r) + " L" + f(q[0] * r) + " " + f(q[1] * r);   /* two points in the disc's radii */
+      const d = tick ? [seg(CHIP.TICK[0], CHIP.TICK[1]), seg(CHIP.TICK[1], CHIP.TICK[2])]   /* T12's check: the short stroke, then the long */
+                     : [seg([-a, -a], [a, a]), seg([a, -a], [-a, a])];                     /* T17's X */
+      const targets = Array.isArray(sp.target) ? sp.target : [sp.target];
+      const marks = targets.map((tg, j) => {
+        const v = tg && tg.kind === "vertex" ? ((S && S.vertices) || [])[tg.index | 0] : null;
+        if (tg && tg.kind === "vertex" && !v) return null;   /* the compiler refuses a vertex the shape does not have */
+        const g = lpEl("g", "lp-badge", surf, { opacity: 0, transform: "translate(0 0) scale(0)" });
+        const dc = lpEl("circle", "lp-badge-disc", g, { cx: 0, cy: 0, r: f(r), style: "fill:" + disc + ";stroke:none;filter:drop-shadow(0 0 "
+          + f(r * LP_BADGE.GLOW_K) + "px " + lpInkA(disc, LP_BADGE.GLOW_A) + ")" });
+        const strokes = d.map((dd) => lpEl("path", "lp-badge-mark", g, { d: dd, pathLength: 1, "stroke-dasharray": "1 1", "stroke-dashoffset": 1,
+          style: "fill:none;stroke:" + ink + ";stroke-width:" + f(sw) + "px;stroke-linecap:round;stroke-linejoin:round" }));
+        return { g, disc: dc, strokes, tick, si: v ? (S.si | 0) : ((tg && tg.series) | 0), i: v ? v.i : ((tg && tg.index) | 0),
+                 at: +sp.at + j * LP_BADGE.STAGGER_S };
+      }).filter(Boolean);
+      return { sp, marks };
+    });
+  };
+  const lpPaintDatumBadges = (PF, t, st) => {
+    for (const b of PF.datumBadges || []) {
+      const lv = pageLeave(b.sp, t);
+      for (const m of b.marks) {
+        const pose = lpBadgePose(m.at, t), D = pose ? lpDatumNow(st, m.si, m.i) : null;
+        if (!pose || !D) { m.g.setAttribute("opacity", 0); continue; }
+        m.g.setAttribute("transform", "translate(" + D[0].toFixed(2) + " " + D[1].toFixed(2) + ") scale(" + pose.scale.toFixed(4) + ")");
+        m.g.setAttribute("opacity", (pose.fade * (1 - lv)).toFixed(3));
+        const k = m.tick ? chipTickStrokes(pose.u) : chipStrokes(pose.u);
+        m.strokes.forEach((p, j) => p.setAttribute("stroke-dashoffset", (1 - k[j]).toFixed(4)));
+      }
+    }
+  };
   const buildPerform = (st, scene, pg) => {
     const P = !!st.portrait, fs = P ? 40 : 26, fss = P ? 32 : 20, G = st.geom || { W: 1000, H: 560 };
     /* P48 T7: on a page with chart STATES the perform layer (brackets, figures, spreads) draws on its OWN svg above every
@@ -16741,10 +16894,15 @@ async function mount(doc) {
       core.style.filter = halo;
       const head = sp.comet === true ? lpEl("circle", "lp-lit-head", g, { cx: 0, cy: 0, r: (sw * LIT.HEAD_K).toFixed(2), fill: col, opacity: 0 }) : null;
       if (head) head.style.filter = halo;
+      /* P71 T20 / A55: `phase_ink` - one core per phase of the page's SCHEMATIC that names an ink, in that ink and its
+         halo, over the light's own core; the painter cuts the lit path at the phases' x (species/lit_stretch.mjs) and the
+         comet head wears the ink of the phase it is in. null on every other light: it paints as it always did. */
+      const segs = sp.phase_ink === true && st.schematic ? lpLitPhaseSegs(st, pg, g, sw) : null;
+      if (head && segs) g.appendChild(head);   /* the head over the phases' cores */
       const takes = [...pageSpecies(scene, "undraw").filter((u) => { const us = u.series ?? (u.target || {}).series; return us == null || (us | 0) === si; }),
                      ...pageSpecies(scene, "chart_to").filter((c) => c.to === "recast" || c.to === "morph" || c.to === "remake")]
         .filter((v) => v.at >= sp.at).sort((a, b) => a.at - b.at);
-      return { sp, si, g, core, head, leave: takes.length ? { at: takes[0].at, dur: takes[0].dur || 1 } : null };
+      return { sp, si, g, core, head, leave: takes.length ? { at: takes[0].at, dur: takes[0].dur || 1 } : null, ...(segs ? { segs, col } : {}) };
     });
     /* SOLO (P69 T37; the Bravos harvest v2's A12 / A49): on its word every OTHER series or bar of the page mutes to E67's
        dim and the named one keeps its ink; `unsolo` restores. species/solo.mjs owns the law and writes the chart's own marks,
@@ -16993,6 +17151,7 @@ async function mount(doc) {
        that series' own stroke (its colour, width and opacity read off the page's path - nothing new is inked), then the
        ring, the neck and the handle in the reference's inks (LENS.RING_INK / HANDLE_INK). Its outer radius is LENS.R_PX
        stage px, carried into chart units by the page's rest scale. Built last, so the glass stands over the page's marks. */
+    const datumBadges = lpBuildDatumBadges(st, scene, surf);   /* P71 T20: the tick / cross on its datum or turning point */
     const lenses = pageSpecies(scene, "lens").map((sp) => {
       const k = st.stagePx > 0 ? st.stagePx : 1, S = (st.states && st.states[st.active | 0]) || st, id = "lp-lens-" + (++lpLensSeq);
       const g = lpEl("g", "lp-lens", surf, { opacity: 0 });
@@ -17019,7 +17178,7 @@ async function mount(doc) {
       const handle = lpEl("rect", "lp-lens-handle", g, { fill: LENS.HANDLE_INK });
       return { sp, si: sp.series | 0, zoom: lensZoom(sp), r: LENS.R_PX / k, g, clip, disc, lines, ring, neck, handle };
     });
-    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads, spans, crosses, lits, solo, axisTags, levelJoins, lenses };
+    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads, spans, crosses, lits, solo, axisTags, levelJoins, lenses, datumBadges };
   };
   /* the X's two strokes over the named cells, the cells dimming under them, and the share written by
      the hand: every number is species/treemap.mjs's, this is the call */
@@ -17190,6 +17349,7 @@ async function mount(doc) {
     for (const ld of PF.lits || []) if (PAGE_PAINTERS.lit_stretch) PAGE_PAINTERS.lit_stretch(ld, t, st, PAGE_CTX);   /* P69 T36: the light that travels a stretch of the line on its word (species/lit_stretch.mjs) */
     for (const lj of PF.levelJoins || []) if (PAGE_PAINTERS.level_join) { PAGE_PAINTERS.level_join(lj, t, st, PAGE_CTX); const lv = pageLeave(lj.sp, t); if (lv > 0) lj.g.setAttribute("opacity", ((+lj.g.getAttribute("opacity") || 0) * (1 - lv)).toFixed(3)); }   /* P71 T10: the dashed level from one datum to another, its figure off the rule (species/level_join.mjs); R26-219: it leaves with its page */
     for (const ld of PF.lenses || []) if (PAGE_PAINTERS.lens) PAGE_PAINTERS.lens(ld, t, st, PAGE_CTX);   /* P71 T32: the magnifier glass travels a stretch of the line (species/lens.mjs) */
+    lpPaintDatumBadges(PF, t, st);   /* P71 T20: the tick / cross springs in on its datum (A14); R26-219: it leaves with its page */
     if (PF.solo && PAGE_PAINTERS.solo) PAGE_PAINTERS.solo(PF.solo, t, st, PAGE_CTX);   /* P69 T37: the others mute on the word (species/solo.mjs) - after the lights, so a light on a muted series mutes with it */
     if (PF.solo) lpFillGlowSolo(PF.solo, t, st);   /* P72 T10: on its word the named bar takes the glow, a muted bar sheds it */
     for (const fg of PF.figures || []) if (PAGE_PAINTERS.figure) {
