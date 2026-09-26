@@ -6015,6 +6015,46 @@ SURFACES.update({"glow-outline-bar": glow_outline_bar})
 FRAME_T.update({"glow-outline-bar": 4.0})   # the bar stood (its page draws 0.0-3.0), the glow held since 1.09 + its fade
 
 
+
+# P73 T4: THE SUPPLY-CHAIN ICONS on a route - the AMD RFSoC story's chain as a ROW flow, every node a SOURCED Lucide glyph
+# the intake added (assets/icons/SOURCES.md): the maker (building), the distributor (warehouse), the reseller (store),
+# the board maker in China (factory), the crowdfunding storefront (store) and its backers (user); one dot of the part
+# riding each arrow, and the link INTO CHINA - the one an export licence governs - FAILING (T17's disc and X). A TEST-BED
+# beat: six nodes because FLOW_NODES caps a row at six (the slice's seven-stop route merges "Hong Kong / China" into the
+# board maker's node); the route is the MECHANISM Tom's names (PLAUSIBLE), no figure on it, so no tier is owed on screen.
+SUPPLY_ROUTE_NODES = [("amd", "building", "AMD"), ("distributor", "warehouse", "DISTRIBUTOR"), ("reseller", "store", "RESELLER"),
+               ("puzhi", "factory", "PUZHI, CHINA"), ("crowd", "store", "CROWD SUPPLY"), ("backers", "user", "BACKERS")]
+SUPPLY_ROUTE_AT, SUPPLY_ROUTE_TOKENS_AT, SUPPLY_ROUTE_FAIL_AT = 4.0, 8.0, 8.8   # the five arrows are drawn by 7.845 s (flowClock); the part
+                                                           # starts down them on the next word; the licence link breaks on its
+
+
+def flow_supply_route() -> tuple[dict, dict]:
+    """P73 T4: the supply route as six chips in a row, each clothoid arrow drawn by length, one dot of the part riding
+    each; then the reseller -> China link FAILS - the neg-ink disc with a white X at its middle, the arrow reddened and its
+    halves retracted, both nodes standing. Judged 1.0 s after the failure (FRAME_T 9.8): the disc settled, the X struck."""
+    import build_scene_timeline_f as BST
+    species = [{"kind": "flow", "at": SUPPLY_ROUTE_AT, "dur": 18.0, "idle": "breath",
+                "target": {"kind": "region", "x0": 0.04, "y0": 0.28, "x1": 0.96, "y1": 0.78},   # the stage's width: six chips need it
+                "nodes": [{"id": i, "icon": icon, "label": label} for i, icon, label in SUPPLY_ROUTE_NODES],
+                "edges": [[a[0], b[0]] for a, b in zip(SUPPLY_ROUTE_NODES, SUPPLY_ROUTE_NODES[1:])],
+                "tokens": {"from_at": SUPPLY_ROUTE_TOKENS_AT, "n": 1},
+                "fail": {"edge": ["reseller", "puzhi"], "at": SUPPLY_ROUTE_FAIL_AT}}]
+    assert not BST.validate_species(species, (0, 0, 0), "plate-plain"), BST.validate_species(species, (0, 0, 0), "plate-plain")
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    uris = _base_uris()
+    for name in sorted(BST.species_icons(species[0])):
+        uris[BST.ICON_PREFIX + name] = BST.icon_geometry(name)
+    tl = _timeline("Golden: the supply route - sourced supply-chain glyphs, the part on its arrows, the licence link failing (test-bed beat)",
+                   scenes, {}, None)
+    tl["captions"], tl["caption_pages"] = [], []   # the harness's centred caption would sit on the row: the diagram is the frame
+    return tl, uris
+
+
+SURFACES.update({"flow-supply-route": flow_supply_route})
+FRAME_T.update({"flow-supply-route": 9.8})   # the arrows drawn (7.845), the part on them, the failure 1.0 s old - disc settled, X struck
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

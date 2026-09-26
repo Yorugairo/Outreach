@@ -1,0 +1,120 @@
+{
+ "caption_modes": [
+  "stage",
+  "anchor"
+ ],
+ "caption_pages": [],
+ "captions": [],
+ "episode_id": "golden",
+ "evidence": {},
+ "narration": {
+  "canonical_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "words_path": ""
+ },
+ "project_id": "golden",
+ "runtime_s": 30.0,
+ "scenes": [
+  {
+   "docks": [],
+   "exit": "cut",
+   "scene_id": "s01",
+   "span": [
+    0.0,
+    30.0
+   ],
+   "species": [
+    {
+     "at": 4.0,
+     "dur": 18.0,
+     "edges": [
+      [
+       "amd",
+       "distributor"
+      ],
+      [
+       "distributor",
+       "reseller"
+      ],
+      [
+       "reseller",
+       "puzhi"
+      ],
+      [
+       "puzhi",
+       "crowd"
+      ],
+      [
+       "crowd",
+       "backers"
+      ]
+     ],
+     "fail": {
+      "at": 8.8,
+      "edge": [
+       "reseller",
+       "puzhi"
+      ]
+     },
+     "idle": "breath",
+     "kind": "flow",
+     "nodes": [
+      {
+       "icon": "building",
+       "id": "amd",
+       "label": "AMD"
+      },
+      {
+       "icon": "warehouse",
+       "id": "distributor",
+       "label": "DISTRIBUTOR"
+      },
+      {
+       "icon": "store",
+       "id": "reseller",
+       "label": "RESELLER"
+      },
+      {
+       "icon": "factory",
+       "id": "puzhi",
+       "label": "PUZHI, CHINA"
+      },
+      {
+       "icon": "store",
+       "id": "crowd",
+       "label": "CROWD SUPPLY"
+      },
+      {
+       "icon": "user",
+       "id": "backers",
+       "label": "BACKERS"
+      }
+     ],
+     "target": {
+      "kind": "region",
+      "x0": 0.04,
+      "x1": 0.96,
+      "y0": 0.28,
+      "y1": 0.78
+     },
+     "tokens": {
+      "from_at": 8.0,
+      "n": 1
+     }
+    }
+   ],
+   "world": {
+    "asset_id": "plate-plain",
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    },
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+   }
+  }
+ ],
+ "schema_version": "scene_evidence_timeline.v1",
+ "sound": [],
+ "subtitle": "P39 golden surface",
+ "title": "Golden: the supply route - sourced supply-chain glyphs, the part on its arrows, the licence link failing (test-bed beat)"
+}
