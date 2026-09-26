@@ -16660,6 +16660,16 @@ async function mount(doc) {
      air before the label and a name; NAME_S a name's write; PART_GAP the stagger of names with no `parts_at` (after
      the brace's own clock); LINE_EM two names' least pitch; OVERLAP the glyph law's (the last letter finishes with the
      window); SUB_EM the sub's size. */
+  /* P71 T20 / A55: the lits block's phase cores - one per phase of the page's schematic that names an `ink`, in chart x */
+  const lpLitPhaseSegs = (st, pg, g, sw) => {
+    const inks = ((pg && pg.schematic && pg.schematic.phases) || []).map((p) => (p && p.ink ? PS_PAL[p.ink] || null : null));
+    return (st.schematic.phases || []).map((ph, i) => ({ ph, ink: inks[i] })).filter((q) => q.ink).map(({ ph, ink }) => {
+      const core = lpEl("path", "lp-lit-core lp-lit-phase", g, { d: "", fill: "none", stroke: ink });
+      core.style.strokeWidth = (sw * LIT.CORE_K).toFixed(2) + "px"; core.style.strokeLinecap = "round"; core.style.strokeLinejoin = "round";
+      core.style.filter = "drop-shadow(0 0 " + (sw * LIT.GLOW_K).toFixed(2) + "px " + lpInkA(lpVarHex(ink), LIT.GLOW_A) + ")";
+      return { x0: Math.min(ph.x0, ph.x1), x1: Math.max(ph.x0, ph.x1), ink, core };
+    });
+  };
   const LPBRACE = Object.freeze({ GAP: 16, R: 10, R_EM: 0.42, CURL_K: 1.6, NOTCH_EM: 0.34, LABEL_EM: 0.4, NAME_EM: 0.55,
                                   NAME_S: 0.6, PART_GAP: 0.4, LINE_EM: 1.2, OVERLAP: 0.6, SUB_EM: 0.8, SAMPLES: 16,
                                   ABOVE_EM: 0.3, HAND_DESC: 0.54 });   /* P72 T43 (R26-338): the air between the "above" label and the bar's
@@ -16781,16 +16791,6 @@ async function mount(doc) {
              A: [q.cx, yT], B: [q.cx, yB], fits: L.cost <= 0, above: !!L.above, main, glow, notches: main.notches, names, bi, si: 0, key: "" };
   };
   let lpLensSeq = 0;   /* P71 T32: the lens's clipPath ids - unique in the document (two worlds), never read by a pixel */
-  /* P71 T20 / A55: the lits block's phase cores - one per phase of the page's schematic that names an `ink`, in chart x */
-  const lpLitPhaseSegs = (st, pg, g, sw) => {
-    const inks = ((pg && pg.schematic && pg.schematic.phases) || []).map((p) => (p && p.ink ? PS_PAL[p.ink] || null : null));
-    return (st.schematic.phases || []).map((ph, i) => ({ ph, ink: inks[i] })).filter((q) => q.ink).map(({ ph, ink }) => {
-      const core = lpEl("path", "lp-lit-core lp-lit-phase", g, { d: "", fill: "none", stroke: ink });
-      core.style.strokeWidth = (sw * LIT.CORE_K).toFixed(2) + "px"; core.style.strokeLinecap = "round"; core.style.strokeLinejoin = "round";
-      core.style.filter = "drop-shadow(0 0 " + (sw * LIT.GLOW_K).toFixed(2) + "px " + lpInkA(lpVarHex(ink), LIT.GLOW_A) + ")";
-      return { x0: Math.min(ph.x0, ph.x1), x1: Math.max(ph.x0, ph.x1), ink, core };
-    });
-  };
   /* ---- P71 T20 (was P69 T62; the Bravos harvest v2's A14, and T46's X at each vertex) - THE DATUM BADGE ----------------
      A filled disc springs in ON a datum on its word - a tick struck in it (what held) or a cross (what failed) - on a line
      page's datum (`{kind: datum, series, index}`, JPN 06:40 "X pins the two endpoints") or on a schematic's turning point
