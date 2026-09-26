@@ -1041,7 +1041,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T8b: The quiet caption reads at the squint - the long form's quiet strip raised to the reference's floor (E99 s126 (2); found by T7)
-- Status: pending (after T7 lands)
+- Status: done - lane B `2bf45d6`: the landscape quiet strip 40 px / 800 in T14's measured stroke; M48 on H 454 -> 2 faults (every caption fault gone); the 61 stage captions and the 9:16 strip unchanged; 60 goldens re-pinned (every diff inside the strip)
 - Owner: implementation_luna (LANE B)
 - Depends on: T7 (M48 and `caption-squint-floor.v1.json`)
 - Harvest: T7 ran M48 over the committed H door: 324 of 391 QUIET captions fail - 315 on cap height at 320 px (ours 4.00-4.21 px against Wealth Logic's measured 4.285 floor, n=82 frames) and 61 on contrast (as low as 1.79 against 3.97); the 53 STAGE captions all pass (7.56-8.43 px, contrast >= 6.98). The operator, s126: "we have this issue with our captions too".
