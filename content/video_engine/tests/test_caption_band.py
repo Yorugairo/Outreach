@@ -212,15 +212,14 @@ def _reel_row(**kw) -> dict:
     return e
 
 
-def test_the_compiler_refuses_a_row_where_the_caption_and_the_crawl_want_one_strip() -> None:
-    """Gate 1's refusal: it names BOTH boxes and the two ways out, and it never moves either by itself."""
-    errs = BST.validate_newsreel_strip([_reel_row()], "9:16", True)
-    assert len(errs) == 1, errs
-    msg = errs[0]
-    assert f"[{HOME_Y}-{HOME_Y + STRIP_H}]" in msg, msg          # the caption's E62 strip, by its own numbers
-    assert "[1296-1565]" in msg, msg                              # ... and the band's declared region
-    assert 'cap_band: "above"' in msg and "BELOW the caption's home" in msg, msg
-    # the DEFAULT this slice ships: the band below the caption's own band, and nothing to rule
+def test_a_crawl_on_the_captions_strip_puts_the_caption_above_it_by_default() -> None:
+    """R26-73 (E84 (2)) retired gate 1's refusal: a crawl on the caption's own strip, with nothing authored, is the
+    whole-reel case - the caption goes one strip above it, exactly as `cap_band: "above"` puts it."""
+    assert BST.validate_newsreel_strip([_reel_row()], "9:16", True) == []
+    band = BST.newsreel_caption_band(None, [_reel_row()], "9:16", 5.0, 9.0)
+    assert band == BST.newsreel_caption_band(None, [_reel_row(cap_band="above")], "9:16", 5.0, 9.0)
+    assert band["band"] == "newsreel-above" and band["y"] + STRIP_H <= BST.newsreel_region_box(_reel_row(), "9:16")["y"]
+    # an AUTHORED region below the caption's own band stands as authored, and nothing to rule
     below = _reel_row(target={"kind": "region", "x0": 0.0, "y0": 0.78, "x1": 1.0, "y1": 0.92})
     assert BST.validate_newsreel_strip([below], "9:16", True) == []
     assert BST.newsreel_region_box(below, "9:16")["y"] >= HOME_Y + STRIP_H, "below the caption's strip, by its own geometry"
@@ -229,8 +228,9 @@ def test_the_compiler_refuses_a_row_where_the_caption_and_the_crawl_want_one_str
     assert BST.caption_home_box("16:9")["y"] == round(0.40 * 1080)
 
 
-def test_cap_band_above_moves_the_caption_over_the_crawl_and_needs_a_surface_docked() -> None:
-    """The alternative the operator rules on tomorrow: the crawl takes the strip, the caption goes above it."""
+def test_cap_band_above_moves_the_caption_over_the_crawl_docked_or_not() -> None:
+    """The authored form: the crawl takes the strip, the caption goes above it - since R26-73 with nothing docked too
+    (the engine reads the scene's `caption_crawl`)."""
     row = _reel_row(cap_band="above")
     assert BST.validate_newsreel_strip([row], "9:16", True) == []
     band = BST.newsreel_caption_band(None, [row], "9:16", 5.0, 9.0)
@@ -238,9 +238,9 @@ def test_cap_band_above_moves_the_caption_over_the_crawl_and_needs_a_surface_doc
     assert band["y"] + STRIP_H <= BST.newsreel_region_box(row, "9:16")["y"], "the caption sits clear ABOVE the crawl"
     assert BST.newsreel_caption_band(None, [row], "9:16", 20.0, 30.0) is None, "outside the band's window nothing moves"
     keep = {"y": 700, "h": STRIP_H, "band": "below"}
-    assert BST.newsreel_caption_band(keep, [_reel_row()], "9:16", 5.0, 9.0) == keep, "a row that does not ask keeps E62's answer"
+    assert BST.newsreel_caption_band(keep, [_reel_row()], "9:16", 5.0, 9.0) == keep, "an E62 band already clear above the crawl is kept"
     assert BST.newsreel_caption_band(keep, [], "9:16", 5.0, 9.0) == keep
-    # the refusals around it: `above` with nothing docked, and `above` where there is no clash to resolve
-    assert any("needs a surface docked above the band" in e for e in BST.validate_newsreel_strip([row], "9:16", False))
+    # R26-73: `above` with nothing docked is no longer refused; `above` where there is no clash to resolve still is
+    assert BST.validate_newsreel_strip([row], "9:16", False) == []
     clear = _reel_row(cap_band="above", target={"kind": "region", "x0": 0.0, "y0": 0.78, "x1": 1.0, "y1": 0.92})
     assert any("already clear of its strip" in e for e in BST.validate_newsreel_strip([clear], "9:16", True))

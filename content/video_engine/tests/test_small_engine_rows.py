@@ -313,3 +313,112 @@ def test_r26_360_a_split_build_carries_its_faces_and_is_the_golden():
         page = RB.write_split(Path(td), tl, uris, f"{HAND_SURFACE}.timeline.json")
         assert sorted(p.name for p in (Path(td) / "fonts" / "kalam").glob("*.woff2")) == sorted(HAND_BUILD)
         _assert_offline_golden(*_capture_offline(page, t, RB.STAGE[aspect]))
+
+
+# ---- R26-73: the 9:16 whole-reel crawl follows E84 (2) --------------------------------------------------------
+# Measured at 4b54f77's parent (P72 T27a step 0): the strip law's default kept the caption on its E62 home (0.676-0.713
+# of a 9:16 frame) and sent the crawl BELOW it (0.78-0.92); a crawl on the caption's strip was refused unless the row
+# authored `cap_band: "above"` AND docked a card. E84 (2): a crawl across the whole reel sits around the top of the
+# bottom third and the captions sit above it. Now an unauthored crawl takes that strip, the caption goes above it by
+# default, and it does so with nothing docked (the engine reads the compiler's `caption_crawl` window). An authored
+# region and an authored `cap_band` are drawn as authored.
+
+def _bst():
+    import build_scene_timeline_f as BST
+    return BST
+
+
+def _reel(**kw) -> dict:
+    e = {"kind": "newsreel", "at": 5.0, "dur": 20.0, "headlines": ["A sourced headline off the dossier"]}
+    e.update(kw)
+    return e
+
+
+ON_STRIP = {"kind": "region", "x0": 0.0, "y0": 0.675, "x1": 1.0, "y1": 0.815}   # the caption's own strip at 9:16
+BELOW = {"kind": "region", "x0": 0.0, "y0": 0.78, "x1": 1.0, "y1": 0.92}        # clear below the caption's home
+
+
+def test_r26_73_an_unauthored_crawl_takes_the_top_of_the_bottom_third():
+    B = _bst()
+    (row,) = B.newsreel_defaults([_reel()])
+    tgt = row["target"]
+    assert tgt["kind"] == "region" and (tgt["x0"], tgt["x1"]) == (0.0, 1.0)
+    assert abs(tgt["y0"] - 2 / 3) < 1e-9 and abs(tgt["y1"] - (2 / 3 + B.NEWSREEL_BAND_H)) < 1e-9
+    assert B._validate_newsreel(row) == [] and B.validate_species([row], (0, 0, 0), "plate-plain") == []
+    authored = _reel(target=dict(BELOW))
+    assert B.newsreel_defaults([authored]) == [authored], "an authored region is kept as authored"
+
+
+def test_r26_73_a_crawl_on_the_captions_strip_puts_the_caption_above_it_by_default_with_nothing_docked():
+    B = _bst()
+    row = _reel(target=dict(ON_STRIP))
+    assert B.validate_newsreel_strip([row], "9:16", False) == [], "the default is E84's, not a refusal"
+    band = B.newsreel_caption_band(None, [row], "9:16", 5.0, 9.0)
+    box = B.newsreel_region_box(row, "9:16")
+    assert band["band"] == "newsreel-above" and band["y"] + band["h"] + B.NEWSREEL_STRIP_PAD <= box["y"]
+    authored = _reel(target=dict(ON_STRIP), cap_band="above")   # the authored form still reads the same
+    assert B.validate_newsreel_strip([authored], "9:16", False) == []
+    assert B.newsreel_caption_band(None, [authored], "9:16", 5.0, 9.0) == band
+
+
+def test_r26_73_a_crawl_that_leaves_the_caption_no_room_above_is_refused_by_name():
+    B = _bst()   # unreachable under the region law (y0 >= NEWSREEL_LOW) at today's stages; the refusal names the numbers anyway
+    tall = _reel(target={"kind": "region", "x0": 0.0, "y0": 0.05, "x1": 1.0, "y1": 0.95})
+    (err,) = B.validate_newsreel_strip([tall], "9:16", False)
+    assert "no room above it for the caption" in err and "E84" in err, err
+
+
+def test_r26_73_a_crawl_authored_below_the_caption_keeps_the_caption_home():
+    B = _bst()
+    row = _reel(target=dict(BELOW))
+    assert B.validate_newsreel_strip([row], "9:16", False) == []
+    home = B.caption_home_box("9:16")
+    assert B.newsreel_caption_band(None, [row], "9:16", 5.0, 9.0) == {"y": home["y"], "h": home["h"], "band": "quiet"}
+    assert any("already clear" in e for e in B.validate_newsreel_strip([_reel(target=dict(BELOW), cap_band="above")], "9:16", True))
+    sc = {"span": [0.0, 30.0], "docks": [], "species": [row]}
+    assert B.stamp_crawl_caption_bands([sc], [{"s": 4.0, "e": 12.0}], "9:16") == 0 and "caption_crawl" not in sc
+
+
+def test_r26_73_the_compiler_writes_the_crawl_window_where_nothing_is_docked():
+    B = _bst()
+    row = B.newsreel_defaults([_reel()])[0]
+    sc = {"span": [0.0, 30.0], "docks": [], "species": [row]}
+    assert B.stamp_crawl_caption_bands([sc], [{"s": 4.0, "e": 12.0}], "9:16") == 1
+    (win,) = sc["caption_crawl"]
+    assert (win["from"], win["to"]) == (5.0, 25.0)
+    assert win["caption_band"] == B.newsreel_caption_band(None, [row], "9:16", 5.0, 25.0)
+    quiet = {"span": [0.0, 30.0], "docks": [], "species": [row]}
+    assert B.stamp_crawl_caption_bands([quiet], [{"s": 26.0, "e": 28.0}], "9:16") == 0, "no caption in the window, nothing written"
+    wide = {"span": [0.0, 30.0], "docks": [], "species": [B.newsreel_defaults([_reel()])[0]]}
+    assert B.stamp_crawl_caption_bands([wide], [{"s": 4.0, "e": 12.0}], "16:9") == 0, "16:9: the caption's 40 % home is clear"
+
+
+def _whole_reel_9x16() -> tuple[dict, dict, float]:
+    """newsreel-strip-above's own surface with the card, the region and the cap_band taken away: the whole-reel case."""
+    B = _bst()
+    tl, uris, t, _aspect = RB.load_surface("newsreel-strip-above")
+    sc = tl["scenes"][0]
+    sc["docks"] = []
+    sc["species"] = B.newsreel_defaults([{k: v for k, v in e.items() if k not in ("target", "cap_band")}
+                                         for e in sc["species"]])
+    B.stamp_crawl_caption_bands(tl["scenes"], tl["caption_pages"], "9:16")
+    return tl, uris, t
+
+
+@needs_chromium
+def test_r26_73_the_whole_reel_crawl_renders_under_the_caption_with_nothing_docked():
+    tl, uris, t = _whole_reel_9x16()
+    with tempfile.TemporaryDirectory() as td:
+        html = Path(td) / "reel.html"
+        html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
+        with SP.served(html, *RB.STAGE["9:16"]) as (page, errs):
+            RB.frame_png(page, t, RB.STAGE["9:16"])
+            m = page.evaluate("""() => { const st = document.getElementById('stage').getBoundingClientRect();
+              const b = (e) => { const r = e.getBoundingClientRect(); return [r.top - st.top, r.bottom - st.top]; };
+              const words = [...document.getElementById('caption').querySelectorAll('*')].filter(e => e.getBoundingClientRect().height > 0);
+              return { cap: words.map(b).reduce((a, c) => [Math.min(a[0], c[0]), Math.max(a[1], c[1])]),
+                       band: b(document.querySelector('.nrband')) }; }""")
+    assert not errs, errs
+    assert abs(m["band"][0] - 1920 * 2 / 3) < 2, m     # the crawl at the top of the bottom third
+    assert m["cap"][1] <= m["band"][0], m                # the caption above it, clear
+    assert m["cap"][0] > 1920 * 0.5, m                   # ... and still in the lower half, roughly where it lives

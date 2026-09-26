@@ -727,8 +727,12 @@ NEWSREEL_HEADLINE_MAX = 90     # characters: a headline longer than this is a pa
 NEWSREEL_LOW = 0.60            # the band's region sits in the LOWER 40 % of the stage - higher than that it IS the composition
 NEWSREEL_BAND_H = 0.14         # [DERIVED: species/newsreel.mjs NEWSREEL.BAND_H] the band's recommended height, as a share of the stage
 NEWSREEL_EXIT_S = 0.38         # [DERIVED: species/newsreel.mjs NEWSREEL.BEATS.EXIT_FOR] the retreat, so `hold` + the retreat must fit the window
-NEWSREEL_CAP_ABOVE = "above"   # `cap_band: "above"` on the row - the operator's alternative: the crawl takes the caption's own
-                               # strip and the caption moves ABOVE the crawl. Absent = this slice's default (the band goes below).
+NEWSREEL_CAP_ABOVE = "above"   # `cap_band: "above"` on the row - the crawl takes the caption's own strip and the caption moves
+                               # ABOVE the crawl. Since R26-73 (E84 (2)) this is also what a crawl on that strip gets UNAUTHORED.
+NEWSREEL_WHOLE_REEL_Y0 = 2 / 3   # R26-73 [DERIVED: E84 (2), "around the top of the bottom 1/3, and the captions are above it"] -
+                                 # the strip an UNAUTHORED crawl across the whole reel takes, NEWSREEL_BAND_H tall, edge to edge
+CAPTION_CRAWL_KEY = "caption_crawl"   # R26-73: a scene's crawl windows [{from, to, caption_band}] - the caption above a crawl with
+                                      # nothing docked (a docked card carries the same band on its entry, E62)
 # P69 T8b (E99 s104, amended twice) - A PANELS PAGE, AND ITS FOCUS. A `panels` object is a ledger page of 2-4 plots
 # (ledger_page.PANELS). Its species ADDRESS a panel: `panel: <index>` on a chart species (the ones below) lands it in
 # that panel's plot, on that panel's scale and clock; a datum target carries the same index (`target.panel`) so a
@@ -11592,13 +11596,16 @@ def caption_band(page: dict, aspect: str, cards: list[dict] | None, xf=None) -> 
 
 
 # ---- THE STRIP LAW: the caption's E62 band and the NEWSREEL band (P52 T6, gate 1) -------------
-# On a short the caption's strip and a newsreel band want the same bottom strip. The compiler REFUSES a row
-# where the two boxes meet and names both, with the two ways out; it does not silently move either, because
-# which one gives way is the operator's call on the frame, not the compiler's:
-#   (1) the DEFAULT this slice ships - the caption keeps its E62 band (its home on a short) and the band goes
-#       BELOW it (`y >= caption home + strip h`); or the band goes entirely ABOVE the caption's home;
-#   (2) `cap_band: "above"` on the newsreel row - the crawl takes the caption's own strip and the caption is
-#       stamped one strip HIGHER, above the crawl (`newsreel_caption_band`).
+# On a short the caption's strip and a newsreel band want the same bottom strip. The operator ruled which gives way
+# (E84, 2026-09-13; built by R26-73, P72 T27): a crawl across the WHOLE REEL sits around the top of the bottom third and
+# the captions sit above it, still roughly centred. So:
+#   (1) THE DEFAULT - a crawl with no target takes that strip (`newsreel_defaults`), and a crawl on the caption's own
+#       strip with no `cap_band` stamps the caption one strip HIGHER, above the crawl (`newsreel_caption_band`), docked
+#       or not (`stamp_crawl_caption_bands` -> the scene's `caption_crawl`);
+#   (2) authored forms stand as authored: `cap_band: "above"` (the same answer, said out loud), and a region the author
+#       placed clear of the caption's home (below it, or above it) keeps the caption on its E62 band.
+# E84 (1) - a crawl on a surface in the world (a TV, a card) with the captions centred - is not built: the band draws on
+# the whole frame.
 # On 16:9 there is no clash to rule: the caption sits at 40 % (432-575) and a band's region is in the lower
 # 40 % (>= 648), so every landscape row takes (1) without saying anything.
 NEWSREEL_STRIP_PAD = 8   # the air between the two strips: a pixel of contact is not "the same strip", 8 px is
@@ -11650,31 +11657,56 @@ def newsreel_strip_clash(entry: dict, aspect: str | None) -> tuple[dict, dict] |
     return band, home
 
 
+def newsreel_defaults(row_species) -> list:
+    """R26-73 / E84 (2): a newsreel row that declares NO target is a crawl across the whole reel - it takes the strip at the
+    top of the bottom third (`NEWSREEL_WHOLE_REEL_Y0`, `NEWSREEL_BAND_H` tall, edge to edge), and the strip law then puts
+    the caption above it. A row that declares a target keeps it verbatim. Pure: a new list, the authored entries untouched."""
+    out = []
+    for e in row_species or []:
+        if isinstance(e, dict) and e.get("kind") == SPECIES_NEWSREEL and "target" not in e:
+            e = {**e, "target": {"kind": "region", "x0": 0.0, "y0": NEWSREEL_WHOLE_REEL_Y0,
+                                 "x1": 1.0, "y1": NEWSREEL_WHOLE_REEL_Y0 + NEWSREEL_BAND_H}}
+        out.append(e)
+    return out
+
+
+def _caption_above_crawl(e: dict, aspect: str | None) -> dict | None:
+    """The caption's strip stamped one strip ABOVE this crawl (clear by NEWSREEL_STRIP_PAD), or None with no room above."""
+    box = newsreel_region_box(e, aspect)
+    if box is None:
+        return None
+    h = caption_strip_h()
+    y = box["y"] - NEWSREEL_STRIP_PAD - h
+    return {"y": int(y), "h": h, "band": "newsreel-above"} if y >= 0 else None
+
+
+def _caption_goes_above(e: dict, aspect: str | None) -> bool:
+    """R26-73: the caption moves above this crawl when the row authors `cap_band: "above"`, or - E84 (2), the default -
+    when the crawl sits on the caption's own strip and the row authors nothing."""
+    return e.get("cap_band") == NEWSREEL_CAP_ABOVE or (e.get("cap_band") is None and newsreel_strip_clash(e, aspect) is not None)
+
+
 def validate_newsreel_strip(row_species, aspect: str | None, row_docks: bool | None = None) -> list[str]:
     """The strip law as a pure check on one row (gate 1). Returns the errors; the caller names the row.
 
-    `row_docks` is whether this row docks anything at all: today the player moves the caption's strip only
-    under a CARD (E62's band is written on the dock entry, and the engine reads it there), so a row that asks
-    for `cap_band: "above"` with nothing docked above the band is refused rather than shipped with the caption
-    sitting on the crawl. That is also the composition the operator described - the band runs UNDER a surface."""
+    R26-73 (E84 (2)): a crawl on the caption's strip is no longer a refusal - the caption goes above it by default, docked
+    or not (the engine reads `caption_crawl` where no card carries the band). Still refused, by name: a crawl on the strip
+    that leaves no room above it for the caption, and `cap_band: "above"` on a crawl already clear of the strip.
+    `row_docks` is kept for the callers; nothing reads it since the caption moves with nothing docked."""
     errs: list[str] = []
     for e in newsreel_rows(row_species):
         above = e.get("cap_band") == NEWSREEL_CAP_ABOVE
         clash = newsreel_strip_clash(e, aspect)
-        if clash and not above:
+        if clash and _caption_above_crawl(e, aspect) is None:
             band, home = clash
             errs.append(
-                f"newsreel: the band's region [{band['y']}-{band['y'] + band['h']}] and the caption's E62 strip "
-                f"[{home['y']}-{home['y'] + home['h']}] want the same strip on {aspect or '16:9'}. Two ways out: move the "
-                f"band's region BELOW the caption's home (y0 >= {round((home['y'] + home['h']) / LPG.STAGE_PX[aspect or '16:9'][1], 4)}) "
-                f"or above it, or give the caption its band above the crawl with cap_band: \"{NEWSREEL_CAP_ABOVE}\"")
+                f"newsreel: the band's region [{band['y']}-{band['y'] + band['h']}] sits on the caption's E62 strip "
+                f"[{home['y']}-{home['y'] + home['h']}] on {aspect or '16:9'} and leaves no room above it for the caption "
+                f"({caption_strip_h()} px + {NEWSREEL_STRIP_PAD}) - E84: the crawl sits around the top of the bottom third "
+                "with the captions above it. Lower the band's region, or drop the target for the whole-reel strip")
         if above and not clash:
             errs.append(f'newsreel: cap_band "{NEWSREEL_CAP_ABOVE}" moves the caption above a crawl that is already clear of '
-                        "its strip - drop it, the default places the band below the caption's own band")
-        if above and row_docks is False:
-            errs.append(f'newsreel: cap_band "{NEWSREEL_CAP_ABOVE}" needs a surface docked above the band - the caption\'s strip '
-                        "moves under a CARD (E62 writes the band on the dock entry). Dock the head or the clip, or let the band "
-                        "sit below the caption's home")
+                        "its strip - drop it, the caption keeps its own band")
     return errs
 
 
@@ -11682,23 +11714,23 @@ def newsreel_caption_band(band: dict | None, row_species, aspect: str | None,
                           enter: float, exitt: float) -> dict | None:
     """Where the caption's strip goes when a crawl is live in this dock's window (P52 T6).
 
-    `cap_band: "above"` is the operator's alternative: the crawl owns the caption's own strip, so the caption
-    is stamped one strip higher - ABOVE the crawl, clear of it by `NEWSREEL_STRIP_PAD`. Every other row keeps
-    whatever E62 gave it (`band`), which is what every timeline compiled before this slice carries."""
+    A crawl that owns the caption's own strip - `cap_band: "above"`, or (R26-73, E84 (2)) the same crawl with
+    nothing authored - stamps the caption one strip higher, ABOVE the crawl, clear of it by `NEWSREEL_STRIP_PAD`.
+    Every other row keeps whatever E62 gave it (`band`), which is what every timeline compiled before this slice carries."""
     h = caption_strip_h()
     for e in newsreel_rows(row_species):
-        if e.get("cap_band") != NEWSREEL_CAP_ABOVE:
+        if not _caption_goes_above(e, aspect):
             continue
         at, dur = float(e.get("at", 0.0)), float(e.get("dur", 0.0))
         if at >= exitt or at + dur <= enter:          # the band is not up in this card's window
             continue
         box = newsreel_region_box(e, aspect)
-        if box is None:
-            continue
-        y = box["y"] - NEWSREEL_STRIP_PAD - h
-        if y < 0:
-            continue                                   # no room above the crawl: the row keeps E62's answer
-        return {"y": int(y), "h": h, "band": "newsreel-above"}
+        if (e.get("cap_band") is None and band is not None and box is not None
+                and band["y"] + band["h"] + NEWSREEL_STRIP_PAD <= box["y"]):
+            continue                                   # R26-73: unauthored, and E62's band already sits clear ABOVE the crawl - kept
+        above = _caption_above_crawl(e, aspect)
+        if above is not None:                          # no room above the crawl: the row keeps E62's answer
+            return above
     # ... and when a crawl is up and E62 found no band at all, the caption may NOT fall back to the quiet
     # ANCHOR: that strip is the bottom of the frame, which is where the crawl is. It takes its own HOME
     # (the stage band) whenever the home is clear of every live band; only if even that is covered does the
@@ -11711,6 +11743,28 @@ def newsreel_caption_band(band: dict | None, row_species, aspect: str | None,
             if all(home["y"] + h + NEWSREEL_STRIP_PAD <= b["y"] or home["y"] >= b["y"] + b["h"] + NEWSREEL_STRIP_PAD for b in live):
                 return {"y": home["y"], "h": h, "band": "quiet"}
     return band
+
+
+def stamp_crawl_caption_bands(scenes: list[dict], pages: list[dict], aspect: str | None) -> int:
+    """R26-73 / E84 (2): write `caption_crawl` onto every scene whose crawl puts the caption ABOVE it - one window per such
+    row, `{from, to, caption_band}`, the band `newsreel_caption_band`'s own - so the caption moves with NOTHING docked (the
+    engine reads it where no card is up; a card carries the same band on its entry). In place; returns the windows written.
+    Nothing is written for a crawl clear of the caption's strip, a window with no caption on screen, or a scene with no
+    crawl, so every timeline compiled before the row paints what it painted."""
+    written = 0
+    for sc in scenes:
+        out = []
+        for e in newsreel_rows(sc.get("species")):
+            at, dur = float(e.get("at", 0.0)), float(e.get("dur", 0.0))
+            if not _caption_goes_above(e, aspect) or not _caption_in_window(pages, at, at + dur):
+                continue
+            band = newsreel_caption_band(None, [e], aspect, at, at + dur)
+            if band and band.get("band") == "newsreel-above":
+                out.append({"from": round(at, 2), "to": round(at + dur, 2), "caption_band": band})
+        if out:
+            sc[CAPTION_CRAWL_KEY] = out
+            written += len(out)
+    return written
 
 
 def dock_card_boxes(docks: list[dict], enter: float, exitt: float) -> list[dict] | None:
@@ -12648,6 +12702,7 @@ def main() -> int:
         # survives the hold/drop pass below, and a chart_to is keyed exactly as a spotlight is.
         row_species = [{**e, "id": species_row_id(sid, n)} if isinstance(e, dict) else e
                        for n, e in enumerate(row_species)]
+        row_species = newsreel_defaults(row_species)   # R26-73 / E84 (2): an unauthored crawl takes the whole-reel strip
         row_camera = row[7] if len(row) > 7 and row[7] is not None else None   # P49 T1: the optional 8th element
         # each window runs to the next so the world layer never drops out
         b = plan[i + 1][0] if i + 1 < len(plan) else tl["runtime_s"]
@@ -13289,6 +13344,9 @@ def main() -> int:
     # move. A 16:9 page row's caption is already anchored (R26-205), so this speaks on a 9:16 page's stage
     # caption; at 16:9 the ceiling is the page's (`camera_zoom_errors`, refused at the row).
     yielded = stamp_camera_caption_bands(scenes, pages, ASPECT)
+    crawled = stamp_crawl_caption_bands(scenes, pages, ASPECT)   # R26-73 / E84 (2): the caption above a crawl, docked or not
+    if crawled:
+        print(f"  caption crawl: {crawled} crawl window(s) put the caption above the band (E84)")
     yield_windows = [w for sc in scenes for w in sc.get(CAPTION_YIELD_KEY, [])]
     if yield_windows:
         print(f"  caption yield: {yielded}/{len(yield_windows)} camera window(s) move the caption rather than shrink it - "

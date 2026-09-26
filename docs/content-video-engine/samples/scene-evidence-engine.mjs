@@ -18270,6 +18270,7 @@ async function mount(doc) {
                SQUIG_DRAW: 0.45, LIFE_FPS: 12, LIFE_LAND: 0.6, BOIL_PX: 1.2, BOIL_DEG: 0.7,   /* LIFE_FPS 10 -> 12, E99 s36 (P61 T12): plate life on the 2s grid of the 24 fps render */
                STEAM_PERIOD: 2.6, TICK_STEP: 0.5 };   /* STILL LIFE (2026-09-05): steam and the ticker (the trace carries its own two in species/trace.mjs, the light its dim and its portrait radius in species/spotlight.mjs) */
   const CAMERA = new Set(["punch", "focus_zoom", "pull_back"]);
+  const CAP_CRAWL = "caption_crawl";   /* R26-73 / E84 (2): the compiler's caption band above a crawl, where no card is up (read in the caption block) */
   const CAP_YIELD = "caption_yield";   /* R26-201: the compiler's per-move caption band on a scene (read in the caption block below) */
   /* R26-220 (E99 s80 (2), 2026-09-18): the FOCUS ZOOM's magnification is the ROW's, not the engine's. `zoom` on the
      species entry, validated at compile time against the page's own reachable zoom (`page_zoom_ceiling`) - at 16:9
@@ -24338,6 +24339,12 @@ async function mount(doc) {
       const yb = capY.caption_band && typeof capY.caption_band.y === "number" ? capY.caption_band : null;
       capBand = !carded ? yb : (yb && capBand ? (yb.y < capBand.y ? yb : capBand) : null);
     }
+    /* R26-73 / E84 (2) (2026-09-25): A CRAWL ACROSS THE WHOLE REEL puts the caption ABOVE it, docked or not. Under a card the
+       band is already on the dock entry (E62's, from `newsreel_caption_band`); with NOTHING docked the compiler writes the
+       same band as a `caption_crawl` window on the scene (`stamp_crawl_caption_bands`) and it is read here - the topmost
+       band wins against a camera yield, as two cards' bands do. Absent = every timeline compiled before the row. */
+    const capC = carded ? null : (sc[CAP_CRAWL] || []).find((w) => t >= w.from && t < w.to && w.caption_band && typeof w.caption_band.y === "number") || null;
+    if (capC) capBand = capBand && capBand.y < capC.caption_band.y ? capBand : capC.caption_band;
     const quiet = ((carded || !!capY) && !capBand) || !!pmOver;   /* R26-292 (P72 T14): the page before collapsing over this world keeps the caption in the strip until the prop lands */
     /* STAGE (s9.25 #2): the timeline declares it; the anchor is the shared-stage position only */
     /* a ledger page may pin its captions to the anchor (page.caption === "anchor"): a host plate's quiet zone is the host's (C5 addendum) */
