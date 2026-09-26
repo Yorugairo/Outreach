@@ -51,6 +51,12 @@ SAFE_TOP, SAFE_BOTTOM, SAFE_SIDE = 0.12, 0.20, 0.05
 # A box this close to `place` / `read_place` is AT it. The spring settles to the pixel, but E49's idle keeps
 # breathing afterwards - a 1 % scale on a 1,026 px card is 12 px - so the tolerance is a share of the box.
 STATE_TOL_PX, STATE_TOL_SHARE = 8.0, 0.03
+# P72 T46c / R26-393 (a): A HOVERING CARD IS AT ITS PLACE. A dock that chose `under: hover` (P71 T15) lifts LIFT_PX and grows
+# one STEP after its contact and holds that pose - its composition, not a flight. So a hovering card's tolerance is widened
+# by the hover's own reach: the lift, and the step's growth of the width and the drawn height (about any origin, a step
+# moves an edge by at most its whole growth). One dial written twice (as MELT_S is): the engine's DOCK_HOVER, pinned by
+# test_wave3_docks_probe.py. A card that names no hover keeps the tolerance it always had.
+HOVER_LIFT_PX, HOVER_STEP = 10.0, 1.035
 DEMOTED_SCALE = 0.95                      # text drawn below this share of its own layout size has been PARKED away (or pulled
                                           # back from): it is a thumbnail beside the card that holds the stage, not reading matter
 # AT REST. What a card RESTS on is composition; what it flies over is choreography. A dock is settled
@@ -327,6 +333,30 @@ READ_DOM = r"""
     };
     /* each bar as drawn, the number printed for it (if FULLY shown, with its own opacity for the veil below), and on a
        horizontal gauge its width (R26-319), on a range bar its band's box (R26-303) */
+    /* P72 T46c / R26-394: A FIGURE THAT SPEAKS FOR ITS BAR. A compare that moves its bar (P69 T26a, and P71 T24's re-value:
+       the engine's `__barMorphs` list - a figure whose metric IS its bar's value) counts the number at the bar's top WITH
+       the height, while the bar's own label stands down (P72 T18) - so that figure is the number printed for the bar.
+       Read only while the bar's own number is not up, only for a figure on that list (a figure that does not speak for
+       its bar is never read as its value), and only as FULLY written: every numeral cell at full ink - a numeral mid-write
+       is not printed yet; the words round it may be crossing over (compare.mjs: the numeral holds while the affixes
+       cross) and a cell below full ink is left out of the text. */
+    const morphFigure = (Q, bb) => {
+      for (const x of [Q, S]) for (const M of (x && x.__barMorphs) || []) if (M && M.rec === bb && M.fg && M.fg.label) return M.fg;
+      return null;
+    };
+    const figureText = (f) => {
+      if (eff(f.label) < 0.99) return null;
+      const cells = (f.__compare && f.__compare.cells) || f.lg || [];
+      if (!cells.length) return txt(f.label) || null;
+      let s = '';
+      for (const ts of cells) {
+        const ch = ts.textContent || '', a = ts.getAttribute('opacity'), o = a == null || a === '' ? 1 : +a;
+        if (/[0-9]/.test(ch) && o < 0.99) return null;
+        if (o >= 0.99) s += ch;
+      }
+      s = s.replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim();
+      return /[0-9]/.test(s) ? s : null;
+    };
     const barRows = (Q, HZ) => {
       const rows = [];
       for (const bb of Q.bars) {
@@ -336,6 +366,10 @@ READ_DOM = r"""
         const vEl = (Q.callout && Q.cval && Q.bars[Q.emph] === bb) ? Q.cval : bb.val;
         const row = { l: (bb.lab ? txt(bb.lab) : '').slice(0, 14), h: r.height, y: r.y - stg.y,
                       v: (vEl && eff(vEl) >= 0.99) ? txt(vEl) : null, vo: vEl ? eff(vEl) : 0 };
+        if (row.v === null) {   /* R26-394: the bar's own number is not up - its figure may be */
+          const f = morphFigure(Q, bb), ft = f ? figureText(f) : null;
+          if (ft) { row.v = ft; row.vs = 'fig'; row.vo = eff(f.label); }
+        }
         if (HZ) { row.w = r.width; row.x = r.x - stg.x; }
         if (bb.band && eff(bb.band) > 0.05) { const q = R(bb.band); row.r = [q[1], q[3]]; }
         rows.push(row);
@@ -667,6 +701,7 @@ def _dock_state(d: dict, entry: dict | None) -> str:
     """parked | reading | moving - the card's own box against the boxes the compiler named for it.
     `moving` covers the flight, the park's path and a card whose life was too short to park."""
     box = d["box"]
+    hover = (entry or {}).get("under") == "hover"
     for key, name in (("place", "parked"), ("read_place", "reading")):
         p = (entry or {}).get(key)
         if not p:
@@ -674,7 +709,10 @@ def _dock_state(d: dict, entry: dict | None) -> str:
         # the top-left and the width only: `place.h` is the compiler's PREDICTION and the card's height
         # stays its content's, so a card at its place is rarely at its place's height
         tol = max(STATE_TOL_PX, STATE_TOL_SHARE * float(p["w"]))
-        if abs(box[0] - p["x"]) <= tol and abs(box[1] - p["y"]) <= tol and abs(box[2] - p["w"]) <= tol:
+        grow = (HOVER_STEP - 1.0) if hover else 0.0   # R26-393 (a): a hover's step and lift are its pose
+        tx, tw = tol + grow * float(p["w"]), tol + grow * float(p["w"])
+        ty = tol + (HOVER_LIFT_PX + grow * float(box[3]) if hover else 0.0)
+        if abs(box[0] - p["x"]) <= tx and abs(box[1] - p["y"]) <= ty and abs(box[2] - p["w"]) <= tw:
             return name
     return "moving"
 
@@ -732,7 +770,8 @@ def bars_json(bars: dict) -> dict:
     rows = [{"l": r["l"], "h": int(round(r["h"])), "y": int(round(r["y"])),
              **({"w": int(round(r["w"])), "x": int(round(r["x"]))} if r.get("w") is not None else {}),
              **({"r": [int(round(v)) for v in r["r"]]} if r.get("r") else {}),
-             **({"v": r["v"]} if r.get("v") else {})} for r in bars["b"]]
+             **({"v": r["v"]} if r.get("v") else {}),
+             **({"vs": r["vs"]} if r.get("v") and r.get("vs") else {})} for r in bars["b"]]   # R26-394: `vs: fig` - read off the bar's figure
     tail = {**({"pg": str(bars["pg"])[:PAGE_NAME_MAX]} if bars.get("pg") is not None and (bars.get("ns") or bars.get("sc")) else {}),
             **({"pn": int(bars["pn"])} if bars.get("pn") is not None else {}),
             **({"si": int(bars["si"])} if bars.get("si") is not None else {}),

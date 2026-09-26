@@ -552,6 +552,22 @@
   .pill-row { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; }
   .pill-num { font-size: 23px; font-weight: 800; font-family: ui-monospace, Consolas, monospace; font-variant-numeric: tabular-nums; white-space: nowrap; }
   .pill-tag { font-size: 13px; font-weight: 700; letter-spacing: .05em; padding: 2px 6px; border-radius: 4px; background: rgba(244,230,199,.14); white-space: nowrap; }
+  /* P72 T46c / R26-365 (b) - R26-171 AMENDED (E99 s71: "the rail is SCALED to the stage, never dropped"). A portrait dock's
+     badge rail was drawn at the landscape card's 13 / 23 px - 13 stage px is 4.7 px in the hand (doc 49 s49.1: 12 px on a
+     390 px phone = 34 stage px). A SOLO portrait card's rail is sized to its CARD, in the card's own width (cqw): on the
+     default 800 px portrait dock the label reads at the phone floor over a number at the page rail's portrait size
+     (`.lp-rail` above: 34 / 59 px), the tag's clause at the label's size wrapping under the number; a card the compiler
+     placed narrower keeps the same proportions to its own width. The stacked PAIR is NOT scaled here: two portrait cards
+     with scaled rails do not fit between the chrome and the caption strip unless the pictures give up height - the pair's
+     mount is a layout decision left open (R26-365 (b), the frame in the slice's record). Landscape is untouched.
+       4.4cqw / 7.6cqw [DERIVED: 34 / 59 px over the portrait dock's ~778 px content box] */
+  html[data-aspect="9:16"] .dock.solo { container-type: inline-size; }
+  html[data-aspect="9:16"] .dock.solo .rail:not(:empty) { gap: 1.55cqw; margin-top: 1.8cqw; }   /* a card with no badges keeps the rail's old 11 px foot - the height the compiler predicts (test_video_dock) */
+  html[data-aspect="9:16"] .dock.solo .pill { padding: 1cqw 2.3cqw 1.3cqw; border-radius: 1.55cqw; flex-direction: column; align-items: flex-start; gap: 0; }
+  html[data-aspect="9:16"] .dock.solo .pill-label { font-size: 4.4cqw; letter-spacing: .04em; }
+  html[data-aspect="9:16"] .dock.solo .pill-row { gap: 1.55cqw; }
+  html[data-aspect="9:16"] .dock.solo .pill-num { font-size: 7.6cqw; }
+  html[data-aspect="9:16"] .dock.solo .pill-tag { font-size: 4.4cqw; letter-spacing: .02em; white-space: normal; padding: .4cqw 1.3cqw; border-radius: .8cqw; }
 
 
   .hand-unused {

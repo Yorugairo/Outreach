@@ -7631,8 +7631,18 @@ async function mount(doc) {
   const dockHoverShadow = (hov, h) => hov.k > 0   /* the drop shadow the lift casts, added under the card's own hard edge */
     ? ", 0 " + (hov.lift + DOCK_HOVER.SHADOW_Y * h * hov.k).toFixed(1) + "px " + (DOCK_HOVER.SHADOW_BLUR * h * hov.k).toFixed(1)
       + "px rgba(5,7,13," + (DOCK_HOVER.SHADOW_A * hov.k).toFixed(3) + ")" : "";
+  /* P72 T46c / R26-393 (b): THE VEIL IS THE READ'S. A blurring card that JOINS ITS DATE (`park_at`, P71 T23) reads over the
+     blurred chart, then parks to its chip and draws a leader and a ring ON the chart - the join is the claim, and a veil
+     left up for the card's whole life blurred it. So on such a card the veil clears over the park's own clock (read_s ->
+     read_s + park_s, the minimum-jerk the park rides) and the join is drawn on the sharp chart. A card too short to park
+     (no `park`) and every card without `park_at` keep the law they had: up on the enter, down on the leave. */
+  const dockVeilParkK = (d, t) => {
+    if (!d.park_at || !d.park) return 1;
+    const rs = d.read_s != null ? d.read_s : DOCK_READ_S, ps = d.park_s != null ? d.park_s : DOCK_PARK_S;
+    return 1 - minJerk((t - d.enter - rs) / Math.max(0.001, ps));
+  };
   const dockVeilK = (d, t) => (d && d.under === "blur")
-    ? minJerk((t - d.enter) / DOCK_VEIL.IN_S) * (t > d.exit ? 1 - minJerk((t - d.exit) / DOCK_VEIL.OUT_S) : 1) : 0;
+    ? minJerk((t - d.enter) / DOCK_VEIL.IN_S) * (t > d.exit ? 1 - minJerk((t - d.exit) / DOCK_VEIL.OUT_S) : 1) * dockVeilParkK(d, t) : 0;
   const dockveil = $("dockveil");
   /* THE PAGE'S WORDS STAY OUT OF THE BLUR (review round 2; E45 s1, E52: a page CITES). The veil blurs the chart - its plot,
      its series, its labels - and is cut round every word the page itself prints (the title, the sub, the citation, a note,
@@ -8272,8 +8282,32 @@ async function mount(doc) {
     const P = d.place, pw = el.offsetWidth || 0, ph = P && P.w > 0 && P.h > 0 && pw > 0 ? pw * P.h / P.w : lh;
     const oy = el.offsetTop + (Number.isFinite(org[1]) && lh > 0 ? ph * org[1] / lh : ph / 2);
     const cx = STAGE_W / 2 - ox, cy = STAGE_H / 2 - oy;
-    return "translate(" + cx.toFixed(2) + "px," + cy.toFixed(2) + "px) " + cam
+    return dockDepthKeep(d, t, el, k, ph, cs) + "translate(" + cx.toFixed(2) + "px," + cy.toFixed(2) + "px) " + cam
       + "translate(" + (-cx).toFixed(2) + "px," + (-cy).toFixed(2) + "px) ";
+  };
+  /* P72 T46c / R26-398 - A CARD AT A DEPTH STAYS ON THE STAGE. Riding its plane's share of the camera, golden `dock-depth`'s
+     card (placed low and right, the focus zoom aimed at it) was carried past the stage's bottom edge with its badge row
+     under it. So the depth placement keeps the card's WHOLE box - the card at its placed height (R26-376's height: the
+     place's aspect at the laid-out width, never the image's decoded layout) plus its badge rail and the frame's own
+     bottom edge - DOCK_DEPTH_EDGE_PX inside the stage: where the camera at the card's depth would carry any edge past
+     that line, one screen-space translate (outside the camera) brings it back, on each axis alone. The card still takes
+     its plane's share of the zoom; only where it would leave the frame does it stop at the frame. The box is the layout's
+     at the camera's own mapping (camProject at the depth, P58 T3: screen = at + s (p - look)); every term is a function
+     of t and the laid-out rail, so a cold seek is the played frame. "" when the whole box is on the stage.
+       DOCK_DEPTH_EDGE_PX 24 [DERIVED: the frame read - the card's frame line kept off the stage's own edge by about its
+         badge rail's gap, so it reads as placed, not clipped]. */
+  const DOCK_DEPTH_EDGE_PX = 24;
+  const dockDepthKeep = (d, t, el, k, ph, cs) => {
+    const xf = camNow(d.scene, t);
+    const st = camLayerState({ s: xf.s, look: [xf.ox, xf.oy], at: [xf.ax != null ? xf.ax : xf.ox, xf.ay != null ? xf.ay : xf.oy] }, k);
+    const px = (v) => parseFloat(v) || 0, rail = el.querySelector(".rail"), rs = rail ? getComputedStyle(rail) : null;
+    const railH = rs && rs.display !== "none" ? px(rs.height) + px(rs.marginTop) + (rs.boxSizing === "border-box" ? 0 : px(rs.paddingTop) + px(rs.paddingBottom)) : 0;
+    const x0 = el.offsetLeft, y0 = el.offsetTop, w = el.offsetWidth || 0, h = ph + railH + px(cs.paddingBottom) + px(cs.borderBottomWidth);
+    if (!(w > 0 && h > 0)) return "";
+    const [X0, Y0] = camProject(st, [x0, y0]), [X1, Y1] = camProject(st, [x0 + w, y0 + h]), E = DOCK_DEPTH_EDGE_PX;
+    const fit = (a, b, W) => (b - a > W - 2 * E ? 0 : a < E ? E - a : b > W - E ? W - E - b : 0);
+    const dx = fit(X0, X1, STAGE_W), dy = fit(Y0, Y1, STAGE_H);
+    return dx || dy ? "translate(" + dx.toFixed(2) + "px," + dy.toFixed(2) + "px) " : "";
   };
 
   /* the whole transform at t: the projection, the arrival composed around it, the idle inside it */
@@ -24014,6 +24048,13 @@ async function mount(doc) {
     PAGE_SETTLE_S: 0.14,     /* ... and the squash relaxing after the impact */
     PAGE_SQUASH: 0.14,       /* the stop-motion squash ON IMPACT: wider by this much, and as much shorter */
     PAGE_FADE_S: 0.1,        /* the stamp's opacity ramp - never a pop out of nothing */
+    /* P72 T46c / R26-369: A NARROW ROW GIVES ITS WORDS THE WIDTH. The medallion and the icon are shares of the row's HEIGHT,
+       so on a tall narrow board (a 9:16 stage) they took the row's width and the text fell to MIN_K (24.6 px) under an icon
+       that overlapped it. When the text column is under PAGE_TEXT_SHARE of the row, both give up width together - down to
+       PAGE_NARROW_MIN of their height share - until the words reach the height's own scale. A row wider than that (every
+       16:9 board) is laid out exactly as before. */
+    PAGE_TEXT_SHARE: 0.5,    /* the text column's least share of the row's width before the row counts as narrow [DERIVED: the 16:9 boards keep 65-79 %, the 9:16 board had 16 %] */
+    PAGE_NARROW_MIN: 0.4,    /* ... and the least share of their height-sized box the medallion and the icon keep [DERIVED: the 9:16 frame read - at 0.35 the icon read as a dot beside a 466 px row; at 0.4 it is a 130 px stamp and the row text 46 px] */
   });
 
   const ag01 = (v) => Math.min(1, Math.max(0, v));
@@ -24082,7 +24123,15 @@ async function mount(doc) {
     const top = (box.y || 0) + pad + (hasTitle ? AGENDA.PAGE_TITLE_H : 0);
     const h = Math.max(1, (box.y || 0) + (box.h || 0) - pad - top);
     const rowH = h / N;
-    const icon = rowH * AGENDA.PAGE_ICON, medR = rowH * AGENDA.PAGE_MED;
+    let icon = rowH * AGENDA.PAGE_ICON, medR = rowH * AGENDA.PAGE_MED;
+    { /* R26-369: a narrow row - the icon and the medallion give the words width (AGENDA.PAGE_TEXT_SHARE) */
+      const fixed = 3 * AGENDA.PAGE_ROW_PAD + AGENDA.PAGE_ICON_GAP, em = 11 * AGENDA.TEXT_SIZE;
+      if (w - fixed - icon - 2 * medR < AGENDA.PAGE_TEXT_SHARE * w) {
+        const kH = Math.min(AGENDA.PAGE_MAX_K, rowH / AGENDA.ROW_H);
+        const f = Math.max(AGENDA.PAGE_NARROW_MIN, Math.min(1, (w - fixed - kH * em) / (icon + 2 * medR)));
+        icon *= f; medR *= f;
+      }
+    }
     const medX = x + AGENDA.PAGE_ROW_PAD + medR;
     const textX = medX + medR + AGENDA.PAGE_ROW_PAD;
     const textW = Math.max(1, x + w - icon - AGENDA.PAGE_ICON_GAP - AGENDA.PAGE_ROW_PAD - textX);
@@ -24179,6 +24228,11 @@ async function mount(doc) {
         const tt = el("text", "agtitle", g, { x: lay.titleX.toFixed(1), y: lay.titleY.toFixed(1), opacity: tf.toFixed(3),
                                              "font-size": (AGENDA.PAGE_TITLE_SIZE * Math.min(lay.k, AGENDA.PAGE_TITLE_K)).toFixed(1) });
         tt.textContent = title;
+        { /* P72 T46c / R26-369: the title follows the block's scale up to PAGE_TITLE_K, and on a narrow board that is wider than
+             the board - it is fitted to the title rule's own length (the board less its row pads); a title that fits is untouched */
+          const room = lay.w - 2 * AGENDA.PAGE_ROW_PAD, tw = tt.getComputedTextLength ? tt.getComputedTextLength() : 0;
+          if (tw > room) tt.setAttribute("font-size", (+tt.getAttribute("font-size") * room / tw).toFixed(1));
+        }
         const d = "M" + lay.titleX.toFixed(1) + " " + lay.titleRuleY.toFixed(1) +
                   " L" + (lay.titleX + lay.w - 2 * AGENDA.PAGE_ROW_PAD).toFixed(1) + " " + lay.titleRuleY.toFixed(1);
         drawOn(el("path", "agrule", g, { d }), tf);   /* the title's own rule closes its room off the list */
@@ -25063,13 +25117,34 @@ async function mount(doc) {
     return { shown: k * dur > C.DRAW_S * C.LABEL_AT, x: lx, y: ly, pop, scale: (C.LABEL_FROM + C.LABEL_SPAN * pop) * s };
   };
 
+  /* P72 T46c / R26-344 / R26-404 - THE RING ON A PARKED PAGE. A ring is the page's annotation: on a page parked to a
+     third (chart_to park) its datum stands a third the size, and a ring kept at stage size crossed the tags beside it
+     (row 24, M34). The engine hands the painter `parkScale(target)`: the park scale of the page the target is ON (a
+     datum on the ledger page; 1 for every other target and for an unparked page). Under a park the ring, its stroke
+     and its label are painted in ONE group scaled by s about the target's centre, round the target's box grown back
+     by 1 / s - so the ring's reach over its datum, its nib and its label all take the page's scale, the datum's own
+     box stays the datum's, and the draw-on runs on the same path length. s = 1 paints exactly the bytes it always
+     painted (no group, no attribute). */
+  const calloutParkScale = (v) => (Number.isFinite(+v) && +v > 0 && +v < 1 ? +v : 1);
+  const calloutParkBox = (b, s) => {
+    const cx = b.x + b.w / 2, cy = b.y + b.h / 2, w = b.w / s, h = b.h / s;
+    return { x: cx - w / 2, y: cy - h / 2, w, h };
+  };
+  const calloutParkXf = (b, s) => {
+    const cx = b.x + b.w / 2, cy = b.y + b.h / 2;
+    return "translate(" + cx.toFixed(2) + " " + cy.toFixed(2) + ") scale(" + s.toFixed(4) + ") translate(" + (-cx).toFixed(2) + " " + (-cy).toFixed(2) + ")";
+  };
+
   /* THE PAINTER. ctx is the engine's species context (SPECIES_PAINTERS in the player): the declaration, the
      clock, the layer already chosen for the kind's target, and the shared helpers by name - `squigglePath` and
      `SQUIG_DRAW` among them, because the underline form is the SQUIGGLE's stroke and clock, not the ring's. */
   function paintCallout(ctx) {
-    const { sp, k, dur, svg, el, resolveTarget, drawOn, ease, hash, seed, squigglePath, SQUIG_DRAW } = ctx;
-    const b = resolveTarget(sp.target);
-    if (!b) return;   /* the targeting law: no resolved target, nothing painted */
+    const { sp, k, dur, el, resolveTarget, drawOn, ease, hash, seed, squigglePath, SQUIG_DRAW } = ctx;
+    const b0 = resolveTarget(sp.target);
+    if (!b0) return;   /* the targeting law: no resolved target, nothing painted */
+    const s = sp.form === "underline" ? 1 : calloutParkScale(ctx.parkScale ? ctx.parkScale(sp.target) : 1);
+    const svg = s < 1 ? el("g", "co-park", ctx.svg, { transform: calloutParkXf(b0, s) }) : ctx.svg;
+    const b = s < 1 ? calloutParkBox(b0, s) : b0;
     if (sp.form === "underline") {   /* P50 T3 / E56's ONE exception: a ring circles a number or a point on a chart,
          but an underline under a QUOTED PHRASE is the squiggle law (s9.27) - the same hand, the same .sq stroke,
          drawn from `at` over SQUIG_DRAW on the underline's own clock, riding the card's live geometry. */
@@ -25959,6 +26034,15 @@ async function mount(doc) {
     return [{ kind: f.kind || "callout", at: sc.span[0] + LP_FOCUS_AT, dur: f.dur || LP.FOCUS_DUR, label: f.label,
               target: f.target || { kind: "datum", index: Number.isInteger(pg.emphasize) ? pg.emphasize : 0 }, target2: f.target2 }];
   };
+  /* P72 T46c / R26-344 / R26-404: THE PARK SCALE OF THE PAGE A TARGET IS ON - a datum on the ledger page (resolveTarget's own
+     world pick, the active state's `parked`, lpPaintPark); 1 for a dock's datum, a point, a region and an unparked page. Handed
+     to the painters as `parkScale` (the callout rings a parked page's datum at the page's scale); read at call time. */
+  const spParkScale = (tg) => {
+    if (!tg || tg.kind !== "datum" || tg.dock != null) return 1;
+    const world = wB.classList.contains("ledger") ? wB : wA, st = world && world.__lp;
+    const S = st ? ((st.states && st.states[st.active | 0]) || st) : null, sc = S && S.parked ? +S.parked.scale : 1;
+    return Number.isFinite(sc) && sc > 0 ? sc : 1;
+  };
   const paintSpecies = (sc, t) => {
     spScene = sc;   /* P72 T48: a datum on a dock names the dock by this scene's index */
     spTop.replaceChildren(); spUnder.replaceChildren(); plife.replaceChildren();
@@ -25984,6 +26068,7 @@ async function mount(doc) {
                   STAGE_W, STAGE_H, PORTRAIT,
                   groundLum: (pts) => groundLumAt(sc, pts),   /* P71 T14: the measured ground under stage-px samples (the ruler's ink) */
                   groundLumThen: (pts, t0) => groundLumsThen(sc, pts, t0),   /* P72 T11: ... as the world stood at t0, per point (a seal's contact) */
+                  parkScale: (tg) => spParkScale(tg),   /* P72 T46c / R26-404: a ring on a parked page takes the page's scale */
                   propHatchLines });   /* P70 T7 / E99 s128: T6b's resting hatch, by the prop's own line law - a stage object IN the world (the balance) casts it; read at call time, so no painter's bytes move */
         return;
       }

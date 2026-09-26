@@ -98,6 +98,13 @@ export const AGENDA = Object.freeze({
   PAGE_SETTLE_S: 0.14,     /* ... and the squash relaxing after the impact */
   PAGE_SQUASH: 0.14,       /* the stop-motion squash ON IMPACT: wider by this much, and as much shorter */
   PAGE_FADE_S: 0.1,        /* the stamp's opacity ramp - never a pop out of nothing */
+  /* P72 T46c / R26-369: A NARROW ROW GIVES ITS WORDS THE WIDTH. The medallion and the icon are shares of the row's HEIGHT,
+     so on a tall narrow board (a 9:16 stage) they took the row's width and the text fell to MIN_K (24.6 px) under an icon
+     that overlapped it. When the text column is under PAGE_TEXT_SHARE of the row, both give up width together - down to
+     PAGE_NARROW_MIN of their height share - until the words reach the height's own scale. A row wider than that (every
+     16:9 board) is laid out exactly as before. */
+  PAGE_TEXT_SHARE: 0.5,    /* the text column's least share of the row's width before the row counts as narrow [DERIVED: the 16:9 boards keep 65-79 %, the 9:16 board had 16 %] */
+  PAGE_NARROW_MIN: 0.4,    /* ... and the least share of their height-sized box the medallion and the icon keep [DERIVED: the 9:16 frame read - at 0.35 the icon read as a dot beside a 466 px row; at 0.4 it is a 130 px stamp and the row text 46 px] */
 });
 
 const ag01 = (v) => Math.min(1, Math.max(0, v));
@@ -166,7 +173,15 @@ export const agendaPageLayout = (box, n, hasTitle) => {
   const top = (box.y || 0) + pad + (hasTitle ? AGENDA.PAGE_TITLE_H : 0);
   const h = Math.max(1, (box.y || 0) + (box.h || 0) - pad - top);
   const rowH = h / N;
-  const icon = rowH * AGENDA.PAGE_ICON, medR = rowH * AGENDA.PAGE_MED;
+  let icon = rowH * AGENDA.PAGE_ICON, medR = rowH * AGENDA.PAGE_MED;
+  { /* R26-369: a narrow row - the icon and the medallion give the words width (AGENDA.PAGE_TEXT_SHARE) */
+    const fixed = 3 * AGENDA.PAGE_ROW_PAD + AGENDA.PAGE_ICON_GAP, em = 11 * AGENDA.TEXT_SIZE;
+    if (w - fixed - icon - 2 * medR < AGENDA.PAGE_TEXT_SHARE * w) {
+      const kH = Math.min(AGENDA.PAGE_MAX_K, rowH / AGENDA.ROW_H);
+      const f = Math.max(AGENDA.PAGE_NARROW_MIN, Math.min(1, (w - fixed - kH * em) / (icon + 2 * medR)));
+      icon *= f; medR *= f;
+    }
+  }
   const medX = x + AGENDA.PAGE_ROW_PAD + medR;
   const textX = medX + medR + AGENDA.PAGE_ROW_PAD;
   const textW = Math.max(1, x + w - icon - AGENDA.PAGE_ICON_GAP - AGENDA.PAGE_ROW_PAD - textX);
@@ -263,6 +278,11 @@ export function paintAgendaPage(ctx) {
       const tt = el("text", "agtitle", g, { x: lay.titleX.toFixed(1), y: lay.titleY.toFixed(1), opacity: tf.toFixed(3),
                                            "font-size": (AGENDA.PAGE_TITLE_SIZE * Math.min(lay.k, AGENDA.PAGE_TITLE_K)).toFixed(1) });
       tt.textContent = title;
+      { /* P72 T46c / R26-369: the title follows the block's scale up to PAGE_TITLE_K, and on a narrow board that is wider than
+           the board - it is fitted to the title rule's own length (the board less its row pads); a title that fits is untouched */
+        const room = lay.w - 2 * AGENDA.PAGE_ROW_PAD, tw = tt.getComputedTextLength ? tt.getComputedTextLength() : 0;
+        if (tw > room) tt.setAttribute("font-size", (+tt.getAttribute("font-size") * room / tw).toFixed(1));
+      }
       const d = "M" + lay.titleX.toFixed(1) + " " + lay.titleRuleY.toFixed(1) +
                 " L" + (lay.titleX + lay.w - 2 * AGENDA.PAGE_ROW_PAD).toFixed(1) + " " + lay.titleRuleY.toFixed(1);
       drawOn(el("path", "agrule", g, { d }), tf);   /* the title's own rule closes its room off the list */

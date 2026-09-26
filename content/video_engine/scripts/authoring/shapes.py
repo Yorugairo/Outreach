@@ -39,7 +39,8 @@ THE APPROVED SHAPE, enforced BY CONSTRUCTION (E99 s67 Apply 1-6, E47, E65, R26-1
   * a world plate row shorter than `plate_hold_s` (M44 `PLATE_MIN_S`) is DIAGNOSED by name in the
     row's own `why` and never manufactured: the plan's window stands, the compiler steals no seconds
     from the row after it, and a longer plate is the plan's to write (E99 s69);
-  * at 9:16 no `badges` rail is emitted (R26-171); the PARK is emitted in both aspects - R26-172 is
+  * at 9:16 a `badges` rail is emitted as at 16:9 and the player SCALES it to the stage (R26-171 AMENDED, E99 s71;
+    P72 T46c); the PARK is emitted in both aspects - R26-172 is
     WITHDRAWN and a park is how a page makes room for a card (`place_cards`);
   * a light is emitted ONLY on a sentence that POINTS - the plan's own `capabilities` name a datum,
     an index, a point or a region - and never before the page's chart LANDS (Apply 1-2). The landing
@@ -134,7 +135,7 @@ DEFAULTS: dict = {
     "page_entry": "axes",         # E99 s67 Apply 6: a page enters by its axes unless its number lands late
     "light_after_build": True,    # E99 s67 Apply 1-2: no light over the build
     "card_in_page_room": True,    # E65: a dock reads, then parks in the page's own room and stays
-    "no_rails_9_16": True,        # R26-171
+    "rails_9_16": "scaled",       # R26-171 AMENDED (E99 s71, P72 T46c): the rail is SCALED to the stage, never dropped
     "plate_hold_s": PLATE_MIN_S,  # M44
     "park_scale": 0.52,           # the park a page makes room with, measured on the approved cut:
     "park_anchor": "top",         # (the skeleton `page-parks-to-make-room-for-the-card` cites the table's own line)
@@ -1691,16 +1692,12 @@ def drop_flashes(species: list, docks: list, t1: float, notes: list) -> list:
 
 
 def _aspect_clean(row_docks: list, row_species: list, aspect: str, defaults: dict) -> tuple[list, list, list]:
-    """R26-171: at 9:16 no `badges` rail leaves this module. The park does (R26-172 WITHDRAWN)."""
-    notes: list[str] = []
-    if str(aspect) != "9:16":
-        return row_docks, row_species, notes
-    if defaults.get("no_rails_9_16", True):
-        for d in row_docks:
-            if "badges" in d[4]:
-                d[4].pop("badges")
-                notes.append("the badges rail is not emitted at 9:16 (R26-171)")
-    return row_docks, row_species, notes
+    """What an aspect strips from a row before it leaves this module - nothing, today. R26-171 AMENDED (2026-09-17, the
+    parent's read of the badge-ladder rendition under E99 s71): *the rail is SCALED to the stage, never dropped* -
+    dropping it at 9:16 left the badge ladder a still card; the player's portrait dock rail is sized for the phone
+    (P72 T46c: the template's `html[data-aspect="9:16"] .dock .pill*`). The park is emitted in both aspects (R26-172
+    WITHDRAWN). Kept as the one place an aspect rule would live, so the row loop's call and its notes stand."""
+    return row_docks, row_species, []
 
 
 # --------------------------------------------------------------------------- the windows

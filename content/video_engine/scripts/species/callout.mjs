@@ -78,13 +78,34 @@ export const calloutLabel = (b, pd, k, dur, ls, ease, C = CALLOUT) => {
   return { shown: k * dur > C.DRAW_S * C.LABEL_AT, x: lx, y: ly, pop, scale: (C.LABEL_FROM + C.LABEL_SPAN * pop) * s };
 };
 
+/* P72 T46c / R26-344 / R26-404 - THE RING ON A PARKED PAGE. A ring is the page's annotation: on a page parked to a
+   third (chart_to park) its datum stands a third the size, and a ring kept at stage size crossed the tags beside it
+   (row 24, M34). The engine hands the painter `parkScale(target)`: the park scale of the page the target is ON (a
+   datum on the ledger page; 1 for every other target and for an unparked page). Under a park the ring, its stroke
+   and its label are painted in ONE group scaled by s about the target's centre, round the target's box grown back
+   by 1 / s - so the ring's reach over its datum, its nib and its label all take the page's scale, the datum's own
+   box stays the datum's, and the draw-on runs on the same path length. s = 1 paints exactly the bytes it always
+   painted (no group, no attribute). */
+export const calloutParkScale = (v) => (Number.isFinite(+v) && +v > 0 && +v < 1 ? +v : 1);
+export const calloutParkBox = (b, s) => {
+  const cx = b.x + b.w / 2, cy = b.y + b.h / 2, w = b.w / s, h = b.h / s;
+  return { x: cx - w / 2, y: cy - h / 2, w, h };
+};
+export const calloutParkXf = (b, s) => {
+  const cx = b.x + b.w / 2, cy = b.y + b.h / 2;
+  return "translate(" + cx.toFixed(2) + " " + cy.toFixed(2) + ") scale(" + s.toFixed(4) + ") translate(" + (-cx).toFixed(2) + " " + (-cy).toFixed(2) + ")";
+};
+
 /* THE PAINTER. ctx is the engine's species context (SPECIES_PAINTERS in the player): the declaration, the
    clock, the layer already chosen for the kind's target, and the shared helpers by name - `squigglePath` and
    `SQUIG_DRAW` among them, because the underline form is the SQUIGGLE's stroke and clock, not the ring's. */
 export function paintCallout(ctx) {
-  const { sp, k, dur, svg, el, resolveTarget, drawOn, ease, hash, seed, squigglePath, SQUIG_DRAW } = ctx;
-  const b = resolveTarget(sp.target);
-  if (!b) return;   /* the targeting law: no resolved target, nothing painted */
+  const { sp, k, dur, el, resolveTarget, drawOn, ease, hash, seed, squigglePath, SQUIG_DRAW } = ctx;
+  const b0 = resolveTarget(sp.target);
+  if (!b0) return;   /* the targeting law: no resolved target, nothing painted */
+  const s = sp.form === "underline" ? 1 : calloutParkScale(ctx.parkScale ? ctx.parkScale(sp.target) : 1);
+  const svg = s < 1 ? el("g", "co-park", ctx.svg, { transform: calloutParkXf(b0, s) }) : ctx.svg;
+  const b = s < 1 ? calloutParkBox(b0, s) : b0;
   if (sp.form === "underline") {   /* P50 T3 / E56's ONE exception: a ring circles a number or a point on a chart,
        but an underline under a QUOTED PHRASE is the squiggle law (s9.27) - the same hand, the same .sq stroke,
        drawn from `at` over SQUIG_DRAW on the underline's own clock, riding the card's live geometry. */
