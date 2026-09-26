@@ -990,7 +990,7 @@ listed order.
 - Evidence: pending
 
 ### T9: The chapter pill held over an act (was P69 T61, A34)
-- Status: pending
+- Status: done - lane B `339d140`: `species[] {kind: chapter, at, until, text}` lifted into `chapters`, the key rail's capsule at 61.4 px over the act, the act's full-stage long-form pages make 117 px of room, the window reserved for stamps / props / cards, M43 skips the pill; golden `chapter-held`; no H row adopts an act before P70-HG1 (the look: white capsule vs crimson pill)
 - Owner: implementation_luna (LANE B), then reviewer (`render()`, the room, the gate's chrome)
 - Depends on: P70 T8 merged (both own hunks of `render()`); P70's base, which carries T65 (ring targets, which T9's
   `ring_obstacles` extra must not change); done P69 T26f `1100c0b`, T10 (the key rail's pill).
@@ -1055,7 +1055,7 @@ listed order.
 - Evidence: pending
 
 ### T10: The in-place badge swap on the chapter pill (was P69 T61, A44)
-- Status: pending (UNBLOCKED 2026-09-24: BOOM read on real frames - A44 CONFIRMED in place at 02:27.0-02:27.5, "Dot-Com Bust" rolls into "Lost Decade" in the same pill; the 02:47-02:49 instance is NOT in place (old pill leaves, new one arrives) and is not a witness. `docs/research/runs/bravos-watch/jx3Ll-GJtMY/verify/VERIFY.md`, frames `A44_A45_T37_swap1/frames/t02m27.0s.jpg`)
+- Status: done - lane B `04bd1e8`: `swap: [{at, text}]` erases the old name as the box closes to a slot (0.43 s) and writes the new one as it springs open (0.42 s), BOOM's measured clock, the left edge fixed; a chapter without a swap is T9's to the byte; golden `chapter-swap`; the H beat is proposed for P70-HG1
 - Owner: implementation_luna (LANE B)
 - Depends on: P70 T9 merged. **Blocker:** harvest v2 `:318` says "Verify the Gemini-only timings for BOOM (`jx3Ll-GJtMY`
   has no frames on disk) before any of R32 / R36 / A44 / A54 / A56 is built from them". `docs/research/runs/bravos-watch/jx3Ll-GJtMY/`
