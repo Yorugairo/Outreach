@@ -15726,7 +15726,8 @@ async function mount(doc) {
      then= state), and a park moves the chart the brace is drawn in, so it rides the park as a bracket does (R26-28).
        The side is the author's (`side`, s106); else Bravos's order is tried first - the brace and the whole on the
      left, the parts named on the right - then the other, and the first whose words meet no bar, figure, value, tick,
-     key or the page's edge is taken (else the least-crowded). Its words are the page's TAG role (a peer of the end
+     key or the page's edge is taken; when neither is (a first or middle bar of a crowded page) the label goes ABOVE the bar
+     (P72 T43, R26-338: aboveFor), else the least-crowded side. Its words are the page's TAG role (a peer of the end
      tags: on a long-form page the preset's, which is E99 s90's floor at `longform:phone`).
        THE KEY YIELDS: a part named beside its own span no longer needs its key entry - the two would say the same
      thing twice. As the brace writes a name it RECORDS how far on the page state (`st.keyHandoff`, keyed by the part's
@@ -15738,7 +15739,10 @@ async function mount(doc) {
      the brace's own clock); LINE_EM two names' least pitch; OVERLAP the glyph law's (the last letter finishes with the
      window); SUB_EM the sub's size. */
   const LPBRACE = Object.freeze({ GAP: 16, R: 10, R_EM: 0.42, CURL_K: 1.6, NOTCH_EM: 0.34, LABEL_EM: 0.4, NAME_EM: 0.55,
-                                  NAME_S: 0.6, PART_GAP: 0.4, LINE_EM: 1.2, OVERLAP: 0.6, SUB_EM: 0.8, SAMPLES: 16 });
+                                  NAME_S: 0.6, PART_GAP: 0.4, LINE_EM: 1.2, OVERLAP: 0.6, SUB_EM: 0.8, SAMPLES: 16,
+                                  ABOVE_EM: 0.3, HAND_DESC: 0.54 });   /* P72 T43 (R26-338): the air between the "above" label and the bar's
+                                  value, and the hand's box under its line [DERIVED: Kalam at 26 px boxes 42 px, 14 of them under the line -
+                                  read off the served probe; a build-time getBBox can read the fallback face before the hand has loaded] */
   const lpBraceArea = (a, b) => Math.max(0, Math.min(a[0] + a[2], b[0] + b[2]) - Math.max(a[0], b[0]))
     * Math.max(0, Math.min(a[1] + a[3], b[1] + b[3]) - Math.max(a[1], b[1]));
   /* the curve: four clothoid curls - end -> spine, spine -> cusp, cusp -> spine, spine -> end - the spines their joins */
@@ -15789,7 +15793,9 @@ async function mount(doc) {
     const sub = sp.sub ? lpBraceGlyphs("bksub", g, String(sp.sub), tss, col) : null, sw = sub ? lpInkW(sub.el) : 0;
     const nms = segs.map((sg) => Object.assign(lpBraceGlyphs("bklab bkname", g, sg.name, tfs, sg.ink), { sg, w: 0 }));
     for (const nm of nms) nm.w = lpInkW(nm.el);
-    const box = (x, y, w, fsz, anchor) => [anchor === "end" ? x - w : x, y - LPVAL.ASC * fsz, w, (LPVAL.ASC + LPVAL.LAB_DESC) * fsz];
+    const box = (x, y, w, fsz, anchor) => [anchor === "end" ? x - w : anchor === "middle" ? x - w / 2 : x, y - LPVAL.ASC * fsz, w, (LPVAL.ASC + LPVAL.LAB_DESC) * fsz];
+    const inkCost = (w) => { let c = 0; for (const o2 of ink) c += lpBraceArea(w, o2);   /* a word's cost: every ink it meets, and 4x its reach past the page's edge */
+      return c + 4 * (Math.max(0, bL - w[0]) + Math.max(0, w[0] + w[2] - bR) + Math.max(0, -w[1]) + Math.max(0, w[1] + w[3] - H)) * w[3]; };
     const layoutFor = (side) => {
       const dir = side === "right" ? 1 : -1, xb = (side === "right" ? q.x + q.w : q.x) + dir * LPBRACE.GAP, P0 = lpBracePath(xb, dir, yT, ym, yB, R, h);
       const anchor = dir > 0 ? "start" : "end", lx = P0.xc + dir * LPBRACE.LABEL_EM * tfs, ly = ym + tfs * 0.35, sy = ly + tss * 1.3;
@@ -15802,17 +15808,31 @@ async function mount(doc) {
       });
       const byY = names.slice().sort((a, b) => a.y - b.y), pitch = LPBRACE.LINE_EM * tfs;   /* two thin parts' names never overprint */
       for (let k = 1; k < byY.length; k++) if (byY[k].y - byY[k - 1].y < pitch) byY[k].y = byY[k - 1].y + pitch;
-      const words = [box(lx, ly, lw, tfs, anchor)].concat(sub ? [box(lx, sy, sw, tss, anchor)] : [],
-        names.map((n) => box(n.x, n.y + tfs * 0.35, n.nm.w, tfs, nAnchor)));
-      let cost = 0;
-      for (const w of words) { for (const o2 of ink) cost += lpBraceArea(w, o2);
-        cost += 4 * (Math.max(0, bL - w[0]) + Math.max(0, w[0] + w[2] - bR) + Math.max(0, -w[1]) + Math.max(0, w[1] + w[3] - H)) * w[3]; }
+      const labWords = [box(lx, ly, lw, tfs, anchor)].concat(sub ? [box(lx, sy, sw, tss, anchor)] : []);
+      let rest = 0, labCost = 0;
+      for (const w of labWords) labCost += inkCost(w);
+      for (const n of names) rest += inkCost(box(n.x, n.y + tfs * 0.35, n.nm.w, tfs, nAnchor));
       const strip = [Math.min(xb, P0.xc), yT, 2 * R, yB - yT];   /* ... and the curve itself: never through a part's leader figure or the next bar */
-      for (const o2 of ink) cost += lpBraceArea(strip, o2);
-      return { side, dir, xb, P0, anchor, lx, ly, sy, nAnchor, names, cost };
+      for (const o2 of ink) rest += lpBraceArea(strip, o2);
+      return { side, dir, xb, P0, anchor, lx, ly, sy, nAnchor, names, cost: labCost + rest, rest };
+    };
+    /* P72 T43 (R26-338) - THE "ABOVE" FALLBACK: when NEITHER side is clean (a first or middle bar of a crowded page: the
+       whole's name meets the neighbouring bar either way) and the author named no side, the brace and the part names
+       keep the side whose curve and names are cleanest, and the label (its sub under it) is set ABOVE the bar - centred
+       over it, over the bar's own value with ABOVE_EM of air, held inside the page's edges and the chart's top - when that
+       costs less than the least-crowded side. A clean side is taken as before, to the byte; an authored side stands. */
+    const aboveFor = (base) => {
+      const vb = rec.val ? lpLabelBox(rec.val) : null, top = Math.min(yT, vb ? vb[1] : yT);   /* the bar's top, or its value's */
+      const w = Math.max(lw, sw), lx = Math.max(bL + w / 2, Math.min(bR - w / 2, q.cx));
+      const ly = top - LPBRACE.ABOVE_EM * tfs - LPBRACE.HAND_DESC * (sub ? tss : tfs) - (sub ? tss * 1.3 : 0), sy = ly + tss * 1.3;
+      let labCost = inkCost(box(lx, ly, lw, tfs, "middle"));
+      if (sub) labCost += inkCost(box(lx, sy, sw, tss, "middle"));
+      return Object.assign({}, base, { anchor: "middle", lx, ly, sy, above: true, cost: labCost + base.rest });
     };
     const order = sp.side === "left" || sp.side === "right" ? [sp.side] : ["left", "right"];   /* s106: the author's side is taken as written */
-    const lays = order.map(layoutFor), L = lays.find((l) => l.cost <= 0) || lays.reduce((a, b) => (b.cost < a.cost ? b : a));
+    const lays = order.map(layoutFor), least = (key) => lays.reduce((a, b) => (b[key] < a[key] ? b : a));
+    let L = lays.find((l) => l.cost <= 0) || least("cost");
+    if (L.cost > 0 && order.length > 1) { const up = aboveFor(least("rest")); if (up.cost < L.cost) L = up; }   /* no clean side, none authored */
     const set = (el, x, y, anchor) => { el.setAttribute("x", x.toFixed(1)); el.setAttribute("y", y.toFixed(1)); el.setAttribute("text-anchor", anchor); };
     set(lab.el, L.lx, L.ly, L.anchor); if (sub) set(sub.el, L.lx, L.sy, L.anchor);
     for (const n of L.names) set(n.nm.el, n.x, n.y + tfs * 0.35, L.nAnchor);
@@ -15836,7 +15856,7 @@ async function mount(doc) {
     const names = L.names.map((n) => ({ j: n.nm.sg.j, el: n.nm.el, glyphs: n.nm.gs, ink: n.nm.sg.color, part: n.nm.sg.name.toLowerCase(),
                                          at: pa ? +pa[n.nm.sg.j] : sp.at + dur + LPBRACE.PART_GAP * n.nm.sg.j }));
     return { sp, brace: true, side: L.side, cusp: [L.P0.xc, ym], ends: [[L.xb, yT], [L.xb, yB]], R, x: L.xb, y0: yT, y1: yB,
-             A: [q.cx, yT], B: [q.cx, yB], fits: L.cost <= 0, main, glow, notches: main.notches, names, bi, si: 0, key: "" };
+             A: [q.cx, yT], B: [q.cx, yB], fits: L.cost <= 0, above: !!L.above, main, glow, notches: main.notches, names, bi, si: 0, key: "" };
   };
   const buildPerform = (st, scene, pg) => {
     const P = !!st.portrait, fs = P ? 40 : 26, fss = P ? 32 : 20, G = st.geom || { W: 1000, H: 560 };

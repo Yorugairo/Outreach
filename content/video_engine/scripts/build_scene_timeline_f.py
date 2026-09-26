@@ -4363,12 +4363,14 @@ BRACE_FIGURE = re.compile(r"(?<![A-Za-z0-9.])[-+\u2212]?\d[\d,]*(?:\.\d+)?")   #
                               # a digit inside a word ("Q1", "H2") is a name, not a figure; a year reads as one (write it in the sub)
 
 
-def check_brace(page: dict | None, species: list) -> None:
+def check_brace(page: dict | None, species: list, aspect: str | None = None) -> list[str]:
     """P70 T5 (E99 s109: the parts must sum to the total - T64's `segments` already refuse a stack that does not): a
     `form: "brace"` bracket on its page. It stands on a single BARS page, on a bar the page has, which carries T64's
     `segments`; `parts_at` names one time per part; a figure in the label must be the bar's written total at the
     label's own precision - a brace names the whole its parts sum to, and a figure it does not total is untrue.
-    ValueError names it; a row with no brace is untouched."""
+    ValueError names it; a row with no brace is untouched.
+    P72 T43: then every bracket's LABEL ROOM at 16:9 (`bracket_room_notes`, at `aspect`, else the build's ASPECT) - the
+    WARNs returned, never a refusal (E99 s106)."""
     braces = [sp for sp in (species or []) if isinstance(sp, dict) and sp.get("kind") == "bracket"
               and sp.get("form") == BRACE_FORM]
     for sp in braces:
@@ -4402,6 +4404,216 @@ def check_brace(page: dict | None, species: list) -> None:
                 raise ValueError(f"{where}: the label says {m.group(0)} and bar {bar}'s written total is {written} - a "
                                  "brace names the whole its parts sum to; a figure it does not total is untrue "
                                  "(E99 s109, E28) - a year or a count the label names belongs in its sub")
+    return bracket_room_notes(page, species, ASPECT if aspect is None else aspect)
+
+
+# P72 T43 (R26-219's bracket half, R26-338): THE BRACKET'S LABEL ROOM, estimated at 16:9 against the page's boxes. The
+# engine measures its own words (paintBracket's `geomOf`, lpBraceBuild's layouts) and the compiler cannot measure type,
+# so it ESTIMATES the room the way it sizes a tip pill (R26-43): the engine's own layout law in chart units, the text at an
+# UPPER bound per glyph (the side to be wrong on), read onto the stage through `ledger_page.page_boxes`' chart and plot.
+# Every finding is a WARN (E99 s106: placement advises, the author's place stands) - never a refusal; its words are
+# written ascii-escaped (`!a`: a build's log is cp1252 on Windows, and a label's minus sign must not stop it). At 9:16 nothing is
+# estimated (a portrait chart is laid out in stage px, its own law).
+#   BRACKET_ROOM_U   paintBracket's span dials, chart units: PS.BRACKET_GAP (data -> span) and PS.BRACKET_ROOM (the room
+#                    the engine keeps beside the span, else the label stacks ABOVE it), geomOf's label air (4 before
+#                    the anchor above, 10 over the series' top) and buildPerform's landscape type (fs / fss)
+#   BRACE_ROOM_U     lpBraceBuild's LPBRACE (GAP, R, R_EM, LABEL_EM, NAME_EM, SUB_EM) and its "above" fallback's stack
+#                    (ABOVE_EM of air over the bar's value, HAND_DESC the hand's box under its line)
+#   BARS_ROOM_U      buildLedgerBars' landscape layout: the gutter, x1, the gap, LPBAR (W_PX, PITCH_RATIO), the y ticks'
+#                    anchor (x0 - 26), the plot's top / bottom, the value's lift (14) and size (the .val class, 26), the
+#                    pad over the tallest bar (0.14 of the range); LPSEG's figure line (FIG_LINE), pad and leader (px)
+#   BRACKET_GLYPH_EM the hand's (Kalam) advance per glyph, an upper bound by class [DERIVED on the served probe,
+#                    2026-09-25: "Cash from operations" 0.48 em a glyph, "Cash capex" 0.51, "Left over" 0.46, "-64%" 0.67]:
+#                    wide (a figure, a capital, % $), narrow (a space, a stop, i l t '), every other glyph
+BRACKET_ROOM_ASPECT = "16:9"
+BRACKET_ROOM_U = {"GAP": 34, "ROOM": 200, "ANCHOR": 4, "OVER": 10, "FS": 26, "FSS": 20, "SUB_LEAD": 1.3}
+BRACE_ROOM_U = {"GAP": 16, "R": 10, "R_EM": 0.42, "LABEL_EM": 0.4, "NAME_EM": 0.55, "ABOVE_EM": 0.3, "HAND_DESC": 0.54,
+                "SUB_EM": 0.8}
+BARS_ROOM_U = {"GUTTER": 60, "X1": 980, "GAP": 0.34, "W_PX": 196, "PITCH_RATIO": 0.44, "TICK_DX": 26, "TOP": 90,
+               "BOTTOM": 440, "VAL_DY": 14, "VAL_FS": 26, "PAD": 0.14, "FIG_LINE": 1.25, "SEG_PAD_PX": 6, "LEAD_PX": 18}
+BRACKET_GLYPH_EM = {"wide": 0.68, "narrow": 0.30, "other": 0.52}
+BRACKET_TYPE_ASC, BRACKET_TYPE_DESC = 0.92, 0.18   # the engine's LPVAL.ASC / LAB_DESC: a word's box above / below its line
+BRACKET_ROOM_TAG = "P72 T43"
+
+
+def _bracket_text_u(text: str, size: float) -> float:
+    """An upper bound on `text`'s advance at `size` (chart units) in the hand (BRACKET_GLYPH_EM). Pure."""
+    em = 0.0
+    for ch in str(text or ""):
+        cls = ("wide" if ch.isdigit() or ch.isupper() or ch in "%$€£−+-&@#" else
+               "narrow" if ch.isspace() or ch in ".,:;'!|ilt()" else "other")
+        em += BRACKET_GLYPH_EM[cls]
+    return em * size
+
+
+def _bracket_frame(page: dict, boxes: dict) -> tuple[float, float, float, float]:
+    """(k, ox, oy, vw): one chart unit in stage px, the viewBox's origin on the stage and its width in units - the
+    1000x560 box letterboxed; a long-form chart keeps the 560-unit height and widens its viewBox to its box."""
+    ch, vw, vh = boxes["chart"], LPG.LAND_VIEWBOX[0], LPG.LAND_VIEWBOX[1]
+    if (page.get("axes") or {}).get("readability") == LPG.LONGFORM:
+        k = ch["h"] / vh
+        return k, ch["x"], ch["y"], max(float(vw), ch["w"] / k)
+    k = min(ch["w"] / vw, ch["h"] / vh)
+    return k, ch["x"] + (ch["w"] - vw * k) / 2, ch["y"] + (ch["h"] - vh * k) / 2, float(vw)
+
+
+def _px_box(k: float, ox: float, oy: float, x: float, y: float, w: float, h: float) -> str:
+    return f"[{ox + x * k:.0f}, {oy + y * k:.0f}, {w * k:.0f} x {h * k:.0f}] px"
+
+
+def _span_room_note(page: dict, boxes: dict, sp: dict) -> str | None:
+    """R26-219: a span bracket on a LINE page - where paintBracket's geomOf stands it (to the right of its two data), its
+    room beside against the engine's own BRACKET_ROOM, and the end-tag column it may stand in. None when it is clean."""
+    series = [s for s in page.get("series") or [] if isinstance(s, dict) and s.get("pts")]
+    si = sp.get("series") if isinstance(sp.get("series"), int) and not isinstance(sp.get("series"), bool) else 0
+    if not (0 <= si < len(series)):
+        return None
+    xs = [float(p[0]) for s in series for p in s["pts"]]
+    pts, lo, hi = series[si]["pts"], min(xs), max(xs)
+    ends = [max(0, min(len(pts) - 1, int(sp.get(key) or 0))) for key in ("from", "to")]
+    plot, U = boxes["plot"], BRACKET_ROOM_U
+    k, ox, oy, vw = _bracket_frame(page, boxes)
+    stage_x = lambda i: plot["x"] + (float(pts[i][0]) - lo) / ((hi - lo) or 1.0) * plot["w"]   # noqa: E731
+    right = max(ends, key=lambda i: float(pts[i][0]))
+    xr = (stage_x(right) - ox) / k + U["GAP"]                  # the span's x, chart units (geomOf's xr)
+    fits = xr + U["ROOM"] <= vw
+    label, sub = str(sp.get("label") or ""), str(sp.get("sub") or "")
+    lw = max(_bracket_text_u(label, U["FS"]), _bracket_text_u(sub, U["FSS"]) if sub else 0.0)
+    lh = (BRACKET_TYPE_ASC + BRACKET_TYPE_DESC) * U["FS"] + (U["SUB_LEAD"] * U["FSS"] if sub else 0.0)
+    tags = boxes.get(LPG.TAGS_KEY) if isinstance(boxes.get(LPG.TAGS_KEY), dict) else None
+    x_px = ox + xr * k
+    in_tags = bool(tags and tags.get("w", 0) > 0 and tags["x"] - 0.5 <= x_px <= tags["x"] + tags["w"])
+    if fits and not in_tags:
+        return None
+    where = f"bracket at {sp.get('at')} (from {sp.get('from')} to {sp.get('to')}, label {label!a})"
+    parts = [f"the span stands at x ~{x_px:.0f} px"]
+    if in_tags:
+        parts[0] += f", inside the end-tag column (x {tags['x']:.0f}..{tags['x'] + tags['w']:.0f} px)"
+        s = series[si]
+        if right == len(pts) - 1 and not s.get("muted"):
+            tag = " ".join(str(v) for v in (s.get("label"), s.get("name")) if v)
+            parts.append(f"its datum {right} is series {si}'s last, where series {si}'s end tag {tag!a} is written: the "
+                         "span's tick stands on the tag")
+    room = (vw - xr) * k
+    parts.append(f"the room beside the span is ~{max(0.0, room):.0f} px for a label ~{lw * k:.0f} px wide (the engine "
+                 f"keeps {U['ROOM'] * k:.0f} px beside it)")
+    if not fits:
+        top = (LPG.LAND_PLOT["T"] * LPG.LAND_VIEWBOX[1] - U["OVER"] - (U["SUB_LEAD"] * U["FSS"] if sub else 0.0)
+               - BRACKET_TYPE_ASC * U["FS"])   # geomOf's stack over the series' top (the data box's top, the estimate)
+        parts.append("so the engine writes the label ABOVE the span, its box ~"
+                     + _px_box(k, ox, oy, xr - U["ANCHOR"] - lw, top, lw, lh))
+    return (f"{BRACKET_ROOM_TAG} (R26-219): {where}: " + "; ".join(parts) + " - end the span inside the plot, or write "
+            "the measure as a figure at its datum. REPORTED (E99 s106)")
+
+
+def _bars_layout(page: dict, k: float) -> dict:
+    """buildLedgerBars' landscape layout in chart units (BARS_ROOM_U): each bar's [x, top, w], the tick column's right
+    edge, the value's size and the type the brace writes in. The long form reads its preset (`ledger_page.longform_type`)."""
+    U, vals = BARS_ROOM_U, [float(v) for v in page.get("values") or []]
+    axes = page.get("axes") or {}
+    lf = axes.get("readability") == LPG.LONGFORM
+    t = LPG.longform_type(page) if lf else None
+    gutter = max(U["GUTTER"], 40 + 2.6 * t["tick"] / k) if t else U["GUTTER"]
+    try:
+        gutter = max(gutter, float(axes["left_gutter"]))
+    except (KeyError, TypeError, ValueError):
+        pass
+    x0, x1, n = gutter, U["X1"], max(1, len(vals))
+    lo, hi = min([0.0] + vals), max([0.0] + vals)
+    pad = max(1e-9, (hi - lo) * U["PAD"])
+    dom = axes.get("domain") if isinstance(axes.get("domain"), list) and len(axes["domain"]) == 2 else None
+    lo, hi = (min(float(dom[0]), lo), float(dom[1])) if dom else (lo - (pad if lo < 0 else 0), hi + (pad if hi > 0 else 0))
+    my = lambda v: U["BOTTOM"] - (v - lo) / ((hi - lo) or 1.0) * (U["BOTTOM"] - U["TOP"])   # noqa: E731
+    nat, cap = (x1 - x0) / n, U["W_PX"] / k
+    capped = nat * (1 - U["GAP"]) > cap
+    pitch = min(nat, cap / U["PITCH_RATIO"]) if capped else nat
+    lead = x0 + ((x1 - x0) - n * pitch) / 2 if capped else x0
+    bw = cap if capped else pitch * (1 - U["GAP"])
+    air = 1 - bw / pitch if capped else U["GAP"]
+    bars = [{"x": lead + pitch * (i + air / 2), "w": bw, "top": min(my(v), my(0.0)), "v": v, "h": abs(my(v) - my(0.0))}
+            for i, v in enumerate(vals)]
+    return {"bars": bars, "tick_r": x0 - U["TICK_DX"], "fs": t["tag"] / k if t else BRACKET_ROOM_U["FS"],
+            "val_fs": t["value"] / k if t else U["VAL_FS"], "my": my}
+
+
+def _brace_room_note(page: dict, boxes: dict, sp: dict) -> str | None:
+    """R26-338: a brace on bar i of a bars page - the room its label, its curl and its part names need on each side of
+    the bar against the room between the bar and its neighbours (the tick column on the left of the first, the safe
+    edge on the right of the last). None when a side is clean (the engine takes it, as before)."""
+    bar = sp.get("bar")
+    vals = page.get("values") or []
+    if not (isinstance(bar, int) and not isinstance(bar, bool) and 0 <= bar < len(vals)):
+        return None
+    k, ox, oy, _vw = _bracket_frame(page, boxes)
+    L, U, B_ = _bars_layout(page, k), BRACE_ROOM_U, BARS_ROOM_U
+    bars, fs = L["bars"], L["fs"]
+    q = bars[bar]
+    safe = boxes["safe"]
+    right_edge = (safe["x"] + safe["w"] - ox) / k
+    room = {"left": q["x"] - (bars[bar - 1]["x"] + bars[bar - 1]["w"] if bar > 0 else L["tick_r"]),
+            "right": (bars[bar + 1]["x"] if bar + 1 < len(bars) else right_edge) - (q["x"] + q["w"])}
+    label, sub = str(sp.get("label") or ""), str(sp.get("sub") or "")
+    fss = fs * U["SUB_EM"]
+    lw = max(_bracket_text_u(label, fs), _bracket_text_u(sub, fss) if sub else 0.0)
+    R = max(U["R"], U["R_EM"] * fs)
+    need_label = U["GAP"] + 2 * R + U["LABEL_EM"] * fs + lw
+    segs = (page.get(LPG.SEGMENTS_KEY) or [None] * len(vals))[bar] or []
+    names_w = max([_bracket_text_u(str(s.get("name") or ""), fs) for s in segs] or [0.0])
+    tot = sum(float(s.get("value") or 0) for s in segs) or 1.0
+    thin = [s for s in segs
+            if q["h"] * float(s.get("value") or 0) / tot < B_["FIG_LINE"] * L["val_fs"] + 2 * B_["SEG_PAD_PX"] / k]
+    fig = lambda s: LPG.with_unit(str(s.get("value_string") or s.get("value")), page.get("unit") or "",   # noqa: E731
+                                  str(page.get(LPG.UNIT_SUFFIX_KEY) or ""))   # the figure as lpSegBuild writes it
+    lead_w = max([B_["LEAD_PX"] / k + _bracket_text_u(fig(s), L["val_fs"]) for s in thin] or [0.0])
+    need_names = {"left": U["NAME_EM"] * fs + names_w, "right": U["NAME_EM"] * fs + names_w + lead_w}
+    clean = {s: need_label <= room[s] and need_names[o] <= room[o] and not (s == "right" and thin)
+             for s, o in (("left", "right"), ("right", "left"))}
+    authored = sp.get("side") if sp.get("side") in ("left", "right") else None
+    order = [authored] if authored else ["left", "right"]
+    if any(clean[s] for s in order):
+        return None
+    where = f"bracket (form: brace) at {sp.get('at')} on bar {bar} (label {label!a})"
+    nums = (f"the label, its curl and its air need ~{need_label * k:.0f} px beside the bar and the part names "
+            f"~{need_names['left'] * k:.0f} px on the other side; the room is left ~{max(0.0, room['left']) * k:.0f} px / "
+            f"right ~{max(0.0, room['right']) * k:.0f} px")
+    if thin:
+        nums += (f"; the thin part{'s' if len(thin) > 1 else ''} "
+                 + ", ".join(ascii(fig(s)) for s in thin)
+                 + " stand" + ("" if len(thin) > 1 else "s") + " on a leader on the bar's right, where the curl would cross it")
+    if authored:
+        return (f"{BRACKET_ROOM_TAG} (R26-338): {where}: side {authored!r} is the author's and it stands (s106), but it "
+                f"is not clean - {nums}; its words meet a neighbour. REPORTED (E99 s106)")
+    vtop = q["top"] - B_["VAL_DY"] - BRACKET_TYPE_ASC * L["val_fs"]
+    lh = BRACKET_TYPE_ASC * fs + U["HAND_DESC"] * (fss if sub else fs) + (BRACKET_ROOM_U["SUB_LEAD"] * fss if sub else 0.0)
+    ytop = vtop - U["ABOVE_EM"] * fs - lh   # the engine's stack: the label's line ABOVE_EM + HAND_DESC over the value
+    box = _px_box(k, ox, oy, q["x"] + q["w"] / 2 - lw / 2, ytop, lw, lh)
+    title = "" if ytop >= 0 else (f"; it rises {-ytop * k:.0f} px over the chart's top, toward the title band - name a "
+                                  "`side` or a shorter label")
+    return (f"{BRACKET_ROOM_TAG} (R26-338): {where}: no clean side - {nums}; the engine sets the label ABOVE the bar, "
+            f"over its value, its box ~{box}{title}. REPORTED (E99 s106)")
+
+
+def bracket_room_notes(page: dict | None, species: list, aspect: str | None) -> list[str]:
+    """P72 T43: one WARN per bracket on a ledger page whose label has no clean room at 16:9 - a span on a line page
+    (R26-219: `_span_room_note`) or a brace on a bars page (R26-338: `_brace_room_note`). [] at 9:16, off a ledger
+    page, and for a bracket with a clean side. Pure; never raises for room (E99 s106)."""
+    if (aspect or BRACKET_ROOM_ASPECT) != BRACKET_ROOM_ASPECT or not isinstance(page, dict) or page.get("panels"):
+        return []
+    brackets = [sp for sp in species or [] if isinstance(sp, dict) and sp.get("kind") == "bracket"]
+    if not brackets:
+        return []
+    boxes = LPG.page_boxes(page, BRACKET_ROOM_ASPECT)
+    notes = []
+    for sp in brackets:
+        if sp.get("form") == BRACE_FORM:
+            note = _brace_room_note(page, boxes, sp) if page.get("variant") == "bars" else None
+        elif page.get("variant") == "line" and page.get("series"):
+            note = _span_room_note(page, boxes, sp)
+        else:
+            note = None   # a span on a bars page (P69 T50) is not estimated: it stands beside its bars' own sides
+        if note:
+            notes.append(note)
+    return notes
 
 
 def resolve_member_logos(page: dict) -> list[str]:
@@ -6735,8 +6947,9 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     check_y2(world, row_species)              # P71 T13: a second axis holds its page (16:9, flat, no chart state)
     check_members(world, row_species)         # P69 T45: a tile the membership bar has, and nothing that moves the bar
     check_segments(world, row_species)        # P69 T64: a stacked page takes a park, and nothing that moves its bars
-    check_brace(world.get("page") if isinstance(world, dict) and world.get("kind") == SPECIES_LEDGER else None,
-                row_species)                  # P70 T5: a brace divides a bar the page has, which has parts; its label's truth
+    for _bk_note in check_brace(world.get("page") if isinstance(world, dict) and world.get("kind") == SPECIES_LEDGER
+                                else None, row_species):   # P70 T5: a brace's bar, its parts, its label's truth; P72 T43 the room
+        print(f"  [WARN] {_bk_note}" + (f" [scene {sid}]" if sid else ""))
     check_solo(world, row_species)            # P69 T37: a solo names ONE mark the page draws, on a page whose marks it re-inks
     for _lj_note in check_level_join(world, row_species):   # P71 T10: a join's ends, its unit, its truth; a WARN on the rule
         print(f"  [WARN] {_lj_note.removeprefix('WARN ')}")
