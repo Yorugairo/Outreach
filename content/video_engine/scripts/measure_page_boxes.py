@@ -272,6 +272,16 @@ READ_BOXES = r"""
      furniture band as the x tick labels are (a card never covers what the page says it is) */
   const sch = wB.querySelector('.lp-schematic');
   if (sch) { out.schematic = R(sch); if (out.plot) out.plot = U(out.plot, out.schematic); }
+  /* P72 T15 (R26-253): the BASIS LABEL (`axes.ylabel` - "index - 100 = Aug 2025, log scale"), the engine's one
+     `axislabel` mark keyed `axislabel` (lpYLabel; an era's label shares the role, never the key), as drawn */
+  const shownEl = (el) => (el.textContent || '').trim() && +(el.getAttribute('opacity') || 1) > 0.05
+    && +getComputedStyle(el).opacity > 0.05;
+  const basis = (st.marks || []).find((m) => m.key === 'axislabel' && m.el && shownEl(m.el));
+  if (basis) { const r = R(basis.el); if (r.w >= 1 && r.h >= 1) out.basis = r; }
+  /* P72 T15 (R26-270): each NAME under a bar (the `xlabel` marks: a bars page's categories, every shown panel's), as
+     drawn - a name lpWrapBarLabel set on two lines is one box over both, and says how many lines it took */
+  out.bar_names = allMarks.filter((mk) => mk.role === 'xlabel' && mk.el && shownEl(mk.el)).map((mk) =>
+    Object.assign(R(mk.el), {lines: mk.el.__wrapLines ? mk.el.__wrapLines.length : 1})).filter((r) => r.w >= 1 && r.h >= 1);
   out.stage = [stg.width, stg.height];
   return out;
 }
@@ -552,6 +562,10 @@ def measure(builder: str, aspect: str, page: dict | None = None, *, full_stage: 
         out[LPG.SCHEMATIC_BOX] = _box(dom[LPG.SCHEMATIC_BOX])
     if dom.get(LPG.Y2_BOX):   # P71 T13: a second axis's words - beside the six boxes
         out[LPG.Y2_BOX] = _box(dom[LPG.Y2_BOX])
+    if dom.get(LPG.BASIS_BOX):   # P72 T15 (R26-253): the basis label, as drawn - beside the six boxes
+        out[LPG.BASIS_BOX] = _box(dom[LPG.BASIS_BOX])
+    if dom.get(LPG.BAR_NAMES_KEY):   # P72 T15 (R26-270): each bar's name, as drawn, with the lines it took
+        out[LPG.BAR_NAMES_KEY] = [dict(_box(b), lines=int(b.get("lines") or 1)) for b in dom[LPG.BAR_NAMES_KEY]]
     if dom.get(LPG.PANELS_KEY):   # P69 T8b: each panel's home box and plot, as drawn
         out[LPG.PANELS_KEY] = [{"hidden": True} if p.get("hidden") else {k: _box(v) for k, v in p.items() if v}
                                for p in dom[LPG.PANELS_KEY]]   # P69 T8e: a panel the first focus state hides
@@ -591,6 +605,9 @@ def entry(builder: str, aspect: str, page: dict | None = None, *, full_stage: bo
         out[LPG.SCHEMATIC_BOX] = got[LPG.SCHEMATIC_BOX]
     if got.get(LPG.Y2_BOX):   # P71 T13: a second axis's words, beside the six
         out[LPG.Y2_BOX] = got[LPG.Y2_BOX]
+    for key in (LPG.BASIS_BOX, LPG.BAR_NAMES_KEY):   # P72 T15: the basis label and the bar names, beside the six
+        if got.get(key):
+            out[key] = got[key]
     drawn_by = got["page"].get("builder")
     if drawn_by != builder and drawn_by in LPG.LAND_TAG_BUILDERS:   # P70 T2: a second representative (`dense-line+
         out["builder"] = drawn_by   # schematic`) names the builder whose end tags its tag_boxes are

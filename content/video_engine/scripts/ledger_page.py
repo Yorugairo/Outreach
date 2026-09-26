@@ -4572,6 +4572,10 @@ BOX_KEYS = ("title", "sub", "chart", "plot", "source", "rail")
 TAGS_KEY = "tags"   # R26-205: the end tag column, on a full-stage page only (the fixture measures the six above)
 TAG_BOXES_KEY = "tag_boxes"   # P69 T6d: on a MEASURED full-stage page, each end tag at its drawn rect (the fixture's own)
 TAG_INK_KEY = "tag_ink"       # REVIEW-P69-LANE-B-MERGE-4 MN3: ... and, on the entry, the tags those rects were measured for (`tag_ink`)
+# P72 T15 (R26-253, R26-270): `page_boxes` carries EVERY text box the page writes, and `text_boxes` names them all.
+BASIS_BOX = "basis"           # the basis label (`axes.ylabel`): as drawn on a measured page, else `basis_strip`'s estimate
+BAR_NAMES_KEY = "bar_names"   # each bar's name as drawn, {x, y, w, h, lines} - a MEASURED page only (the wrap is the player's)
+BASIS_LINE_PX = 36            # the estimate's one tick-label line where the page reports no measured x tick band
 INK_KEYS = ("builder", "title", "sub", "source", "quiet_zone")
 # Kept as a descriptive alias for callers that name the variant.  The fixture's
 # actual key is the main lane's geometry key, ``16:9|full_stage``.
@@ -4859,6 +4863,10 @@ def measured_boxes(spec: dict, aspect: str) -> dict | None:
         out[SCHEMATIC_BOX] = dict(entry[SCHEMATIC_BOX])
     if isinstance(entry.get(Y2_BOX), dict):   # P71 T13: the right axis's words, as drawn
         out[Y2_BOX] = dict(entry[Y2_BOX])
+    if isinstance(entry.get(BASIS_BOX), dict):   # P72 T15 (R26-253): the basis label, as drawn
+        out[BASIS_BOX] = dict(entry[BASIS_BOX])
+    if isinstance(entry.get(BAR_NAMES_KEY), list):   # P72 T15 (R26-270): each bar's name, as drawn
+        out[BAR_NAMES_KEY] = [dict(b) for b in entry[BAR_NAMES_KEY] if isinstance(b, dict)]
     if (isinstance(boxes.get(TAG_BOXES_KEY), list) and boxes[TAG_BOXES_KEY]   # P69 T6d: its end tags, each as drawn -
             and entry.get(TAG_INK_KEY) == tag_ink(spec)):                      # MN3: only for the tags they were drawn for
         out[TAG_BOXES_KEY] = [dict(b) for b in boxes[TAG_BOXES_KEY] if isinstance(b, dict)]
@@ -4885,6 +4893,63 @@ def measured_room(spec: dict, aspect: str) -> dict:
     return out
 
 
+def basis_strip(plot: dict, axis: dict | None) -> dict:
+    """The basis label's LINE: the plot's top strip, one tick-label line high (the measured x tick band's height, else
+    BASIS_LINE_PX), across the plot's width - where `page_boxes` folds the label into the plot, and so the label's box on
+    a page nothing measured. Measured on the served full-stage page 2026-09-22: the label (151, 208, 435 x 33) inside
+    the strip (151, 208, 947 x 36). Pure."""
+    h = ((axis or {}).get("x") or {}).get("h") or BASIS_LINE_PX
+    return {"x": plot["x"], "y": plot["y"], "w": plot["w"], "h": h}
+
+
+def text_boxes(boxes: dict) -> list[tuple[str, dict]]:
+    """P72 T15: EVERY page text box `page_boxes` carries, as (name, stage-px rect), in one order - the title, the sub,
+    the source line, the badge rail, the key rail, the basis label, both tick bands, the end tags as drawn (else the
+    names' column), the schematic's tag, the right axis's words, each bar's name. The names are the placer's own
+    findings' names. A box that is absent or empty is left out. Pure."""
+    ok = lambda b: isinstance(b, dict) and b.get("w", 0) > 0 and b.get("h", 0) > 0   # noqa: E731
+    out = [(k, dict(boxes[k])) for k in ("title", "sub", "source", "rail", KEY_BOX) if ok(boxes.get(k))]
+    if ok(boxes.get(BASIS_BOX)):
+        out.append(("the basis label", dict(boxes[BASIS_BOX])))
+    axis = boxes.get("axis") or {}
+    out += [(f"the {k} axis", dict(axis[k])) for k in ("x", "y") if ok(axis.get(k))]
+    if boxes.get(TAG_BOXES_KEY):
+        out += [("an end tag", dict(b)) for b in boxes[TAG_BOXES_KEY] if ok(b)]
+    elif ok(boxes.get(TAGS_KEY)):
+        out.append(("the end names", dict(boxes[TAGS_KEY])))
+    for key, name in ((SCHEMATIC_BOX, "the schematic tag"), (Y2_BOX, "the right axis")):
+        if ok(boxes.get(key)):
+            out.append((name, dict(boxes[key])))
+    out += [("a bar name", {k: b[k] for k in ("x", "y", "w", "h")}) for b in boxes.get(BAR_NAMES_KEY) or [] if ok(b)]
+    return out
+
+
+# R26-270: a bar's name - on two lines where lpWrapBarLabel wrapped it - stands under the plot, above the source foot and
+# (at 16:9 on a full-stage page) level with the anchored caption's band. Nothing measured it against either. A name may
+# sit flush against either; a pixel into one is a finding.
+
+
+def bar_name_findings(boxes: dict) -> list[str]:
+    """R26-270 (s106 - advice, never a refusal): one WARN, with its numbers, per bar name whose drawn box runs into the
+    page's source line or into the anchored caption's band. [] on a page with no measured names. Pure."""
+    out = []
+    bands = [("the source line", boxes.get("source")), ("the caption band", boxes.get("caption_anchor"))]
+    for b in boxes.get(BAR_NAMES_KEY) or []:
+        if not isinstance(b, dict):
+            continue
+        for what, r in bands:
+            if not isinstance(r, dict):
+                continue
+            dx = min(b["x"] + b["w"], r["x"] + r["w"]) - max(b["x"], r["x"])
+            dy = min(b["y"] + b["h"], r["y"] + r["h"]) - max(b["y"], r["y"])
+            if dx > 0 and dy > 0:
+                lines = int(b.get("lines") or 1)
+                out.append(f"a bar name [{b['x']}, {b['y']}, {b['w']}, {b['h']}] ({lines} line{'s' if lines > 1 else ''}) "
+                           f"runs {dy:.0f} px into {what} [{r['x']}, {r['y']}, {r['w']}, {r['h']}] - shorten the name, "
+                           "or give the page's foot room (R26-270)")
+    return out
+
+
 def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
     """Where this page puts its ink, in STAGE pixels (E45 §1).
 
@@ -4892,7 +4957,9 @@ def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
     ``chart``/``plot``/``source``/``rail`` (the page's), each ``{x, y, w, h}``; ``quiet_zone``
     passes the spec's declared side through. ``plot`` is the DATA box plus the ink that lives
     inside it - the basis label above it (``axes.ylabel``) and the x tick labels below the axis -
-    because a card over either of them covers the chart just as surely.
+    because a card over either of them covers the chart just as surely. P72 T15: ``basis`` (the basis label's own box - as
+    drawn on a measured page, else `basis_strip`) and, on a measured page, ``bar_names`` (each bar's name as drawn, with
+    the ``lines`` it took); `text_boxes` names every text box the page carries.
 
     ``measured`` says whose numbers these are (P50 T16): True when the fixture holds the player's
     own boxes for this page's INK (`measured_boxes`), False when this is `_portrait_boxes`' estimate.
@@ -4944,6 +5011,8 @@ def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
         plot = boxes["plot"]
         boxes["plot"] = _box(plot["x"], plot["y"], max(0.0, plot["w"] - y2box["w"]), plot["h"])
         boxes[Y2_BOX] = dict(y2box, x=boxes["plot"]["x"] + boxes["plot"]["w"])
+    if (spec.get("axes") or {}).get("ylabel") and not isinstance(boxes.get(BASIS_BOX), dict):   # P72 T15: the basis
+        boxes[BASIS_BOX] = basis_strip(boxes["plot"], boxes.get("axis"))                         # label, estimated
     sx, sy, sw, sh = SAFE_BOX[aspect]
     cx, cy, cw, ch = CAPTION_ANCHOR[aspect]
     out = {"aspect": aspect, "stage": _box(0, 0, w_s, h_s), "safe": _box(sx, sy, sw, sh),

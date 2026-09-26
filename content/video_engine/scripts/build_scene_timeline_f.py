@@ -10094,6 +10094,22 @@ def page_text_boxes(page: dict | None, aspect: str | None) -> list[tuple[str, di
     return [(name, dict(r)) for name, r in groups["label"] if name not in PLACE_TEXT_EXEMPT]
 
 
+def plot_words(page: dict | None, aspect: str | None) -> list[dict]:
+    """P72 T15 (R26-253): the page's words that stand INSIDE the plot - the part of `page_text_boxes` (so E45's heading
+    and E65's x tick band stay exempt) that meets the plot's box, each whole: the basis label on every page that states
+    one. [] for no page. Pure."""
+    if not page:
+        return []
+    plot = LPG.page_boxes(page, aspect or "16:9")["plot"]
+    out = []
+    for _n, r in page_text_boxes(page, aspect):
+        x0, y0 = max(r["x"], plot["x"]), max(r["y"], plot["y"])
+        x1, y1 = min(r["x"] + r["w"], plot["x"] + plot["w"]), min(r["y"] + r["h"], plot["y"] + plot["h"])
+        if x1 > x0 and y1 > y0:
+            out.append(r)
+    return out
+
+
 def text_cover_notes(where: str, box: dict | None, text: list[tuple[str, dict]]) -> list[str]:
     """s106: one WARN with its numbers per page word a card's box still covers (the placer's last resort). Pure."""
     if not isinstance(box, dict):
@@ -10178,14 +10194,14 @@ def page_place(page: dict, aspect: str, reserve: list[dict] | None = None, clear
     if page_refused_at(page, aspect):   # P72 T40: a page no build draws at `aspect` has no placement - None, as the search says
         return None
     stamps = [t for t in (clear_of or []) if isinstance(t, dict)]
-    if not words:
-        return _page_place_search(page, aspect, reserve, stamps)
+    if not words:   # P72 T15: the stamp's tie-break reads the room as it always did (the stamp itself is fitted off every word)
+        return _page_place_search(page, aspect, reserve, stamps, room_words=False)
     text = [r for _n, r in page_text_boxes(page, aspect)]
     blocked = stamps + text
     got = _page_place_search(page, aspect, reserve, blocked)
     if not blocked:
         return got
-    park = _page_place_search(page, aspect, reserve, [])
+    park = _page_place_search(page, aspect, reserve, [], room_words=False)   # P72 T15: the default park, as P71 T5 r4 sized it
     if got["w"] >= park["w"] and not any(_overlap_area(got, r) > 0 for r in blocked):
         return got
     if not any(_overlap_area(park, r) > 0 for r in blocked):
@@ -10194,7 +10210,7 @@ def page_place(page: dict, aspect: str, reserve: list[dict] | None = None, clear
 
 
 def _page_place_search(page: dict, aspect: str, reserve: list[dict] | None = None,
-                       clear_of: list[dict] | None = None) -> dict | None:
+                       clear_of: list[dict] | None = None, room_words: bool = True) -> dict | None:
     """E65's search for the parked rectangle for a dock on this ledger page, in stage pixels (E45 §1, E65) - the
     search P71 T5's `page_place` wraps (`clear_of` is every rectangle the rooms are cut round).
 
@@ -10206,7 +10222,11 @@ def _page_place_search(page: dict, aspect: str, reserve: list[dict] | None = Non
     (`stamp_clash_error`). Absent or empty, every room is the room it always was, to the byte.
     P72 T40: None on a page no build draws at `aspect` (`page_refused_at`) - there is no page to place on; and before the
     corner, a band outside the plot at the legibility floor (E65: the card's SCALE gives ground before its place does;
-    that band is never on the data, the corner may be)."""
+    that band is never on the data, the corner may be).
+    P72 T15 (R26-253): the `empty` room is the plot's room with no DATA and no WORD in it - cut round every page word
+    that stands inside the plot (`plot_words`: the basis label above all) that `clear_of` does not already carry.
+    `room_words=False` reads the data mask alone, as before this slice: the DEFAULT PARK `page_place` sizes a card by
+    (P71 T5 r4) and a stamp's E65 tie-break (`words=False`) - both answers stay to the byte what they were."""
     if page_refused_at(page, aspect):
         return None
     boxes = LPG.page_boxes(page, aspect)
@@ -10226,9 +10246,10 @@ def _page_place_search(page: dict, aspect: str, reserve: list[dict] | None = Non
         return got
     plot = boxes["plot"]
     centre = (plot["x"] + plot["w"] / 2, plot["y"] + plot["h"] / 2)
-    # (2) EMPTY: the largest rectangle the data does not touch, the quiet side first
+    # (2) EMPTY: the largest rectangle the data does not touch, the quiet side first - and, P72 T15, no word
+    words = [r for r in plot_words(page, aspect) if r not in taken] if room_words else []
     cands = []
-    for room in cut(mask_rooms(boxes)):
+    for room in cut([p for r in mask_rooms(boxes) for p in _pieces_clear_of(r, words)]):
         fit = _fit_in(room, want, floor_h)
         if fit is None:
             continue
@@ -10563,8 +10584,11 @@ def prop_obstacle_groups(page: dict | None, aspect: str | None, extra: list[dict
     # plot's top strip, one tick-label line high (the page's measured `axis.x` height), across the plot's width -
     # measured on the served full-stage page 2026-09-22: the label at (151, 208, 435 x 33) inside that strip
     # (151, 208, 947 x 36). Without it the send-back #2 fit put the ring straight through it.
+    # P72 T15 (R26-253): `page_boxes` now carries the label's own box (`basis`: as drawn on a measured page, else this very
+    # strip, `ledger_page.basis_strip`); the obstacle is the strip grown to the drawn box wherever the label runs past it,
+    # so a label inside its strip (every page measured so far) is fitted round exactly as before
     if (page.get("axes") or {}).get("ylabel"):
-        label.append(("the basis label", {"x": plot["x"], "y": plot["y"], "w": plot["w"], "h": (axis.get("x") or {}).get("h") or 36}))
+        label.append(("the basis label", basis_obstacle(boxes)))
     if mask:
         rows, cols = len(mask), len(mask[0])
         cw, ch = plot["w"] / cols, plot["h"] / rows
@@ -10573,6 +10597,14 @@ def prop_obstacle_groups(page: dict | None, aspect: str | None, extra: list[dict
     else:
         data = [("the plot", plot)]
     return {"label": label, "caption": caption, "data": data, "reserved": reserved}, boxes["safe"], blind
+
+
+def basis_obstacle(boxes: dict) -> dict:
+    """P72 T15: the basis label as an obstacle - its line (`ledger_page.basis_strip`) grown to the label's own box
+    (`page_boxes`' `basis`) wherever the drawn label runs past the line. Pure."""
+    strip = LPG.basis_strip(boxes["plot"], boxes.get("axis"))
+    drawn = boxes.get(LPG.BASIS_BOX)
+    return LPG._union([strip, drawn]) if isinstance(drawn, dict) and drawn != strip else strip
 
 
 def _flat_obstacles(groups: dict) -> list[dict]:
@@ -13053,6 +13085,17 @@ def page_is_measured(world: dict | None, aspect: str | None) -> bool:
     return bool(LPG.page_boxes(world["page"], aspect or "16:9").get("measured"))
 
 
+def bar_name_warns(world: dict | None, aspect: str | None) -> list[tuple[str, str]]:
+    """R26-270 (P72 T15; s106 - advice, never a refusal): `(ink, WARN)` for every bar name, on this scene's page and each
+    of its later states, whose drawn box runs into the source line or the caption band (`ledger_page.bar_name_findings`
+    - a MEASURED page only: the wrap is the player's). [] off a ledger page. Pure."""
+    if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER or not isinstance(world.get("page"), dict):
+        return []
+    pages = [world["page"]] + [p for p in (world.get("page_states") or []) if isinstance(p, dict)]
+    return [(LPG.page_ink_key(p), f"{str(p.get('title') or '')[:44]!r}: {w}")
+            for p in pages for w in LPG.bar_name_findings(LPG.page_boxes(p, aspect or "16:9"))]
+
+
 def solo_centre_by_clock(world: dict | None, aspect: str | None, n_docks: int, slot: int,
                          enter: float, scene_start: float, dopt: dict) -> bool:
     """R26-22: a SOLO card that arrives after the page's own clock has finished is CENTRED in the
@@ -13731,6 +13774,7 @@ def main() -> int:
     print(f"  audio: {audio.name}")
 
     evidence, uris, scenes, estimated_pages = {}, {}, [], []   # P50 T16: the pages this build placed by ESTIMATE, for the report below
+    bar_names_warned: set[str] = set()   # P72 T15 (R26-270): the page inks whose bar names this build has WARNed
     read_moves: list[str] = []      # E63: the docks whose READ the rule moved off a building chart ...
     prop_warns: list[str] = []      # P69 T26d / E99 s106: every prop-placement finding the fit ADVISED (printed as it was found)
     read_defers: list[str] = []     # ... and the ones with no band to move it to, deferred to the parked box
@@ -13969,6 +14013,10 @@ def main() -> int:
             ledger_rows.append(i + 1)
             if not page_is_measured(world, ASPECT):
                 estimated_pages.append(f"row {i + 1} {str(world['page'].get('title') or plate)[:44]!r}")
+            for _ink, _w in bar_name_warns(world, ASPECT):   # P72 T15 (R26-270): a WARN with its numbers, once a page
+                if _ink not in bar_names_warned:
+                    bar_names_warned.add(_ink)
+                    print(f"  [WARN] P72 T15: shot row {i + 1} ({a}-{b}s) {_w}")
         # E45 §1: on a ledger page every dock parks in the same rectangle, computed from the
         # page's own geometry. Only the SOLO card (slot 0) is placed - a paired/stacked dock keeps
         # the layout its slot declares, and a plain plate keeps the solo card entirely.

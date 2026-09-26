@@ -38,6 +38,7 @@ FIXTURE = json.loads(LPG.PAGE_BOXES_FIXTURE.read_text(encoding="utf-8"))
 CASES = [(b, a) for b in M.BUILDERS for a in M.ASPECTS]
 PAGES = FIXTURE.get("pages") or {}
 
+
 # R26-51: the ink keys of Tokyo's five compiled pages at 9:16 - the two holdings/Fed dense lines and
 # the three bars states. Pinned because a fixture that quietly stops covering an episode's pages is
 # exactly the staleness R26-51 closed: change a title and this list, and the measurement, must move
@@ -822,3 +823,28 @@ def test_a_schematics_tag_is_ink_in_its_data_mask():
         blank = [c for c in cols if mask[row][c] != "1"]
         assert not blank, f"{key}: the mask calls the tag's cells {blank} of row {row} empty - a card may cover it"
     assert "text.lp-phase" in M.READ_BOXES and "text.lp-schematic" in M.READ_BOXES
+
+
+# ---- P72 T15 (R26-253, R26-270): the basis label and every bar's name, as drawn ----------------------------------------
+def test_the_measure_reads_the_basis_label_by_its_key_and_every_bars_name_with_its_lines():
+    assert "m.key === 'axislabel'" in M.READ_BOXES, "the basis label is the mark KEYED axislabel (an era label shares the role)"
+    assert "mk.role === 'xlabel'" in M.READ_BOXES and "__wrapLines" in M.READ_BOXES
+
+
+def test_every_line_representative_carries_its_basis_label_inside_its_plot_in_every_geometry():
+    for builder in ("dense-line", M.SCHEMATIC_LINE, M.DUAL_LINE):
+        assert (M.representative(builder).get("axes") or {}).get("ylabel"), f"{builder}'s page states a basis"
+        for key, e in FIXTURE["builders"][builder].items():
+            b, plot = e.get(LPG.BASIS_BOX), e["boxes"]["plot"]
+            assert b, f"{builder} {key}: no basis label on file"
+            assert plot["x"] <= b["x"] and b["x"] + b["w"] <= plot["x"] + plot["w"] + 2 and abs(b["y"] - plot["y"]) <= 4, (key, b, plot)
+
+
+def test_a_bars_pages_names_are_on_file_and_page_boxes_serves_them():
+    for key, e in FIXTURE["builders"]["story"].items():
+        names = e.get(LPG.BAR_NAMES_KEY)
+        assert names and all({"x", "y", "w", "h", "lines"} <= set(n) and n["lines"] >= 1 for n in names), (key, names)
+    gauge = FIXTURE["builders"][M.STORY_GAUGE]["16:9|full_stage"][LPG.BAR_NAMES_KEY]
+    assert [n["lines"] for n in gauge] == [2], f"the 94 page's name wraps on its capped bar: {gauge}"
+    got = LPG.page_boxes(M.full_stage_variant(M.representative("story")), "16:9")
+    assert got["measured"] and got[LPG.BAR_NAMES_KEY] == FIXTURE["builders"]["story"]["16:9|full_stage"][LPG.BAR_NAMES_KEY]
