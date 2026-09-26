@@ -1032,3 +1032,23 @@ def test_the_reader_survives_a_short_row_and_a_junk_ken():
     """A row is a tuple that may stop at its exit, and a hand-written table can carry anything."""
     assert T.life_tokens([(0.0, 4.0, "plate-v1;idle=live")]) == [(1, "idle=live")]
     assert T.life_tokens([_row("plate-v1", ("x", 0, 0))]) == []
+
+
+def test_a_declared_life_species_IS_the_rows_life_R26_345():
+    """R26-345 (P69 T32, Steel and Paper H row 27): the outro row is a clip with `life` DECLARED over its seconds (the
+    kit's own `shapes.outro_row`, the approved cuts' `build_short.py` shape) and no idle token or ken - the reader
+    said `26 of 27 rows` on a table whose every row was alive. The gate credits that species (SPECIES_EVENTS `life`:
+    continuous), so the counter names it too."""
+    from authoring import shapes as S
+    row = S.outro_row({"world": "clip:build-h/clips/outro-yt-1920x1080-24fps.mp4", "at": 805.58, "runtime": 811.78})
+    assert T.life_tokens([row]) == [(1, "life 6.2s")]
+    both = (0.0, 4.0, "plate-v1;idle=drift", (0.04, 8, -6), [], "cut", [{"kind": "life", "at": 0.0, "dur": 4.0}])
+    assert T.life_tokens([both]) == [(1, "idle=drift + ken 0.04/8/-6 + life 4s")]
+
+
+def test_a_row_whose_species_declare_no_life_reads_as_before():
+    """Any other species (a callout, a steam - the gate's own continuous credit, not a declared `life`) is not the row's
+    declared life; a junk species entry is skipped, never a crash."""
+    row = (0.0, 4.0, "world-v1;use=landing", (0, 0, 0), [], "cut", [{"kind": "callout", "at": 1.0}, "junk", {"kind": "life"}])
+    assert T.life_tokens([row]) == [(1, "life")]
+    assert T.life_tokens([(0.0, 4.0, "world-v1", (0, 0, 0), [], "cut", [{"kind": "steam", "at": 0.0}])]) == []

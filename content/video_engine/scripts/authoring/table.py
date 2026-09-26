@@ -89,6 +89,24 @@ def print_rows(rows: list[tuple], show_docks: bool = False) -> None:
         print(row_line(r, show_docks))
 
 
+LIFE_SPECIES = "life"   # a DECLARED self-animating world (the outro clip): `shapes.OUTRO_LIFE`, the gate's SPECIES_EVENTS "life"
+
+
+def _declared_life(row: tuple) -> list[str]:
+    """R26-345: a row whose species DECLARE its life (`{"kind": "life", "at", "dur"}` - the outro row the kit writes,
+    `shapes.outro_row`) carries it by that species; named with its seconds when it states them."""
+    species = row[ROW_SPECIES] if len(row) > ROW_SPECIES else None
+    out: list[str] = []
+    for e in species or ():
+        if not isinstance(e, dict) or e.get("kind") != LIFE_SPECIES:
+            continue
+        try:
+            out.append("life %gs" % float(e["dur"]))
+        except (KeyError, TypeError, ValueError):
+            out.append("life")
+    return out
+
+
 def life_tokens(rows: list[tuple]) -> list[tuple[int, str]]:
     """R26-245 (E49, E99 s84): which rows carry LIFE - and by WHAT, never a bare count.
 
@@ -97,7 +115,8 @@ def life_tokens(rows: list[tuple]) -> list[tuple[int, str]]:
     plate's life - the operator withdrew the painted drift ("the drift is too random, i think we
     should use ken burns instead of drift"), so a plate row now carries `;use=landing`, a ken tuple
     and no `;idle=` token at all. A counter that reads only the `;idle=` token therefore reads a
-    Ken-Burns plate as still and contradicts E49 on a row that is correct.
+    Ken-Burns plate as still and contradicts E49 on a row that is correct. A row may also DECLARE its life as a
+    species (`life`, the outro clip's own motion - R26-345), and that is named too.
 
     Returns (1-based row number, what carries it) for every row that carries any. A ken of all
     zeros is no push and no life; the gate's own M18 reads this from the rendered frames instead
@@ -117,6 +136,7 @@ def life_tokens(rows: list[tuple]) -> list[tuple[int, str]]:
             pushes = False
         if pushes:
             carries.append("ken " + "/".join("%g" % float(v) for v in ken))
+        carries += _declared_life(r)
         if carries:
             out.append((i + 1, " + ".join(carries)))
     return out

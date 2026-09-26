@@ -4076,27 +4076,80 @@ def _build_to_holds(scenes: list[dict]) -> list[tuple[float, float]]:
     return out
 
 
-def _deployed_lives(scenes: list[dict]) -> list[tuple[str, float, float, float]]:
-    """E50: per ledger page, (scene_id, last data mark, end, deployed). The data marks are the build's landing on the page's
-    own clock (a returning page arrives drawn: its entry) and the end of every build_to and bracket inside the span; the
-    life ends at the first undraw after the last mark, else at the page's exit. Annotations (spotlight, callout, retitle,
-    relight, figure) add no data and neither restart nor end the clock."""
-    out: list[tuple[str, float, float, float]] = []
+UNPARK_SCALE = 1.0   # build_scene_timeline_f.PARK_SCALE's note: a `chart_to park` to exactly 1.0 is the UN-PARK
+PARK_DEFAULT_SCALE = 0.72   # ... and a park that names no scale takes the compiler's default (a park, not an un-park)
+
+
+def _park_moves(s: dict) -> list[tuple[float, float, bool]]:
+    """R26-342: a page's parks and un-parks as (at, land, parks), in time order. A PAGE park is `chart_to park` with no
+    `panel` (a panel's own park shrinks one panel and the page keeps the stage) - a scale under 1.0 parks, exactly 1.0
+    un-parks; on a panels page a `panel_focus` with a `region` fits the panels into a box for the thing beside them (the
+    panels' park), and a focus with none grows them back to the plot."""
+    out: list[tuple[float, float, bool]] = []
+    for x in s.get("species", []):
+        at, dur = float(x.get("at", 0.0)), float(x.get("dur", 0.0))
+        if x.get("kind") == "chart_to" and x.get("to") == "park" and x.get("panel") is None:
+            sc = x.get("scale", PARK_DEFAULT_SCALE)
+            parks = not (isinstance(sc, (int, float)) and not isinstance(sc, bool) and float(sc) >= UNPARK_SCALE)
+            out.append((at, at + dur, parks))
+        elif x.get("kind") == PANEL_FOCUS:
+            out.append((at, at + dur, bool(x.get("region"))))
+    return sorted(out)
+
+
+def _full_stage_windows(s: dict, a: float, z: float) -> list[tuple[float, float, bool]]:
+    """R26-342 (P69 T32): the stretches of a page's span in which its chart holds the WHOLE stage, as (start, end,
+    unparked). A park closes the window at its word - the chart starts yielding to the next thing (E50: "or becomes the
+    next thing") - and an un-park opens the next at its land, the chart back at full size: a page RETURNING, whose
+    entry the clock has always taken as a mark. A page that never parks is one window, its span."""
+    out: list[tuple[float, float, bool]] = []
+    start, unparked, parked = a, False, False
+    for at, land, parks in _park_moves(s):
+        if parks and not parked and a <= at <= z:
+            if at > start + 1e-6:
+                out.append((start, at, unparked))
+            parked = True
+        elif not parks and parked and a <= at <= z:
+            start, unparked, parked = land, True, False
+    if not parked and z > start + 1e-6:
+        out.append((start, z, unparked))
+    return out
+
+
+def _deployed_windows(scenes: list[dict]) -> list[tuple[str, float, float, float, bool]]:
+    """E50 per full-stage window of every ledger page: (scene_id, last data mark, end, deployed, opened by an un-park).
+    Inside a window the clock is the one it has always been; the window's first instant is its first mark (the build's
+    landing on the page's own clock for the first - a returning page arrives drawn - and the chart grown back for one an
+    un-park opens)."""
+    out: list[tuple[str, float, float, float, bool]] = []
     for s in scenes:
         if not _is_page(s) or not s.get("span"):
             continue
         a, z = float(s["span"][0]), float(s["span"][1])
         sp = s.get("species", [])
-        page = ((s.get("world") or {}).get("page") or {})
         marks = [a + _page_land_offset(s)]
         marks += [float(x["at"]) + float(x.get("dur", 0.0)) for x in sp if x.get("kind") in ("build_to", "bracket") and a <= float(x.get("at", -1e9)) <= z]
         # P48 T6: a chart that changes its data state is a new chart's life - E50's clock restarts at the transition's end
         marks += [_transition_land(s, x) for x in sp if x.get("kind") == "chart_to" and x.get("to") in TRANSITION_DATA_KINDS and a <= float(x.get("at", -1e9)) <= z]   # E60: a breakthrough state's run is its last mark
-        last = max(m for m in marks if m <= z + 1e-6) if any(m <= z + 1e-6 for m in marks) else a
-        uds = sorted(float(x["at"]) for x in sp if x.get("kind") == "undraw" and last - 1e-6 <= float(x.get("at", -1e9)) <= z)
-        end = uds[0] if uds else z
-        out.append((str(s.get("scene_id", "?")), round(last, 2), round(end, 2), round(max(0.0, end - last), 2)))
+        for w0, w1, unparked in _full_stage_windows(s, a, z):
+            # an un-park's window counts only what lands inside it, from its own land (a mark made while parked was
+            # never on the whole stage); the first window keeps the page's own landing as it always has
+            inside = [m for m in marks if m <= w1 + 1e-6 and (not unparked or m >= w0 - 1e-6)] + ([w0] if unparked else [])
+            last = max(inside) if inside else w0
+            uds = sorted(float(x["at"]) for x in sp if x.get("kind") == "undraw" and last - 1e-6 <= float(x.get("at", -1e9)) <= w1)
+            end = uds[0] if uds else w1
+            out.append((str(s.get("scene_id", "?")), round(last, 2), round(end, 2), round(max(0.0, end - last), 2), unparked))
     return out
+
+
+def _deployed_lives(scenes: list[dict]) -> list[tuple[str, float, float, float]]:
+    """E50: per ledger page, (scene_id, last data mark, end, deployed) - one per full-stage window (R26-342: a page that
+    parks and grows back has two). The data marks are the build's landing on the page's own clock (a returning page
+    arrives drawn: its entry; an un-parked chart is back at full size: its land) and the end of every build_to and
+    bracket inside the span; the life ends at the first undraw after the last mark, else at the window's end (a park,
+    or the page's exit). Annotations (spotlight, callout, ring, retitle, relight, figure) add no data and neither
+    restart nor end the clock (E50 section 1); nor does a card landing on the page (section 2)."""
+    return [w[:4] for w in _deployed_windows(scenes)]
 
 
 def _landings(s: dict) -> list[tuple[float, str]]:
@@ -4245,17 +4298,20 @@ def _arrive_of(scenes: list[dict], scene_id: str) -> float:
 
 def _deployed_gate(scenes: list[dict]) -> Gate | None:
     """M21 (E50): the chart's deployed life per ledger page - over DEPLOY_MAX_S WARN, over DEPLOY_AVG_S INFO, else PASS."""
-    lives = _deployed_lives(scenes)
-    if not lives:
+    wins = _deployed_windows(scenes)
+    if not wins:
         return None
-    row = lambda l: f"{l[0]} {l[3]:.1f}s ({_mm(l[1])} -> {_mm(l[2])})"
+    lives = [w[:4] for w in wins]
+    reopened = {w[:4] for w in wins if w[4]}   # R26-342: a life an un-park opened - read before the park, so never "short"
+    row = lambda l: f"{l[0]} {l[3]:.1f}s ({_mm(l[1])} -> {_mm(l[2])}{' after its un-park' if l in reopened else ''})"
     # the SPLIT the author needs: a span is arrival + build + deployed, and only the last of the three is E50's clock
     split = lambda l: (f"{l[0]} {l[3]:.1f}s deployed of a {_span_of(scenes, l[0]):.1f}s span "
                        f"(arrive+build {_arrive_of(scenes, l[0]):.1f}s), {DEPLOY_MIN_S - l[3]:.1f}s short")
     # the floor applies only to a page CUT short. A page that ends its own life with an undraw is LEAVING on purpose -
     # E50's "then it un-draws or becomes the next thing" - and a deliberate exit is not a rushed chart.
     short = [l for l in lives if l[3] < DEPLOY_MIN_S and l[2] >= _end_of(scenes, l[0]) - 1e-6
-             and _arrive_of(scenes, l[0]) < 1.0]   # only a page that ARRIVES BUILT: a page that draws was read as it drew
+             and _arrive_of(scenes, l[0]) < 1.0   # only a page that ARRIVES BUILT: a page that draws was read as it drew
+             and l not in reopened]
     over = [l for l in lives if l[3] > DEPLOY_MAX_S]
     long = [l for l in lives if DEPLOY_AVG_S < l[3] <= DEPLOY_MAX_S]
     if short and not over:
