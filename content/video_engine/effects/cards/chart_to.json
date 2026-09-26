@@ -230,6 +230,14 @@
         {
           "name": "`extend`: new points",
           "source": "docs/content-video-engine/CAPABILITIES.md:107"
+        },
+        {
+          "name": "A17 dashed path past the last real point (`projection`)",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:415"
+        },
+        {
+          "name": "T23 projection chart: actual, then a labelled forecast",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:409"
         }
       ],
       "does": "New points or a later series draw on at the pen after the axes retarget.",
@@ -257,7 +265,13 @@
         }
       ],
       "blends": [],
-      "options": [],
+      "options": [
+        {
+          "token": "projection",
+          "means": "`series: k` on a later series carrying `projection: {label, tier, src}`: an estimate drawn DASHED from the last actual, unbloomed, its tag its label, sourced on the page (E77).",
+          "source_set": null
+        }
+      ],
       "dials": {
         "module": "content/video_engine/scripts/kinetics/chartxf.mjs",
         "object": "XF"

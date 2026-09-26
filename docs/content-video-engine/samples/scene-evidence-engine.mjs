@@ -12157,6 +12157,39 @@ async function mount(doc) {
       return e; });
     st.brk = { after: BK.after, before: BK.before, xa: BK.xa, xb: BK.xb, cx: BK.cx, label: BK.label, slashes, gapEl, eraEls };
   };
+  /* P71 T16 (was P69 T41; harvest v2 A17 / T23 / S3; E77): A PROJECTION IS DASHED. A `later` series carrying `projection`
+     draws on its word from the last actual (chart_to extend {series: k}) and every dashed series is a projection (S3). The
+     line's own stroke-dasharray / -dashoffset is the engine's DRAW STATE - every paint, rescale and seek writes and reads it
+     (the pen, the caps, the undraws, the hand-overs) - so the dashes cannot live there. They live in a MASK: a white twin
+     of the path, dashed, butt-ended and wider than the line at any card scale, so the line draws on exactly as every line
+     does and shows only where the twin is ink. The twin follows the path: whatever writes the path's `d` (a rescale
+     re-projecting it, lpRestoreState putting it back, a seek) writes the twin's in the same call, and the dashes are
+     re-fitted to its length - whole dashes, so the path opens on ink at the last actual and ENDS on ink at the estimate's
+     own point. Built only for a projection: a page without one carries not one extra element (the goldens are the
+     contract). The dash law is MEASURED off Bravos (HIS 12:20, STK 9:04, BOOM 18:58 - scratchpad/p71-t16/logs/
+     bravos-measure.jsonl): a dash ~4 of the line's widths on the core ink, the gap ~half a dash (0.32-0.65, median 0.47).
+     Read by the SAME tool on the golden: DASH_W 4 measured 4.58 widths, 3.5 measured 4.22, 3.25 measures 3.82 against
+     Bravos's 3.49-4.17 (median 3.91) - so 3.25. The line a projection CONTINUES has its end tag at the very point the
+     dashes leave: the tag steps off the side the path leaves by (under a rising estimate, over a falling one) so the
+     first dash never runs through its name. */
+  const LP_PROJ = Object.freeze({ DASH_W: 3.25, GAP_K: 0.5, MASK_K: 6, TAG_K: 0.8 });   /* TAG_K: the continued line's end tag steps this many of its ems off the path's first dash */
+  const lpProjDashArray = (len, w) => {
+    const d = LP_PROJ.DASH_W * w, g = d * LP_PROJ.GAP_K;
+    const n = Math.max(1, Math.round((len + g) / (d + g))), k = len > 0 ? (len + g) / (n * (d + g)) : 1;   /* n whole dashes fill the path */
+    return (d * k).toFixed(2) + " " + (g * k).toFixed(2);
+  };
+  const lpProjectionDash = (st, p, w) => {
+    const defs = lpEl("defs", "", st.chart), id = "projmask-" + (st.seed | 0) + "-" + (++lpClipN);   /* deterministic: the build order names it */
+    const mask = lpEl("mask", "", defs, { id, maskUnits: "userSpaceOnUse", x: -10000, y: -10000, width: 20000, height: 20000 });
+    const twin = lpEl("path", "", mask, { d: p.getAttribute("d"), fill: "none", stroke: "#fff", "stroke-width": (LP_PROJ.MASK_K * w).toFixed(2),
+                                          "stroke-linecap": "butt", "stroke-linejoin": "round" });
+    const fit = () => twin.setAttribute("stroke-dasharray", lpProjDashArray(twin.getTotalLength ? twin.getTotalLength() : 0, w));
+    fit();
+    p.setAttribute("mask", "url(#" + id + ")");
+    const set = p.setAttribute.bind(p);
+    p.setAttribute = (k, v) => { set(k, v); if (k === "d") { twin.setAttribute("d", v); fit(); } };   /* the twin follows the path */
+    return twin;
+  };
   const buildLedgerLine = (st, pg) => {
     const ax = pg.axes || {}, series = pg.series || [];
     const PAL = pg.surface_from ? { ...LP_INK, cobalt: "#1769C2", teal: "#087D68", crimson: "#B53A28" } : LP_INK;
@@ -12263,7 +12296,7 @@ async function mount(doc) {
       } else drawn.push({ ...s, muted: false, si, k0: 0 });
     });
     /* E99 s117 (P69 T37b): the PRIMARY - the first live series that is not `deemph` (context never blooms) */
-    const primaryI = drawn.findIndex((q) => !q.muted && q.color !== "deemph");
+    const primaryI = drawn.findIndex((q) => !q.muted && q.color !== "deemph" && !q.projection);   /* P71 T16: nor a projection (an estimate is context) */
     drawn.forEach((s, i) => {
       /* P58 T5: every datum through the ONE homography, once. The path, the travelling tip, the tip-riding pill,
          the terminal name and the species' targets then all ride the same projected geometry - a line drawn ON the
@@ -12286,10 +12319,11 @@ async function mount(doc) {
       const col = s.muted ? (declared ? lpInkA(declared, 0.45) : LP_MUTED) : live;
       const sHost = BK ? lpBreakHost(st, BK, s.pts) : st.chart;   /* P69 T66: a line across the cut is held out of the gap */
       const p = lpEl("path", "ser" + (s.muted ? " muted" : ""), sHost, { d, stroke: col });
-      const role = { p, muted: !!s.muted, context: !s.muted && s.color === "deemph", hot: i === primaryI };
+      const role = { p, muted: !!s.muted, context: !s.muted && (s.color === "deemph" || !!s.projection), hot: i === primaryI };   /* P71 T16: a projection never blooms (s117) */
       lpBloomRole(st, role, col);   /* E99 s117: the primary is emissive, a live peer keeps E67's neon, context and the history never bloom */
       const len = p.getTotalLength ? p.getTotalLength() : 2000;
       p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
+      if (s.projection) lpProjectionDash(st, p, (p.isConnected && parseFloat(getComputedStyle(p).strokeWidth)) || (P ? 8 : 4));   /* P71 T16: dashed (S3) */
       const tip = lpEl("circle", "", sHost, { r: 6, fill: col, opacity: 0 });
       const last = s.pts[s.pts.length - 1];
       const prev = s.pts.length > 1 ? s.pts[s.pts.length - 2] : last;   /* portrait: the name ends left of the last segment so a steep drop never runs through it */
@@ -12344,15 +12378,18 @@ async function mount(doc) {
       name.textContent = s.muted ? "" : LFT && LFT.form !== "full" ? (s.label || s.name || "") : (s.label ? s.label + " " : "") + (s.name || "");   /* P69 T8: a tag the stage cannot hold keeps its value (T10's key takes the name) */   /* the muted history carries no name */
       /* DYNAMIC LABEL: the badge that keys this line rides its inline name as the tag, in the accent - one
          reveal, one real estate (operator, 2026-09-03) */
-      const ib = (st.inlineBadges || {})[s.color], chipT = (ib && ib.tag) || s.card_name || "";   /* a card's short name rides where a badge's tag would */
+      const ib = s.projection ? null : (st.inlineBadges || {})[s.color], chipT = s.projection ? "" : (ib && ib.tag) || s.card_name || "";   /* P71 T16: a projection's tag is its label alone - never its line's badge value (E77) */   /* a card's short name rides where a badge's tag would */
       if (chipT && !(LFT && LFT.form === "value")) { const tg = lpEl("tspan", "tagchip", name, { dx: LFT ? (LP_LONGFORM.CHIP_DX_PX / LFT.scale).toFixed(2) : 12, fill: col,
         ...(PHONE ? { style: "font-size:" + lpTypeU(st, "chip") + "px" } : {}) }); tg.textContent = chipT; }
       const rec = { p, len, tip, name, stagger: i / Math.max(1, drawn.length), ny: P ? nameY : (PJ ? PE[1] : myS(last[1])) + 8,
                      pts: PT.map((q) => [q[0], q[1]]), si: s.si | 0, k0: s.k0 | 0, muted: !!s.muted, hot: role.hot, context: role.context,
                      data: s.pts.map(([x, v]) => [+x, +v]), d0: d, len0: len };   /* P47 T2: the path knows its data, so a build_to can cap it at a datum; P48 T2: and its DATA, so a rescale re-projects it */
       if (ax.name_clear && !nameBelow) rec.ny = Math.min(rec.ny, clearY - (P ? 34 : 20));
+      const cont = !P && !s.projection && !s.muted ? drawn.find((q) => q.projection && q.pts.length > 1 && +q.pts[0][0] === +last[0] && +q.pts[0][1] === +last[1]) : null;   /* P71 T16 */
+      if (cont) rec.ny += (myS(+cont.pts[1][1]) < myS(+last[1]) ? 1 : -1) * LP_PROJ.TAG_K * (LFT ? LFT.tag : PHONE ? lpTypeU(st, "tag") : 24);
       st.paths.push(rec);
-      lpMark(st, "s" + rec.si + (rec.muted ? ":h" : ""), "line", p, { pts: rec.pts, vals: s.pts.map(([, v]) => +v), len, k0: rec.k0, muted: rec.muted, col }, rec);
+      lpMark(st, "s" + rec.si + (rec.muted ? ":h" : ""), "line", p, { pts: rec.pts, vals: s.pts.map(([, v]) => +v), len, k0: rec.k0, muted: rec.muted, col,
+        ...(s.projection ? { projection: true } : {}) }, rec);   /* P71 T16: a probe or a gate tells an estimate from a datum */
     });
     /* s9.23b inline names never overprint: push apart any two ends closer than one line */
     /* REVIEW-P69-LANE-B-MERGE-4 N2: on a CARD the x labels run under the end tags' column (a range label is set from the

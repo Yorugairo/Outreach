@@ -4965,6 +4965,75 @@ SURFACES.update({"dual-axis-inverted": dual_axis_inverted})
 FRAME_T.update({"dual-axis-inverted": 12.0})   # both lines drawn and tagged, both axes written, held
 
 
+# ---- P71 T16 (was P69 T41; harvest v2 A17 / T23 / S3; E77, E99 s93): `project` - A LABELLED DASHED CONTINUATION --------
+#   project-issuance-2026e  Steel and Paper H row 16's own sentence, "Last year: a hundred and twenty-one billion. This
+#                     year they're tracking toward a hundred and fifty" - the ONE point the script speaks of the 2026E
+#                     range (the plan's rule: "if the consensus is a RANGE, the wedge recipe is the form and T16's golden
+#                     uses the single point the script speaks"; the capex words 480 / 690 are a REVISION of two 2026
+#                     estimates, no actual to continue). The object is the COMMITTED `ev-debt-issuance-line-v1`, read in
+#                     place, never re-typed: its issuance line (the 2020-24 average drawn flat, 121 in 2025) and its
+#                     `$150B` series as the projection - `later: true`, from the 2025 actual, labelled "2026E", its tier
+#                     the object's own `research_tier`, its source the object's dossier proof for the range. The row's
+#                     plate (the long form, live - rule (g)), the take's words shifted by -258.61 s: "tracking toward"
+#                     266.61 -> 8.00, the extend's pen landing as "fifty" is said + 0.4 (267.79 -> 9.18). The 2026E x
+#                     tick is not on the page (the standing state ends at 2025; the tag names the year). Judged 1.0 s
+#                     after the landing: dashed from the last actual, the tag "2026E" whole, the actual the primary.
+PROJ_PROJECT = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper"
+PROJ_OBJECT = PROJ_PROJECT / "evidence/objects/ev-debt-issuance-line-v1.series.json"
+PROJ_ID = "ref-issuance-2026e"
+PROJ_PLATE = f"ledger:{PROJ_ID}:line::right;idle=live;readability=longform"
+PROJ_SHIFT = 258.61
+PROJ_AT, PROJ_DUR = round(266.61 - PROJ_SHIFT, 2), round(267.79 - 266.61, 2)
+
+
+def projection_series() -> dict:
+    """The golden's object, composed from the committed debt object: its actual and its spoken 2026E point."""
+    obj = json.loads(PROJ_OBJECT.read_text(encoding="utf-8"))
+    actual = next(s for s in obj["series"] if s.get("label") == "issuance")
+    hi = next(s for s in obj["series"] if s.get("label") == "$150B")
+    rng = next(p for p in obj["proof"] if "est_2026_high_usd_b" in (p.get("values") or {}))
+    lo_v, hi_v = rng["values"]["est_2026_low_usd_b"], rng["values"]["est_2026_high_usd_b"]
+    assert hi["pts"][-1][1] == hi_v and hi["pts"][0] == actual["pts"][-1], "the $150B series leaves the 2025 actual"
+    last = actual["pts"][-1][0]
+    return {"title": obj["title"],
+            "sub": "Hyperscaler bond issuance, US$ billions a year; 2020-24 is an average; the dashed line an estimate",
+            "src": obj["src"], "ylabel": obj["ylabel"], "ymin": obj["ymin"],
+            "xticks": [t for t in obj["xticks"] if t[0] <= last],
+            "series": [{"label": actual["label"], "color": actual["color"], "pts": actual["pts"]},
+                       {"color": actual["color"], "later": True, "pts": hi["pts"],
+                        "projection": {"label": "2026E", "tier": obj["research_tier"],
+                                       "src": f"the top of the ${lo_v}–{hi_v}B projected range"}}]}
+
+
+def project_issuance_2026e() -> tuple[dict, dict]:
+    import tempfile
+    import build_scene_timeline_f as BST
+    series = projection_series()
+    assert LPG.validate(series, "line") == [], LPG.validate(series, "line")
+    species = [{"kind": "chart_to", "at": PROJ_AT, "dur": PROJ_DUR, "to": "extend", "series": 1}]
+    assert not BST.validate_species(species, (0, 0, 0), PROJ_PLATE), BST.validate_species(species, (0, 0, 0), PROJ_PLATE)
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        with tempfile.TemporaryDirectory() as td:
+            objects = Path(td) / "evidence/objects"
+            objects.mkdir(parents=True)
+            (objects / f"{PROJ_ID}.series.json").write_text(json.dumps(series), encoding="utf-8")
+            world = BST.world_for_plate(PROJ_PLATE, (0, 0, 0), Path(td))
+            BST.stamp_full_stage(world["page"])
+            BST.derive_rescale_states(world, species, PROJ_PLATE, Path(td))   # the extend's derived state; check_projection
+    finally:
+        BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    tl = _timeline("Golden: the dashed 2026E continuation from the last actual (project)", scenes, {}, "16:9")
+    return tl, dict(_base_uris(), **BST.longform_assets(tl))
+
+
+SURFACES.update({"project-issuance-2026e": project_issuance_2026e})
+FRAME_T.update({"project-issuance-2026e": round(PROJ_AT + PROJ_DUR + 1.0, 2)})   # landed 1.0 s: dashed, tagged, held
+
+
 # ---- P70 T9 (was P69 T61, A34; BUB 12:22-15:06): THE CHAPTER PILL, HELD OVER AN ACT ------------------------------------
 #   chapter-held     Steel and Paper H's act "The turn" across the cut from row 14 into row 15, the take's words shifted by
 #                    -360.0 s: the pill lands on "It was never the AI stocks" (363.38 -> 3.38) over the reset plate (the

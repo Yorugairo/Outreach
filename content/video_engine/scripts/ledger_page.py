@@ -1502,6 +1502,145 @@ def y2_axis_box(spec: dict, plot: dict, aspect: str) -> dict:
     return _box(plot["x"] + plot["w"], plot["y"] - px, w, plot["h"] + px)
 
 
+# ---- P71 T16 (was P69 T41; harvest v2 A17 / T23 / S3; E77, E99 s93): `project` - A LABELLED DASHED CONTINUATION -------
+# A `later: true` series of a dense line page may carry `projection: {label, tier, src}`: an ESTIMATE past the last
+# real point, drawn on its word by `chart_to extend {series: k}` FROM the last actual datum of the line it continues -
+# dashed (S3: every dashed series is a projection, BOOM 03:18 / 17:59.5 / 18:52), in its line's ink, never blooming
+# (s117: context, not a primary line), its end tag writing its LABEL and the page's source line naming it and its source
+# (s93: "its source line says what it is"). E77 / an estimate is never data: the refusals below are TRUTH rules (s106) -
+# an unlabelled, untiered or unsourced projection, a label that is a bare figure (it reads as a datum), and a path that
+# does not open from the real line. The compiler refuses any mark that would read the projected stretch as a datum
+# (`build_scene_timeline_f.check_projection`). A label with no estimate word is advice (WARN, s106).
+PROJECTION_KEY = "projection"
+PROJECTION_FIELDS = ("label", "tier", "src")
+PROJECTION_TIERS = ("CONFIRMED", "PLAUSIBLE", "DERIVED", "scenario")   # the research gate's two usable tiers, our derived
+                                                                       # layer (E77), or the sentence's own "if"
+PROJECTION_RULING = "E77 / E99 s93"
+# A label that is a figure and nothing else ("$150B", "+24%", "1,250", "$130-150B") reads as a DATUM on the page.
+PROJECTION_FIGURE_RE = re.compile(r"^[\s$£€¥+\-−–~≈]*[\d.,]+(\s*[–\-]\s*[\d.,]+)?\s*[%xX×]?\s*([kKmMbBtT]|bn|tn)?\s*$")
+# ... and a label reads as a projection when it carries an estimate word (else the WARN names it).
+PROJECTION_WORDS_RE = re.compile(r"\d{2,4}E\b|\best\b|estimat|consensus|forecast|project|scenario|guidance|target|"
+                                 r"expect|outlook|trend|\bif\b|could|would|may\b|path|pace", re.IGNORECASE)
+
+
+def _projection_actual(own: list, i: int) -> int | None:
+    """The live line series `i`'s projection continues: the first standing (not `later`, not a projection) series whose
+    LAST datum is the projection's FIRST point, exactly (the page's own tokens, read as numbers)."""
+    pts = _points(own[i])
+    if not pts:
+        return None
+    x0, y0 = to_number(pts[0][0]), to_number(pts[0][1])
+    for j, s in enumerate(own):
+        if j == i or not isinstance(s, dict) or s.get("later") or PROJECTION_KEY in s:
+            continue
+        sp = _points(s)
+        if sp and x0 is not None and y0 is not None and to_number(sp[-1][0]) == x0 and to_number(sp[-1][1]) == y0:
+            return j
+    return None
+
+
+def _projection_field_errors(where: str, proj) -> list[str]:
+    if not isinstance(proj, dict):
+        return [f"{where}: a projection is an object {{label, tier, src}} ({PROJECTION_RULING}: an estimate is labelled, "
+                f"tiered and sourced), not {proj!r}"]
+    errs = [f"{where}: `{k}` is not a projection key ({'|'.join(PROJECTION_FIELDS)}) - a projection carries no value of "
+            "its own: its points are its series' (E77)" for k in proj if k not in PROJECTION_FIELDS]
+    label = proj.get("label")
+    if not _text(label):
+        errs.append(f"{where}: a projection with no `label` - an estimate is labelled as one on the page "
+                    f"({PROJECTION_RULING}: '2026E', 'consensus')")
+    elif PROJECTION_FIGURE_RE.match(label):
+        errs.append(f"{where}: the label {label!r} is a bare figure - it reads as a datum on the page; name the estimate "
+                    f"('2026E', 'consensus') ({PROJECTION_RULING})")
+    if proj.get("tier") not in PROJECTION_TIERS:
+        errs.append(f"{where}: a projection's `tier` is one of {'|'.join(PROJECTION_TIERS)}, not {proj.get('tier')!r} - "
+                    f"the tier rides the object ({PROJECTION_RULING})")
+    if not _text(proj.get("src")):
+        errs.append(f"{where}: a projection with no `src` - its source line says what it is and where it comes from "
+                    f"({PROJECTION_RULING})")
+    return errs
+
+
+def _projection_path_errors(where: str, own: list, i: int) -> list[str]:
+    s, errs = own[i], []
+    if i == 0:
+        errs.append(f"{where}: the page's first series is its line, never a projection - a projection continues a live "
+                    "line from its last datum")
+    if s.get("later") is not True:
+        errs.append(f"{where}: a projection draws on its word - it is a `later: true` series drawn by "
+                    "`chart_to extend {series: k}`")
+    pts = _points(s)
+    xs = [to_number(p[0]) for p in pts]
+    if len(pts) < 2 or any(x is None for x in xs) or any(b <= a for a, b in zip(xs, xs[1:])):
+        errs.append(f"{where}: a projection runs forward from the last actual - two or more points, each x past the one "
+                    "before it")
+    if pts and _projection_actual(own, i) is None:
+        errs.append(f"{where}: its first point {list(pts[0])} is not the last actual of a live line - the path opens from "
+                    f"the real line, never from nowhere ({PROJECTION_RULING})")
+    return errs
+
+
+def _validate_projection(series: dict, variant: str) -> list[str]:
+    """P71 T16: `projection` on a later series of a dense line page, whole and truthful, or refused BY NAME (s106: never
+    accepted and ignored, the key's state before this slice). [] when no series names it."""
+    own = [s for s in series.get("series") or []]
+    panel_hits = [(pi, si) for pi, p in enumerate(series.get("panels") or []) if isinstance(p, dict)
+                  for si, s in enumerate(p.get("series") or []) if isinstance(s, dict) and PROJECTION_KEY in s]
+    errs = [f"panels[{pi}].series[{si}]: a projection is not built on a panel - a panel's lines draw with the page's "
+            "build and take no `extend` (P71 T16)" for pi, si in panel_hits]
+    hits = [i for i, s in enumerate(own) if isinstance(s, dict) and PROJECTION_KEY in s]
+    if not hits:
+        return errs
+    builder = pick_builder(series, variant)
+    if builder != "dense-line":
+        return errs + [f"series[{i}]: a projection draws on a dense line page's own line; this page draws as "
+                       f"{builder!r} (P71 T16)" for i in hits]
+    for i in hits:
+        where = f"series[{i}] projection"
+        errs += _projection_field_errors(where, own[i][PROJECTION_KEY])
+        errs += _projection_path_errors(where, own, i)
+    return errs
+
+
+def projection_warnings(series: dict) -> list[str]:
+    """s106 advice: a label that carries no estimate word ('2026E', 'consensus', 'forecast', 'if ...') may still read as
+    a name; the frame read decides."""
+    out = []
+    for i, s in enumerate(series.get("series") or []):
+        proj = s.get(PROJECTION_KEY) if isinstance(s, dict) else None
+        if isinstance(proj, dict) and _text(proj.get("label")) and not PROJECTION_WORDS_RE.search(proj["label"]):
+            out.append(f"{FORM_WARN} series[{i}] projection: the label {proj['label']!r} carries no estimate word - it "
+                       "may read as a name, not an estimate ('2026E', 'consensus', 'forecast')")
+    return out
+
+
+def projection_source(series: dict) -> str | None:
+    """The page's source line with each projection named and sourced (s93) - `<src> · <label>: <projection src>`; a
+    projection whose source the line already names adds nothing. None when the file carries no projection."""
+    src = series.get("src")
+    projs = [s[PROJECTION_KEY] for s in series.get("series") or []
+             if isinstance(s, dict) and isinstance(s.get(PROJECTION_KEY), dict)]
+    if not projs or not isinstance(src, str):
+        return None
+    out = src
+    for p in projs:
+        if _text(p.get("src")) and p["src"] not in out:
+            out += f" · {p.get('label')}: {p['src']}"
+    return out
+
+
+def projection_line(own: list, i: int) -> dict:
+    """The series a projection is DRAWN as: its tag writes the projection's label (never a value, never the series'
+    own name), in its line's ink when it names none. A copy; the file is never mutated."""
+    s = copy.deepcopy(own[i])
+    s["label"] = s[PROJECTION_KEY].get("label")
+    s.pop("name", None)
+    j = _projection_actual(own, i)
+    if "color" not in s and j is not None and own[j].get("color") is not None:
+        s["color"] = own[j]["color"]
+    return s
+
+
 def validate(series: dict, variant: str) -> list[str]:
     """Error strings; empty means the series is a page for this variant. Pure."""
     if SCHEMATIC_KEY in series:   # P70 T2: the shape's own rules first; a clean one is validated as the line it generates
@@ -1517,6 +1656,7 @@ def validate(series: dict, variant: str) -> list[str]:
     errors += _validate_segments(series, variant)   # P69 T64: a stack of values is true to its total, one key per page
     errors += _validate_unit_suffix(series, variant)   # P72 T13 / R26-287: a prefix AND a suffix ($...B), refused by name when malformed
     errors += _validate_y2(series, variant)         # P71 T13 / R26-307: a second axis draws (a line page) or is refused by name
+    errors += _validate_projection(series, variant)   # P71 T16 / E77: a projection is labelled, tiered, sourced and opens from the last actual
     if "left_gutter" in series:
         gutter = series["left_gutter"]
         if isinstance(gutter, bool) or not isinstance(gutter, int) or not 60 <= gutter <= 300:
@@ -2968,7 +3108,8 @@ def _validate_values(series: dict, variant: str) -> list[str]:
     if bars and pick_builder(series, variant) == "story" and len(bars) > STORY_MAX_VALUES:
         errors.append(f"story shape carries {len(bars)} values; the ceiling is {STORY_MAX_VALUES}")
     for i, entry in enumerate(dense_series(series)):
-        if not (_text(entry.get("label")) or _text(entry.get("name"))):
+        proj = entry.get(PROJECTION_KEY)   # P71 T16: a projection is named by its own label (its tag writes it)
+        if not (_text(entry.get("label")) or _text(entry.get("name")) or (isinstance(proj, dict) and _text(proj.get("label")))):
             errors.append(f"series[{i}] has neither label nor name (s9.23b: series are named inline)")
         raw = entry.get("pts") or []
         bad = [p for p in raw if not (isinstance(p, (list, tuple)) and len(p) == 2
@@ -3094,6 +3235,10 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
             spec[Y2_KEY] = y2_block(series)
             if y2_warnings(series):
                 spec["warnings"] = list(spec.get("warnings") or []) + y2_warnings(series)
+        if projection_source(series) is not None:   # P71 T16 / s93: the source line names each projection (absent: not one key)
+            spec["source"] = projection_source(series)
+            if projection_warnings(series):
+                spec["warnings"] = list(spec.get("warnings") or []) + projection_warnings(series)
     else:
         spec.update(_story_block(series))
     if builder == "combo":
@@ -3214,6 +3359,10 @@ def _with_ranges(block: dict, bars: list[dict]) -> dict:
 
 def _dense_block(series: dict) -> dict:
     # P48 T3: a series marked `later: true` waits off the page - an `extend` derives the state that draws it on
+    own = series.get("series") or []
+    if any(isinstance(s, dict) and isinstance(s.get(PROJECTION_KEY), dict) for s in own):   # P71 T16: its tag is its label (absent: not one byte)
+        series = dict(series, series=[projection_line(own, i) if isinstance(s, dict) and isinstance(s.get(PROJECTION_KEY), dict)
+                                      else s for i, s in enumerate(own)])
     return {"labels": [s.get("name") or s.get("label") for s in dense_series(series) if not s.get("later")],
             "series": copy.deepcopy([s for s in (series.get("series") or []) if not (isinstance(s, dict) and s.get("later"))]),
             "axes": {k: copy.deepcopy(series[k]) for k in AXES_KEYS if k in series}}

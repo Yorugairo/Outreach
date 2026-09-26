@@ -2701,6 +2701,67 @@ def _y2_species_error(sp: dict, right: set, inverted: bool, page: dict) -> str |
     return None
 
 
+# ---- P71 T16 / E77: AN ESTIMATE IS NEVER DATA -------------------------------------------------------------------------
+# A projection (`ledger_page.PROJECTION_KEY`, a `later: true` series drawn by `chart_to extend {series: k}`) is drawn and
+# labelled, never READ: a mark that names its series while it stands - a figure, a ring or callout on its datum, a level
+# join, a bracket, a span, a light, a solo - would write or circle an estimate as if it were a real point. Refused by name
+# (a truth rule, s106). The verbs that only DRAW it keep it: the extend itself, a build_to / undraw, and a spread (the
+# range between two projections is the wedge recipe's form).
+PROJECTION_DRAW_KINDS = ("chart_to", "build_to", "undraw", "spread")
+PROJECTION_STATE_VERBS = ("rescale", "extend", "recast", "morph", "remake")   # a chart_to that stands a new state
+
+
+def _projection_named(sp: dict) -> list[tuple[str, int]]:
+    """Every series index a species names: its own `series` / `tier`, and any end object's (`target`, `to`, ...)."""
+    idx = lambda v: isinstance(v, int) and not isinstance(v, bool)   # noqa: E731
+    out = [(f, sp[f]) for f in ("series", "tier") if idx(sp.get(f))]
+    return out + [(f"{f}.series", v["series"]) for f, v in sp.items() if isinstance(v, dict) and idx(v.get("series"))]
+
+
+def _projection_portrait_check(world: dict, ext: dict, label) -> None:
+    """At 9:16 the page's source line keeps its FIRST clause (the engine's lpFirstClause cuts at ';'): a projection sourced
+    after the cut would stand unsourced (s93) - ValueError naming the fix."""
+    src = str((world.get("page") or {}).get("source") or "")
+    cut = src.find(";")
+    if ASPECT == "9:16" and 0 < cut < src.find(f"{label}:"):
+        raise ValueError(f"chart_to extend at {ext['at']}: the projection {label!r} is sourced on the page's source line, and "
+                         f"at 9:16 that line keeps only its first clause ({src[:cut]!r}) - the estimate would stand "
+                         f"unsourced ({LPG.PROJECTION_RULING}); write the page's src without a ';', or draw it at 16:9")
+
+
+def check_projection(world: dict, row_species: list, plate_id: str, ep_dir: Path) -> None:
+    """P71 T16 / E77: from a projection's extend to the page's next chart state, no species but a drawing verb names the
+    projection's series - ValueError naming the mark and the ruling. A row with no extend onto a projection: untouched."""
+    if (world or {}).get("kind") != SPECIES_LEDGER:
+        return
+    sps = [sp for sp in (row_species or []) if isinstance(sp, dict)]
+    extends = [sp for sp in sps if sp.get("kind") == "chart_to" and sp.get("to") == "extend" and _is_index(sp.get("series"))]
+    if not extends:
+        return
+    path = Path(ep_dir) / "evidence/objects" / f"{parse_ledger_id(split_plate_opts(plate_id)[0])[0]}.series.json"
+    own = (LPG.load_series(path).get("series") or []) if path.exists() else []
+    for ext in extends:
+        k = ext["series"]
+        if not (0 < k < len(own) and isinstance(own[k], dict) and isinstance(own[k].get(LPG.PROJECTION_KEY), dict)):
+            continue
+        label = own[k][LPG.PROJECTION_KEY].get("label")
+        _projection_portrait_check(world, ext, label)
+        # its index on the state the extend derives: the file's standing series, with this one revealed in its place
+        idx = [i for i, s in enumerate(own) if isinstance(s, dict) and (not s.get("later") or i == k)].index(k)
+        nxt = [c["at"] for c in sps if c.get("kind") == "chart_to" and c.get("to") in PROJECTION_STATE_VERBS
+               and isinstance(c.get("at"), (int, float)) and c["at"] > ext["at"]]
+        end = min(nxt) if nxt else float("inf")
+        for sp in sps:
+            at = sp.get("at")
+            if sp.get("kind") in PROJECTION_DRAW_KINDS or not isinstance(at, (int, float)) or not ext["at"] <= at < end:
+                continue
+            for field, v in _projection_named(sp):
+                if v == idx:
+                    raise ValueError(f"{sp.get('kind')} at {at}: {field} {v} is the projection {label!r} (drawn at "
+                                     f"{ext['at']}) - an estimate is never data ({LPG.PROJECTION_RULING}): no mark reads the "
+                                     "projected stretch as a real point; mark the last actual, or say the estimate in words")
+
+
 def check_y2(world: dict, row_species: list) -> None:
     """P71 T13 / E99 s102: a page with a SECOND AXIS holds its page. Its right axis is fitted to the lines it carries and
     every chart-state verb (rescale, extend, recast, morph, remake, compare) re-projects the page on ONE y scale - the
@@ -7284,6 +7345,7 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     at its state. An extend grows the CURRENT window (the page's whole series, or the last rescale's window) to
     `to_index`, or reveals a `later: true` series; the species carries `from_index` (the last shared datum) so the
     player caps the draw there."""
+    check_projection(world, row_species, plate_id, ep_dir)   # P71 T16 / E77: nothing reads a projection as a datum
     check_target_series(world, row_species)   # R26-218: a series the page does not have, refused before it draws nothing
     check_panels(world, row_species)          # P69 T8b: a panel's address, and the focus states, on the page they name
     check_broken_axis(world, row_species)     # P69 T66: a broken axis holds its page (no chart state, no form)
