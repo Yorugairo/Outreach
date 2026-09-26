@@ -1735,7 +1735,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T20: Illustrations drawn as schematics - candles over a ghost wave, the motif line with X marks, a ✓ / ✗ on a datum, and A55's traced point (was P69 T62; A55 folded in from P70's Not Building)
-- Status: pending
+- Status: done - lane B `5e6595e`: `candles` and `motif` schematics, the `datum_badge` page species (tick / cross on a datum or a vertex, 42 px disc), `lit_stretch` `phase_ink` (A55); goldens `schematic-candles`, `schematic-motif`. At HG1: the motif's X marks are on the four troughs (Bravos marks all eight turning points); the discs' halo 0.5 r is off a frame read
 - Owner: implementation_luna (LANE B), then reviewer (s109 (1): no axis values, no figures it cannot source)
 - Depends on: P70 T2 committed (the schematic); T12 (the tick and the cross)
 - Harvest: v2 T8 "Candlesticks over a ghost wave" (BUB 4:47); T46 "Axis-free "Market" motif line with repeated X marks"
@@ -1920,7 +1920,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T23: A card joins its date on the line - it reads in the plot's empty room (E65) or over the plot hovering / blurred (s124), then parks at its datum - and the proof walk (was P69 T67)
-- Status: pending
+- Status: done - lane B `8204488`: `park_at` - the card reads in E65's room, parks to a chip at E45's floor, a leader to a dashed ring on the datum (BOOM 00:45's dials), carried by a rescale; card `dock_option:park_at` (draft), recipe `the-proof-walk` (candidate), goldens `card-reads-in-the-empty-room`, `card-parks-at-its-date`. At HG1: the read is 385 px on the railway page vs ~675 in BOOM (the room caps it). Findings R26-393
 - Owner: implementation_luna (LANE B)
 - Depends on: P70 T8 committed (the dock branch); P70 T13 committed (the dock-option validation `park_at` joins); T9
   (the era tagged); T15 (`under`: the hover default and the blur option); T20 (the ✓ / ✗ on a datum)
@@ -1985,7 +1985,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T24: Bars re-valued - then to now, the ratio span after it, and the ranked dim-the-rest (was P69 T72)
-- Status: pending
+- Status: done - lane B `e831ffe`: `chart_to compare` with `from` - down 0.83 s, hold, up 0.70 s (D40 measured), the figure counting with the bar; recipes `revalue-then-the-ratio`, `ranked-dim-the-rest` (candidates); golden `bar-revalue-then-now`. At HG1: our levels are faint, thin and unlabelled where D40's are bright with axis pills ("Avg. $47 Billion") - a dial. Findings R26-394 / R26-395
 - Owner: implementation_luna (LANE B), then reviewer (M26: the printed value and the drawn bar at every instant)
 - Depends on: T0. Done: P69 T26a (`lpBarMorphs`, `ghost=yes`), T37 (`solo` on bars), T50 (a bracket on bars).
 - Harvest: v2 A48 "Bar re-value" (D40 11:46-11:52 (G): $47B in 2016 -> $94B); R28 "Bar re-value, then the ratio span"
@@ -2275,7 +2275,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T30: The longform chrome finish - the key chip and the end badge turn accent on `solo`, the two-line source, the title capsule (was P69 T78)
-- Status: pending
+- Status: done - lane B `cc22edf`: S9 (a long-form solo fills its key pill with `--lp-acc` and turns its end badge the accent, restored to the byte), S10 `source_lines`, S11 `title_style: capsule` (D40 04:16), both the long form's alone; `WARN chrome:` past 15 % of the chart box (our own M28 read, no reference); the badge capsule dropped (R26-396); no golden moved. At HG1: BOOM's subtitle capsules are recorded, not built
 - Owner: junior_developer (LANE B)
 - Depends on: P69 T37c committed (the title's size, glow and face: s122 amended), because S11 draws round the title
   T37c sets
