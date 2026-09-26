@@ -6,17 +6,32 @@ import tomllib
 
 def check(root: Path) -> int:
     config = tomllib.loads((root / 'config.toml').read_text(encoding='utf-8-sig'))
-    assert (config['model'], config['model_reasoning_effort']) == ('gpt-6-sol', 'xhigh'), root
+    assert (config['model'], config['model_reasoning_effort']) == ('gpt-6-luna', 'max'), root
+    sol_xhigh = {'architect_sol', 'execution_sol', 'professional_sol'}
+    astra_high = {'execution_astra', 'professional_astra'}
+    luna_max = {
+        'speedster', 'junior_developer', 'implementation_luna',
+        'release_steward', 'explorer', 'docs_researcher',
+        'professional_worker', 'computer_use_worker',
+    }
+    expected_roles = sol_xhigh | astra_high | luna_max | {'reviewer'}
     count = 0
     for name, entry in config['agents'].items():
         if not isinstance(entry, dict):
             continue
         path = root / entry['config_file']
         role = tomllib.loads(path.read_text(encoding='utf-8-sig'))
-        sol = name in {'architect_sol', 'execution_sol', 'professional_sol'}
-        expected = ('gpt-6-sol', 'xhigh') if sol else ('gpt-6-luna', 'max')
+        if name in sol_xhigh:
+            expected = ('gpt-6-sol', 'xhigh')
+        elif name == 'reviewer':
+            expected = ('gpt-6-sol', 'high')
+        elif name in astra_high:
+            expected = ('gpt-6-astra', 'high')
+        else:
+            assert name in luna_max, name
+            expected = ('gpt-6-luna', 'max')
         assert (role['model'], role['model_reasoning_effort']) == expected, path
-        if not sol:
+        if name in luna_max:
             assert 'After 3 consecutive substantive task failures' in role['developer_instructions'], path
             assert 'Three consecutive failed tool calls trigger local inspection' in role['developer_instructions'], path
             assert 'including failed tool attempts' not in role['developer_instructions'], path
@@ -24,7 +39,8 @@ def check(root: Path) -> int:
         if name in {'reviewer', 'explorer', 'docs_researcher'}:
             assert role['sandbox_mode'] == 'read-only', path
         count += 1
-    assert count == 12, (root, count)
+    assert set(config['agents']) - {'max_threads', 'max_depth'} == expected_roles, root
+    assert count == len(expected_roles), (root, count)
     print(f'PASS: {count} registered roles, paths, models, efforts and escalation instructions: {root}')
     return count
 

@@ -34,9 +34,12 @@ multiple coherent slices.
 | `reviewer` | Read-only correctness, security, regression, and test review | Editing or integrating its own findings |
 | `release_steward` | Reviewed stage/commit/authorized push mechanics | Unexpected diff, conflict, absent approval |
 
-The parent owns architecture, integration, protected actions, and completion
-truth. Keep concurrency at four threads and depth one. Do not overlap write
-sets.
+The parent owns final architecture decisions, integration, protected actions,
+and completion truth. On Codex's Luna default, route PRP architecture research
+and the draft to `architect_sol` (Sol xhigh); the parent reviews the draft and
+handles approval gates. Claude's same-named role keeps the model specified in
+`.claude/agents/architect_sol.md`. Keep concurrency at four threads and depth
+one. Do not overlap write sets.
 
 Use `speedster` only when judgment is unnecessary. Prefer `junior_developer`
 for a small bounded fix that still requires implementation reasoning, and
@@ -47,7 +50,7 @@ for a small bounded fix that still requires implementation reasoning, and
 
 **Since 2026-09-05 the eight roles ARE dispatchable types on both sides.**
 Codex: `.codex/config.toml` + `.codex/agents/<role>.toml` (OpenAI models).
-Codex model policy was updated by the operator on 2026-09-22 and 2026-09-23: Luna 6/max for execution and professional/computer-use work, Sol 6/xhigh for planning and diagnosis after three consecutive substantive task failures. Tool-call mistakes have a separate three-consecutive-error local recovery trigger and do not by themselves cause a model switch. A setup/spec failure may receive one Sol-directed Luna retry under the same ledger; Sol need not automatically produce the artifact. See `docs/agent-context/SKILL_ROUTER.md`; the Claude model/effort tables below do not override Codex routing.
+Codex model policy was updated by the operator on 2026-09-22 through 2026-09-24: Luna 6/max is the parent default and handles execution and professional/computer-use work; Sol 6/high independently reviews acceptance and integration gates; Sol 6/xhigh handles planning and diagnosis after three consecutive substantive Luna task failures; optional Astra 6/high diagnoses after three consecutive substantive Sol-xhigh failures on the same bounded task. The parent retains integration, protected actions, and human gates regardless of model. Tool-call mistakes have a separate three-consecutive-error local recovery trigger and do not by themselves cause a model switch. A setup/spec failure may receive one Sol-directed Luna retry under the same ledger; Sol need not automatically produce the artifact. Astra is asked for independent diagnosis and a viable alternative when one exists, even if that challenges the failed approach. It may propose a wider design, but execution authority changes only through a parent-approved revised order. This is not an automatic retry or an increase in authority. See `docs/agent-context/SKILL_ROUTER.md`; the Claude model/effort tables below do not override Codex routing. Already-running tasks and agents keep their current models until restarted or explicitly changed.
 Claude Code: `.claude/agents/<role>.md` (project scope, committed) — pass the
 bare role name as `subagent_type`. Each definition carries its own model, tools
 and the role's stop conditions, so a slice no longer has to be squeezed into

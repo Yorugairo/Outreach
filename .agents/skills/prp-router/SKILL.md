@@ -19,5 +19,6 @@ Read `docs/runbooks/PRP_EXECUTION.md` and `docs/AGENT_START_HERE.md`.
 5. State owner, write boundaries, acceptance, validation, exclusions, and
    human gates.
 
-The parent retains architecture, external actions, integration, and final
-completion authority.
+The parent retains final architecture decisions, external actions, integration,
+and completion authority; `architect_sol` drafts and recommends, but does not
+approve its own plan.

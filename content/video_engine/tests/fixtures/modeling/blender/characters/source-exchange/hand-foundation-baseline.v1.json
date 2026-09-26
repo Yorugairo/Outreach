@@ -1,0 +1,77 @@
+{
+  "schema": "mm_hand_foundation_baseline.v1",
+  "status": "review_only_negative_baseline",
+  "source_video": {
+    "path": "content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/assets/raw/source-short/ufc-sharaf-steveson-high.mkv",
+    "sha256": "c162dcb7e7a11336c5b0bd3b29d51ecbf2f8cd5a49f90a3b851775165da64758"
+  },
+  "source_clock": {
+    "path": "content/video_engine/tests/fixtures/modeling/motion/source-exchange-clock.v1.json",
+    "sha256": "74305d4eb84efdcc9875d3abaaf0e86f2618913cf32335341f4d5ff027d2d823"
+  },
+  "source_character_blend": {
+    "path": "content/video_engine/assets/modeling/native/fighter-family-v1.1.blend",
+    "sha256": "5a99ce057520e332673230dd5367189a5e6dc7da56ca45da50c8a38b4f40bade"
+  },
+  "source_exchange_fixture": {
+    "path": "content/video_engine/tests/fixtures/modeling/blender/characters/source-exchange/exchange.v1.json",
+    "sha256": "d7d37878a692e3359cbeb4d3409620c840150c9152d5c344c90815aacf1db971"
+  },
+  "implementation_sha256": {
+    "fight_motion.py": "3ac38adbcf4b0aa57f707bb593644f387ca3015cb3ac9942bf211730c63c469b",
+    "contact_transfer.py": "feeb572a19f9caf0a918bb624ed62fc4af33893fcdbd762e779f80393fa89ae9",
+    "inspect_hand_wrist.py": "0abcfe16504e9438924e8b55fb27fe40664ea7f83d503142562651b9691f9a34"
+  },
+  "runtime": {
+    "blender": "5.2.2 LTS",
+    "fps": 30,
+    "source_frames_inclusive": [0, 35],
+    "review_resolution_px": [540, 960],
+    "units": {"world_length": "m", "angle": "deg", "screen_length": "px"}
+  },
+  "saved_contact_transfer_review": {
+    "relative_path": "content/video_engine/review/model-engines/benchmark-v1/3d/source-fight-rig/exchange/hand-foundation-baseline/",
+    "scene_sha256": "3c1aad6de3d0a3b4525e547646ff79274ed55f0a931c86aaf42d8cf75656943e",
+    "receipt": "receipt.json",
+    "scripts_disabled_reopen": "verified_36_frames_and_8_renders",
+    "contact_claim": "palm_plane_alignment_and_nearest_sample_proximity_only"
+  },
+  "observed_source_events": {
+    "right_contact_frames": [10, 11],
+    "right_follow_through_frame": 12,
+    "left_hook_contact_frame": 24,
+    "left_head_response_frame": 25,
+    "left_follow_through_frame": 26
+  },
+  "skeletal_centerline_baseline_deg": {
+    "definition": "angle between elbow-to-wrist and wrist-to-mean-four-MCP vectors; not physiological carpal flexion",
+    "rest_both": 4.7005,
+    "guard_f0_both": 93.4011,
+    "right_jab_f10": 60.2714,
+    "left_hook_f24": 106.5978,
+    "left_follow_f26": 119.0838
+  },
+  "separate_prior_negative_glove_evidence": {
+    "right_f10_unsigned_pad_head_gap_m": 0.0529,
+    "source": "HAND-CONTACT-LEDGER.md / hand-glove-sol-01 VISUAL-REVIEW.md",
+    "warning": "not measured on this glove-free saved scene; unsigned gap is not a signed contact witness"
+  },
+  "predeclared_engineering_budgets": {
+    "kind": "visual_and_geometric_test_budgets_not_biomechanical_laws",
+    "max_guard_and_recovery_centerline_angle_deg": 30.0,
+    "max_strike_contact_centerline_angle_deg": 20.0,
+    "signed_knuckle_to_target_gap_at_contact_m": [-0.005, 0.008],
+    "max_projected_knuckle_to_target_gap_at_540x960_px": 6.0,
+    "max_unintentional_hand_surface_penetration_m": 0.002,
+    "max_planted_sole_slip_xy_m": 0.01,
+    "max_floor_penetration_m": 0.01,
+    "max_precontact_head_displacement_m": 0.002,
+    "contact_retract_rule": "hand separation grows after contact; no tracking the departing head"
+  },
+  "topology_requirement": {
+    "reference_landmarks": {"carpals": 8, "metacarpals": 5, "phalanges": 14},
+    "required_surface": "editable skinned outer hand with four-knuckle patch, tucked thumb, and visible closed-fist silhouette",
+    "simulation_boundary": "27 independent rigid bodies, ligaments and muscles are not required; coupling and omitted anatomy must be documented"
+  },
+  "visual_baseline_verdict": "fail_closed_fist_and_wrist_contact_readability; diagnostic_character_art_not_approved"
+}
