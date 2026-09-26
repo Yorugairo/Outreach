@@ -9797,6 +9797,74 @@ async function mount(doc) {
     lt.style.cssText = "position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:"
       + holdLightCss(x, el.clientWidth, el.clientHeight) + ";";
   };   /* P69 T49: on the LIFE clock - a freeze beat holds every class's idle (lifeT, declared with the freeze region) */
+  /* P71 T19 (was P69 T60; the Bravos harvest v2 T26 "Mini-chart verdict tiles", R14 "Two verdict panels", A14, A59) - THE
+     VERDICT TILE. A chart card's `verdict` ({state: tick | cross | buy | sell, at}) is a STATE ON THE CARD, painted by P71
+     T12's chip-state laws (one grammar): the badge spring (chipLand) lands it on `at`, its word; a tick is the chip's check
+     badge (paintChipCheck: the positive disc, its charcoal check in two strokes over CHIP.CROSS_S, split by length); a cross
+     is the same disc in the negative ink carrying the X's two strokes (chipStrokes); BUY / SELL is the chip's tab
+     (chipTabPose / paintChipTab: the word at the s90 floor, the sign inks) - a scenario label, never a trade record.
+     WHERE is the reference's [MEASURED: BUB frame_0095 (18:45), scratchpad/p71-t19/logs/measure-bub-0095.json - a 19 px
+     disc over a 126 px tile, centred on it (0.5 px off), its centre 6.5 px above the top edge]: the disc's diameter is D of
+     the tile's width and its centre LIFT diameters ABOVE the top edge. The tab takes the same lift, LIFT of its own height:
+     centred ON the edge as the chip carries it (T12's JPN 04:08) its lower half covered the middle of a chart card's own
+     title (frames/strip, the first draw) - a tile's top band is its title, a chip's is empty.
+     THE ANCHOR is the dock element itself: the park writes that element's own box (dockGeom's left / top / width) and the
+     arrival, the hover, the camera and the plane are transforms on it, so a child of it rides every one of them and leaves
+     with the card. A card-page tile clips at its edge (.dock.chart.card-page's overflow), so a verdict tile's element shows
+     its overflow - its frame keeps its own radius and clip. Pure in t. A dock with no verdict mounts nothing, and a slot's
+     previous tile's layer is removed. Not a seal (E99 s121 / s128): the compiler refuses it on a stamp, a prop, a cutout, a
+     press card and a card on a surface, and on a dock whose chart is not drawn from its own sourced series. */
+  const DOCK_VERDICT = Object.freeze({
+    D: 0.151,       /* the disc's diameter, in the tile's width [MEASURED: BUB 0095, 19 / 126] */
+    LIFT: 0.342,    /* its centre ABOVE the tile's top edge, in its diameter [MEASURED: BUB 0095, 6.5 / 19] */
+    X_K: 0.46,      /* the X's half-reach in the disc's radius - the check's own (CHIP.TICK spans +-0.46), so the two marks
+                       are one size; BUB's X reads ~0.5 r on a 19 px disc, too coarse to set a dial finer than that */
+    STATES: Object.freeze(["tick", "cross", "buy", "sell"]),   /* build_scene_timeline_f.DOCK_VERDICTS */
+  });
+  const dockVerdictEl = (tag, cls, parent, attrs) => {   /* the chip painter's `el` signature, so its paint functions run here */
+    const e = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    if (cls) e.setAttribute("class", cls);
+    for (const k in attrs || {}) e.setAttribute(k, attrs[k]);
+    parent.appendChild(e);
+    return e;
+  };
+  /* the cross: paintChipCheck's disc in the negative ink, the X's two strokes (chipStrokes: first half, second half) */
+  const paintDockCross = (g, h, ck) => {
+    const r = ck.d / 2, f = (v) => v.toFixed(1), k = DOCK_VERDICT.X_K * r;
+    const cg = dockVerdictEl("g", "dock-verdict-cross", g, { opacity: ck.fade.toFixed(3),
+      transform: "translate(0 " + f(-h + ck.dy) + ") scale(" + ck.scale.toFixed(4) + ")" });
+    dockVerdictEl("circle", "dock-verdict-disc", cg, { cx: 0, cy: 0, r: f(r), style: "fill:" + CHIP.TAB_INK.sell + ";stroke:none" });
+    [["M" + f(-k) + " " + f(-k) + " L" + f(k) + " " + f(k), ck.strokes[0]], ["M" + f(k) + " " + f(-k) + " L" + f(-k) + " " + f(k), ck.strokes[1]]]
+      .forEach(([dd, s]) => { if (s > 0) drawOn(dockVerdictEl("path", "dock-verdict-mark", cg, { d: dd, style: "fill:none;stroke:"
+        + CHIP.CHECK_MARK + ";stroke-width:" + f(CHIP.TICK_W * r) + ";stroke-linecap:round;stroke-linejoin:round" }), s); });
+  };
+  const paintDockVerdict = (el, d, t) => {
+    let vs = el.querySelector(":scope > .dock-verdict");
+    const v = d.verdict;
+    if (!v || !DOCK_VERDICT.STATES.includes(v.state) || !Number.isFinite(+v.at)) {
+      if (vs) { vs.remove(); el.style.overflow = ""; }
+      return;
+    }
+    if (!vs) { vs = dockVerdictEl("svg", "dock-verdict", el, {}); }
+    el.style.overflow = "visible";
+    const W = el.offsetWidth || 0, at = +v.at;
+    vs.setAttribute("data-state", v.state);
+    vs.style.cssText = "position:absolute;left:" + (-el.clientLeft) + "px;top:" + (-el.clientTop) + "px;width:" + W
+      + "px;height:1px;overflow:visible;pointer-events:none;";   /* its origin is the tile's OUTER top-left */
+    while (vs.firstChild) vs.removeChild(vs.firstChild);
+    if (t < at) return;
+    const g = dockVerdictEl("g", "dock-verdict-at", vs, { transform: "translate(" + (W / 2).toFixed(1) + " 0)" });
+    if (v.state === "buy" || v.state === "sell") {
+      const tab = chipTabPose({ tab: v.state, tab_at: at, at }, t);
+      if (tab && tab.fade > 0) paintChipTab(dockVerdictEl, g, DOCK_VERDICT.LIFT * tab.h, tab);   /* the tile's lift, not the chip's on-edge centre: see WHERE */
+      return;
+    }
+    const dd = DOCK_VERDICT.D * W, land = chipLand(t, at), f = clamp01((t - at) / CHIP.CROSS_S);
+    if (land.fade <= 0) return;
+    const ck = { fade: land.fade, dy: land.dy, scale: land.scale, d: dd };
+    if (v.state === "tick") paintChipCheck(dockVerdictEl, g, DOCK_VERDICT.LIFT * dd, Object.assign(ck, { strokes: chipTickStrokes(f) }), drawOn);
+    else paintDockCross(g, DOCK_VERDICT.LIFT * dd, Object.assign(ck, { strokes: chipStrokes(f) }));
+  };
   /* R26-228 (E99 s82's (e), "LIFE IS SEEN, NOT PASSED: a page's `idle=live` must render the tip spark (E67's live ink),
      the line's glow/pulse and the labels' breath"): THE PAGE'S OWN IDLE KIND. The compiler writes a row's `;idle=<kind>`
      as `world["idle"]` (build_scene_timeline_f.py:3824 - "the player reads it for the page or the plate") and the page
@@ -25548,6 +25616,7 @@ async function mount(doc) {
         if (contact) contact.style.opacity = "0";
       } else embedUnfill(el);   /* a slot that carried a picture on a surface gets its card back */
       paintHoldLight(el, d, t);   /* P70 T13: a held card's light - nothing mounts for a card that does not hold */
+      paintDockVerdict(el, d, t);   /* P71 T19: a chart card's verdict on its word - nothing mounts for a card that names none */
 
       const badges = (TL.evidence[d.slide] || {}).badges || [];
       /* THE CALLOUT IS THE CONCLUSION (remotion-ui comparison-bars,

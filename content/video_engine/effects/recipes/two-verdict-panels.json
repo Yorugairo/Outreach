@@ -1,0 +1,42 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:two-verdict-panels",
+ "title": "Two verdict panels",
+ "aliases": [],
+ "acts": [
+  "RETRACTS"
+ ],
+ "members": [
+  {
+   "card": "dock_option:verdict",
+   "option": "cross",
+   "offset_s": 0.0,
+   "role": "the first option lands as a chart tile drawn from its own sourced series; its cross lands on the word that rejects it"
+  },
+  {
+   "card": "dock_option:verdict",
+   "option": "cross",
+   "offset_s": 1.5,
+   "role": "the second option lands BESIDE it, the same size, and its cross lands on its own word - the two read as one comparison, side by side"
+  }
+ ],
+ "window_s": 6.0,
+ "does": "Two chart tiles stand side by side, one per option, and each takes its verdict on its own word - the close rejecting two easy options, one panel each (a tick where one holds).",
+ "use_when": {
+  "act": "RETRACTS - the close rejects two strategies",
+  "moment": "close",
+  "shape": "named things x2, each with its own sourced series",
+  "use": "the close rejects two strategies side by side. (R14; T26: the close rejects two easy options, one panel each - BUB 18:45-19:09, STK 10:11)",
+  "dont": "either option is left unexplained. (R14); the panels carry no sourced data (T26); a BUY / SELL tab read as a trade record (A59)"
+ },
+ "doctrine": [
+  "P71 T19",
+  "E99 s70",
+  "E99 s106",
+  "E99 s121",
+  "E99 s128"
+ ],
+ "status": "candidate",
+ "source": "P71 T19 (harvest v2 R14, n=2; T26, n=2; BRAVOS-USE-WHEN :977, :1019). Proved as a private TEST-BED beat by content/video_engine/tests/test_verdict_tiles.py::test_the_two_panel_recipe_is_proved_two_tiles_side_by_side_each_on_its_word (two crosses, each on its own second) and by the golden verdict-tiles-three-questions (the same pair ticking on H's answer words); no approved cut carries it",
+ "count": 0
+}

@@ -1003,6 +1003,93 @@
         "today": true,
         "why": "dock_opts accepts it, the compiler writes it on the entry and keeps the authored read, the engine hovers or blurs (goldens dock-hover-over-ledger and dock-blur-over-plate); no committed dock names it - which of H's docks hover or blur is authored by each beat's goal; it awaits the operator's watch"
       }
+    },
+    {
+      "id": "dock_option:verdict",
+      "axis": "dock_option",
+      "token": "verdict",
+      "title": "A verdict on a chart tile",
+      "aliases": [
+        {
+          "name": "verdict tile",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:977"
+        },
+        {
+          "name": "mini-chart verdict tile",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:977"
+        },
+        {
+          "name": "check / cross badge on a card",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:995"
+        },
+        {
+          "name": "BUY / SELL tab on a tile",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:667"
+        }
+      ],
+      "does": "A chart card carries a state that lands on its word on the chip's badge spring - a tick, a cross, or a BUY / SELL tab - centred over the tile's top edge, riding the card through its park and its leave.",
+      "when": "A set judged item by item, or the close rejecting an option, one tile each (T26, A14): the tile's chart is drawn from its own sourced series (refused otherwise). BUY / SELL is a scenario label, never a trade record (A59). A state on a CARD, never a seal: refused on a prop, stamp, cutout, press card or embed.",
+      "when_source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:977",
+      "author": {
+        "key": "dock option {'verdict': {'state': 'tick'|'cross'|'buy'|'sell', 'at': <the word's second>}} (DOCK_VERDICTS; verdict_tile_error)",
+        "example": "{'centre': True, 'centre_w': 0.4, 'centre_x': 0.27, 'centre_y': 0.46, 'card_aspect': 0.62, 'verdict': {'state': 'tick', 'at': 18.22}}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py:VT_SLOT",
+        "check": "dock_option"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [
+        {
+          "token": "tick",
+          "means": "It held: the check badge (positive disc, 0.151 of the tile's width, centre 0.342 of its diameter above the top edge) springs in on the word; its check draws in two strokes.",
+          "source_set": null
+        },
+        {
+          "token": "cross",
+          "means": "It failed or is rejected: the same disc in the negative ink, the X's two strokes drawn over CHIP.CROSS_S; the chart keeps its ink.",
+          "source_set": null
+        },
+        {
+          "token": "buy",
+          "means": "A scenario label: the chip's BUY tab in the positive ink, lifted over the tile's top edge clear of its title, its word at the s90 floor - never a trade record.",
+          "source_set": null
+        },
+        {
+          "token": "sell",
+          "means": "A scenario label: the chip's SELL tab in the negative ink, lifted over the tile's top edge clear of its title, its word at the s90 floor - never a trade record.",
+          "source_set": null
+        }
+      ],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "paintDockVerdict",
+        "also": [
+          "DOCK_VERDICT",
+          "paintDockCross",
+          "dockVerdictEl"
+        ],
+        "note": "one call line in render()'s dock loop after the hover and the hold light; reuses chip.mjs's chipLand, chipTabPose, paintChipCheck, paintChipTab; compiler DOCK_VERDICTS, verdict_tile_error"
+      },
+      "doctrine": [
+        "E99 s121",
+        "E99 s128",
+        "E99 s106",
+        "E99 s90",
+        "E28",
+        "E38"
+      ],
+      "status": "draft",
+      "proof": {
+        "golden": "verdict-tiles-three-questions",
+        "test": "content/video_engine/tests/test_verdict_tiles.py::test_the_disc_sits_where_the_reference_puts_it",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "dock_opts accepts it, the compiler refuses it off a sourced chart card and writes it on the entry, the engine paints it (golden verdict-tiles-three-questions); no committed dock names it - no H row adopts the move before HG1 (rule f)"
+      }
     }
   ]
 }

@@ -4964,6 +4964,92 @@ FRAME_T.update({"dock-hover-over-ledger": round(UNDER_ENTER + 3.0, 2),   # the h
                 "dock-blur-over-plate": round(UNDER_ENTER + 3.0, 2)})    # the veil up (0.45 s) and holding
 
 
+# ---- P71 T19 (was P69 T60; the Bravos harvest v2 T26 / R14 / A14 / A59): VERDICT TILES ON THEIR WORDS -------------------
+#   verdict-tiles-three-questions  A REFERENCE beat on Steel and Paper H's "Take any holding and ask it three questions"
+#                     (the take, vo-h-scratch/scratch-kokoro.words.json, shifted by VT_SHIFT so "One:", the word after
+#                     the ask, lands at 0.3 s): two CHART CARDS side by side (Bravos STK 10:22's "Your Portfolio" pair; R14's two
+#                     panels), each drawn LIVE from its own sourced series (committed objects, never re-typed) - the first
+#                     lands on "One:" (what memory costs leaving Korea, ev-memory-monitor-v1: the scarcity question), the
+#                     second on "Two:" (SK hynix's share price against its own operating profit, ev-hynix-steel-v1: the
+#                     cash question) - and each TICKS on its answer's word: "sold" ("Scarcity shows up in the order book -
+#                     sold out") and "positive" ("If cash flow is positive ..."). The third question ("used tomorrow
+#                     morning?") has no sourced series on disk to draw a tile from, and the dock has two slots, so it has
+#                     no tile. No H row adopts the move before HG1 (rule f). Read with both ticks landed.
+VT_TAKE = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper/vo-h-scratch/scratch-kokoro.words.json"
+VT_OBJECTS = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/objects"
+VT_TILES = ("ev-memory-monitor-v1", "ev-hynix-steel-v1")
+VT_WORDS = ((("one is what", 0), ("order book sold", 2)),        # (the tile's enter word, its verdict's word): a phrase and
+            (("two does it", 0), ("if cash flow is positive", 4)))   # the index of the word in it - "One:" / "sold", "Two:" / "positive"
+VT_SLOT = {"centre": True, "centre_w": 0.40, "centre_y": 0.46, "card_aspect": 0.62}
+VT_X = (0.27, 0.73)   # the two tiles' centres: side by side, 116 px apart at 0.40 of the stage each
+VT_PARK = {"x": 1180.0, "y": 150.0, "w": 480.0}   # the bench's parked box (stage px) for the park read
+
+
+def _vt_word(phrase: str, k: int = 0) -> float:
+    """The take's second for word `k` of the first `phrase` past 460 s (P71 T19): read off the words file, never re-typed."""
+    words = json.loads(VT_TAKE.read_text(encoding="utf-8"))["words"]
+    norm = [w["w"].lower().strip(".,:;?!—–-") for w in words]
+    toks = phrase.lower().split()
+    for i in range(len(norm) - len(toks) + 1):
+        if norm[i:i + len(toks)] == toks and words[i]["start_s"] > 460.0:
+            return float(words[i + k]["start_s"])
+    raise SystemExit(f"verdict tiles: {phrase!r} is not in the take")
+
+
+VT_SHIFT = round(_vt_word(*VT_WORDS[0][0]) - 0.3, 2) if VT_TAKE.exists() else 468.64   # "One:" at 0.3 s, right after the ask
+
+
+def _vt_evidence(aid: str) -> dict:
+    chart = json.loads((VT_OBJECTS / f"{aid}.series.json").read_text(encoding="utf-8"))
+    return {"title": chart["title"], "source": chart["src"], "species": "chart",
+            "document": {"path": f"evidence/objects/{aid}.series.json", "sha256": "0" * 64}, "badges": [], "chart": chart}
+
+
+def verdict_tiles_surface(states: tuple = ("tick", "tick"), ats: tuple | None = None, park: bool = False,
+                          words: bool = False) -> tuple[dict, dict]:
+    """The P71 T19 bench: one or two chart tiles side by side (VT_TILES, in slot order), tile n naming `states[n]` at
+    `ats[n]` (None: no verdict - the dock as it always was). `words`: the golden's clock - enters and verdicts off the take
+    (VT_WORDS). `park`: ONE tile that reads centred and parks to VT_PARK, the stop condition's read. Every dock's options
+    are the row's own, through `dock_opts`, and every verdict passes the compiler's `verdict_tile_error`."""
+    import build_scene_timeline_f as BST
+    ev, docks, uris = {}, [], _base_uris()
+    for n, state in enumerate(states):
+        aid = VT_TILES[n]
+        ev[aid] = _vt_evidence(aid)
+        uris[aid] = uri("image/png", png_solid(64, 40, (22, 24, 28)))   # the static fallback: the tile is DRAWN from its series
+        if words:
+            enter = round(_vt_word(*VT_WORDS[n][0]) - VT_SHIFT, 2)
+            at = round(_vt_word(*VT_WORDS[n][1]) - VT_SHIFT, 2)
+        else:
+            enter, at = 2.0 + 1.5 * n, (ats[n] if ats else None)
+        verdict = {"state": state, "at": at} if state else None
+        opts = BST.dock_opts(dict(VT_SLOT, centre_x=VT_X[n] if len(states) > 1 else 0.5,
+                                  **({"verdict": verdict} if verdict else {})))
+        place = BST.centred_place(None, None, opts["card_aspect"], None, opts["centre_w"], None, opts["centre_y"],
+                                  opts["centre_x"])
+        if verdict:
+            assert BST.verdict_tile_error(ev[aid], verdict, enter, RUNTIME) is None
+        if park:
+            h = round(VT_PARK["w"] * opts["card_aspect"], 2)
+            docks.append(BST.dock_entry(aid, n, enter, RUNTIME, 0, BST.DOCK_KIND_IMAGE, dict(VT_PARK, h=h), None, None, False,
+                                        read_place=place, verdict=opts.get("verdict")))
+        else:
+            docks.append(BST.dock_entry(aid, n, enter, RUNTIME, 0, BST.DOCK_KIND_IMAGE, place, None, None, True,
+                                        verdict=opts.get("verdict")))
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": docks, "species": []}]
+    return _timeline("Golden: verdict tiles on their words (P71 T19)", scenes, ev, None), uris
+
+
+def verdict_tiles_three_questions() -> tuple[dict, dict]:
+    return verdict_tiles_surface(("tick", "tick"), words=True)
+
+
+SURFACES.update({"verdict-tiles-three-questions": verdict_tiles_three_questions})
+FRAME_T.update({"verdict-tiles-three-questions": round(_vt_word(*VT_WORDS[1][1]) - VT_SHIFT + 0.55 + 0.6, 2)
+                if VT_TAKE.exists() else 29.0})   # the second tick landed (LAND_S 0.55) and drawn, held
+
+
 # ---- P71 T13 (was P69 T43b; R26-307, E99 s102): A SECOND AXIS, AND AN INVERTED ONE, FOR A CO-MOVEMENT CLAIM -------------
 #   dual-axis-inverted  A REFERENCE beat (no H row: SCRIPT-H says no "these move together"): Bravos's own pairing (JPN 06:38,
 #                     "Foreign Holdings of US Treasuries & US 30-Year Treasury Yield") on two sourced series in unlike units
