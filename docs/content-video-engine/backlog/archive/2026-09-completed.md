@@ -332,6 +332,14 @@ an unresolved source anomaly; this pass does not synthesize a task from it.
 | R26-361 | The seal's name keyline and gold ignore the ground. Closed by P72 T46b. | lane B `976fcc4`: the keyline reads the latched ground (1.57:1 -> 6.85:1 on the mid photo); the compiler's gold twin WARNs when no gold holds 3:1; one `worldPoseAt`. |
 | R26-362 | The choreography mirror snaps a stamp and a prop to the boundary. Closed by P72 T46b. | lane B `976fcc4`: a stamp or prop owns its exit; a WARN names an owned exit running past its page's end; (c) a spring cutout keeps the card's rule by decision. |
 | R26-391 | The verdict tile earns no gate credit; the seal's verdict refusal is unclear. Closed by P72 T46b. | lane B `976fcc4`: the motion gate credits the tile's landing on its word; the refusal points to the chart card's `verdict` tile. |
+| R26-368 | (b) The cadence rule is in 1080 px, not picture widths. Closed by P72 T46e. | lane B `7f5ead9`: `cadence(v, kind, {stage_w})` - 154 px/s on 1080, 273.8 on 1920; M20 reads the aspect. |
+| R26-403 | The gate does not credit a bars extend as new data. Closed by P72 T46e. | lane B `7f5ead9`: `EXTEND_NEW_DATA` credits `field` and `bar`. |
+| R26-392 | The ken-vs-camera clash ignores the ken's window. Closed by P72 T46e. | lane B `7f5ead9`: compiler `ken_lean_window` and gate `_ken_window` agree on (t0, t1). |
+| R26-349 | M25 misses a schematic's words. Closed by P72 T46e. | lane B `7f5ead9`: it already failed them; now it names them (a phase name, the schematic's tag). |
+| R26-356 | The effect cards' CAPABILITIES cites are by line and rot. Closed by P72 T46e. | lane B `7f5ead9`: 92 cites are `CAPABILITIES[<span>]`, resolved to `row_cites`, a bad cite refused by name. |
+| R26-352 | The ingester does not re-apply the operator's hand scrub. Closed in code by P72 T46e. | lane B `7f5ead9`: reads `scrub-terms.txt` from the operator's folder (outside git); docket 12 re-scrubs once the operator writes it. |
+| R26-358 | The strength screens read a take that is not the script's. Closed by P72 T46e. | lane B `7f5ead9`: `screens_take` refuses a foreign take by name (0.95), as the opening gate does. |
+| R26-359 | The audit crashes on a kokoro words file. Closed by P72 T46e. | lane B `7f5ead9`: `take_groups` reads numbered scenes as one take and a named words file as its own. |
 | R26-284 | A figure double-prints its bar's value. Closed by P72 T18. | lane B `4b07424`: the figure hands over in place; a restating figure WARNs (s106). |
 | R26-288 | A ring on a bar has no value target. Closed by P72 T18. | lane B `4b07424`: `part: value` rings the printed value as drawn. |
 | R26-255 | A bar figure drifts on a page with states. Closed by P72 T18. | lane B `4b07424`: it rides its bar through a rescale. |
