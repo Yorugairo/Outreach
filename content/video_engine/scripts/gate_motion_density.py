@@ -3044,6 +3044,48 @@ def _in_build_window(t: float, scenes: list[dict]) -> bool:
     return False
 
 
+FLIGHT_ARRIVALS = ("throw", "land", "stamp", "poof")   # the arrivals that travel to their spot (the spring pops in place)
+
+
+def _flight_of(scenes: list[dict] | None, card: str, t: float) -> str | None:
+    """The arrival `card` is still travelling on at t - inside [enter, contact) of its own throw, land, stamp or poof
+    (`_dock_contact`, `_landings`' clock) - else None."""
+    for s in scenes or []:
+        for d in s.get("docks") or []:
+            if str(d.get("slide")) == card and d.get("arrive") in FLIGHT_ARRIVALS \
+                    and float(d.get("enter", 0.0)) - 1e-6 <= t < _dock_contact(d):
+                return str(d["arrive"])
+    return None
+
+
+def _flying(inst: dict, scenes: list[dict] | None) -> dict[str, str]:
+    """card -> its arrival, for every card this instant catches IN FLIGHT: on its own arrival's clock AND measured
+    moving by the frame (the probe's `rest` 0 - it moved REST_PX or more over the next REST_DT). The clock alone never
+    excuses a card: one the frame shows at rest is read, and a probe that predates `rest` reads every card at rest."""
+    t = float(inst.get("t", 0.0))
+    return {str(b.get("id")): arr for b in inst.get("docks") or []
+            if b.get("rest", 1) == 0 and (arr := _flight_of(scenes, str(b.get("id")), t))}
+
+
+def _flight_lines(doc: dict, scenes: list[dict] | None) -> list[str]:
+    """R26-202 (a): every instant a card in flight meets what M27 scores - the ink by M27's own shares, or the plot's
+    box (the WARN tier) - its PATH, listed, so no line the row would have printed disappears silently."""
+    out: list[str] = []
+    for inst in doc.get("instants") or []:
+        fly = _flying(inst, scenes)
+        t = float(inst.get("t", 0.0))
+        for o in inst.get("overlaps") or []:
+            card, hit = str(o.get("a")), str(o.get("b"))
+            share = o["share_of_smaller"] / 100.0
+            over = (hit == "page.data" and share > DATA_OVER_SHARE) or hit == "page.plot" or \
+                   ((hit in LAYOUT_INK or hit.startswith("chart.")) and share > INK_OVER_SHARE)
+            if card in fly and over:
+                what = {"page.data": "the chart's data", "page.plot": "the plot's box"}.get(hit) or _ink_name(hit)
+                out.append(f"{card}'s {fly[card]} flight at {_mm(t)} ({t:.2f}s) crosses {what}, {o['area_px']:,} px, "
+                           f"{o['share_of_smaller']} % of the smaller box")
+    return _dedupe(out)
+
+
 def _over_build_faults(doc: dict, scenes: list[dict]) -> tuple[list[str], list[str], int]:
     """(FAIL lines, WARN lines, how many not-parked card readings were measured) over every instant.
 
@@ -3058,7 +3100,11 @@ def _over_build_faults(doc: dict, scenes: list[dict]) -> tuple[list[str], list[s
     E65 (2026-09-11): the placer's own fall-through now puts a card in the plot's EMPTY ROOM when the page
     leaves no band outside it - over the plot BOX and over no mark the chart drew. So the row scores what
     M25 scores, the page's INK: the data by DATA_OVER_SHARE, a line of its labels or its citation by
-    INK_OVER_SHARE. The plot box on its own is the WARN tier, and the row says the card is clear of the ink."""
+    INK_OVER_SHARE. The plot box on its own is the WARN tier, and the row says the card is clear of the ink.
+
+    P72 T7 (R26-202 (a)): M27 judges a card AT REST. A card the frame catches in FLIGHT (`_flying`: its own arrival's
+    clock and the probe's `rest` 0) is on its path, not reading - `_flight_lines` lists it, and it is scored nowhere
+    here. A card that SETTLES over the ink is scored exactly as before."""
     handled = {str(d.get("slide")): ("moved" if d.get("read_moved") else "deferred")
                for s in (scenes or []) for d in (s.get("docks") or []) if d.get("read_moved") or d.get("read_deferred")}
     fails: list[str] = []
@@ -3070,6 +3116,7 @@ def _over_build_faults(doc: dict, scenes: list[dict]) -> tuple[list[str], list[s
         when = "while the chart draws" if _in_build_window(t, scenes) else "on the finished chart"
         state = {d["id"]: d.get("state") for d in inst.get("docks") or []}
         measured += sum(1 for st in state.values() if st not in (None, "parked"))
+        flying = _flying(inst, scenes)   # R26-202 (a): a flight's frames are its path - listed by _flight_lines
 
         def line(o: dict) -> str:
             note = f" - the compiler {handled[o['a']]} this read (E63) and it still lands here" if o["a"] in handled else ""
@@ -3082,6 +3129,8 @@ def _over_build_faults(doc: dict, scenes: list[dict]) -> tuple[list[str], list[s
             card, hit = str(o.get("a")), str(o.get("b"))
             if state.get(card) in (None, "parked"):
                 continue                              # a PARKED card is E45's contract and M25's row; this one is the READ
+            if card in flying:
+                continue                              # in flight: its path, never a read (R26-202 (a))
             share = o["share_of_smaller"] / 100.0
             under = _under_of(scenes, card, t)   # P71 T15: a dock that chose the chart reads over it by intent - a WARN
             if under and _on_the_plot(hit) and share > (DATA_OVER_SHARE if hit == "page.data" else INK_OVER_SHARE):
@@ -3115,7 +3164,10 @@ def _over_build_gate(doc: dict | str | None, scenes: list[dict]) -> Gate:
     if not instants:
         return Gate("M27", "INFO", f"{LAYOUT_PROBE_NAME} carries no instants - re-run probe.py <build> --gate", SRC_M27)
     fails, warns, measured = _over_build_faults(doc, scenes)
-    span = f"{len(instants)} instants probed"
+    flights = _flight_lines(doc, scenes)
+    span = f"{len(instants)} instants probed" + (
+        f" ({len(flights)} flight frame(s) listed as the card's PATH, never a read - R26-202 (a): "
+        + "; ".join(flights[:3]) + (" ..." if len(flights) > 3 else "") + ")" if flights else "")
     if fails:
         return Gate("M27", "FAIL", f"{len(fails)} card(s) reading over a ledger page's ink over {span}: " + "; ".join(fails[:6])
                     + (" ..." if len(fails) > 6 else "") + f" - move the READ, never the word (E63): a free band at the "

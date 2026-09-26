@@ -314,3 +314,40 @@ def test_an_unmeasured_depth_card_is_said_not_measured_never_passed() -> None:
     tl = _dock_depth()
     g = G._in_frame_gate(tl["scenes"], "16:9", None)
     assert g is not None and g.level == "INFO" and "not measured" in g.message, g
+
+
+# ------------------------------------------------------------------ R26-202 (a): a flight is a path, not a read
+PANEL = "dock-c-blue-ties-panel"
+
+
+def _v3b(t: float, rest: int, state: str = "moving") -> tuple[dict, dict]:
+    """Tokyo v3b's row: the blue-ties panel THROWN at 9.09 (contact 9.55) over the 21.5x page (layout-probe.json at
+    9.09: moving, rest 0, 2,432 px on the chart's data = 4 % of the card)."""
+    page = {"scene_id": "s01", "span": [0.0, 38.96], "world": {"kind": "ledger", "page": {"builder": "story"}},
+            "docks": [{"slide": PANEL, "enter": 9.09, "exit": 19.49, "arrive": "throw",
+                       "place": {"x": 505, "y": 937, "w": 277, "h": 208}, "read_s": 1.2, "park_s": 0.7}]}
+    tl = {"aspect": "9:16", "runtime_s": 38.96, "scenes": [page]}
+    inst = {"t": t, "why": f"s01 dock {PANEL} enter", "docks": [{"id": PANEL, "state": state, "box": [-37, 800, 386, 156], "rest": rest}],
+            "overlaps": [{"a": PANEL, "b": "page.plot", "area_px": 18603, "share_of_smaller": 31},
+                         {"a": PANEL, "b": "page.data", "area_px": 2432, "share_of_smaller": 4}]}
+    return tl, {"instants": [inst]}
+
+
+def test_v3b_s_throw_flight_is_an_info_line_naming_the_flight_not_an_m27_fail() -> None:
+    tl, layout = _v3b(9.09, rest=0)
+    g = _by_id(G.run(tl, [], {"cues": []}, layout=layout)[0])["M27"]
+    assert g.level != "FAIL", g.message
+    assert "flight" in g.message and PANEL in g.message and "throw" in g.message and "0:09" in g.message, g.message
+
+
+def test_a_card_that_settles_over_the_line_still_fails_m27() -> None:
+    tl, layout = _v3b(9.7, rest=1, state="reading")
+    g = _by_id(G.run(tl, [], {"cues": []}, layout=layout)[0])["M27"]
+    assert g.level == "FAIL" and PANEL in g.message, g.message
+
+
+def test_a_card_the_frame_shows_at_rest_inside_its_flight_clock_is_judged() -> None:
+    """The clock alone never excuses a card: inside 9.09-9.55 a card the probe measured AT REST (rest 1) is read."""
+    tl, layout = _v3b(9.3, rest=1)
+    g = _by_id(G.run(tl, [], {"cues": []}, layout=layout)[0])["M27"]
+    assert g.level == "FAIL", g.message
