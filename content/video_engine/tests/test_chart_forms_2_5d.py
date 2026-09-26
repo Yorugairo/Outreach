@@ -242,8 +242,13 @@ def test_the_engine_dials_are_named_and_the_forms_are_gated() -> None:
         assert f"{dial}:" in src, f"the extrusion's {dial} dial is not declared"
     assert 'formOf(pg, "extruded_bar")' in src and 'formOf(pg, "tilted_line")' in src   # both opt-in, off the page's own key
     assert "const tiltProject = (quad, box)" in src and "planeMatrix(quad.map(" in src  # ONE projective path (kinetics/homography.mjs)
-    # the prism is built BEFORE the face, so SVG paint order puts it behind - which is what keeps every label still
-    assert src.index("extrudeFaces(st, { x, bw, base, h, neg, P") < src.index('const bar = lpEl("rect", "bar" + (neg ? " neg" : " pos") + (i === st.emph')
+    # the prism is built BEFORE the face, so SVG paint order puts it behind - which is what keeps every label still.
+    # P72 T51a: the face is the bars page's rect ON THE CHART (`st.chart`) - P72 T6 (9dc5bb6) gave the turned gauge's
+    # capsule fill the same `const bar = lpEl("rect", "bar" + ...` prefix earlier in the file, so the bare prefix no
+    # longer named this builder's bar.
+    face = 'const bar = lpEl("rect", "bar" + (neg ? " neg" : " pos") + (i === st.emph ? " emph" : ""), st.chart,'
+    assert src.count(face) == 1, "the bars page's face is one line"
+    assert src.index("extrudeFaces(st, { x, bw, base, h, neg, P") < src.index(face)
 
 
 def test_a_negative_bar_extrudes_the_way_its_value_goes() -> None:

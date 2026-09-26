@@ -357,10 +357,28 @@ def test_the_card_is_the_species_card():
 # ---- the engine ----------------------------------------------------------------------------------------------------
 
 
+# The species layer's own painters that may stand between paintSpecies and paintChapters - each with its reason.
+SPECIES_LAYER_PAINTERS = (
+    "paintDockJoins",   # P71 T23 (8204488): a parked card's leader and ring, on #species-under, which paintSpecies clears
+                        # every frame - so test_card_at_its_date pins it DIRECTLY after paintSpecies
+)
+
+
 def test_render_paints_the_chapters_right_after_the_species():
+    """Once per frame, after the species - with nothing between but the species layer's own painters.
+
+    P72 T51a: this pinned `paintSpecies(sc, t);` then `paintChapters(t);` on adjacent lines. P71 T23 (8204488) put
+    `paintDockJoins(live, t);` directly after paintSpecies, and its own test pins that adjacency with a reason; two
+    adjacency pins cannot both hold. The chapter's law is the order (the stage layer painted after the species, the
+    declaring scene's copy a no-op), so the pin now reads the order and names what may stand between."""
     src = ENGINE.read_text(encoding="utf-8")
     assert "  const paintChapters = (t) => {" in src
-    assert "    paintSpecies(sc, t);\n    paintChapters(t);" in src
+    assert src.count("paintChapters(t);") == 1, "the stage layer is painted once per frame"
+    m = re.search(r"\n    paintSpecies\(sc, t\);\n((?:    \w+\([^\n]*\n)*?)    paintChapters\(t\);", src)
+    assert m, "render() paints the chapters after the species, with only painter calls between"
+    between = [re.match(r"\s*(\w+)\(", ln).group(1) for ln in m.group(1).splitlines()]
+    assert all(p in SPECIES_LAYER_PAINTERS for p in between), \
+        f"{between}: only the species layer's own painters stand between paintSpecies and paintChapters"
     assert "SPECIES_PAINTERS.chapter = " in src, "the declaring scene's copy is owned by a painter that draws nothing"
 
 

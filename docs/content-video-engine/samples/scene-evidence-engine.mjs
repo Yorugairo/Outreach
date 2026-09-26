@@ -15379,7 +15379,8 @@ async function mount(doc) {
                                                                       chart (frame, axes, ticks) drawn, every datum still at zero (a bar's scaleY rounds to 0) */
     OCCLUDE_OP: 0.5,                                               /* P72 T12 (R26-299): a panel in front covers the words behind it from this opacity - a word it
                                                                       covers even in part is not drawn (never '%' without its digits) */
-    PHONE_PX: 12 * 1920 / 390,                                     /* P72 T47: a phone panel's sub and rule names, at the E99 s90 floor (LP_CARD.TYPE_PX; ledger_page.CARD_TYPE_PX) */
+    PHONE_PX: LP_CARD.TYPE_PX,                                     /* P72 T47: a phone panel's sub and rule names, at the E99 s90 floor (ledger_page.CARD_TYPE_PX);
+                                                                      P72 T51a: named, not re-typed - the landscape literal is the card's alone (test_portrait_parity) */
     RULE_BASE: 0.9,                                                /* ... a laddered rule name's baseline this many of its sizes under its line's top (its
                                                                       descender ends 0.04 em past its LINE_H row, in the plot's 40-unit air) */
   });
