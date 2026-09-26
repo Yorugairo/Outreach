@@ -53,6 +53,7 @@ PROBE_T = MPB.MEASURE_T               # 20 s - past the page's whole build, the 
 FULL = "16:9|full_stage"
 FIXTURE = json.loads(LPG.PAGE_BOXES_FIXTURE.read_text(encoding="utf-8"))
 TOL = 2.0                             # the brief's own bar: the measured boxes agree with the frame to 2 px
+GAUGE_SPAN_PX = 110 + 2 * 30          # the engine's LPGAUGE.W_PX + 2 x OVER_PX: the capsule and its rule's overhang, stage px
 
 
 def _golden_page() -> dict:
@@ -136,8 +137,17 @@ def test_the_fixture_measures_both_16x9_geometries_for_every_builder():
         assert full["full_stage"] is True, builder
         assert "full_stage" not in plain, f"{builder}: the plain entry must not claim the other geometry"
         assert full["ink"] == plain["ink"] == LPG.page_ink_key(MPB.representative(builder)), builder
-        assert full["boxes"]["plot"]["w"] > plain["boxes"]["plot"]["w"], (
-            f"{builder}: the full-stage plot is not wider than the column's - one of the two was not measured")
+        fp, pp = full["boxes"]["plot"], plain["boxes"]["plot"]
+        if builder == MPB.STORY_GAUGE:
+            # P72 T51b: the gauge's plot is its capsule's span, a STAGE-px width in every geometry (the engine's LPGAUGE
+            # W_PX 110 + 2 x OVER_PX 30, divided by the stage's px: Bravos D40's 110 px capsule) - it does not widen
+            # with the stage (P70 T3, e43c3d8, measured 170 = 170); its capsule is TALLER and moves with the column
+            assert fp["w"] == pp["w"] == GAUGE_SPAN_PX, (builder, fp, pp)
+            assert fp["h"] > pp["h"] and fp["x"] != pp["x"], (
+                f"{builder}: the full-stage capsule is not taller than the column's - one of the two was not measured")
+        else:
+            assert fp["w"] > pp["w"], (
+                f"{builder}: the full-stage plot is not wider than the column's - one of the two was not measured")
         # P69 T6d + fixes4: a full-stage entry may also carry `tag_boxes` - the LINE end tags' drawn rects, read only
         # by the stamp's fit and only when the entry's `tag_ink` fingerprint matches; never a box of its own
         extra = set(full["boxes"]) - set(LPG.BOX_KEYS)

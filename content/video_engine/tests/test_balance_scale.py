@@ -478,9 +478,11 @@ TIP_AT = 9.0
 
 def _tip_bed() -> tuple[dict, dict]:
     """A NEUTRAL synthetic tip on a plain plate (review F6: no reference beat is committed): two made-up forces, EAST
-    weighed on 3.0 and WEST on 5.0, and the balance tips WEST on 9.0."""
+    weighed on 3.0 and WEST on 5.0, and the balance tips WEST on 9.0. Its room stops at y1 0.80, the compiler's own
+    advice (`balance_advice`: the footprint clear of the caption's rail, 878-960 px): at 0.86 the footprint reached 37 px
+    into the rail, which the 33 px quiet strip missed by luck and P71 T8b's 40 px strip (2bf45d6) met (P72 T51b)."""
     import build_golden_sources as GS
-    e = {"kind": "balance", "at": 2.0, "dur": 12.0, "target": {"kind": "region", "x0": 0.2, "y0": 0.18, "x1": 0.8, "y1": 0.86},
+    e = {"kind": "balance", "at": 2.0, "dur": 12.0, "target": {"kind": "region", "x0": 0.2, "y0": 0.18, "x1": 0.8, "y1": 0.80},
          "left": {"label": "EAST", "at": 3.0}, "right": {"label": "WEST", "at": 5.0}, "tip": {"at": TIP_AT, "to": "right"}}
     assert B.validate_species([dict(e)], (0, 0, 0), "plate-plain") == []
     world = {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
@@ -628,6 +630,14 @@ def test_the_caption_takes_the_rail_while_the_balance_s_names_stand():
 def test_the_golden_room_is_clear_of_the_caption_rail():
     import build_golden_sources as GS
     assert B.balance_advice(GS.BAL_SPECIES[0], "16:9") == []
+
+
+def test_the_tip_bed_s_room_is_clear_of_the_caption_rail():
+    """P72 T51b: the footprint test's second bed takes a room the compiler clears too - a bed that breaks the advice
+    proves nothing about where a build puts the caption (it met P71 T8b's 40 px strip by 5 px)."""
+    tl, _ = _tip_bed()
+    bal = [e for e in tl["scenes"][0]["species"] if e["kind"] == "balance"][0]
+    assert B.balance_advice(bal, "16:9") == []
 
 
 FOOT_PROBE = """() => { const st = document.getElementById('stage').getBoundingClientRect(), k = 1920 / st.width;

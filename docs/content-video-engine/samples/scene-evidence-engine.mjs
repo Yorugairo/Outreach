@@ -11870,6 +11870,27 @@ async function mount(doc) {
     lab.__wrapText = [best.a, best.b];   /* the two lines as written - what a write-on reaches and an erase returns to */
     return true;
   };
+  /* P72 T51b (R26-380 (a), P72 T15's finding): A PORTRAIT PAGE KEEPS ROOM FOR A NAME'S SECOND LINE. The portrait floor
+     (G.H - 70) was laid for ONE line of names (their baseline XLAB 52 under it, the chart's own foot 18 px under that),
+     and a name lpWrapBarLabel breaks onto two ran its second line off the chart's foot and into the source line - the
+     gauge representative's "capital spending", 12 px into it at 9:16. So the names are measured BEFORE the plot is
+     laid, on the wrap's own rule (a space, and wider than the slot it will be wrapped to), and a row with a two-line
+     name raises the floor by that line (LPBAR_LINE_H of the name's own size), the plot a line shorter. A row of one-line
+     names, every landscape page and the long form (its floor, LF.bars_b, already keeps 1.4 ticks under its names) are
+     laid exactly as before. Returns the lift in chart units. */
+  const lpBarNameRoom = (st, pg, o) => {
+    if (!o.P || o.LF || !o.capped) return 0;
+    const names = (pg.labels || []).slice(0, st.vals.length).filter((t, i) => i !== o.skip && typeof t === "string" && t.indexOf(" ") >= 0);
+    if (!names.length) return 0;
+    const probe = lpEl("text", "lab", st.chart, { x: 0, y: 0, opacity: 0 });
+    let lift = 0;
+    for (const t of names) {
+      probe.textContent = t;
+      if (lpInkW(probe) > o.slot) { lift = LPBAR_LINE_H * (parseFloat(getComputedStyle(probe).fontSize) || 26); break; }
+    }
+    probe.remove();
+    return lift;
+  };
   /* A wrapped name's lines each carry their OWN x (a line that starts a new chunk must), and a tspan's x outranks its
      <text>'s - so a painter that moves a name moves it through here, or its lines stay behind while its y follows
      (the lane B review, F1: a rescale moved the bar and left its two-line name). A one-line name is set exactly as
@@ -12725,11 +12746,8 @@ async function mount(doc) {
     const requestedGutter = Number((pg.axes || {}).left_gutter);
     const leftGutter = Number.isFinite(requestedGutter) ? Math.max(defaultGutter, requestedGutter) : defaultGutter;
     const PN = st.panel != null && !P;   /* P69 T8d: a landscape bars PANEL - its plot starts where a line panel's does, its ticks thinned by room */
-    const bottom = P ? G.H - 70 : LF ? LF.bars_b : 440, top = P ? 150 : PN ? LPBAR_PANEL.TOP : 90, x0g = leftGutter, x1 = P ? G.W - 30 : st.panel != null || PH ? G.W - 20 : 980, gap = 0.34, unit = lpUnitOf(pg);   /* P69 T8d: a panel's viewBox is its box's width. P72 T13: the unit as lpWithUnit takes it (a string, or $...B) */
+    const floor0 = P ? G.H - 70 : LF ? LF.bars_b : 440, top = P ? 150 : PN ? LPBAR_PANEL.TOP : 90, x0g = leftGutter, x1 = P ? G.W - 30 : st.panel != null || PH ? G.W - 20 : 980, gap = 0.34, unit = lpUnitOf(pg);   /* P69 T8d: a panel's viewBox is its box's width. P72 T13: the unit as lpWithUnit takes it (a string, or $...B) */
     const x0 = GA || st.panel != null ? x0g : lpTickColX0(st, x0g, lo, hi, unit);   /* P72 T13 (R26-274): the tick column stays on the stage (a gauge's ticks and a panel's are their own) */
-    const my = (v) => bottom - (v - lo) / (hi - lo || 1) * (bottom - top);
-    const base = my(0);
-    st.scale = { kind: "bars", my, yv: (v) => v, y0: lo, y1: hi, x0, x1 };   /* P48 T2 */
     /* THE CAP (P69 T6c, E99 s96): W_PX on the stage, in this chart's units; a row whose natural bar is wider narrows to
        it, at the measured bar/pitch ratio unless that row would leave the plot, and stands centred */
     const nat = (x1 - x0) / n, capU = (GA ? LPGAUGE.W_PX : LPBAR.W_PX) * (st.cardK || 1) / (st.stagePx > 0 ? st.stagePx : 1);   /* T10c: a card's bar is the cap at the card's own size */
@@ -12738,6 +12756,10 @@ async function mount(doc) {
     const lead = capped ? x0 + ((x1 - x0) - n * pitch) / 2 : x0;   /* ... and the group stands centred in the plot */
     const bw = capped ? capU : pitch * (1 - gap);
     const air = capped ? 1 - bw / pitch : gap;   /* the pitch's share left as air, half each side of its bar */
+    const bottom = floor0 - lpBarNameRoom(st, pg, { P, LF, capped, slot: PH ? pitch - LPBAR_NAME_GAP * LF.tick : bw, skip: OUT ? OUT.hid : -1 });   /* P72 T51b (R26-380 (a)) */
+    const my = (v) => bottom - (v - lo) / (hi - lo || 1) * (bottom - top);
+    const base = my(0);
+    st.scale = { kind: "bars", my, yv: (v) => v, y0: lo, y1: hi, x0, x1 };   /* P48 T2 */
     const outX = OUT ? lpBarsOutX(OUT, { lead, pitch, air, bw, x0, x1 }) : null;   /* P71 T25: each bar's left edge in this state (null: the page's own law below) */
     const GS = GA ? (() => { const k = st.stagePx > 0 ? st.stagePx : 1, ov = LPGAUGE.OVER_PX * (st.cardK || 1) / k;   /* P70 T3: the capsules' span, the rule's overhang either side */
       const caps = Array.from({ length: n }, (_, i) => { const cx = lead + pitch * (i + air / 2); return [cx, cx + bw]; });
