@@ -48,7 +48,7 @@
 
 export const SPAN = Object.freeze({
   IN_S: 0.45,       /* the shade's fade-in: a period ARRIVES, it does not cut in - slower than a bracket's tick, because nothing is being measured */
-  ALPHA: 0.16,      /* ... and what it settles at: enough to read as a region behind the line, never enough to fight it (the spread bleeds to 0.30 because the gap IS its argument; a span is only the room the argument happens in) */
+  ALPHA: 0.16,      /* ... and what it settles at: enough to read as a region behind the line, never enough to fight it (the spread bleeds to 0.51 - D40's measured brightness, P72 T49 - because the gap IS its argument; a span is only the room the argument happens in) */
   WRITE: 0.5,       /* the share of the word the label's hand takes, after the shade is in */
   PAD_T: 44,        /* the band's reach above the highest point of the drawn data, in the chart's viewBox units ... */
   PAD_B: 44,        /* ... and below the lowest: it is a band behind the chart, not a box around the line */

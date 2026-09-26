@@ -1199,5 +1199,135 @@
     }
    }
   }
+ },
+ "spreads": {
+  "what": "P72 T49 (R26-378): the Bravos band a SPREAD's glow (the fill between two lines) is set from (E38: thresholds from the reference). Read by measure_line_bloom.py --spread (measure_spread): a spread's two long edges ARE its two lines (each with a bloom of its own), so the halo is read PAST THE FILL'S END - the column most of its rows stop at - over the middle 25-75 % of the rows that reach it, from 2 stage px out (D40's frame rule reads as the fill's last column; one dark AA pixel past it; at the thumbnail at least one px, the edge's own resampled pixel); the fill's own luma 6-30 px in from its end (`fill_luma`, over the ground: a band key since the T49 ruling - the fill's brightness is a dial the reference sets, as the halo's is); the ground the same rows' from `ground_from` stage px (96 by default). Each frame at 1920 (`measured`) and downsampled to the 256 px thumbnail (`measured_thumb`). A frame is its video at `t` (BRAVOS-FRAME, `ffmpeg -ss <t> -i <video> -frames:v 1`), both videos gitignored under the main checkout; `frame_sha256` is the decoded frame's. `--band <this> --check --root <main checkout>` re-extracts and re-measures every frame.",
+  "thumb_w": 256,
+  "keys": [
+   "halo_edge",
+   "halo_r50_px1080",
+   "halo_reach10_px1080",
+   "halo_area_x_fill",
+   "fill_luma"
+  ],
+  "frames": [
+   {
+    "id": "d40-spread-0448",
+    "video": "docs/research/runs/bravos-watch/u70oUWgVoYU/video_1080p.mp4",
+    "t": 288.0,
+    "frame_sha256": "e53025891fb79072df28cf65ed1031a23a195eb7253ab727b4b130b71f7895cf",
+    "what": "D40 04:48 (the frame the operator named, 2026-09-25: 'their red fill has more of a bloom than ours t36') - Obligations vs Revenue, the gap bled crimson to its end at the plot's right frame (x 1521), both lines' end pills beside it; a long soft glow past the end",
+    "ink": "#971E37",
+    "box": [
+     420,
+     360,
+     1760,
+     660
+    ],
+    "end": "right",
+    "measured": {
+     "fill_luma": 33.95,
+     "halo_edge": 0.343,
+     "halo_r50_px1080": 19.73,
+     "halo_reach10_px1080": 35.74,
+     "halo_area_1080": 281.1,
+     "halo_area_x_fill": 8.28
+    },
+    "measured_thumb": {
+     "halo_edge": 0.17,
+     "halo_r50_px1080": 43.66,
+     "halo_reach10_px1080": 40.77,
+     "halo_area_x_fill": 6.58,
+     "fill_luma": 34.29
+    }
+   },
+   {
+    "id": "boom-wedge-0838",
+    "video": "scratch/jx3Ll_full.mp4",
+    "t": 518.0,
+    "frame_sha256": "2f1a21c1814e5b28a924c9fb57ff58cef736dfc98a7d5ca9b31fce7ce6fde5da",
+    "what": "BOOM 08:38 (P71 T36's 'BOOM 08:35 the wedge fill', at rest from 08:35) - the S&P 500 against Hyperscalers/S&P 500, the wedge between them filled white to amber, its end a vertical cut at x 1468 with the plot's frame rule 50 px past it (box to 1515, ground from 36 px); a tight glow",
+    "ink": "#FFD382",
+    "box": [
+     1250,
+     150,
+     1515,
+     600
+    ],
+    "end": "right",
+    "ground_from": 36.0,
+    "measured": {
+     "fill_luma": 179.28,
+     "halo_edge": 0.411,
+     "halo_r50_px1080": 6.47,
+     "halo_reach10_px1080": 9.69,
+     "halo_area_1080": 390.7,
+     "halo_area_x_fill": 2.18
+    },
+    "measured_thumb": {
+     "halo_edge": 0.041,
+     "halo_r50_px1080": 19.63,
+     "halo_reach10_px1080": 15.0,
+     "halo_area_x_fill": 0.37,
+     "fill_luma": 179.25
+    }
+   }
+  ],
+  "band": {
+   "full": {
+    "halo_edge": {
+     "min": 0.343,
+     "max": 0.411,
+     "n": 2
+    },
+    "halo_r50_px1080": {
+     "min": 6.47,
+     "max": 19.73,
+     "n": 2
+    },
+    "halo_reach10_px1080": {
+     "min": 9.69,
+     "max": 35.74,
+     "n": 2
+    },
+    "halo_area_x_fill": {
+     "min": 2.18,
+     "max": 8.28,
+     "n": 2
+    },
+    "fill_luma": {
+     "min": 33.95,
+     "max": 179.28,
+     "n": 2
+    }
+   },
+   "thumb": {
+    "halo_edge": {
+     "min": 0.041,
+     "max": 0.17,
+     "n": 2
+    },
+    "halo_r50_px1080": {
+     "min": 19.63,
+     "max": 43.66,
+     "n": 2
+    },
+    "halo_reach10_px1080": {
+     "min": 15.0,
+     "max": 40.77,
+     "n": 2
+    },
+    "halo_area_x_fill": {
+     "min": 0.37,
+     "max": 6.58,
+     "n": 2
+    },
+    "fill_luma": {
+     "min": 34.29,
+     "max": 179.25,
+     "n": 2
+    }
+   }
+  }
  }
 }

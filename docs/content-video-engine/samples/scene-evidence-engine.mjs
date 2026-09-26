@@ -791,7 +791,7 @@ async function mount(doc) {
 
   const SPAN = Object.freeze({
     IN_S: 0.45,       /* the shade's fade-in: a period ARRIVES, it does not cut in - slower than a bracket's tick, because nothing is being measured */
-    ALPHA: 0.16,      /* ... and what it settles at: enough to read as a region behind the line, never enough to fight it (the spread bleeds to 0.30 because the gap IS its argument; a span is only the room the argument happens in) */
+    ALPHA: 0.16,      /* ... and what it settles at: enough to read as a region behind the line, never enough to fight it (the spread bleeds to 0.51 - D40's measured brightness, P72 T49 - because the gap IS its argument; a span is only the room the argument happens in) */
     WRITE: 0.5,       /* the share of the word the label's hand takes, after the shade is in */
     PAD_T: 44,        /* the band's reach above the highest point of the drawn data, in the chart's viewBox units ... */
     PAD_B: 44,        /* ... and below the lowest: it is a band behind the chart, not a box around the line */
@@ -12229,8 +12229,10 @@ async function mount(doc) {
   let lpFillN = 0;
   /* ONE SVG FILTER per glowing fill, built on its first glow: the two halos over SourceGraphic, each a gaussian of what is
      under it flooded with the ink (lpHotFilter's halo, the same primitives). `box` - the fill's own reach in the
-     element's user space (a capsule: the fill never leaves it); absent, the chart's box (a bar that rescales or morphs) */
-  const lpFillFilter = (st, el, box) => {
+     element's user space (a capsule: the fill never leaves it); absent, the chart's box (a bar that rescales or morphs).
+     `outside` (P72 T49, a TRANSLUCENT fill - a spread at PS.SPREAD_A): the halos are cut to the fill's OUTSIDE (the fill's
+     alpha, lifted by 1 / `outside` to a mask), so the glow never deepens the fill it rings; an opaque fill needs no cut */
+  const lpFillFilter = (st, el, box, outside = 0) => {
     if (el.__lpFill) return el.__lpFill;
     const svg = el.ownerSVGElement || st.chart, G = st.geom || { W: 1000, H: 560 };
     const U = lpHotUnit(st) || (st && st.portrait ? 2 : 1), m = 3 * LP_FILL_GLOW.OUTER_PX * U;
@@ -12248,6 +12250,15 @@ async function mount(doc) {
     const h1 = halo("SourceGraphic", 1);
     const m1 = lpEl("feMerge", "", f, { result: "g1" }); lpEl("feMergeNode", "", m1, { in: "s1" }); lpEl("feMergeNode", "", m1, { in: "SourceGraphic" });
     const h2 = halo("g1", 2);
+    if (outside > 0) {   /* P72 T49: the two halos alone, cut out of the fill's own footprint, then the fill over them */
+      const mh = lpEl("feMerge", "", f, { result: "halos" }); lpEl("feMergeNode", "", mh, { in: "s2" }); lpEl("feMergeNode", "", mh, { in: "s1" });
+      const ct = lpEl("feComponentTransfer", "", f, { in: "SourceAlpha", result: "mask" });
+      lpEl("feFuncA", "", ct, { type: "linear", slope: (1 / outside).toFixed(4), intercept: 0 });
+      lpEl("feComposite", "", f, { in: "halos", in2: "mask", operator: "out", result: "ring" });
+      const mo = lpEl("feMerge", "", f); lpEl("feMergeNode", "", mo, { in: "ring" }); lpEl("feMergeNode", "", mo, { in: "SourceGraphic" });
+      el.__lpFill = { id, h1, h2, U };
+      return el.__lpFill;
+    }
     const m2 = lpEl("feMerge", "", f, box && box.tpad > 0 ? { result: "all" } : {}); lpEl("feMergeNode", "", m2, { in: "s2" }); lpEl("feMergeNode", "", m2, { in: "g1" });
     if (box && box.tpad > 0) {   /* the half-separator strip over the seam: the part's own stroke there, never its halo */
       lpEl("feFlood", "", f, { x: box.x.toFixed(2), y: (box.y - box.tpad).toFixed(3), width: box.w.toFixed(2), height: box.tpad.toFixed(3),
@@ -12259,14 +12270,16 @@ async function mount(doc) {
     el.__lpFill = { id, h1, h2, U };
     return el.__lpFill;
   };
-  /* THE FILL'S GLOW at `level` (0-1: a solo's hand-over; 1 the glow at rest). 0 removes it (the element as it was). */
-  const lpFillGlow = (st, el, col, box, level = 1) => {
+  /* THE FILL'S GLOW at `level` (0-1: a solo's hand-over; 1 the glow at rest). 0 removes it (the element as it was).
+     `dial` - the halos' numbers: a filled mark's (LP_FILL_GLOW), or a spread's own (LP_SPREAD_GLOW, P72 T49), whose
+     `OUTSIDE` (the fill's alpha at rest) cuts the halos to the fill's outside (lpFillFilter). */
+  const lpFillGlow = (st, el, col, box, level = 1, dial = LP_FILL_GLOW) => {
     if (!el || !(LINE_BLOOM > 0)) return "";
     const k = Math.max(0, Math.min(1, level));
     if (k <= 1e-4) { if (el.__lpFill) el.style.filter = ""; return ""; }
-    const hf = lpFillFilter(st, el, box), hx = lpVarHex(col);
-    lpHotHalo(hf.h1, hx, LP_FILL_GLOW.INNER_PX * hf.U, LP_FILL_GLOW.INNER_A * k);
-    lpHotHalo(hf.h2, hx, LP_FILL_GLOW.OUTER_PX * hf.U, LP_FILL_GLOW.OUTER_A * k);
+    const hf = lpFillFilter(st, el, box, dial.OUTSIDE || 0), hx = lpVarHex(col);
+    lpHotHalo(hf.h1, hx, dial.INNER_PX * hf.U, dial.INNER_A * k);
+    lpHotHalo(hf.h2, hx, dial.OUTER_PX * hf.U, dial.OUTER_A * k);
     el.style.filter = "url(#" + hf.id + ")";
     return el.style.filter;
   };
@@ -12314,6 +12327,38 @@ async function mount(doc) {
       const k = Math.max(b.i === S.emph ? 1 - mute : 0, soloLift(sd.evs, key, t));
       if (k > 1e-4 || lpHasGlow(b)) lpBarGlow(S, b.bar, b.segs, b.bx, b.bw, ink, null, k);
     });
+  };
+  /* P72 T49 (R26-378) - THE SPREAD GLOWS. The operator, 2026-09-25, on P71 T36's divergence spread beside Bravos D40
+     04:48: "their red fill has more of a bloom than ours t36, but that should just be a dial not a recipe change". The
+     spread's path (the gap between two lines, bled full of its ink - paintSpread) carries T10's fill glow (lpFillFilter
+     / lpFillGlow, the same two halos in its own ink, the chart's box as the region: the polygon is rebuilt every frame)
+     on its OWN dials. The halo is a gaussian of the path's own alpha, so it rises with the bleed, deepens with the ink
+     and leaves with the page (pageLeave multiplies the fill's alpha) - it never paints where the fill has not.
+     ON for every spread at rest (how a spread reads); LEVEL 0 turns it off - no filter, the page as it was, to the byte.
+     A `deemph` spread never glows (E67: context never blooms). Under a solo the glow follows the spread's EDGES, on the
+     solo's own ease (soloAlpha): a solo on a series that is neither edge mutes both and the glow leaves with the mute;
+     a solo on one of its edges keeps it. The spread's fill alpha (PS.SPREAD_A) is the other dial the band sets: its `fill_luma`.
+     The dials are MEASURED: measure_line_bloom.py --spread reads the halo PAST THE FILL'S END (its long edges are its
+     two lines), the Bravos band is `content/video_engine/assets/bravos-line-bloom.v1.json` `spreads` (D40 04:48, BOOM
+     08:38's wedge), and ours is read by the same tool (tests/test_spread_glow.py). */
+  const LP_SPREAD_GLOW = Object.freeze({
+    LEVEL: 1,        /* the dial: 1 every spread glows at rest, 0 none (the page as it was) */
+    OUTSIDE: 0.51,   /* = PS.SPREAD_A (declared below; tests/test_spread_glow.py pins the two equal): the halo rings the fill and never lies inside it, so the fill keeps its own ink */
+    INNER_PX: 2,     /* a TIGHT inner halo at the fill's edge, STAGE px [MEASURED: bravos D40 04:48 (u70oUWgVoYU t 288): its edge 0.343 at 2 px, ours 0.358] ... */
+    INNER_A: 0.65,   /* ... at this alpha of the ink [MEASURED: bravos D40 04:48 - 0.5 read 0.348 on the 0.30 fill; on the 0.51 fill it read 0.308, under D40's 0.343, so re-fit: 0.6 0.324, 0.65 0.358, 0.7 0.343] */
+    OUTER_PX: 36,    /* the WIDE soft outer halo, STAGE px - D40's long plateau [MEASURED: bravos D40 04:48: reach10 35.7, area 8.3 fill-px; BOOM 08:38 (jx3Ll t 518) the band's tight end 9.7 / 2.2; ours 31.6 / 6.9] ... */
+    OUTER_A: 0.45,   /* ... at this alpha [MEASURED: bravos D40 04:48] */
+  });
+  /* THE SPREAD'S GLOW at `t` (paintPerform, after the spread is painted and its leave applied). A pure function of t:
+     the level is written every frame, 0 while the fill has no ink (before its word, gone with its page). */
+  const lpSpreadGlow = (sd, t, st, solo) => {
+    const p = sd.path, a = +p.getAttribute("fill-opacity") || 0;
+    let k = sd.sp.color === "deemph" || a <= 0 ? 0 : Math.max(0, Math.min(1, LP_SPREAD_GLOW.LEVEL));
+    if (k > 0 && solo) {   /* the edges' own mute on the solo's clock: the glow stays while either edge keeps its ink */
+      const keys = ["s:" + (sd.sp.from | 0), ...(Number.isInteger(sd.sp.to_rule) ? [] : ["s:" + (sd.sp.to | 0)])];
+      k *= Math.max(...keys.map((key) => 1 - Math.min(1, Math.max(0, (1 - soloAlpha(solo.evs, key, t)) / (1 - SOLO.DIM)))));
+    }
+    if (k > 1e-4 || p.__lpFill) lpFillGlow(st, p, p.getAttribute("fill"), null, k, LP_SPREAD_GLOW);
   };
   /* R26-228 (E99 s82's (e); the operator: "You also missed the sparking lead points from the line chart reference, which
      add chart life ... our chart lines have no glow/pulse") - THE PAGE'S INTERIOR AT ITS IDLE. Measured on frozen copy d
@@ -14816,7 +14861,10 @@ async function mount(doc) {
                                             sunflower twin beneath it rises and falls on a sine, the base never moves.
      Dials, ours (42 s42.5): ERASE_S the title's wipe; BRACKET_DRAW / TICK / LABEL the bracket's phases as shares of its dur;
      BRACKET_GAP the room between the data and the span, viewBox units. */
-  const PS = { SPREAD_A: 0.30, SPREAD_BLEED: 0.55,   /* the fifth watch: the gap between two lines, bled full of ink - the alpha it lands at, and the share of the word the bleed takes to cross */
+  const PS = { SPREAD_A: 0.51, SPREAD_BLEED: 0.55,   /* the fifth watch: the gap between two lines, bled full of ink - the alpha it lands at, and the share of the word the bleed takes to cross */
+               /* SPREAD_A [MEASURED: P72 T49 (R26-378), the coordinator's ruling on the operator's "a dial": the fill's own
+                  brightness is the reference's - measure_line_bloom.py --spread `fill_luma`, D40 04:48 33.95 over its
+                  ground (the band's `spreads`), ours 34.19 at 0.51 (0.30 read 19.83, 0.50 33.84 - under D40's)] */
                ERASE_S: 0.4, BRACKET_DRAW: 0.5, BRACKET_TICK: 0.15, BRACKET_LABEL: 0.55, BRACKET_GAP: 34, BRACKET_TICK_W: 14,
                BRACKET_BAR_W: 26,   /* P50 T9: `form: "bar"` - the SAME span, drawn as a bar in the accent instead of a hairline (Bravos shot 36: the drop of one tier). The law is the bracket's: the bar grows from the first datum's level to the second as the span draws, so a fall goes DOWN (E28) */
                BRACKET_ROOM: 200, RELIGHT_COL: "#F5B72E" };
@@ -16860,7 +16908,8 @@ async function mount(doc) {
     for (const b of PF.brackets) paintBracket(b, t, b.sp.keep === true ? null : undrawAll.find((sp) => sp.at >= b.sp.at), st);
     for (const sd of PF.spreads || []) { paintSpread(sd, t, st);   /* the fifth watch: the gap between the lines, bled full; R26-28: on the active state */
       const lv = pageLeave(sd.sp, t);   /* R26-219: the bled gap was measured between THAT page's lines */
-      if (lv > 0) sd.path.setAttribute("fill-opacity", ((+sd.path.getAttribute("fill-opacity") || 0) * (1 - lv)).toFixed(3)); }
+      if (lv > 0) sd.path.setAttribute("fill-opacity", ((+sd.path.getAttribute("fill-opacity") || 0) * (1 - lv)).toFixed(3));
+      lpSpreadGlow(sd, t, st, PF.solo); }   /* P72 T49: the gap glows in its own ink - after its bleed and its leave, on the solo's ease */
     /* THE PAGE REGISTRY HOOK (P52 T5; R26-41) - the only page painting written in this layer. The kind comes off the
        DECLARATION, so the registry routes it; `span` (P50 T4: the named stretch of time, shaded behind the chart on the
        live scale) was the first page species through it and `figure` (P57 T20 / R26-98: E50's number, written by the hand

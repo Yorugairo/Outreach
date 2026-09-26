@@ -41,6 +41,8 @@ reference on disk yet).
 
     python measure_line_bloom.py FRAME --ink "#34F5C5" --box 150,250,1098,820 [--title-box ..] [--label-box ..] [--words N]
     python measure_line_bloom.py --band content/video_engine/assets/bravos-line-bloom.v1.json --check
+    python measure_line_bloom.py FRAME --fill --ink "#FF8A4C" --box x0,y0,x1,y1            # P72 T10: a filled mark's halo
+    python measure_line_bloom.py FRAME --spread --ink "#971E37" --box x0,y0,x1,y1 [--end right]   # P72 T49: a spread's halo
     python measure_line_bloom.py --caption-floor content/video_engine/assets/caption-squint-floor.v1.json --check
     python measure_line_bloom.py --build <build-dir> [--timeline NAME] [--at T ...] [--frames DIR]
 """
@@ -825,6 +827,153 @@ def check_fills(band_path: Path, root: Path) -> list[str]:
     return bad
 
 
+# ---- P72 T49 (R26-378): a SPREAD's halo - the fill between two lines ---------------------------------------------
+# The operator, on P71 T36's divergence spread beside Bravos D40 04:48: "their red fill has more of a bloom than ours
+# t36, but that should just be a dial not a recipe change". A spread's two long edges ARE its two lines (each with a
+# bloom of its own, in another ink), so the fill's own halo is read where no line is: PAST THE FILL'S END - its last
+# column (`end` "right") or its first ("left") - row by row over the middle SPREAD_SPAN of the rows the fill reaches
+# that column in (the two lines' end dots, tips and tags sit at the end's top and foot). The read starts SPREAD_SKIP
+# past the edge on both sides of the comparison: D40 draws its plot's frame rule exactly at the fill's end. The fill's
+# luma is its own at the end (SPREAD_BODY in from the end of those rows - D40's fill deepens toward its end), the ground
+# the same rows' past the halo (from `ground_from` stage px, 96 by default; a frame rule close past the end - BOOM
+# 08:35's, 50 px - stops the box and the read before it). Every distance is from the fill's edge. The band is `spreads` in the band file.
+SPREAD_SPAN = (0.25, 0.75)   # the middle of the end's height the read takes
+SPREAD_SKIP_1080 = 2.0       # the read starts this many stage px past the edge (D40's frame rule, x 1520-1521 at 1920, reads
+                             # as the fill's own last column - its hue is the fill's - and leaves one dark AA pixel past it);
+                             # at a thumbnail at least ONE px: the first ring there is the edge's own resampled pixel (our
+                             # NO-glow spread read 0.40 at 256 on it)
+SPREAD_BODY_1080 = (6.0, 30.0)   # the fill's own luma: this far in from its end, stage px (clear of the rule's AA inside)
+SPREAD_END_TOL = 2           # an end row: the fill reaches within this many px of its end column
+SPREAD_KEYS = FILL_KEYS + ("fill_luma",)   # the band: the halo's four AND the fill's own brightness over its ground (the
+                                           # coordinator's ruling on T49: the fill is a dial the reference sets too)
+
+
+def _end_rows(fill: np.ndarray, end: str) -> tuple[np.ndarray, np.ndarray]:
+    """The rows the fill reaches its end column in (the middle SPREAD_SPAN of them) and each row's end column."""
+    if not fill.any():
+        raise ValueError("an empty fill has no end")
+    last = np.array([(np.nonzero(r)[0][-1] if end == "right" else np.nonzero(r)[0][0]) if r.any() else -10 ** 6
+                     for r in fill])
+    vals, counts = np.unique(last[last > -10 ** 6], return_counts=True)
+    at = int(vals[np.argmax(counts)])   # the END is the column most rows stop at (a dot or a tip past it is one row's)
+    rows = np.nonzero(np.abs(last - at) <= SPREAD_END_TOL)[0]
+    a = rows[0] + int(SPREAD_SPAN[0] * (rows[-1] - rows[0]))
+    b = rows[0] + int(np.ceil(SPREAD_SPAN[1] * (rows[-1] - rows[0])))
+    rows = rows[(rows >= a) & (rows <= b)]
+    return rows, last[rows]
+
+
+def end_profile(lu: np.ndarray, fill: np.ndarray, halo_m: np.ndarray, reach: int, ground_at: int, end: str) -> tuple[np.ndarray, list]:
+    """Per distance 1..reach past the fill's end: the median luma over the end rows (NaN outside the halo mask); and
+    the same rows' luma from `ground_at` to 2 x `ground_at` (the ground past the halo, inside the box)."""
+    import warnings
+    rows, edge = _end_rows(fill, end)
+    sgn, n = (1 if end == "right" else -1), 2 * max(reach, ground_at)
+    steps = np.arange(1, n + 1)
+    out = np.full((rows.size, n), np.nan)
+    for k, (r, c) in enumerate(zip(rows, edge)):
+        idx = c + sgn * steps
+        ok = (idx >= 0) & (idx < lu.shape[1])
+        vals = np.full(n, np.nan)
+        vals[ok] = np.where(halo_m[r, idx[ok]], lu[r, idx[ok]], np.nan)
+        out[k] = vals
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        far = out[:, ground_at - 1:2 * ground_at].ravel()
+        return np.nanmedian(out[:, :reach], axis=0), [float(v) for v in far if not np.isnan(v)]
+
+
+def _end_body(lu: np.ndarray, fill: np.ndarray, end: str, k1080: float) -> float:
+    rows, edge = _end_rows(fill, end)
+    sgn = 1 if end == "right" else -1
+    d0, d1 = (max(1, int(round(v / k1080))) for v in SPREAD_BODY_1080)
+    vals = [lu[r, c - sgn * d] for r, c in zip(rows, edge) for d in range(d0, max(d0 + 1, d1))
+            if 0 <= c - sgn * d < lu.shape[1] and fill[r, c - sgn * d]]
+    return float(np.median(vals))
+
+
+def measure_spread(frame: str | Path, ink: str, box, *, end: str = "right", exclude=(), halo_exclude=(),
+                   ground_from: float = RING_MAX_1080, at_width: int | None = None) -> dict:
+    """Every number for one SPREAD (the fill between two lines), read past its end. Boxes are in the frame's own px."""
+    if end not in ("right", "left"):
+        raise ValueError(f"a spread's end is 'right' or 'left', not {end!r}")
+    native_w = Image.open(frame).width
+    rgb = load_rgb(frame, at_width)
+    h, w = rgb.shape[:2]
+    ks, k1080 = w / native_w, STAGE_W / w
+    sc = lambda b: [v * ks for v in b]  # noqa: E731
+    box, exclude, halo_exclude = sc(box), [sc(e) for e in exclude], [sc(e) for e in halo_exclude]
+    fill = fill_mask(rgb, ink, box, exclude)
+    if not fill.any():
+        raise ValueError(f"{frame}: no fill of ink {ink} inside the box {box}")
+    box_m = _box_mask((h, w), box)
+    for ex in exclude:
+        box_m &= ~_box_mask((h, w), ex)
+    halo_m = box_m & ~fill
+    for ex in halo_exclude:
+        halo_m &= ~_box_mask((h, w), ex)
+    lu = luma(rgb)
+    ring_max = max(8, round(RING_MAX_1080 / k1080))
+    ground_at = max(4, min(ring_max, round(ground_from / k1080)))   # a frame rule close past the end: the box stops at it
+    raw, far = end_profile(lu, fill, halo_m, ground_at, ground_at, end)
+    if not far:
+        raise ValueError(f"{frame}: no ground inside the box past the halo ({ground_from} stage px past the end)")
+    g = float(np.median(far))
+    skip = min(len(raw) - 1, max(1, int(round(SPREAD_SKIP_1080 / k1080))))   # at a thumbnail: at least the edge's own resampled px
+    n = int(np.argmax(np.isnan(raw))) if np.isnan(raw).any() else len(raw)
+    prof = [float(v) - g for v in raw[skip:n]] or [0.0]
+    fl = _end_body(lu, fill, end, k1080) - g
+    off = skip   # every distance is from the fill's edge: the profile starts at ring skip + 1
+    r50, reach10 = _cross(prof, 0.5 * prof[0]) + off, _cross(prof, 0.10 * fl) + off
+    area = float(sum(max(v, 0.0) for v in prof))
+    rows, _edge = _end_rows(fill, end)
+    return {
+        "mode": "spread", "frame": str(frame).replace("\\", "/"), "size": [w, h], "ink": ink.upper(), "end": end,
+        "box": [round(v, 1) for v in box], "ground_luma": round(g, 2), "end_rows": [int(rows[0]), int(rows[-1])],
+        "fill_luma": round(fl, 2), "halo_edge": round(prof[0] / fl, 3) if fl > 0 else 0.0,
+        "halo_r50_px1080": round(r50 * k1080, 2), "halo_reach10_px1080": round(reach10 * k1080, 2),
+        "halo_area_1080": round(area * k1080, 1), "halo_area_x_fill": round(area * k1080 / fl, 2) if fl > 0 else 0.0,
+        "halo_read_px1080": round((len(prof) + off) * k1080, 1), "halo_profile": [round(v, 1) for v in prof],
+    }
+
+
+def measure_spread_entry(entry: dict, png: Path, at_width: int | None = None) -> dict:
+    return measure_spread(png, entry["ink"], entry["box"], end=entry.get("end", "right"),
+                          exclude=entry.get("exclude", ()), halo_exclude=entry.get("halo_exclude", ()),
+                          ground_from=entry.get("ground_from", RING_MAX_1080), at_width=at_width)
+
+
+def spreads_band(frames: list[dict]) -> dict:
+    """The band a spread is judged against: each SPREAD_KEYS number's min and max over the recorded Bravos spreads, at
+    1920 (`full`) and at THUMB_W (`thumb`)."""
+    out = {}
+    for side, rec in (("full", "measured"), ("thumb", "measured_thumb")):
+        out[side] = {}
+        for k in SPREAD_KEYS:
+            v = [f[rec][k] for f in frames if f[rec].get(k) is not None]
+            out[side][k] = {"min": min(v), "max": max(v), "n": len(v)}
+    return out
+
+
+def check_spreads(band_path: Path, root: Path) -> list[str]:
+    """Re-extract and re-measure every recorded Bravos spread (the `spreads` entry); a drift is a finding."""
+    import tempfile
+    sb = json.loads(band_path.read_text(encoding="utf-8")).get("spreads")
+    if not sb:
+        return []
+    bad = [] if sb["band"] == spreads_band(sb["frames"]) else ["spreads.band: not the recorded frames' own min / max"]
+    with tempfile.TemporaryDirectory() as td:
+        for e in sb["frames"]:
+            try:
+                png, sha = bravos_fill_frame(e, root, Path(td))
+            except FileNotFoundError as err:
+                bad.append(str(err))
+                continue
+            bad += _fill_drift(e, "measured", measure_spread_entry(e, png), sha)
+            bad += _fill_drift(e, "measured_thumb", measure_spread_entry(e, png, THUMB_W), sha)
+    return bad
+
+
 # ---- M48 (P71 T7; E99 s120 / s126): the squint read of a BUILD, and the reference it is judged against ------------
 
 SQUINT_NAME = "squint.json"          # written beside the timeline; gate_motion_density.load_squint reads it
@@ -1229,6 +1378,10 @@ def main(argv=None) -> int:
     ap.add_argument("--frames", type=Path, help="--build: keep the rendered frames in this dir")
     ap.add_argument("--fill", action="store_true", help="P72 T10: read a FILLED mark's halo (a gauge's fill, a lit bar)")
     ap.add_argument("--halo-exclude", action="append", default=[], help="--fill: a box left out of the halo read only")
+    ap.add_argument("--spread", action="store_true", help="P72 T49: read a SPREAD's halo (the fill between two lines) past its end")
+    ap.add_argument("--end", default="right", help="--spread: the fill's end the halo is read past, right | left")
+    ap.add_argument("--ground-from", type=float, default=RING_MAX_1080,
+                    help="--spread: the ground is read from this many stage px past the end (a frame rule close past it)")
     a = ap.parse_args(argv)
     if a.build:
         out = measure_build(a.build, timeline_name=a.timeline, at=a.at, frames_dir=a.frames)
@@ -1237,12 +1390,16 @@ def main(argv=None) -> int:
         return 0
     if a.check and (a.band or a.caption_floor):
         bad = (check_band(a.band, a.root) + check_squint_band(a.band, a.root) + check_fills(a.band, a.root)
-               if a.band else []) \
+               + check_spreads(a.band, a.root) if a.band else []) \
             + (check_caption_floor(a.caption_floor, a.root) if a.caption_floor else [])
         print("\n".join(bad) if bad else f"{a.band or a.caption_floor}: every recorded frame reproduces")
         return 1 if bad else 0
     if not (a.frame and a.ink and a.box):
         ap.error("a frame, --ink and --box (or --band --check)")
+    if a.spread:
+        print(json.dumps(measure_spread(a.frame, a.ink, _box(a.box), end=a.end, exclude=[_box(x) for x in a.exclude],
+                                        halo_exclude=[_box(x) for x in a.halo_exclude], ground_from=a.ground_from), indent=1))
+        return 0
     if a.fill:
         print(json.dumps(measure_fill(a.frame, a.ink, _box(a.box), exclude=[_box(x) for x in a.exclude],
                                       halo_exclude=[_box(x) for x in a.halo_exclude]), indent=1))
