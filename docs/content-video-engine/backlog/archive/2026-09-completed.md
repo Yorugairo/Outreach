@@ -325,6 +325,10 @@ an unresolved source anomaly; this pass does not synthesize a task from it.
 | R26-267 | A dock cannot ride another dock's read and park. Closed by P72 T19. | lane B `89de388`: `rel: {pin, inherit?}` (E97; translation by default); a bad pin refused across the cut. |
 | R26-202 | A throw cannot pick its entry edge (b); the over-build landing (a). Closed by P72 T19 (b) and P72 T7 (a). | lane B `89de388`: `side: left|right|bottom` on a throw; `top` refused (a drop). |
 | R26-343 | A park leaves the long form's key rail at full size. Closed by P72 T19. | lane B `89de388`: the key rail scales about the chart's anchor on a park and returns on the un-park. |
+| R26-157 | The splash has no off-screen pitch. Closed by P72 T23. | lane B `151636d`: `melt:splash:...:offscreen` - out of the frame, 6 empty frames, back flatter and faster (E99 s56). |
+| R26-146 | The ball cannot blend the page's inks. Closed by P72 T23. | lane B `151636d`: `body=blend` (Kubelka-Munk, each series ink one arm); its green on the golden is P72-HG1 (3). |
+| R26-139 | The gather swings the axis hairlines as straight sticks. Closed by P72 T23. | lane B `151636d`: they curl into the spiral (`MELT.G_LINE_CURL`, on; P72-HG1 (12)). |
+| R26-389 | The two-ink hand goes muddy. Closed by P72 T23. | lane B `151636d`: a sweep hands the ink over, chroma 200 -> 57 with no dip (`MELT.HAND_INK_ON`, on; P72-HG1 (12)). |
 | R26-284 | A figure double-prints its bar's value. Closed by P72 T18. | lane B `4b07424`: the figure hands over in place; a restating figure WARNs (s106). |
 | R26-288 | A ring on a bar has no value target. Closed by P72 T18. | lane B `4b07424`: `part: value` rings the printed value as drawn. |
 | R26-255 | A bar figure drifts on a page with states. Closed by P72 T18. | lane B `4b07424`: it rides its bar through a rescale. |
