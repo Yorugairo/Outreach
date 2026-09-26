@@ -2040,6 +2040,11 @@ DATUM_ON_DOCK_KINDS = ("callout", SPECIES_RING, "spotlight", "squiggle")   # ...
                           # (punch, focus_zoom, pull_back, a camera key) resolves its target before the frame's docks are
                           # laid out (engine render(): camNow before the dock loop), so it would aim at last frame's card
 R26_367 = "R26-367"
+DATUM_PART_KEY = "part"      # P72 T18 / R26-288: a datum names a PART of its bar - {"kind": "datum", "index": i, "part": "value"}
+DATUM_PARTS = ("value",)     # ... the bar's printed number (its value label; an emphasized bar's pill), as drawn at t - the one
+                             # part a ring may circle there (E56: a number on a chart); absent = the bar, as before
+DATUM_PART_KINDS = ("callout", "ring")   # ... the two rings alone (a light or a camera move names the bar, never its label)
+R26_284, R26_288 = "R26-284", "R26-288"
 
 
 def _datum_dock_shape_errors(kind: str, dock) -> list[str]:
@@ -2051,6 +2056,23 @@ def _datum_dock_shape_errors(kind: str, dock) -> list[str]:
     ok = (isinstance(dock, int) and not isinstance(dock, bool) and dock >= 0) or (isinstance(dock, str) and dock.strip())
     return [] if ok else [f"{kind}: target datum 'dock' must be the row's dock index (a non-negative integer) or the "
                           f"dock's evidence id, not {dock!r} ({R26_367})"]
+
+
+def _datum_part_shape_errors(kind: str, target: dict) -> list[str]:
+    """P72 T18: a target's `part` - who may name one, on what, and what it may be (refused BY NAME, s106: a silent drop is
+    neither advice nor refusal). The page it names is checked where the page is in hand (`check_value_targets`)."""
+    part = target.get(DATUM_PART_KEY)
+    if target.get("kind") != "datum":
+        return [f"{kind}: target 'part' names a part of a BAR - only a datum target has one ({R26_288})"]
+    if kind not in DATUM_PART_KINDS:
+        return [f"{kind}: target datum 'part' names the bar's printed value, which only a ring "
+                f"({'|'.join(DATUM_PART_KINDS)}) circles (E56: a number on a chart) - a {kind} takes the bar ({R26_288})"]
+    if isinstance(part, bool) or part not in DATUM_PARTS:
+        return [f"{kind}: target datum 'part' must be one of {'|'.join(DATUM_PARTS)}, not {part!r} ({R26_288})"]
+    if DATUM_DOCK_KEY in target:
+        return [f"{kind}: target datum 'part' names a bar of the PAGE; a datum with 'dock' is a docked chart's line point "
+                f"- ring the value on its page, or the docked datum without 'part' ({R26_288})"]
+    return []
 
 
 def _dock_chart_counts(chart: dict, panel: int | None) -> tuple[list[int] | None, str | None]:
@@ -2153,6 +2175,8 @@ def _validate_target(kind: str, target, allowed: tuple) -> list[str]:
         errs.append(f"{kind}: target datum 'panel' must be a non-negative integer panel index (P69 T8b)")
     if tk == "datum" and DATUM_DOCK_KEY in target:
         errs += _datum_dock_shape_errors(kind, target[DATUM_DOCK_KEY])
+    if DATUM_PART_KEY in target:
+        errs += _datum_part_shape_errors(kind, target)
     if tk == "span" and not errs and target["from_word"] > target["to_word"]:
         errs.append(f"{kind}: target span from_word > to_word")
     return errs
@@ -3859,6 +3883,116 @@ def _validate_solo(entry: dict) -> list[str]:
         errs.append(f"solo: {', '.join(map(repr, extra))} - a solo writes nothing and takes only "
                     f"{'|'.join(SOLO_KEYS[1:])}: the named mark keeps its own ink and tag, and a number is a `figure`")
     return errs
+
+
+def _bars_block(world: dict, sp: dict) -> tuple[dict | None, str]:
+    """The bars a datum on this page names (P72 T18): the page's own when it is a bars page, else the PANEL the species
+    or its target names on a panels page when that panel draws bars - with a word for where it is; (None, why) else."""
+    page = (world or {}).get("page") if isinstance(world, dict) and world.get("kind") == SPECIES_LEDGER else None
+    if not isinstance(page, dict):
+        return None, "the row's world is not a ledger page"
+    if page.get("builder") == LPG.PANELS:
+        tg = sp.get("target") if isinstance(sp.get("target"), dict) else {}
+        k = sp.get("panel", tg.get("panel", 0))
+        panels = page.get("panels") or []
+        blk = panels[k] if _is_index(k) and k < len(panels) else None
+        if not isinstance(blk, dict) or blk.get("builder") != LPG.PANEL_BARS:
+            return None, f"panel {k!r} of this panels page draws no bars"
+        return blk, f"panel {k}"
+    if page.get("builder") != "story":
+        return None, f"a {page.get('builder')} page prints no value on a bar"
+    return page, "the page"
+
+
+def _printed_value(blk: dict, i: int) -> str:
+    """What the engine prints on bar `i` (lpWithUnit over the value string - the pill writes the same string)."""
+    strings = blk.get("value_strings") or []
+    vs = strings[i] if i < len(strings) else None
+    v = (blk.get("values") or [None] * (i + 1))[i]
+    text = vs if vs not in (None, "") else (f"{v:g}" if isinstance(v, (int, float)) and not isinstance(v, bool) else str(v))
+    return LPG.with_unit(str(text), str(blk.get("unit") or ""), str(blk.get(LPG.UNIT_SUFFIX_KEY) or ""))
+
+
+def _said(text) -> str:
+    """A printed number as the eye reads it: spacing, the typographic minus and case do not make it another number."""
+    return re.sub(r"\s+", "", str(text or "")).replace("\u2212", "-").lower()
+
+
+def _value_target(sp: dict) -> bool:
+    tg = sp.get("target") if isinstance(sp, dict) else None
+    return isinstance(tg, dict) and tg.get("kind") == "datum" and tg.get(DATUM_PART_KEY) == "value"
+
+
+def _bar_of(world: dict, sp: dict) -> tuple[dict | None, str, int | None]:
+    """(the bars block, where, the bar index) a species' datum names - the index None when the block does not draw it."""
+    blk, where = _bars_block(world, sp)
+    tg = sp.get("target") if isinstance(sp.get("target"), dict) else {}
+    i = tg.get("index", 0)
+    ok = blk is not None and _is_index(i) and i < len(blk.get("values") or [])
+    return blk, where, (i if ok else None)
+
+
+def check_value_targets(world: dict, row_species: list) -> None:
+    """P72 T18 / R26-288: every ring on a bar's VALUE names a value the page prints - a bars page (or a bars panel) and a
+    bar it draws. A target that resolves to nothing is a truth rule: ValueError names it. A row with none: untouched."""
+    for sp in row_species or []:
+        if not (isinstance(sp, dict) and _value_target(sp)):
+            continue
+        tag = f"{sp.get('kind')} at {sp.get('at')}"
+        blk, where, i = _bar_of(world, sp)
+        if blk is None:
+            raise ValueError(f"{tag}: target datum part 'value' - {where}, so there is no printed value to ring ({R26_288})")
+        if i is None:
+            n = len(blk.get("values") or [])
+            raise ValueError(f"{tag}: target datum part 'value' names bar {sp['target'].get('index')!r}, which {where} "
+                             f"does not draw (0..{n - 1}) ({R26_288})")
+
+
+def _figure_restates(world: dict, sp: dict, where: str) -> str | None:
+    tg = sp.get("target") if isinstance(sp.get("target"), dict) else {}
+    if tg.get("kind") not in (None, "datum") or sp.get("series") or tg.get("series"):
+        return None
+    blk, place, i = _bar_of(world, sp)
+    if i is None:
+        return None
+    printed = _printed_value(blk, i)
+    if _said(sp.get("text")) != _said(printed):
+        return None
+    name = str((blk.get("labels") or [""] * (i + 1))[i] or "")
+    return (f"{where}: figure {str(sp.get('text')).strip()!r} at {sp.get('at')}s restates bar {i}'s own printed value "
+            f"{printed!r} ({place}, {name!r}) - the bar already says it; the value hands over in place (it leaves, then "
+            f"the hand writes), so the page prints it once. Drop the figure, or write what the value does not say "
+            f"({R26_284}, M28; advice, E99 s106)")
+
+
+def _ring_relabels(world: dict, sp: dict, where: str) -> str | None:
+    if not (_value_target(sp) and str(sp.get("label") or "").strip()):
+        return None
+    blk, _place, i = _bar_of(world, sp)
+    printed = _printed_value(blk, i) if i is not None else "?"
+    return (f"{where}: {sp.get('kind')} at {sp.get('at')}s circles bar {sp['target'].get('index')}'s printed value "
+            f"{printed!r} and writes its label {str(sp.get('label')).strip()!r} beside it - the number it circles IS the "
+            f"ring's number (E99 s110); a second one prints it twice ({R26_288}, M28; advice, E99 s106)")
+
+
+def figure_value_advice(world: dict, row_species: list, where: str) -> list[str]:
+    """P72 T18 / R26-284 (E99 s106: legibility advises, only truth refuses) - a FIGURE that restates its bar's own printed
+    value, and a ring on a value that writes a number of its own beside it. The engine hands the number over in place
+    (the value leaves, then the hand writes), so the page prints it once; the row still authors the number twice, and
+    the advice names the row, the figure and the value. Never a refusal. Pure."""
+    out = []
+    for sp in row_species or []:
+        if not isinstance(sp, dict):
+            continue
+        if sp.get("kind") == "figure":
+            w = _figure_restates(world, sp, where)
+        elif sp.get("kind") in DATUM_PART_KINDS:
+            w = _ring_relabels(world, sp, where)
+        else:
+            w = None
+        if w:
+            out.append(w)
+    return out
 
 
 def check_solo(world: dict, row_species: list) -> None:
@@ -6951,6 +7085,7 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
                                 else None, row_species):   # P70 T5: a brace's bar, its parts, its label's truth; P72 T43 the room
         print(f"  [WARN] {_bk_note}" + (f" [scene {sid}]" if sid else ""))
     check_solo(world, row_species)            # P69 T37: a solo names ONE mark the page draws, on a page whose marks it re-inks
+    check_value_targets(world, row_species)   # P72 T18: a ring on a bar's value names a value the page prints (R26-288)
     for _lj_note in check_level_join(world, row_species):   # P71 T10: a join's ends, its unit, its truth; a WARN on the rule
         print(f"  [WARN] {_lj_note.removeprefix('WARN ')}")
     check_schematic(world, row_species)       # P70 T2: a schematic writes no figure it cannot source (E99 s109 (1))
@@ -13766,6 +13901,8 @@ def main() -> int:
             derive_rescale_states(world, row_species, plate, EP, sid=sid)   # P48 T2: each `chart_to rescale` gets its own derived page state; E64: and each recast its derived KEY
             for _w in check_axis_tags(world, row_species):   # P71 T9: a tag's truth on its page (refused above), its crowding (a WARN)
                 print(f"  [WARN] P71 T9: shot row {i + 1}: {_w}")
+            for _w in figure_value_advice(world, row_species, f"shot row {i + 1} ({a}-{b}s)"):   # P72 T18: a figure that restates
+                print(f"  [WARN] P72 T18: {_w}")                                                  # its bar's value (R26-284, s106)
         except ValueError as exc:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
         # P70 T9 (option A): the acts on screen in this row - a long-form page makes room for each pill (a page that

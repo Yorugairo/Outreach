@@ -59,6 +59,10 @@ export const FIGURE = Object.freeze({
   WRITE: 0.6,          /* the share of the word the figure's own hand takes ... */
   SUB_WRITE: 0.4,      /* ... and the share the sub takes after it (the two are the whole word) */
   OVERLAP: 1.6,        /* each glyph fades over this many of its own shares - the hand's overlap, not a ticker's */
+  HAND: 0.4,           /* P72 T18 / R26-284: a figure on a bar whose own number STOOD at its word - the share of the word
+                          that number takes to leave before the hand writes in its place (test_compare_on_bars reads the
+                          value mid-leave at 0.3 of the word, so it is more than that) ... */
+  BACK: 0.5,           /* ... and of the figure's own leave, the share the figure takes to go before the number returns */
 });
 
 const fig01 = (v) => Math.min(1, Math.max(0, v));   /* the engine's clamp01, verbatim */
@@ -164,6 +168,23 @@ export const figureSubGlyph = (u, j, n) => {
   return fig01((u - FIGURE.WRITE - j * per) / (per * FIGURE.OVERLAP));
 };
 
+/* R26-284 (P72 T18, found by P69 T25): THE HAND-OVER IN PLACE. On the 94 bars page the bar's value faded while the
+   figure wrote "94%" a few px off it - M28's `val:94% on bracket:94%` for ~0.6 s, the number printed twice. The probe
+   counts a label whose ELEMENT is up (its glyphs' own opacities are not the element's), so "once at every frame" means
+   the number and the figure's group are never up together. `stood` is whether the bar's printed number (its value, or
+   an emphasized bar's pill) already stood at the figure's word - the page had built. Then the number leaves over HAND of
+   the word, the figure is not up until it has gone, and the hand writes it in its place over the rest (`uf`, the
+   figure's own write law on the remaining word). A number that had not stood (the bar still growing as the figure is
+   written - both of the H door's bar figures) keeps the base's yield (u / WRITE) and the base write, to the bit.
+   `number` is the share of the number still standing (1 = all of it); `show` the figure's group. Pure in u. */
+export const figureHandOver = (u, stood) => stood
+  ? { number: 1 - fig01(u / FIGURE.HAND), show: u >= FIGURE.HAND ? 1 : 0, uf: fig01((u - FIGURE.HAND) / (1 - FIGURE.HAND)) }
+  : { number: 1 - fig01(u / FIGURE.WRITE), show: 1, uf: u };
+
+/* ... and BACK, on the figure's own leave (`lv`, R26-219's clock): the figure goes over the first BACK of it and the
+   number returns over the rest - they never stand together on the way out either. */
+export const figureHandBack = (lv) => ({ figure: 1 - fig01(lv / FIGURE.BACK), number: fig01((lv - FIGURE.BACK) / (1 - FIGURE.BACK)) });
+
 /* THE PAINTER (P47 T6; P48 T7; R26-71). `fg` is the perform layer's BUILT figure - the declaration `sp`, its
    datum `D`, its glyphs `lg` / `sg`, the measured advance `tw`, the sizes and the chart's box - `st` the page
    state, and `ctx` the PAGE species context the engine hands every page painter (PAGE_PAINTERS in the engine):
@@ -171,20 +192,35 @@ export const figureSubGlyph = (u, j, n) => {
    species dials the bracket owns - never as free identifiers, so `node --test` can call this with recorders
    and no DOM. The BUILDER stays in the engine's buildPerform, where the DOM it makes belongs; it calls this
    module's `figurePlace`, `figWidth` and `figClearY` by name, so the place is authored in one law only. */
+/* the figure's label and its sub, written at (x, y) with one anchor - the sub hangs SUB_DY of its own size under it */
+const figSet = (fg, x, y, anchor) => {
+  fg.label.setAttribute("x", x.toFixed(1)); fg.label.setAttribute("y", y.toFixed(1)); fg.label.setAttribute("text-anchor", anchor);
+  if (fg.sub) { fg.sub.setAttribute("x", x.toFixed(1)); fg.sub.setAttribute("y", (y + fg.fss * FIGURE.SUB_DY).toFixed(1)); fg.sub.setAttribute("text-anchor", anchor); }
+};
+
 export const paintFigure = (fg, t, st, ctx) => {
   const sp = fg.sp, dur = Math.max(0.001, sp.dur || 1), u = fig01((t - sp.at) / dur);
-  fg.g.setAttribute("opacity", t >= sp.at ? 1 : 0);
+  const hand = fg.stood ? figureHandOver(u, true) : null, uw = hand ? hand.uf : u;   /* R26-284: the engine says whether the bar's number stood */
+  fg.g.setAttribute("opacity", t >= sp.at && (!hand || hand.show) ? 1 : 0);
   if (st && (st.states || []).length > 1) {   /* P48 T7: the figure stands at its datum on the ACTIVE state - a datum the window dropped shows nothing */
-    const D = ctx.markDatum(st, fg.si, fg.idx);
+    const onBar = fg.anchor === "middle";   /* R26-255: a bar's figure rides its bar - lerped across a rescale as the bar moves (datumNow) */
+    const D = onBar && ctx.datumNow ? ctx.datumNow(st, fg.si, fg.idx) : ctx.markDatum(st, fg.si, fg.idx);
     if (!D) { fg.g.setAttribute("opacity", 0); return; }
-    const q = figurePlace(D, fg.fs, sp.dy, fg.W, ctx.PS.BRACKET_GAP, ctx.PS.BRACKET_ROOM);
-    const y = figClearY(q.x, q.yA, fg.tw, fg.fs, q.anchor, sp.dy, ctx.pointsNow(st, fg.si).map((e) => e.p), fg.subH || 0, fg.H, st.labBoxes);   /* R26-71: the same step-off on the ACTIVE state's own points - and R26-191's labels, the list the BUILD measured (pure in t) */
-    fg.label.setAttribute("x", q.x.toFixed(1)); fg.label.setAttribute("y", y.toFixed(1)); fg.label.setAttribute("text-anchor", q.anchor);
-    if (fg.sub) { fg.sub.setAttribute("x", q.x.toFixed(1)); fg.sub.setAttribute("y", (y + fg.fss * FIGURE.SUB_DY).toFixed(1)); fg.sub.setAttribute("text-anchor", q.anchor); }
-    fg.D = D; fg.x = q.x; fg.y = y; fg.fits = q.fits;   /* the record species/compare.mjs reads (PF.figures) - the same fields, in the same place */
+    if (onBar) {   /* R26-255 (P72 T18): a BAR's figure keeps the builder's centred anchor - the value's place, which the line
+         rule below would move beside the bar - and rides its bar's top as the page draws it this frame, at the built offset */
+      const H0 = fg.home || (fg.home = { D: fg.D, x: fg.x, y: fg.y });
+      const x = H0.x + (D[0] - H0.D[0]), y = H0.y + (D[1] - H0.D[1]);
+      figSet(fg, x, y, "middle");
+      fg.D = D; fg.x = x; fg.y = y;
+    } else {
+      const q = figurePlace(D, fg.fs, sp.dy, fg.W, ctx.PS.BRACKET_GAP, ctx.PS.BRACKET_ROOM);
+      const y = figClearY(q.x, q.yA, fg.tw, fg.fs, q.anchor, sp.dy, ctx.pointsNow(st, fg.si).map((e) => e.p), fg.subH || 0, fg.H, st.labBoxes);   /* R26-71: the same step-off on the ACTIVE state's own points - and R26-191's labels, the list the BUILD measured (pure in t) */
+      figSet(fg, q.x, y, q.anchor);
+      fg.D = D; fg.x = q.x; fg.y = y; fg.fits = q.fits;   /* the record species/compare.mjs reads (PF.figures) - the same fields, in the same place */
+    }
   }
-  fg.lg.forEach((ts, j) => ts.setAttribute("opacity", figureGlyph(u, j, fg.lg.length).toFixed(3)));
-  fg.sg.forEach((ts, j) => ts.setAttribute("opacity", figureSubGlyph(u, j, fg.sg.length).toFixed(3)));
+  fg.lg.forEach((ts, j) => ts.setAttribute("opacity", figureGlyph(uw, j, fg.lg.length).toFixed(3)));
+  fg.sg.forEach((ts, j) => ts.setAttribute("opacity", figureSubGlyph(uw, j, fg.sg.length).toFixed(3)));
 };
 
 /* THE MODULE RULE, the page half of it: the last statement registers the painter, a plain guarded assignment,

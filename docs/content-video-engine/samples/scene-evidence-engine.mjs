@@ -14482,6 +14482,10 @@ async function mount(doc) {
     WRITE: 0.6,          /* the share of the word the figure's own hand takes ... */
     SUB_WRITE: 0.4,      /* ... and the share the sub takes after it (the two are the whole word) */
     OVERLAP: 1.6,        /* each glyph fades over this many of its own shares - the hand's overlap, not a ticker's */
+    HAND: 0.4,           /* P72 T18 / R26-284: a figure on a bar whose own number STOOD at its word - the share of the word
+                            that number takes to leave before the hand writes in its place (test_compare_on_bars reads the
+                            value mid-leave at 0.3 of the word, so it is more than that) ... */
+    BACK: 0.5,           /* ... and of the figure's own leave, the share the figure takes to go before the number returns */
   });
 
   const fig01 = (v) => Math.min(1, Math.max(0, v));   /* the engine's clamp01, verbatim */
@@ -14587,6 +14591,23 @@ async function mount(doc) {
     return fig01((u - FIGURE.WRITE - j * per) / (per * FIGURE.OVERLAP));
   };
 
+  /* R26-284 (P72 T18, found by P69 T25): THE HAND-OVER IN PLACE. On the 94 bars page the bar's value faded while the
+     figure wrote "94%" a few px off it - M28's `val:94% on bracket:94%` for ~0.6 s, the number printed twice. The probe
+     counts a label whose ELEMENT is up (its glyphs' own opacities are not the element's), so "once at every frame" means
+     the number and the figure's group are never up together. `stood` is whether the bar's printed number (its value, or
+     an emphasized bar's pill) already stood at the figure's word - the page had built. Then the number leaves over HAND of
+     the word, the figure is not up until it has gone, and the hand writes it in its place over the rest (`uf`, the
+     figure's own write law on the remaining word). A number that had not stood (the bar still growing as the figure is
+     written - both of the H door's bar figures) keeps the base's yield (u / WRITE) and the base write, to the bit.
+     `number` is the share of the number still standing (1 = all of it); `show` the figure's group. Pure in u. */
+  const figureHandOver = (u, stood) => stood
+    ? { number: 1 - fig01(u / FIGURE.HAND), show: u >= FIGURE.HAND ? 1 : 0, uf: fig01((u - FIGURE.HAND) / (1 - FIGURE.HAND)) }
+    : { number: 1 - fig01(u / FIGURE.WRITE), show: 1, uf: u };
+
+  /* ... and BACK, on the figure's own leave (`lv`, R26-219's clock): the figure goes over the first BACK of it and the
+     number returns over the rest - they never stand together on the way out either. */
+  const figureHandBack = (lv) => ({ figure: 1 - fig01(lv / FIGURE.BACK), number: fig01((lv - FIGURE.BACK) / (1 - FIGURE.BACK)) });
+
   /* THE PAINTER (P47 T6; P48 T7; R26-71). `fg` is the perform layer's BUILT figure - the declaration `sp`, its
      datum `D`, its glyphs `lg` / `sg`, the measured advance `tw`, the sizes and the chart's box - `st` the page
      state, and `ctx` the PAGE species context the engine hands every page painter (PAGE_PAINTERS in the engine):
@@ -14594,20 +14615,35 @@ async function mount(doc) {
      species dials the bracket owns - never as free identifiers, so `node --test` can call this with recorders
      and no DOM. The BUILDER stays in the engine's buildPerform, where the DOM it makes belongs; it calls this
      module's `figurePlace`, `figWidth` and `figClearY` by name, so the place is authored in one law only. */
+  /* the figure's label and its sub, written at (x, y) with one anchor - the sub hangs SUB_DY of its own size under it */
+  const figSet = (fg, x, y, anchor) => {
+    fg.label.setAttribute("x", x.toFixed(1)); fg.label.setAttribute("y", y.toFixed(1)); fg.label.setAttribute("text-anchor", anchor);
+    if (fg.sub) { fg.sub.setAttribute("x", x.toFixed(1)); fg.sub.setAttribute("y", (y + fg.fss * FIGURE.SUB_DY).toFixed(1)); fg.sub.setAttribute("text-anchor", anchor); }
+  };
+
   const paintFigure = (fg, t, st, ctx) => {
     const sp = fg.sp, dur = Math.max(0.001, sp.dur || 1), u = fig01((t - sp.at) / dur);
-    fg.g.setAttribute("opacity", t >= sp.at ? 1 : 0);
+    const hand = fg.stood ? figureHandOver(u, true) : null, uw = hand ? hand.uf : u;   /* R26-284: the engine says whether the bar's number stood */
+    fg.g.setAttribute("opacity", t >= sp.at && (!hand || hand.show) ? 1 : 0);
     if (st && (st.states || []).length > 1) {   /* P48 T7: the figure stands at its datum on the ACTIVE state - a datum the window dropped shows nothing */
-      const D = ctx.markDatum(st, fg.si, fg.idx);
+      const onBar = fg.anchor === "middle";   /* R26-255: a bar's figure rides its bar - lerped across a rescale as the bar moves (datumNow) */
+      const D = onBar && ctx.datumNow ? ctx.datumNow(st, fg.si, fg.idx) : ctx.markDatum(st, fg.si, fg.idx);
       if (!D) { fg.g.setAttribute("opacity", 0); return; }
-      const q = figurePlace(D, fg.fs, sp.dy, fg.W, ctx.PS.BRACKET_GAP, ctx.PS.BRACKET_ROOM);
-      const y = figClearY(q.x, q.yA, fg.tw, fg.fs, q.anchor, sp.dy, ctx.pointsNow(st, fg.si).map((e) => e.p), fg.subH || 0, fg.H, st.labBoxes);   /* R26-71: the same step-off on the ACTIVE state's own points - and R26-191's labels, the list the BUILD measured (pure in t) */
-      fg.label.setAttribute("x", q.x.toFixed(1)); fg.label.setAttribute("y", y.toFixed(1)); fg.label.setAttribute("text-anchor", q.anchor);
-      if (fg.sub) { fg.sub.setAttribute("x", q.x.toFixed(1)); fg.sub.setAttribute("y", (y + fg.fss * FIGURE.SUB_DY).toFixed(1)); fg.sub.setAttribute("text-anchor", q.anchor); }
-      fg.D = D; fg.x = q.x; fg.y = y; fg.fits = q.fits;   /* the record species/compare.mjs reads (PF.figures) - the same fields, in the same place */
+      if (onBar) {   /* R26-255 (P72 T18): a BAR's figure keeps the builder's centred anchor - the value's place, which the line
+           rule below would move beside the bar - and rides its bar's top as the page draws it this frame, at the built offset */
+        const H0 = fg.home || (fg.home = { D: fg.D, x: fg.x, y: fg.y });
+        const x = H0.x + (D[0] - H0.D[0]), y = H0.y + (D[1] - H0.D[1]);
+        figSet(fg, x, y, "middle");
+        fg.D = D; fg.x = x; fg.y = y;
+      } else {
+        const q = figurePlace(D, fg.fs, sp.dy, fg.W, ctx.PS.BRACKET_GAP, ctx.PS.BRACKET_ROOM);
+        const y = figClearY(q.x, q.yA, fg.tw, fg.fs, q.anchor, sp.dy, ctx.pointsNow(st, fg.si).map((e) => e.p), fg.subH || 0, fg.H, st.labBoxes);   /* R26-71: the same step-off on the ACTIVE state's own points - and R26-191's labels, the list the BUILD measured (pure in t) */
+        figSet(fg, q.x, y, q.anchor);
+        fg.D = D; fg.x = q.x; fg.y = y; fg.fits = q.fits;   /* the record species/compare.mjs reads (PF.figures) - the same fields, in the same place */
+      }
     }
-    fg.lg.forEach((ts, j) => ts.setAttribute("opacity", figureGlyph(u, j, fg.lg.length).toFixed(3)));
-    fg.sg.forEach((ts, j) => ts.setAttribute("opacity", figureSubGlyph(u, j, fg.sg.length).toFixed(3)));
+    fg.lg.forEach((ts, j) => ts.setAttribute("opacity", figureGlyph(uw, j, fg.lg.length).toFixed(3)));
+    fg.sg.forEach((ts, j) => ts.setAttribute("opacity", figureSubGlyph(uw, j, fg.sg.length).toFixed(3)));
   };
 
   /* THE MODULE RULE, the page half of it: the last statement registers the painter, a plain guarded assignment,
@@ -16018,7 +16054,7 @@ async function mount(doc) {
       const y = bar ? yA : figClearY(x, yA, tw, fs, anchor, sp.dy, pts, subH, G.H, st.labBoxes);   /* a bar's figure was placed clear of everything above */
       if (y !== yA) { label.setAttribute("y", y.toFixed(1)); if (sub) sub.setAttribute("y", (y + fss * FIGURE.SUB_DY).toFixed(1)); }
       return { sp, D, x, y, fits, g, label, lg, sub, sg, fi, fs, fss, W: G.W, H: G.H, tw, subH, si: fsi, idx: i,
-               ...(bar ? { anchor, bar: bar.rec } : {}) };   /* P69 T6: a bar's figure is CENTRED (compare.mjs reads `anchor`), and its bar's value yields to it */
+               ...(bar ? { anchor, bar: bar.rec, home: { D, x, y } } : {}) };   /* P69 T6: a bar's figure is CENTRED (compare.mjs reads `anchor`), and its bar's value yields to it; P72 T18 (R26-255): `home` is the built place a chart state's paint offsets from */
     }).filter(Boolean);
     /* NOTES (the third watch: "the page has plenty of space on the side to write things"): a line of handwriting in the page's
        QUIET ZONE beside the chart - the column the chart leaves free (the dock's band) - stacked in order, each written on its
@@ -16335,6 +16371,29 @@ async function mount(doc) {
     const s = +sp.leave_s > 0 ? +sp.leave_s : LP_RETRACT.COLOURS;
     return segEase(clamp01((t - +sp.leave_at) / s));
   };
+  /* P69 T6 / P72 T18 (R26-284, R26-256) - A FIGURE WRITTEN OVER ITS BAR TAKES THE BAR'S OWN NUMBER'S PLACE, and the page
+     never says the number twice. The number is what the page prints for that bar: its value label, or - on an emphasized
+     bar - the PILL, whose count replaced the value (buildLedgerBars hides the value under it). It yields on the figure's
+     own clock (figure.mjs figureHandOver: over HAND of the word when it STOOD at the word and the hand waits for it; over
+     WRITE when the bar was still growing, as it always did) and comes back as the figure leaves (figureHandBack), so the
+     number and the figure are never up together. `stood`: the page had built by the figure's word (st.builtAt, the
+     instant its build lands) and the bar prints a number to hand over. A panel carries no builtAt (its clock is
+     lpPaintPanels'), so a panel's figure keeps the base hand-over - P72 T12 already starts it on its panel's build. */
+  const lpFigureNumber = (st, fg) => {
+    const rec = fg.bar, bars = st.bars || [];
+    if (!rec) return [];
+    const emph = st.callout && bars[Math.min(st.emph, bars.length - 1)] === rec ? st.callout : null;
+    return [...(rec.val && rec.val.style.display !== "none" ? [rec.val] : []), ...(emph ? [emph] : [])];
+  };
+  const lpFigureStood = (st, fg) => !!fg.bar && Number.isFinite(st.builtAt) && fg.sp.at >= st.builtAt - 1e-6 && lpFigureNumber(st, fg).length > 0;
+  const lpFigureYield = (st, fg, tf, back) => {
+    const els = lpFigureNumber(st, fg);
+    if (!els.length || tf < fg.sp.at) return;
+    const y0 = fg.stood ? 1 - figureHandOver(clamp01((tf - fg.sp.at) / Math.max(0.001, fg.sp.dur || 1)), true).number
+                        : clamp01((tf - fg.sp.at) / Math.max(0.001, (fg.sp.dur || 1) * FIGURE.WRITE));   /* the base's own expression, to the bit */
+    const yv = y0 * (back ? 1 - back.number : 1);
+    if (yv > 0) for (const el of els) el.setAttribute("opacity", ((+el.getAttribute("opacity") || 0) * (1 - yv)).toFixed(3));
+  };
   const paintPerform = (st, scene, t, pg) => {
     if (!st.perform) st.perform = buildPerform(st, scene, pg);
     const PF = st.perform;
@@ -16364,13 +16423,11 @@ async function mount(doc) {
          build (lpPanelBuildAt, written by lpPaintPanels as st.panelBuildAt) - written on the reveal's word, it stood over
          an empty plot while the bars waited. Its own clock only (its `at`, as read here); every other page: t itself */
       const tf = st.panelBuildAt > fg.sp.at ? t - (st.panelBuildAt - fg.sp.at) : t;
+      fg.stood = lpFigureStood(st, fg);   /* P72 T18 (R26-284): its bar's number already stood at the figure's word - the hand waits for it */
       PAGE_PAINTERS.figure(fg, tf, st, PAGE_CTX);
-      const lv = pageLeave(fg.sp, t);   /* R26-219: the hand wrote it at a datum of the page that has just been replaced */
-      if (lv > 0) fg.g.setAttribute("opacity", ((+fg.g.getAttribute("opacity") || 0) * (1 - lv)).toFixed(3));
-      /* P69 T6: a figure written over its BAR takes the bar's own number's place - the value fades out on the figure's
-         own write and comes back as the figure leaves, so the page never says the number twice */
-      const yv = fg.bar && fg.bar.val && tf >= fg.sp.at ? clamp01((tf - fg.sp.at) / Math.max(0.001, (fg.sp.dur || 1) * FIGURE.WRITE)) * (1 - lv) : 0;
-      if (yv > 0) fg.bar.val.setAttribute("opacity", ((+fg.bar.val.getAttribute("opacity") || 0) * (1 - yv)).toFixed(3)); }   /* E50: the chart's next thing - species/figure.mjs, named as the compare's dispatch names its own: ONE hook reads the registry by key (the span's), and it is the span's */
+      const lv = pageLeave(fg.sp, t), back = fg.bar && lv > 0 ? figureHandBack(lv) : null;   /* R26-219: the hand wrote it at a datum of the page that has just been replaced */
+      if (lv > 0) fg.g.setAttribute("opacity", ((+fg.g.getAttribute("opacity") || 0) * (back ? back.figure : 1 - lv)).toFixed(3));   /* P72 T18: a bar's figure goes before its number returns */
+      if (fg.bar) lpFigureYield(st, fg, tf, back); }   /* E50: the chart's next thing - species/figure.mjs, named as the compare's dispatch names its own: ONE hook reads the registry by key (the span's), and it is the span's */
     /* P57 T12 / R26-70b / E76 - THE CHART_TO COMPARE, DISPATCHED: the quoted figure the page has already written becomes the
        number the viewer feels. The law, the dials and the DOM are species/compare.mjs; this is the call, and it runs AFTER the
        figures so the morph owns the glyphs its own clock is writing. */
@@ -18286,6 +18343,7 @@ async function mount(doc) {
       + idleCssFor("page", pgIdleKind(scene, pg), t, st.seed, 1);   /* E49: the page breathes while it holds under a sentence (R26-228: at the kind the ROW named) */
     /* beat 6: the build - crisp, landing on the exact strings - on the punched page */
     const c = clamp01((t3 - LP.PUNCH) / (st.buildDur || LP.BUILD));   /* race/decline/combo declare their own envelope */
+    st.builtAt = +(t - t3 + LP.PUNCH + (st.buildDur || LP.BUILD)).toFixed(6);   /* P72 T18 (R26-284): the instant c reaches 1 - t3 runs with t, so a constant of the scene; a bar's figure reads whether its number already stood */
     /* P48 T4: a page may carry more than one chart. `lpPaintChart` is the build beat for ONE of them, at its own
        fraction c - and because every builder's law is written as "at c the chart is this far drawn", running c back
        to zero IS an un-draw, whatever the builder. That is what a recast leaves on. */
@@ -18576,6 +18634,19 @@ async function mount(doc) {
     const q = new DOMPoint(v[0], v[1]).matrixTransform(m), sb = $("stage").getBoundingClientRect(), k = STAGE_W / Math.max(1, sb.width);
     return { x: (q.x - sb.left) * k, y: (q.y - sb.top) * k, w: 0, h: 0 };
   };
+  /* P72 T18 / R26-288 (E56: a ring circles a NUMBER on a chart) - A BAR'S VALUE AS A TARGET. A bar target resolved to
+     the whole bar, so a ring meant for "94%" circled the bar and crossed its name. `part: "value"` resolves to what the
+     page prints for that bar - its value label, or on an emphasized bar the pill that carries its count - as DRAWN this
+     frame, so a bar a compare re-values (P69 T26a moves the label with the top) carries its ring. A hidden number has
+     no box: nothing to ring (null, as every unresolvable target). */
+  const lpValueBox = (S, i) => {
+    const bars = (S && S.bars) || [], rec = bars[i];
+    if (!rec) return null;
+    const pill = S.callout && bars[Math.min(S.emph, bars.length - 1)] === rec ? (S.callout.querySelector("rect.cpill") || S.callout) : null;
+    const el = pill || (rec.val && rec.val.style.display !== "none" ? rec.val : null);
+    const b = el ? stageBox(el) : null;
+    return b && b.w > 0 && b.h > 0 ? b : null;
+  };
   const resolveTarget = (tg) => {
     if (!tg) return null;
     if (tg.kind === "datum" && tg.dock != null) return dockDatumBox(tg);
@@ -18597,6 +18668,7 @@ async function mount(doc) {
       const S0 = lpst ? ((lpst.states && lpst.states[lpst.active | 0]) || lpst) : null;
       const chart = S0 ? S0.chart : null;
       const bars = chart ? chart.querySelectorAll(".bar") : world.querySelectorAll(".lp-chart .bar");
+      if (bars.length && tg.part === "value") return lpValueBox(S0, Math.min(tg.index | 0, bars.length - 1));   /* P72 T18 (R26-288): the bar's printed number */
       if (bars.length) return stageBox(bars[Math.min(tg.index | 0, bars.length - 1)]);
       /* viewBox -> stage px under the default xMidYMid meet (the landscape chart is letterboxed in its box) */
       const vbMap = (svg, q) => { const b = stageBox(svg), vb = svg.viewBox.baseVal, k = Math.min(b.w / vb.width, b.h / vb.height);

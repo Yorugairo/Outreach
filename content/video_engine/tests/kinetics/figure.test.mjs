@@ -7,7 +7,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { FIGURE, segMeetsBox, boxMeetsBox, figBox, figWidth, figClearY, figurePlace, figureGlyph, figureSubGlyph,
-         paintFigure } from "../../scripts/species/figure.mjs";
+         figureHandOver, figureHandBack, paintFigure } from "../../scripts/species/figure.mjs";
 
 const near = (a, b, eps = 1e-9) => Math.abs(a - b) <= eps;
 const clamp01 = (v) => Math.min(1, Math.max(0, v));   // the engine's own, verbatim
@@ -282,4 +282,77 @@ test("the same instant, painted twice, lands on the same attributes (a seek is a
   for (const t of [10.2, 10.8, 11.0, 11.4]) paintFigure(b, t, st, ctx);
   assert.deepEqual(b.label.a, a.label.a, "nothing here integrates: the frame is a function of t");
   assert.deepEqual(b.lg.map((n) => n.a.opacity), a.lg.map((n) => n.a.opacity));
+});
+
+// ---------------------------------------------------------------- P72 T18: the hand-over in place (R26-284) and the bar's anchor (R26-255)
+test("R26-284: the hand-over's two dials, and the base write untouched when nothing stood", () => {
+  assert.equal(FIGURE.HAND, 0.4, "the share of the word the standing number takes to leave");
+  assert.equal(FIGURE.BACK, 0.5, "the share of the leave the figure takes before the number returns");
+  assert.ok(FIGURE.HAND > 0.3, "test_compare_on_bars reads the value mid-leave at u = 0.3");
+  for (const u of [0, 0.1, 0.3, 0.59, 0.6, 1]) {
+    const h = figureHandOver(u, false);
+    assert.equal(h.show, 1, "a number that had not stood: the figure is up from its word");
+    assert.equal(h.uf, u, "... and writes on its own clock, to the bit");
+    assert.equal(h.number, 1 - clamp01(u / FIGURE.WRITE), "... and the value yields as it always did (u / WRITE)");
+  }
+});
+
+test("R26-284: a number that STOOD leaves first, and the hand writes after it - never both up", () => {
+  let last = -1;
+  for (let k = 0; k <= 1000; k++) {
+    const u = k / 1000, h = figureHandOver(u, true);
+    assert.ok(!(h.number > 0 && h.show > 0), `u=${u}: the number (${h.number}) and the figure are both up`);
+    assert.ok(h.uf >= last, "the hand never writes backwards"); last = h.uf;
+    if (u < FIGURE.HAND) assert.equal(h.uf, 0, "no glyph before the number has gone");
+  }
+  assert.equal(figureHandOver(0, true).number, 1, "at the word the number still stands");
+  assert.equal(figureHandOver(FIGURE.HAND, true).number, 0);
+  assert.equal(figureHandOver(1, true).uf, 1, "and the figure is whole at the word's end");
+});
+
+test("R26-284: on the leave the figure goes first and the number returns after it", () => {
+  for (let k = 0; k <= 100; k++) {
+    const lv = k / 100, b = figureHandBack(lv);
+    assert.ok(!(b.figure > 0 && b.number > 0), `lv=${lv}: both up`);
+  }
+  assert.deepEqual(figureHandBack(0), { figure: 1, number: 0 });
+  assert.deepEqual(figureHandBack(1), { figure: 0, number: 1 });
+});
+
+test("R26-284: the painter holds a figure whose number stood, then writes it on the remaining word", () => {
+  const fg = built({ stood: true });
+  paintFigure(fg, 10 + 2 * 0.2, null, { PS });
+  assert.equal(fg.g.a.opacity, 0, "u = 0.2: the number is still leaving - the figure is not up");
+  paintFigure(fg, 10 + 2 * 0.7, null, { PS });
+  const uf = (0.7 - FIGURE.HAND) / (1 - FIGURE.HAND);
+  assert.equal(fg.g.a.opacity, 1);
+  assert.equal(fg.lg[0].a.opacity, figureGlyph(uf, 0, 4).toFixed(3), "the hand's own law, on the remaining word");
+  const plain = built();
+  paintFigure(plain, 10 + 2 * 0.2, null, { PS });
+  assert.equal(plain.g.a.opacity, 1, "a figure with no standing number is untouched");
+  assert.equal(plain.lg[0].a.opacity, figureGlyph(0.2, 0, 4).toFixed(3));
+});
+
+test("R26-255: on a page with STATES a centred bar figure keeps its anchor and rides its bar's top", () => {
+  const st = { states: [{}, {}], active: 1 };
+  const bar = built({ anchor: "middle", bar: {}, D: [500, 300], x: 500, y: 280, fits: true });
+  paintFigure(bar, 12, st, { PS, markDatum: () => [540, 260], pointsNow: () => [] });
+  assert.equal(bar.label.a["text-anchor"], "middle", "never re-placed beside its bar by the line rule");
+  assert.equal(bar.label.a.x, (540).toFixed(1), "centred on the bar's top as the active state draws it");
+  assert.equal(bar.label.a.y, (240).toFixed(1), "at the same offset from that top the builder chose");
+  assert.equal(bar.sub.a.y, (240 + bar.fss * FIGURE.SUB_DY).toFixed(1));
+  assert.deepEqual([bar.x, bar.y, bar.fits, bar.anchor], [540, 240, true, "middle"], "the record compare.mjs reads");
+  const again = built({ anchor: "middle", bar: {}, D: [500, 300], x: 500, y: 280, fits: true });
+  for (const t of [11, 12.5, 12]) paintFigure(again, t, st, { PS, markDatum: () => [540, 260], pointsNow: () => [] });
+  assert.deepEqual(again.label.a, bar.label.a, "a seek is a play: the offset is the BUILT one, never re-accumulated");
+  const lerp = built({ anchor: "middle", bar: {}, D: [500, 300], x: 500, y: 280 });
+  paintFigure(lerp, 12, st, { PS, markDatum: () => [540, 260], datumNow: () => [520, 280], pointsNow: () => [] });
+  assert.equal(lerp.label.a.x, (520).toFixed(1), "across a rescale it rides the bar as it MOVES (datumNow, the lerped datum)");
+  const line = built();
+  paintFigure(line, 12, st, { PS, markDatum: () => [400, 300], datumNow: () => [10, 10], pointsNow: () => FLAT.map((p, i) => ({ i, p })) });
+  assert.equal(line.label.a.x, figurePlace([400, 300], line.fs, line.sp.dy, line.W, PS.BRACKET_GAP, PS.BRACKET_ROOM).x.toFixed(1),
+               "a LINE figure still reads the active state's datum, as before");
+  const gone = built({ anchor: "middle", bar: {}, D: [500, 300], x: 500, y: 280 });
+  paintFigure(gone, 12, st, { PS, markDatum: () => null, pointsNow: () => [] });
+  assert.equal(gone.g.a.opacity, 0, "a bar the state dropped shows nothing");
 });
