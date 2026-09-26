@@ -436,6 +436,9 @@ SPECIES_EVENTS["lit_stretch"] = ("at", "end")
 # edges are events, as the lit stretch's are: it leaves on its word and lands (the far ring, the figure) at its end.
 # What it does after that is standing ink (s91) and earns nothing.
 SPECIES_EVENTS["level_join"] = ("at", "end")
+# P71 T32: THE LENS's glass TRAVELS - it rises onto the line on its word, walks the stretch and leaves by its end (s99): both
+# edges are events. The magnified line inside it is the page's own ink seen closer, and earns nothing of its own.
+SPECIES_EVENTS["lens"] = ("at", "end")
 # P69 T48 / E99 s109 (4): the EXPLODE - the named slice leaves the pie along its bisector over the word: it moves, so
 # both edges are events (it starts on its word and lands out at its end).
 SPECIES_EVENTS["explode"] = ("at", "end")
@@ -1276,6 +1279,12 @@ def _camera_clashes(scenes: list[dict]) -> list[tuple[str, str]]:
             out.append((sid, f"{moves[0]} over Ken Burns scale {scale:g}"))
         elif keyed and scale > 0:
             out.append((sid, f"camera keys over Ken Burns scale {scale:g}"))
+        if _pedestal_moves(s):   # P71 T32: the pedestal is the row's ONE camera move (the compiler refuses the pairs by name)
+            other = moves[:1] or (["camera keys"] if keyed else []) or (["attention landings"] if landings else [])
+            if other:
+                out.append((sid, f"camera pedestal + {other[0]}"))
+            elif scale > 0:
+                out.append((sid, f"camera pedestal over Ken Burns scale {scale:g}"))
     return out
 
 
@@ -1354,6 +1363,11 @@ def _build_clashes(scenes: list[dict], docks: list[dict]) -> list[tuple[str, str
         moves = [(float(sp.get("at", 0.0)), float(sp.get("at", 0.0)) + float(sp.get("dur", CAMERA_MOVE_S) or CAMERA_MOVE_S), sp["kind"])
                  for sp in s.get("species", []) if sp.get("kind") in CAMERA_MOVES]
         moves += [(a, z, "camera keys") for a, z, _why in _camera_key_segments(s)]   # P49 T6: the track's own moves
+        moves += _pedestal_moves(s)   # P71 T32: the pedestal is a camera move (M14: after the build has settled)
+        for at, end, kind in _pedestal_moves(s):   # ... and the page's OWN build is a build for it (the compiler's refusal, mirrored)
+            for a, z in (s.get("build_windows") or []):
+                if at < float(z) and float(a) < end:
+                    out.append((s.get("scene_id", "?"), f"{kind} {at:.1f}-{end:.1f}s over the page build {float(a):.1f}-{float(z):.1f}s"))
         for at, end, kind in moves:
             for slide, a, z in builds:
                 if at < z and a < end:
@@ -1407,7 +1421,41 @@ def _attn_scale(s: dict) -> float:
     return max(1.0, float(lz)) if isinstance(lz, (int, float)) and not isinstance(lz, bool) else ATTN_SCALE
 
 
+PEDESTAL_BY_MAX = 1.0   # kinetics/camera.mjs PEDESTAL.BY_MAX (exclusive), mirrored
+PEDESTAL_EASE = "inout"  # kinetics/camera.mjs PEDESTAL.EASE, mirrored
+
+
+def _pedestal(s: dict) -> dict | None:
+    """P71 T32: the scene's well-formed pedestal {at, dur, by, ease}, or None (the player's camPedestalState guards)."""
+    ped = (s.get("camera") or {}).get("pedestal") if isinstance(s, dict) else None
+    if not isinstance(ped, dict):
+        return None
+    num = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v)   # noqa: E731
+    if not (num(ped.get("at")) and num(ped.get("dur")) and ped["dur"] > 0 and num(ped.get("by")) and 0 < ped["by"] < PEDESTAL_BY_MAX):
+        return None
+    return ped
+
+
+def _pedestal_moves(s: dict) -> list[tuple[float, float, str]]:
+    """P71 T32: (at, at + dur, "camera pedestal") for a scene's pedestal - the ONE move it makes, straight down."""
+    ped = _pedestal(s)
+    return [(float(ped["at"]), float(ped["at"]) + float(ped["dur"]), "camera pedestal")] if ped else []
+
+
 def camera_state_at(s: dict, t: float, sw: float, sh: float, plot: dict | None) -> dict:
+    """{s, look, at} at t - the scene's authored keys (or its landing pull), then its PEDESTAL (P71 T32: kinetics/camera.mjs
+    camPedestalState, the player's order in camNow): raised by `by` of the stage's height before its word, eased straight
+    down to the state beneath over `dur`, that state itself after. No pedestal: exactly the state it always was."""
+    st = _camera_state_base(s, t, sw, sh, plot)
+    ped = _pedestal(s)
+    if not ped or t >= float(ped["at"]) + float(ped["dur"]):
+        return st
+    u = 0.0 if t <= float(ped["at"]) else _cam_ease(ped.get("ease", PEDESTAL_EASE), (t - float(ped["at"])) / float(ped["dur"]))
+    dy = float(ped["by"]) * sh * (1 - u)
+    return {"s": st["s"], "look": (st["look"][0], st["look"][1] - dy), "at": (st["at"][0], st["at"][1])}
+
+
+def _camera_state_base(s: dict, t: float, sw: float, sh: float, plot: dict | None) -> dict:
     """{s, look, at} at t from the scene's authored keys - identity before the first, lerp by the arriving key's ease,
     hold after the last; species windows are the player's and are not evaluated here (their target is their centre)."""
     ident = {"s": 1.0, "look": (sw / 2, sh / 2), "at": (sw / 2, sh / 2)}

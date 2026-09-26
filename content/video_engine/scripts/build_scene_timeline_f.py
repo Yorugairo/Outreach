@@ -880,6 +880,23 @@ LEVEL_JOIN_PAD_PX, LEVEL_JOIN_CLEAR_PX, LEVEL_JOIN_FRAME_AIR_PX = 14, 10, 8
 LEVEL_JOIN_ASC, LEVEL_JOIN_DESC, LEVEL_JOIN_MID = 0.8, 0.22, 0.3
 LEVEL_JOIN_RING_PX = (54.0 * 0.55, 40.0 * 0.55)   # RING.MIN_RX / MIN_RY at LEVEL.RING_K: an end mark, not a callout
 LEVEL_JOIN_EM_W = 0.52   # [DERIVED: Kalam 700's mean advance, the figure's own estimate] - a WARN's width, never a place
+# P71 T32 (was P69 T80; the Bravos harvest v2's A57 "magnifier lens over the chart", STK 9:16-9:18, BOOM 06:28) - THE LENS.
+# A PAGE species: a magnifier glass rises onto a LINE page on its word, TRAVELS the stretch `from` -> `to` of one drawn
+# series (or stands on `from`), and leaves; inside its ring it redraws the page's OWN points at `zoom` about the glass's
+# centre - the same series, no value invented (BRAVOS-USE-WHEN A57: "don't: invent zoomed values"). Its law and painter
+# are species/lens.mjs; this file owns its grammar (`_validate_lens`) and the page it reads (`check_lens`). It writes
+# nothing on the page and leaves on its own clock, so it is not page-bound. E38: Bravos's glass measured k = 1.0 (it
+# points; it magnifies nothing), so `zoom` is the author's, default 1.
+SPECIES_LENS = "lens"
+SPECIES_KINDS += (SPECIES_LENS,)
+PAGE_SPECIES += (SPECIES_LENS,)
+SPECIES_WHEN[SPECIES_LENS] = ("a small region of a long line must be read without losing the rest ('one soft month in "
+                              "June' on a three-year monthly line) - a glass travels to it on the word and shows the "
+                              "same points closer; never a value the series does not have")
+LENS_KEYS = ("kind", "at", "dur", "from", "to", "series", "zoom", *ROW_PATH_KEYS)
+LENS_ZOOM_DEFAULT = 1.0   # species/lens.mjs LENS.ZOOM - Bravos measured (STK 557.5: k 1.0 explains 84 % of the in-glass ink)
+LENS_ZOOM_MAX = 4.0       # species/lens.mjs LENS.ZOOM_MAX - [DERIVED] a ceiling, not a finding
+LENS_BUILDERS = ("dense-line",)   # the pages whose marks are a drawn LINE the glass can redraw
 # P71 T14 (was P69 T55; RESCOPED by the BOOM frame verification, VERIFY.md row T32) - THE DECADE RULER. A STAGE species:
 # a full-width ruler (a tick a year, a taller one each five, the tallest each decade under a large faded numeral) enters
 # at the stage's right edge, SCROLLS left from `from` and lands with its `settle` decades framed, then holds - a GROUND
@@ -1048,6 +1065,15 @@ CAMERA_MOVES = ("punch", "focus_zoom", "pull_back")
 # default). Keys and a camera species never share a row (s9.28 C3: one camera per window).
 CAMERA_EASES = ("cubic", "inout", "linear", "hold")
 CAMERA_ARRIVAL_S = 0.45   # the player's SNAP_S: the camera arrival's clock (enter=camera=<dock>), mirrored
+# P71 T32 (was P69 T80; the Bravos harvest v2's A33, BUB 0:00) - THE PEDESTAL: `pedestal: {at, dur, by, ease?}` on a row's
+# camera. Until `at` the camera stands RAISED by `by` of the stage's height (the stage is taller than the frame - the
+# page's lower part is below it, the band above is the stage's own ground); over `dur` it travels straight DOWN to the
+# identity and holds. The law is kinetics/camera.mjs `camPedestalState` (PEDESTAL); the gate mirrors it
+# (gate_motion_density.camera_state_at, `_pedestal_moves`). A malformed pedestal is refused BY NAME (at the base it was
+# accepted and ignored: P71's review finding 7), and `pedestal_errors` refuses one over a build (M14) or past its row.
+CAMERA_PEDESTAL_KEYS = ("at", "dur", "by", "ease")
+PEDESTAL_BY_MAX = 1.0    # kinetics/camera.mjs PEDESTAL.BY_MAX (exclusive): at a whole frame nothing of the stage shows
+PEDESTAL_EASES = tuple(e for e in CAMERA_EASES if e != "hold")   # a `hold` is a step: a cut wearing a move's clothes
 
 
 def extend_camera_cards(scenes: list[dict]) -> list[str]:
@@ -1185,6 +1211,59 @@ def camera_edge_errors(cam, plate_id: str, aspect: str | None = None) -> list[st
     return errs
 
 
+def _validate_pedestal(ped, plate_id: str) -> list[str]:
+    """P71 T32: a row camera's `pedestal`, by name - `at` (timeline seconds, its word), `dur` (> 0), `by` (a share of the
+    stage's height, 0 < by < PEDESTAL_BY_MAX) and an optional `ease` from the camera's set bar `hold`. Nothing else."""
+    if not isinstance(ped, dict):
+        return [f"{plate_id}: camera pedestal must be a dict {{at, dur, by, ease?}} - the camera stands raised by `by` of "
+                "the stage's height until `at`, then travels straight down to the identity over `dur`"]
+    num = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v)   # noqa: E731
+    errs: list[str] = []
+    if not num(ped.get("at")):
+        errs.append(f"{plate_id}: camera pedestal: 'at' must be a number (timeline seconds - the word it moves on)")
+    if not (num(ped.get("dur")) and ped["dur"] > 0):
+        errs.append(f"{plate_id}: camera pedestal: 'dur' must be a number > 0 (seconds - the move's clock)")
+    if not (num(ped.get("by")) and 0 < ped["by"] < PEDESTAL_BY_MAX):
+        errs.append(f"{plate_id}: camera pedestal: 'by' must be a share of the stage's height, 0 < by < "
+                    f"{PEDESTAL_BY_MAX:g} (how far below the frame the hidden part starts; Bravos BUB 0:00 measured ~0.21), "
+                    f"not {ped.get('by')!r}")
+    if "ease" in ped and ped["ease"] not in PEDESTAL_EASES:
+        errs.append(f"{plate_id}: camera pedestal: ease must be one of {'|'.join(PEDESTAL_EASES)} (absent = inout, from "
+                    "rest to rest; `hold` is a step - a cut, not a move)")
+    extra = sorted(k for k in ped if k not in CAMERA_PEDESTAL_KEYS)
+    if extra:
+        errs.append(f"{plate_id}: camera pedestal: {', '.join(map(repr, extra))} - a pedestal takes only "
+                    f"{'|'.join(CAMERA_PEDESTAL_KEYS)} (it only travels DOWN, and only to the identity)")
+    return errs
+
+
+def pedestal_errors(scene: dict) -> list[str]:
+    """P71 T32 / M14 (47 s2 G-a): a scene's pedestal moves only AFTER the build has settled, inside its own row. Refused
+    by name when its window [at, at + dur] crosses the page's build (the compiled `build_windows`: the page's own clock
+    and each `build_to`) or a card's build (the motion gate's own `_build_windows`, the M14 set), or runs past the row's
+    span. Pure; [] for a scene with no (well-formed) pedestal."""
+    ped = (scene.get("camera") or {}).get("pedestal") if isinstance(scene, dict) else None
+    sid = scene.get("scene_id", "?") if isinstance(scene, dict) else "?"
+    if ped is None or _validate_pedestal(ped, sid):
+        return []
+    a, z = float(ped["at"]), float(ped["at"]) + float(ped["dur"])
+    errs: list[str] = []
+    span = scene.get("span")
+    if isinstance(span, (list, tuple)) and len(span) == 2 and (a < float(span[0]) - 1e-6 or z > float(span[1]) + 1e-6):
+        errs.append(f"{sid}: camera pedestal {a:.1f}-{z:.1f}s runs past its row ({float(span[0]):.1f}-{float(span[1]):.1f}s) - "
+                    "the move and its landing belong to the row whose stage it reveals")
+    why = ("M14 (47 s2 G-a): the camera never moves over a build - the eye is blind during the move. The pedestal "
+           "moves after the build has settled: put its `at` after the build's end")
+    for w in scene.get("build_windows") or []:
+        if a < float(w[1]) and float(w[0]) < z:
+            errs.append(f"{sid}: camera pedestal {a:.1f}-{z:.1f}s moves over the page's build "
+                        f"{float(w[0]):.1f}-{float(w[1]):.1f}s. {why}")
+    for slide, b0, b1 in MG._build_windows([scene], []):
+        if a < b1 and b0 < z:
+            errs.append(f"{sid}: camera pedestal {a:.1f}-{z:.1f}s moves over {slide}'s build {b0:.1f}-{b1:.1f}s. {why}")
+    return errs
+
+
 def validate_camera(cam, plate_id: str, aspect: str | None = None) -> list[str]:
     """An authored camera, validated by name: keys in ascending t, zoom > 0, an ease from the set, look/at as stage
     fractions or a declared target, attention from the set. None or the identity pass.
@@ -1203,6 +1282,8 @@ def validate_camera(cam, plate_id: str, aspect: str | None = None) -> list[str]:
                     "would cut the page's title, y ticks, source line or a drawn end tag fails the row by name; "
                     "\"clamp\": it moves only as far as the page allows)")
     errs += validate_chrome(cam.get("chrome"), plate_id)   # P69 T26f: the page's chrome, as objects (E99 s108)
+    if "pedestal" in cam:   # P71 T32: accepted and ignored at the base (review finding 7) - now its grammar, by name
+        errs += _validate_pedestal(cam["pedestal"], plate_id)
     keys = cam.get("keys", [])
     if not isinstance(keys, list):
         return errs + [f"{plate_id}: camera keys must be a list of {{t, zoom, look, at?, ease?}}"]
@@ -1242,6 +1323,13 @@ def validate_camera_row(cam, row_species, plate_id: str, aspect: str | None = No
         errs.append(f"{plate_id}: camera keys and a {moves[0]} species on one row - one camera per window (s9.28 C3)")
     elif isinstance(cam, dict) and cam.get("attention") == "landings" and moves:
         errs.append(f"{plate_id}: attention landings and a {moves[0]} species on one row - the landing IS the camera's move (E51, s9.28 C3)")
+    if isinstance(cam, dict) and cam.get("pedestal") is not None:   # P71 T32: the pedestal is the row's ONE camera move
+        if cam.get("keys"):
+            errs.append(f"{plate_id}: camera keys and a pedestal on one row - one camera per window (s9.28 C3)")
+        if moves:
+            errs.append(f"{plate_id}: a pedestal and a {moves[0]} species on one row - one camera per window (s9.28 C3)")
+        if cam.get("attention") == "landings":
+            errs.append(f"{plate_id}: attention landings and a pedestal on one row - one camera per window (E51, s9.28 C3)")
     return errs
 
 
@@ -2011,6 +2099,7 @@ SPECIES_TARGETS[SPECIES_MEMBER] = ()   # P69 T45: a tile of a membership bar, by
 SPECIES_TARGETS[SPECIES_LIT_STRETCH] = ()   # P69 T36: like the span, a lit stretch names its two edges as DATA; the chart owns where they are
 SPECIES_TARGETS[SPECIES_LEVEL_JOIN] = ()   # P71 T10: a level join names its two ends as DATA; the chart owns where they are
 SPECIES_TARGETS[SPECIES_RULER] = ()   # P71 T14: the ruler is the stage's full width at its line - it points at nothing
+SPECIES_TARGETS[SPECIES_LENS] = ()   # P71 T32: a lens names its stands as DATA (`from`, `to`); the chart owns where they are
 SPECIES_TARGETS[SPECIES_SOLO] = SPECIES_TARGETS[SPECIES_UNSOLO] = ()   # P69 T37: a solo names a series or a bar by index; the chart owns where it is
 SPECIES_TARGETS[SPECIES_AXIS_TAG] = ()   # P71 T9: a tag names its x as the page's own value (a tick, a datum, a bar); the chart owns where it is
 SPECIES_TARGETS[SPECIES_FREEZE] = ("datum", "point", "region")   # P69 T49: the ONE thing the light comes on at - a datum (a
@@ -6011,6 +6100,8 @@ def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
         errs += _validate_axis_tag(entry)
     if kind == SPECIES_LEVEL_JOIN:    # P71 T10
         errs += _validate_level_join(entry)
+    if kind == SPECIES_LENS:          # P71 T32
+        errs += _validate_lens(entry)
     if kind == SPECIES_BALANCE:       # P70 T7
         errs += _validate_balance(entry)
     if kind == SPECIES_RULER:         # P71 T14
@@ -6038,7 +6129,7 @@ def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
                 errs.append("trace: hop.draw_s must be > 0")
     if "idle" in entry and entry["idle"] not in IDLE_KINDS:   # a held light's idle (E49 on the spotlight, 2026-09-09)
         errs.append(f"{kind}: idle {entry['idle']!r} is not one of {'|'.join(IDLE_KINDS)}")
-    if "zoom" in entry:   # R26-220: the FOCUS ZOOM's own dial - the magnification the move lands on (E99 s80 (2))
+    if "zoom" in entry and kind != SPECIES_LENS:   # R26-220: the FOCUS ZOOM's own dial (E99 s80 (2)); P71 T32: the lens has its own (_validate_lens)
         z = entry["zoom"]
         if kind != "focus_zoom":
             errs.append(f"{kind}: 'zoom' is the focus zoom's dial - a {kind}'s scale is the engine's own "
@@ -7293,6 +7384,53 @@ def check_level_join(world: dict, row_species: list) -> list[str]:
     return notes
 
 
+def _validate_lens(entry: dict) -> list[str]:
+    """P71 T32: a `lens`'s own fields - `from` a datum index of its `series` (the glass's first stand), an optional `to`
+    (another index: the stretch it travels), `series` (default 0) and `zoom` (LENS_ZOOM_DEFAULT .. LENS_ZOOM_MAX). It
+    writes nothing: any other key is refused by name (P71's review finding 7)."""
+    errs: list[str] = []
+    if not _is_index(entry.get("from")):
+        errs.append(f"lens: 'from' must be a datum index (a non-negative integer) of its series, not {entry.get('from')!r}")
+    if "to" in entry:
+        if not _is_index(entry["to"]):
+            errs.append(f"lens: 'to' must be a datum index (a non-negative integer) - the far end of the stretch the glass "
+                        f"travels - not {entry['to']!r}")
+        elif _is_index(entry.get("from")) and entry["to"] == entry["from"]:
+            errs.append(f"lens: from and to are both datum {entry['to']} - a glass that stands on one datum names `from` only")
+    if "series" in entry and not _is_index(entry["series"]):
+        errs.append("lens: series must be a non-negative integer series index")
+    z = entry.get("zoom", LENS_ZOOM_DEFAULT)
+    if isinstance(z, bool) or not isinstance(z, (int, float)) or not LENS_ZOOM_DEFAULT <= z <= LENS_ZOOM_MAX:
+        errs.append(f"lens: zoom must be a number from 1 (the glass shows the line as it is - Bravos's, measured) to "
+                    f"{LENS_ZOOM_MAX:g}, not {z!r}")
+    extra = sorted(k for k in entry if k not in LENS_KEYS)
+    if extra:
+        errs.append(f"lens: {', '.join(map(repr, extra))} - a lens writes nothing and takes only "
+                    f"{'|'.join(k for k in LENS_KEYS if k not in ('kind', 'at', 'dur') + tuple(ROW_PATH_KEYS))}")
+    return errs
+
+
+def check_lens(world: dict, row_species: list) -> list[str]:
+    """P71 T32: a row's `lens`es on the page they magnify. Refused by name (ValueError): a page with no drawn line (not a
+    dense-line page), a series or a datum the page does not have. The lens reads the chart state standing at its word
+    (a recast's, as the level join does). Returns [] - it has no advice to give."""
+    sps = [sp for sp in (row_species or []) if isinstance(sp, dict) and sp.get("kind") == SPECIES_LENS and not _validate_lens(sp)]
+    if not sps or not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER:
+        return []
+    for sp in sps:
+        where = f"lens at {sp.get('at')}"
+        page = _lj_state(world, row_species, sp)
+        builder = str(page.get("builder") or "")
+        if builder not in LENS_BUILDERS:
+            raise ValueError(f"{where}: a {builder or 'plate'} page has no line to magnify - the glass redraws a LINE's own "
+                             f"points ({'|'.join(LENS_BUILDERS)})")
+        si = int(sp.get("series") or 0)
+        for name in ("from", "to"):
+            if name in sp:
+                _lj_value(page, "series", si, int(sp[name]), where, name)
+    return []
+
+
 def _cross_honesty(page: dict, sp: dict) -> list[str]:
     """P69 T50 / E99 s100 + s106: the census X on a treemap is judged by the two honesty tests, and a failure is a
     REPORT with its numbers, never a refusal (E53 s1's census exception (b) and (c) are superseded by them):
@@ -7360,6 +7498,7 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     check_value_targets(world, row_species)   # P72 T18: a ring on a bar's value names a value the page prints (R26-288)
     for _lj_note in check_level_join(world, row_species):   # P71 T10: a join's ends, its unit, its truth; a WARN on the rule
         print(f"  [WARN] {_lj_note.removeprefix('WARN ')}")
+    check_lens(world, row_species)            # P71 T32: a lens magnifies a line the page draws, at data it has
     check_schematic(world, row_species)       # P70 T2: a schematic writes no figure it cannot source (E99 s109 (1))
     for sp in (row_species or []):   # P48 T5: a morph moves the area under a line into another - both sides are line pages, or the refusal names the verb to use
         if isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") == "morph":
@@ -14649,6 +14788,9 @@ def main() -> int:
         validate_page_build_spans(scenes)
     except ValueError as exc:
         raise SystemExit(f"FAIL: {exc}") from exc
+    _perr = [e for sc in scenes for e in pedestal_errors(sc)]   # P71 T32 / M14: a pedestal moves after the build has settled
+    if _perr:
+        raise SystemExit("FAIL: " + "; ".join(_perr))
     for _w in page_build_span_warnings(scenes):   # R26-249 (P72 T17): an UNAUTHORED page's clock against its row - advice
         print(f"  [WARN] R26-249: {_w}")
     _merr = morph_series_errors(scenes)   # R26-149 (P72 T17): read after the stamps (a melt:morph stamps the page's enter)

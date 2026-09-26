@@ -461,11 +461,14 @@ def test_every_wired_card_is_in_a_recipe():
     # P70 T9's chapter pill (species:chapter) is tested alone in test_chapter_pill.py and pinned by the chapter-held golden
     # (H's act "The turn", held across the cut into row 15); no H body row adopts act markers before P70-HG1 (harvest v2
     # :274), so no recipe is invented for it here.
-    assert uncovered == ["dock_option:moves", "page_builder:bars+segments",
+    # P71 T32's pedestal (camera:pedestal) and lens (page_species:lens) are tested alone in test_pedestal_and_lens.py (the
+    # lens pinned by the lens-over-the-line golden, H row 22's soft June); the pedestal's recipe is P71 T34's
+    # `the-hidden-base` (the plan breaks the P69 T80 <-> T44 circle there), and no body row adopts either before P71-HG1.
+    assert uncovered == ["camera:pedestal", "dock_option:moves", "page_builder:bars+segments",
                          "page_builder:combo+segments", "page_builder:line+break", "page_builder:line+schematic",
                          "page_builder:progress",
                          "page_enter:surface",
-                         "page_species:explode", "page_species:member", "page_species:solo",
+                         "page_species:explode", "page_species:lens", "page_species:member", "page_species:solo",
                          "plate_option:bar_style",
                          "plate_option:build", "plate_option:caption_room", "plate_option:domain", "plate_option:readability",
                          "plate_option:room", "species:balance", "species:chapter", "species:equation", "species:freeze"], uncovered

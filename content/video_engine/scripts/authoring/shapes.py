@@ -633,7 +633,8 @@ def clear_strips(band: dict, ink: list[dict]) -> list[dict]:
 # walks, and the same argument `bound_by_state` makes for a `chart_to` redrawing under a card.
 PLOT_MARKS = ("callout", "bracket", "figure", "spread", "relight", "peel", "undraw", "span", "ring", "lit_stretch", "freeze", "explode",
               "member", "axis_tag",   # P69 T45: a membership tile lands INSIDE its bar, on the plot; P71 T9: the pill on the axis and its guide down the plot
-              "level_join")   # P71 T10: the dashed level, its rings and its figure stand ON the plot
+              "level_join",   # P71 T10: the dashed level, its rings and its figure stand ON the plot
+              "lens")         # P71 T32: the magnifier glass stands ON the plot for its window (it leaves on its own clock: not held)
 # P69 T49: the freeze beat's ONE light comes on at a datum ON the plot, for the beat's own window (at .. at + dur) and
 # no longer: a card that holds over the plot through the beat would stand on the light the stage stopped for.
 # P69 T36: the lit stretch is a mark ON the line - and it HOLDS lit after its word until the page leaves (E99 s91: the

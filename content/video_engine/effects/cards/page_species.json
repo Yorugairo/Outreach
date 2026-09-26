@@ -771,6 +771,118 @@
       }
     },
     {
+      "id": "page_species:lens",
+      "axis": "page_species",
+      "token": "lens",
+      "title": "The lens: a magnifier glass travels a stretch of the line",
+      "aliases": [
+        {
+          "name": "Magnifier lens over the chart",
+          "source": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md:149"
+        },
+        {
+          "name": "Magnifier lens (don't: invent zoomed values)",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:1103"
+        }
+      ],
+      "does": "On its word a magnifier glass rises onto a drawn line, travels the named stretch and leaves; inside its ring the page's own data are redrawn at the row's zoom - every vertex a datum, no value invented.",
+      "when": null,
+      "when_source": null,
+      "serves": [
+        "TURNS"
+      ],
+      "author": {
+        "key": "species[] {\"kind\": \"lens\", \"at\", \"dur\", \"from\": <datum>, \"to\"?: <datum>, \"series\"?, \"zoom\"?: 1..4} on a ledger LINE row (dense-line)",
+        "example": "{\"kind\": \"lens\", \"at\": 12.69, \"dur\": 2.52, \"series\": 0, \"from\": 40, \"to\": 41, \"zoom\": 2}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py (lens-over-the-line)",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "the glass rises",
+          "does": "the glass rises onto its first stand from RISE_K radii below, fading in",
+          "trigger": "the species' `at`, over IN_S (at most EDGE_MAX of `dur`)",
+          "dials": {
+            "IN_S": "0.25",
+            "RISE_K": "1.2",
+            "EDGE_MAX": "0.3"
+          }
+        },
+        {
+          "name": "the glass travels",
+          "does": "its centre walks the stretch from -> to by length on the min-jerk clock (the lit stretch's law); inside the ring the page's own data, magnified by `zoom` about the centre",
+          "trigger": "between the rise and the leave",
+          "dials": {
+            "ZOOM": "1 (Bravos, measured)",
+            "ZOOM_MAX": "4",
+            "REACH_K": "1.25"
+          }
+        },
+        {
+          "name": "the glass leaves",
+          "does": "it slides EXIT_K radii to the right and fades out by the word's end",
+          "trigger": "the last OUT_S of `dur`",
+          "dials": {
+            "OUT_S": "0.3",
+            "EXIT_K": "1.6"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "Bravos harvest v2 A57 (STK 9:16-9:18, BOOM 06:28): a magnifier glass sweeps a stretch of the chart",
+          "became": "the glass, its look (ring R 0.0676 W, stroke 0.127 R, crimson handle) and its rise - travel - leave",
+          "record": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md:149",
+          "tie": "recorded"
+        },
+        {
+          "source": "the lit stretch's travel law (litStretchPts, litCut, litDrawnX)",
+          "became": "the glass's stand on the line and the pen's edge inside it",
+          "record": "content/video_engine/scripts/species/lit_stretch.mjs",
+          "tie": "recorded"
+        }
+      ],
+      "options": [
+        {
+          "token": "to",
+          "means": "`to: <index>`: the far datum of the stretch the glass travels; absent, it stands on `from`.",
+          "source_set": null
+        },
+        {
+          "token": "zoom",
+          "means": "`zoom: 1..4`: the magnification inside the ring, the author's (default 1 - Bravos's glass, measured, magnifies nothing).",
+          "source_set": null
+        }
+      ],
+      "dials": {
+        "module": "content/video_engine/scripts/species/lens.mjs",
+        "object": "LENS"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/lens.mjs",
+        "symbol": "paintLens"
+      },
+      "doctrine": [
+        "P71 T32",
+        "E38",
+        "E99 s99",
+        "E99 s128",
+        "E99 s109",
+        "BRAVOS-USE-WHEN A57 (don't: invent zoomed values)"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "lens-over-the-line",
+        "test": "content/video_engine/tests/kinetics/lens.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
       "id": "page_species:lit_stretch",
       "axis": "page_species",
       "token": "lit_stretch",

@@ -2,7 +2,7 @@
 // zoom in place, a frustum that inverts the projection, an in-frame test that knows a point from a box.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { ATTN, CAM, CAM_EASES, PARALLAX, camAttentionState, camEase, camIdentity, camSpeciesState, camKeyState, camCssFor, camFrustum, camInFrame, camProject, camLayerState, camProjectAt, camLayerCss } from "../../scripts/kinetics/camera.mjs";
+import { ATTN, CAM, CAM_EASES, PARALLAX, PEDESTAL, camAttentionState, camEase, camIdentity, camSpeciesState, camKeyState, camCssFor, camFrustum, camInFrame, camProject, camLayerState, camProjectAt, camLayerCss, camPedestalState } from "../../scripts/kinetics/camera.mjs";
 import { STOP, STAMP_LAND } from "../../scripts/kinetics/stopaction.mjs";
 
 const W = 1080, H = 1920;
@@ -166,4 +166,49 @@ test("throw and land keep their own contacts and envelopes; any other arrival st
   }
   for (const arr of [undefined, "spring", "pop"]) assert.equal(camAttentionState([dock(arr)], 9, contactOf), null, String(arr));
   assert.equal(camAttentionState([{ arrive: "stamp", enter: 4, exit: 12 }], 9, contactOf), null, "a stamp with no parked box pulls nothing");
+});
+
+// P71 T32 (was P69 T80) - THE PEDESTAL: the camera stands raised by `by` of the stage's height until its word, eases
+// straight DOWN to the identity over `dur`, and holds there. A pure vertical move of `look`; absent, nothing moves.
+const LW = 1920, LH = 1080, PED = { at: 12, dur: 2, by: 0.21 };
+
+test("the pedestal absent, malformed or landed returns the state it was handed, by identity (every frame ever rendered)", () => {
+  const id = camIdentity(LW, LH);
+  for (const ped of [undefined, null, {}, { at: 12, dur: 2 }, { at: 12, dur: 0, by: 0.2 }, { at: "x", dur: 2, by: 0.2 },
+                     { at: 12, dur: 2, by: 0 }, { at: 12, dur: 2, by: 1 }, { at: 12, dur: 2, by: -0.2 }]) {
+    assert.equal(camPedestalState(ped, 13, id, LH), id, JSON.stringify(ped));
+  }
+  assert.equal(camPedestalState(PED, 14, id, LH), id, "landed at at + dur: the identity itself");
+  assert.equal(camPedestalState(PED, 99, id, LH), id, "... and it holds");
+  assert.equal(camCssFor(camPedestalState(PED, 14, id, LH), LW, LH), "", "the landed camera writes the locked string");
+});
+
+test("before its word the camera stands raised: the world sits by * H lower, zoom and at untouched", () => {
+  const id = camIdentity(LW, LH), st = camPedestalState(PED, 0, id, LH);
+  assert.equal(st.s, 1);
+  assert.deepEqual(st.at, [LW / 2, LH / 2]);
+  assert.ok(Math.abs(st.look[1] - (LH / 2 - 0.21 * LH)) < 1e-9 && st.look[0] === LW / 2, "look raised by by * H");
+  const p = camProject(st, [300, 700]);
+  assert.ok(Math.abs(p[0] - 300) < 1e-9 && Math.abs(p[1] - (700 + 0.21 * LH)) < 1e-9, "a world point lands by * H lower, never sideways");
+  assert.deepEqual(camPedestalState(PED, 12, id, LH), st, "on its word it has not moved yet");
+  assert.equal(camCssFor(st, LW, LH), "translate(0.00px, " + (0.21 * LH).toFixed(2) + "px) scale(1.0000)", "a pure translation");
+});
+
+test("the move is monotone down, from rest to rest on the in-out ease (half its clock is half its travel)", () => {
+  const id = camIdentity(LW, LH), y = (t) => camPedestalState(PED, t, id, LH).look[1];
+  let prev = -Infinity;
+  for (let t = 12; t <= 14.0001; t += 0.05) { const v = y(Math.min(t, 14)); assert.ok(v >= prev - 1e-9, "never back up"); prev = v; }
+  assert.ok(Math.abs(y(13) - (LH / 2 - 0.21 * LH * 0.5)) < 1e-9, "inout: symmetric");
+  assert.ok(y(12.05) - y(12) < 0.21 * LH * 0.02, "it leaves gently, never at speed");
+  assert.ok(y(14) - y(13.95) < 0.21 * LH * 0.02, "... and lands gently");
+  assert.equal(PEDESTAL.EASE, "inout");
+  const cub = camPedestalState(Object.assign({}, PED, { ease: "cubic" }), 12.5, id, LH).look[1];
+  assert.ok(Math.abs(cub - (LH / 2 - 0.21 * LH * (1 - camEase.cubic(0.25)))) < 1e-9, "an authored ease from the set is honoured");
+});
+
+test("the pedestal composes on the state it is handed: a zoomed state keeps its zoom and its at", () => {
+  const st0 = { s: 1.2, look: [800, 500], at: [900, 600] }, st = camPedestalState(PED, 12, st0, LH);
+  assert.equal(st.s, 1.2);
+  assert.deepEqual(st.at, [900, 600]);
+  assert.deepEqual(st.look, [800, 500 - 0.21 * LH]);
 });

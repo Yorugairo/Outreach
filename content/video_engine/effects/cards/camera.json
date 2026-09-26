@@ -120,6 +120,94 @@
         "today": true,
         "why": "the locked default runs on every build; keys and landings used only on the Tokyo test bed"
       }
+    },
+    {
+      "id": "camera:pedestal",
+      "axis": "camera",
+      "token": "pedestal",
+      "title": "The pedestal: the camera drops through the stage once, after the build",
+      "aliases": [
+        {
+          "name": "Pedestal down through the waterline",
+          "source": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md:125"
+        },
+        {
+          "name": "Pedestal (don't: a camera move over a build, M14)",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:489"
+        }
+      ],
+      "does": "The camera stands raised by `by` of the stage's height - the page's lower part below the frame - until its word, then travels straight down to the identity over `dur` and holds there, locked.",
+      "when": "the stage is taller than the frame and the hidden part is below (the iceberg's base under the waterline) - one move, after the build has settled; never over a build (M14)",
+      "when_source": "content/video_engine/scripts/kinetics/camera.mjs",
+      "author": {
+        "key": "shot row 8th element {'pedestal': {at, dur, by, ease?}} (validate_camera's _validate_pedestal; pedestal_errors: M14 and the row's span)",
+        "example": "{'keys': [], 'pedestal': {'at': 6.0, 'dur': 2.4, 'by': 0.21}}",
+        "example_source": "content/video_engine/tests/test_pedestal_and_lens.py (the served pedestal)",
+        "check": "camera"
+      },
+      "phases": [
+        {
+          "name": "raised",
+          "does": "until `at` the camera looks `by` of the stage's height above the centre: the world sits that much lower on screen",
+          "trigger": "the row's start"
+        },
+        {
+          "name": "down",
+          "does": "straight down to the identity on the in-out ease (rest to rest)",
+          "trigger": "`at`, over `dur`",
+          "dials": {
+            "EASE": "inout",
+            "BY_MAX": "1 (exclusive)"
+          }
+        },
+        {
+          "name": "held",
+          "does": "the identity: every frame after is the locked camera's",
+          "trigger": "at + dur"
+        }
+      ],
+      "blends": [
+        {
+          "source": "Bravos harvest v2 A33 (BUB 0:00-0:48): the tip, then the camera drops past the waterline to the base",
+          "became": "the raised opening and the one move down; BUB measured ~0.21 H of travel, then still",
+          "record": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md:125",
+          "tie": "recorded"
+        }
+      ],
+      "options": [
+        {
+          "token": "ease",
+          "means": "`ease: cubic|inout|linear` (absent = inout); `hold` is refused - a step is a cut.",
+          "source_set": null
+        }
+      ],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/camera.mjs",
+        "object": "PEDESTAL"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/camera.mjs",
+        "symbol": "camPedestalState"
+      },
+      "doctrine": [
+        "P71 T32",
+        "M14 (47 s2 G-a)",
+        "E38",
+        "E59",
+        "29 s9.28 C3",
+        "R26-209"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_pedestal_and_lens.py::test_the_pedestal_on_the_served_player_raises_then_lands_on_the_identity",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
     }
   ]
 }

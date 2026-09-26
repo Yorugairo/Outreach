@@ -157,3 +157,34 @@ export const camProjectAt = (st, p, k) => camProject(camLayerState(st, k), p);
 /* the CSS the plane at k gets, about the same stage-centre origin the world layer uses (camCssFor at k = 1, exactly
    - the same string, so a layered world under a LOCKED camera writes what the flat world writes) */
 export const camLayerCss = (st, k, W, H) => camCssFor(camLayerState(st, k), W, H);
+
+/* P71 T32 (was P69 T80) - THE PEDESTAL: the camera travels straight DOWN through the stage, once, after the build has
+   settled (the Bravos harvest v2's A33, "pedestal down through the waterline", BUB 0:00: the tip of the iceberg, then
+   the camera drops past the waterline to the base; BRAVOS-USE-WHEN "use: the stage is taller than the frame and the
+   hidden part is below"; "don't: a camera move over a build (M14)" - the compiler refuses that by name, and the gate's
+   M14 reads the same window).
+   THE STAGE TALLER THAN THE FRAME is the camera's own, not a page layout: until the pedestal the camera stands RAISED
+   by `by` of the stage's height - it looks at a world point `by * H` above the stage's centre and lands it AT the
+   centre, so the world sits `by * H` lower on screen, the page's lower part is below the frame and the band above the
+   page is the stage's own ground (the sky over the tip). On its word the camera eases DOWN to the identity and holds
+   there: the frame then shows exactly the stage it always did, so a row whose pedestal has run ends on the identity
+   (R26-209's boundary reads no open camera) and nothing after it moves. A pure vertical move of `look`: zoom and `at`
+   are never touched (so the move is a translation, screen = at + (p - look)).
+   MEASURED (E38), BUB frames 1-4: the waterline from 0.615 H to 0.431 H between 12 s and 24 s (one move, ~0.21 H) and
+   still after (0.431 -> 0.434); the clock is not measurable on the 12 s grid, so `dur` is the row's. `by` is the row's
+   too, under BY_MAX: at a whole frame the camera would open on empty ground with nothing of the stage showing - HF-15's
+   "a region ARRIVES from the frame's edge", which the compiler refuses by name.
+   Absent - every row ever written - this returns the state it was handed, BY IDENTITY, so no frame moves. */
+export const PEDESTAL = Object.freeze({
+  EASE: "inout",   /* from rest to rest: a camera standing raised leaves gently and lands gently (camEase.inout) */
+  BY_MAX: 1,       /* exclusive: `by` is a share of the stage's height, 0 < by < 1 (at 1 nothing of the stage is in frame) */
+});
+export const camPedestalState = (ped, t, st, H) => {
+  if (!ped || typeof ped !== "object") return st;
+  const at = +ped.at, dur = +ped.dur, by = +ped.by;
+  if (!Number.isFinite(at) || !(dur > 0) || !(by > 0 && by < PEDESTAL.BY_MAX)) return st;   /* malformed: the compiler refuses it by name; here it never moves */
+  if (t >= at + dur) return st;                                                             /* landed: the camera it was */
+  const u = t <= at ? 0 : (camEase[ped.ease] || camEase[PEDESTAL.EASE])((t - at) / dur);
+  const dy = by * H * (1 - u);
+  return { s: st.s, look: [st.look[0], st.look[1] - dy], at: [st.at[0], st.at[1]] };
+};

@@ -105,7 +105,7 @@ SOURCES: tuple[Source, ...] = (
     Source("CAMERA_MOVES", "compiler", "CAMERA_MOVES", ("species",)),
     Source("CAMERA_EASES", "compiler", "CAMERA_EASES", ("camera",)),
     Source("CAMERA_ATTENTION", "compiler", "CAMERA_ATTENTION", ("camera",)),
-    Source("CAMERA_ROW_KEYS", "literal", None, ("camera",), ("keys",), COMPILER_REL),
+    Source("CAMERA_ROW_KEYS", "literal", None, ("camera",), ("keys", "pedestal"), COMPILER_REL),   # P71 T32: the pedestal (_validate_pedestal)
     Source("IDLE_KINDS", "compiler", "IDLE_KINDS", ("idle",)),
     Source("ARRIVALS", "compiler", "ARRIVALS", ("arrival",)),
     Source("MASSES", "compiler", "MASSES", ("arrival",)),

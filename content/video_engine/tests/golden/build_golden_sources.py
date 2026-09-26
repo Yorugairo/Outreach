@@ -4392,6 +4392,47 @@ SURFACES.update({"level-join-half-a-point": level_join_half_a_point})
 FRAME_T.update({"level-join-half-a-point": round(LEVEL_AT + LEVEL_DUR, 2)})   # the figure's write end: 13.34
 
 
+# ---- P71 T32 (was P69 T80; harvest v2 A57): THE LENS - a magnifier glass travels to the soft month --------------------
+#   lens-over-the-line  Steel and Paper H row 22's long customs line - the memory monitor's COMMITTED source object
+#                     (`ledger:ev-memory-monitor-v1:line:42:right`, `idle=live`, full stage, 16:9, the plain profile; H's
+#                     row page is the derived `ev-memory-monitor-row22-v1`, DRAM and HBM-CLASS verbatim, which lives in
+#                     lane A: the source carries the same two lines and its dashed TRIGGER beside them). 43 monthly
+#                     prints on a log scale from $7.6k to $95k/kg, and the sentence "one soft month in June" (652.69 -
+#                     653.73 in the H take, shifted by -640.0 s so the page has built first): the June print is 74,686
+#                     against May's 77,558, -3.7 % - on this scale a step of about a hundredth of the plot's height.
+#                     On the word the glass rises onto the May print (datum 40), travels to June (41) and leaves before
+#                     the row's recast (655.31), magnifying 2x (the row's authored zoom; Bravos's own glass is 1.0,
+#                     measured). Judged mid-travel: the glass between May and June, the dip twice its size inside.
+LENS_PLATE = "ledger:ev-memory-monitor-v1:line:42:right;idle=live"
+LENS_SHIFT = 640.0
+LENS_AT = round(652.69 - LENS_SHIFT, 2)                       # "one soft month in June"
+LENS_DUR = round(655.31 - 0.1 - 652.69, 2)                    # ... to 0.1 s before the row's recast (the trim proof)
+LENS_SPECIES = [
+    {"kind": "build_to", "at": 0.0, "dur": 0.4, "series": si, "target": {"kind": "datum", "index": 42}} for si in (0, 1, 2)
+] + [{"kind": "lens", "at": LENS_AT, "dur": LENS_DUR, "series": 0, "from": 40, "to": 41, "zoom": 2}]
+
+
+def lens_over_the_line() -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    species = [dict(e) for e in LENS_SPECIES]
+    assert not BST.validate_species(species, (0, 0, 0), LENS_PLATE), BST.validate_species(species, (0, 0, 0), LENS_PLATE)
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        world = BST.world_for_plate(LENS_PLATE, (0, 0, 0), LEVEL_PROJECT)
+        BST.stamp_full_stage(world["page"])
+        assert BST.check_lens(world, species) == []   # the compiler's own page check: a line page, data it has
+    finally:
+        BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: a magnifier glass travels to the soft month (lens)", scenes, {}, "16:9"), _base_uris()
+
+
+SURFACES.update({"lens-over-the-line": lens_over_the_line})
+FRAME_T.update({"lens-over-the-line": round(LENS_AT + 0.25 + (LENS_DUR - 0.25 - 0.3) / 2, 3)})   # mid-travel (LENS.IN_S / OUT_S): 13.925
+
+
 # ---- P70 T3 (was P69 T51): THE FILL GAUGE - one share of one whole fills a capsule -----------------------------------
 #   gauge-94   Steel and Paper H row 17's own object, READ where it is committed (`ev-capex-ocf-94-bars-v1`: PIMCO Fig. 3,
 #              94 % of operating cash flow, the 100 rule named "every dollar from operations"), compiled as the PROGRESS

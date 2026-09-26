@@ -78,7 +78,7 @@ ACT_SPECIES = {
     "DIVIDES": ("share page", "peel", "treemap page", "cross", "explode", "member"),   # P50 T6: the census, and the X's on its named subset; P69 T45: who is in ONE total, a tile on each name
     "NAMES": ("trace", "light", "arc", "stamp"),   # P50 T5: the vector map ships - a country lights, an arc crosses, a figure stamps
     "EXPLAINS": ("note", "plate use=bridge", "chip", "flow", "equation"),   # P70 T6: the arithmetic IS the claim (A60)
-    "TURNS": ("figure", "spotlight", "callout", "note", "freeze"),   # P69 T49: the stage STOPS on the number the turn lands on (E99 s99)
+    "TURNS": ("figure", "spotlight", "callout", "note", "freeze", "lens"),   # P71 T32: a glass travels to the small region the turn lands on (A57, moment: turn)   # P69 T49: the stage STOPS on the number the turn lands on (E99 s99)
     "BREAKS": ("burst", "stack", "burst:stop", "placeholder", "axis capsule"),
     "SPANS": ("bracket", "spread", "relight", "span", "lit_stretch", "level_join", "ruler"),   # P69 T36: a light that TRAVELS the stretch the sentence walks (E99 s99)
     "SETS": ("chart_to:park", "figure", "retitle", "chapter"),   # P70 T9: a long form's named act, one pill held over it (A34)
