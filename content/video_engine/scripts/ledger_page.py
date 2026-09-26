@@ -3981,8 +3981,14 @@ def _longform_panel_scale(page: dict) -> float:
     n = len(page.get(PANELS_KEY) or [])
     if not n:
         return longform_scale0()
-    chart = _longform_full_boxes(page, *STAGE_PX["16:9"])["chart"]
-    region = (chart["x"], chart["y"], LAND_PHONE_SAFE_RIGHT * STAGE_PX["16:9"][0] - chart["x"], chart["h"])
+    # P72 T47 (R26-366): the region the panels ARE drawn in - the floor cut (`_panels_region`, the engine's) - and, at
+    # phone, the band a page the phone layout holds stands its plots under (0.888 px a unit was read on the two-era page
+    # at phone where its panels drew at 0.771)
+    fit = _panels_phone_fit(page)
+    if fit is not None and fit["band"] is not None:
+        return min(b[3] - fit["band"] for b in fit["homes"]) / LAND_VIEWBOX[1]
+    boxes = _longform_full_boxes(page, *STAGE_PX["16:9"])
+    region = _panels_region(page, boxes["chart"], "16:9", boxes.get("_floor"))
     return min(b[3] for b in panel_home_boxes(n, region)) / (LAND_VIEWBOX[1] + PANEL_SUB_U)
 
 
@@ -4019,7 +4025,7 @@ def _apply_longform_panels(page: dict) -> dict:
     """The long form on a panels page: each panel's tag form at the page's home scale (fitted with no key, then again
     under the key those forms give up, which moves the region down), and the page's one key rail. In place."""
     axes = page["axes"]
-    for key in ("key", "key_px"):
+    for key in ("key", "key_px", PANEL_BAND_KEY):   # P72 T47: the band is recomputed by every fit, never authored
         axes.pop(key, None)
     for _ in range(2):
         scale = _longform_panel_scale(page)
@@ -4037,6 +4043,9 @@ def _apply_longform_panels(page: dict) -> dict:
     fit = longform_panels_fit_warning(page)
     if fit:
         warns.append(fit)
+    phone = _panels_phone_fit(page)
+    if phone is not None and phone["band"] is not None:   # P72 T47: the phone layout holds it - the engine draws the band
+        axes[PANEL_BAND_KEY] = round(phone["band"], 3)
     if warns:
         page["warnings"] = warns
     else:
@@ -4106,18 +4115,167 @@ def _panel_faults(page: dict, t: dict, boxes: list) -> list[str]:
 
 def longform_panels_fit_warning(page: dict) -> str | None:
     """P72 T12 (R26-316): the FIT_WARN a panels page at `longform:phone` carries - the region its panels get against the
-    height one needs, and the faults that apply - or None (every other preset, and a page that holds)."""
+    height one needs, and the faults that apply - or None (every other preset, a page that holds as drawn, and - P72
+    T47 - a page the phone layout holds: it is drawn in that layout, `axes.panel_band_px`)."""
+    fit = _panels_phone_fit(page)
+    if fit is None or fit["band"] is not None or not fit["phone_faults"]:
+        return None
+    region, need, faults = fit["region"], fit["need"], fit["faults"]
+    return (f"{FIT_WARN} a panels page at readability={LONGFORM}:phone gets a {region[3]:.0f} px region and a panel needs "
+            f"~{need:.0f} px (its sub at the floor, two y ticks, its x labels)" + (": " + "; ".join(faults) if faults else "")
+            + " - it renders as drawn (E99 s106: advice; P72 T47's phone layout - the subs at the floor, the rule names"
+            " laddered, two y ticks - does not hold it: " + "; ".join(fit["phone_faults"]) + ")")
+
+
+# P72 T47 (R26-366, R26-316's build half) - THE PANELS PAGE AT `longform:phone`, BUILT, where the arithmetic allows.
+# T12's WARN measured five faults of the MIDDLE preset's panel layout drawn at phone. The phone layout, for a page whose
+# as-drawn layout T12 warns: every panel's plot stands under a BAND (rendered px) of
+#   - its SUB at the floor (CARD_TYPE_PX, 59.08) - the band's first CARD_TYPE_PX / PANEL_SUB_MAX (the sub's own law), and
+#   - its RULE NAMES laddered under it, one line each at the floor, LONGFORM_LINE_H apart, highest rule first, in the
+#     rule's ink and right-aligned in the panel (at the plot's right end when every name on the panel fits there, else at
+#     its right edge less LONGFORM_EDGE_PX): two rules 1 % apart cannot each carry a 60 px name at its own rule;
+# the band is the page's (the most names any line panel carries), so every panel keeps one plot and one scale. Its y
+# axis steps at the finest nice step (<= 5 divisions) whose TWO ticks stand LONGFORM_TICK_SPACE figures apart (E28), its
+# x labels thin by the card's rule (both ends kept). The page HOLDS when every line panel writes those two ticks, every rule name
+# fits its panel and every bars panel's tallest bar stands a tick figure tall; then `_apply_longform_panels` stamps the
+# band as `axes.panel_band_px` and the engine draws it (lpBuildPanel, `longform:phone` only). A page it does not hold
+# keeps its WARN, whose tail names why (four panels in two rows; the companion's 210 px), and is drawn as it was.
+PANEL_BAND_KEY = "panel_band_px"   # axes: the phone band (rendered px), the compiler's - recomputed by every fit, never authored
+
+
+def _panel_nice_step(x: float) -> float:
+    """The engine's lpNiceStep: 1, 2, 5 or 10 times a power of ten, at least `x`."""
+    e = 10 ** math.floor(math.log10(x))
+    f = x / e
+    return e * (1 if f <= 1 else 2 if f <= 2 else 5 if f <= 5 else 10)
+
+
+def longform_phone_divs(plot_px: float, lo: float, hi: float, tick_px: float) -> int | None:
+    """The divisions a phone panel's y axis is drawn in (the engine's lpPhoneDivs, line for line): the most, at most 5,
+    whose nice step writes two ticks or more inside [lo, hi] at least LONGFORM_TICK_SPACE tick figures apart on a plot
+    `plot_px` tall - or None (no two ticks fit: the axis cannot state its scale, E28)."""
+    span = hi - lo
+    if not (plot_px > 0 and span > 0 and tick_px > 0):
+        return None
+    for d in range(5, 0, -1):
+        step = _panel_nice_step(max(1e-9, span / d))
+        n, tv = 0, math.ceil(lo / step - 1e-9) * step
+        while tv <= hi + 1e-9:
+            n, tv = n + 1, tv + step
+        if n >= 2 and step / span * plot_px >= LONGFORM_TICK_SPACE * tick_px:
+            return d
+    return None
+
+
+def _finite(v) -> bool:
+    try:
+        return math.isfinite(float(v))
+    except (TypeError, ValueError):
+        return False
+
+
+def _panel_y_range(page: dict, panel: dict) -> tuple[float, float]:
+    """A line panel's y range as the line builder sets it (buildLedgerLine: the data and the rules, padded 6 %, from zero
+    if asked, then the domain - the page's shared one unless the panel is independent - over both)."""
+    axes = dict(panel.get("axes") or {})
+    page_dom = (page.get("axes") or {}).get("domain")
+    if isinstance(page_dom, list) and not panel.get("independent"):
+        axes["domain"] = page_dom
+    f = (lambda v: math.log10(v)) if axes.get("log") else (lambda v: v)   # noqa: E731
+    vals = [f(float(v)) for sr in panel.get("series") or [] if isinstance(sr, dict) for _x, v in sr.get("pts") or []]
+    vals += [f(float(h["y"])) for h in axes.get("hlines") or [] if isinstance(h, dict) and _finite(h.get("y"))]
+    lo, hi = (min(vals), max(vals)) if vals else (0.0, 1.0)
+    pad = (hi - lo) * 0.06 or 1.0
+    lo, hi = lo - pad, hi + pad
+    if axes.get("from_zero") and not axes.get("log"):
+        lo = 0.0
+    dom = axes.get("domain")
+    if isinstance(dom, list):
+        if len(dom) > 0 and dom[0] is not None and _finite(dom[0]):
+            lo = f(float(dom[0]))
+        if len(dom) > 1 and dom[1] is not None and _finite(dom[1]):
+            hi = f(float(dom[1]))
+    return lo, hi
+
+
+def _panel_rule_names(panel: dict) -> list[str]:
+    """A panel's labelled rules' names, highest rule first (the ladder's order)."""
+    rules = [h for h in (panel.get("axes") or {}).get("hlines") or [] if isinstance(h, dict) and _finite(h.get("y"))
+             and str(h.get("label") or "").strip()]
+    return [str(h["label"]) for h in sorted(rules, key=lambda h: -float(h["y"]))]
+
+
+def longform_panels_phone_band(page: dict) -> float:
+    """The phone band (rendered px) every panel's plot stands under: the sub at the floor, then the page's longest
+    ladder of rule names, one floor line each."""
+    rows = max([len(_panel_rule_names(p)) for p in page.get(PANELS_KEY) or [] if p.get("builder") != PANEL_BARS] or [0])
+    return CARD_TYPE_PX / PANEL_SUB_MAX + rows * LONGFORM_LINE_H * CARD_TYPE_PX
+
+
+def _panel_phone_faults(page: dict, t: dict, boxes: list, band: float) -> list[str]:
+    """What the phone layout cannot hold on each panel (none: the page holds)."""
+    out = []
+    for i, (panel, b) in enumerate(zip(page.get(PANELS_KEY) or [], boxes)):
+        u = (b[3] - band) / LAND_VIEWBOX[1]
+        if u <= 0:
+            out.append(f"panel {i} has no plot under its {band:.0f} px band ({b[3]:.0f} px box)")
+            continue
+        g = longform_geom(t, 0.0, LAND_VIEWBOX[1] * u, LAND_VIEWBOX[1] * u)
+        if panel.get("builder") == PANEL_BARS:
+            plot = max(0.0, (g["bars_b"] - PANEL_BARS_TOP_U) * u)
+            lo, hi = (list((panel.get("axes") or {}).get("domain") or [0.0, 1.0]) + [1.0])[:2]
+            span = (float(hi) - float(lo)) or 1.0
+            vals = [abs(float(v)) for v in panel.get("values") or [] if isinstance(v, (int, float))]
+            if vals and plot <= 0:
+                out.append(f"panel {i}'s bars get no plot under the band")
+            elif vals and max(vals) / span * plot < t["tick"]:
+                out.append(f"panel {i}'s bars at most {max(vals) / span * plot:.1f} px tall")
+            continue
+        plot = max(0.0, (g["line_b"] - PANEL_LINE_TOP_U) * u)
+        if longform_phone_divs(plot, *_panel_y_range(page, panel), t["tick"]) is None:
+            out.append(f"panel {i} writes no two y ticks {LONGFORM_TICK_SPACE * t['tick']:.0f} px apart on its "
+                       f"{plot:.0f} px plot")
+        for name in _panel_rule_names(panel):
+            w = longform_text_px(name, "title", CARD_TYPE_PX)
+            if w > b[2] - LONGFORM_EDGE_PX:
+                out.append(f"panel {i}'s rule name '{name}' is wider than its panel ({w:.0f} px on {b[2]:.0f})")
+    return out
+
+
+def _panels_phone_fit(page: dict) -> dict | None:
+    """A panels page at `longform:phone`: its region and home boxes, T12's need and the faults of the layout as drawn,
+    and - when T12 warns it - the phone layout's band if it holds (`band`) or what it cannot hold (`phone_faults`).
+    None on every other page and preset."""
     if page.get("builder") != PANELS or longform_preset(page) != "phone" or not page.get(PANELS_KEY):
         return None
     t, boxes = longform_type(page), _longform_full_boxes(page, *STAGE_PX["16:9"])
     region = _panels_region(page, boxes["chart"], "16:9", boxes.get("_floor"))
     homes = panel_home_boxes(len(page[PANELS_KEY]), region)
     need, faults = longform_panels_need_px(t), _panel_faults(page, t, homes)
+    out = {"region": region, "homes": homes, "need": need, "faults": faults, "band": None, "phone_faults": []}
     if region[3] >= need and not faults:
-        return None
-    return (f"{FIT_WARN} a panels page at readability={LONGFORM}:phone gets a {region[3]:.0f} px region and a panel needs "
-            f"~{need:.0f} px (its sub at the floor, two y ticks, its x labels)" + (": " + "; ".join(faults) if faults else "")
-            + " - it renders as drawn (E99 s106: advice; R26-316's build is its own slice)")
+        return out   # it holds as drawn: no WARN, no band
+    band = longform_panels_phone_band(page)
+    out["phone_faults"] = _panel_phone_faults(page, t, homes, band)
+    if not out["phone_faults"]:
+        out["band"] = band
+    return out
+
+
+def longform_panel_right_u(page: dict, panel: dict, scale: float) -> float:
+    """A phone panel's right margin (units at `scale`): the builder's 220, or its widest end tag's gap, tag and edge air
+    when those are wider (the engine's lpPanelTagR)."""
+    view = {"series": panel.get("series") or [], "badges": page.get("badges") or []}
+    form = (panel.get("axes") or {}).get("tag_form") or "full"
+    return max(LAND_PLOT["R"] * LAND_VIEWBOX[0], LAND_TAG_GAP + longform_tag_units(view, longform_type(page), form, scale)
+               + LONGFORM_EDGE_PX / scale)
+
+
+def panel_band(spec: dict) -> float:
+    """The phone band a page is drawn under (`axes.panel_band_px` at `longform:phone`), or 0 - the engine's own read."""
+    v = (spec.get("axes") or {}).get(PANEL_BAND_KEY)
+    return float(v) if (spec.get("builder") == PANELS and longform_preset(spec) == "phone" and _finite(v)
+                        and float(v) > 0) else 0.0
 
 
 def _longform_place(y: float, h: float) -> float:
@@ -4518,15 +4676,20 @@ def _panels_region(spec: dict, chart: dict, aspect: str, floor: float | None = N
     return (chart["x"], chart["y"], w, h)
 
 
-def _panel_plot(box: tuple, spec_panel: dict) -> dict:
-    """One panel's plot in stage px: the line builder's own margins inside the panel's box (its viewBox fills it)."""
+def _panel_plot(box: tuple, spec_panel: dict, band: float = 0.0, page: dict | None = None) -> dict:
+    """One panel's plot in stage px: the line builder's own margins inside the panel's box (its viewBox fills it).
+    P72 T47: `band` > 0 - a page drawn in the phone layout - stands the plot under that band (rendered px), its right
+    margin holding its end tag (`longform_panel_right_u`)."""
     x, y, w, h = box
-    s = h / (LAND_VIEWBOX[1] + PANEL_SUB_U)   # px per unit: the viewBox is the box's own aspect
+    s = (h - band) / LAND_VIEWBOX[1] if band > 0 else h / (LAND_VIEWBOX[1] + PANEL_SUB_U)   # px per unit
+    top = band / s if band > 0 else PANEL_SUB_U
     if (spec_panel or {}).get("builder") == PANEL_BARS:   # P69 T8d: the bars builder's plot - its tick rules' own extent
         vw, l_u, (t_u, b_u) = w / s, PANEL_BARS_PLOT["L"], PANEL_BARS_PLOT["TB"]   # (gutter less 20, to the viewBox's edge)
-        return _box(x + l_u * s, y + (PANEL_SUB_U + t_u) * s, (vw - l_u) * s, (b_u - t_u) * s)
+        return _box(x + l_u * s, y + (top + t_u) * s, (vw - l_u) * s, (b_u - t_u) * s)
     vw, l_u, r_u = w / s, LAND_PLOT["L"] * LAND_VIEWBOX[0], LAND_PLOT["R"] * LAND_VIEWBOX[0]
-    return _box(x + l_u * s, y + (PANEL_SUB_U + LAND_PLOT["T"] * LAND_VIEWBOX[1]) * s,
+    if band > 0 and page is not None:
+        r_u = longform_panel_right_u(page, spec_panel or {}, s)
+    return _box(x + l_u * s, y + (top + LAND_PLOT["T"] * LAND_VIEWBOX[1]) * s,
                 (vw - l_u - r_u) * s, (LAND_PLOT["B"] - LAND_PLOT["T"]) * LAND_VIEWBOX[1] * s)
 
 
@@ -4536,7 +4699,7 @@ def panel_boxes(spec: dict, chart: dict, aspect: str, floor: float | None = None
     region = _panels_region(spec, chart, aspect, floor)
     out = []
     for p, b in zip(panels, panel_home_boxes(len(panels), region, aspect)):
-        out.append({"box": _box(*b), "plot": _panel_plot(b, p) if aspect == "16:9" else
+        out.append({"box": _box(*b), "plot": _panel_plot(b, p, panel_band(spec), spec) if aspect == "16:9" else
                     _box(b[0] + PORTRAIT_PLOT["L"], b[1] + PORTRAIT_PLOT["T"], b[2] - PORTRAIT_PLOT["L"] - PORTRAIT_PLOT["R"],
                          b[3] - PORTRAIT_PLOT["T"] - PORTRAIT_PLOT["B"])})
     return out

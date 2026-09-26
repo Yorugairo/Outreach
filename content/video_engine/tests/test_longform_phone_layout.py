@@ -221,9 +221,10 @@ def test_a_line_state_keeps_its_end_tags_room_in_the_phone_bars_viewbox() -> Non
 
 
 # ---- round 2: R26-316 - a panels page at `longform:phone` is WARNED by name, never refused (D1; E99 s106) ------------
-# The panels page's build at phone is its own slice; until then the compiler says, per row, the region the panels get
-# against the height one panel needs and which of the five measured faults apply (P72 T12's frames: the subs, the y
-# ticks, the x labels, the rule names, the bars), with their numbers. The page renders as it does.
+# The compiler says, per row, the region the panels get against the height one panel needs and which of the five
+# measured faults apply (P72 T12's frames: the subs, the y ticks, the x labels, the rule names, the bars), with their
+# numbers. The page renders as it does. P72 T47 built the phone layout: a page it holds is drawn in it and no longer
+# warned (test_panels_at_phone); a page it cannot hold keeps this WARN, whose tail says why.
 FIT_WARN = "WARN fit:"
 
 
@@ -252,15 +253,9 @@ def test_the_companion_page_at_phone_is_warned_with_its_region_its_need_and_its_
         "WARN fit: a panels page at readability=longform:phone gets a 210 px region and a panel needs ~327 px (its sub at "
         "the floor, two y ticks, its x labels): the panel subs at 15.3 px (floor 59.08); panel 0's plot 81 px - under two "
         "y ticks' 154; panel 0's x labels overprint (906 px of labels on a 663 px plot); panel 1's bars at most 5.7 px "
-        "tall - it renders as drawn (E99 s106: advice; R26-316's build is its own slice)"], warns
-
-
-def test_a_roomy_panels_page_at_phone_names_only_the_faults_it_has() -> None:
-    """The two-era page gets 475 px - more than a panel needs - and still sets its subs and its labels too small or too
-    close: the WARN names those, and no bars (it has none) and no tick room (its plots hold two)."""
-    (w,) = _fit(_panels_page(LPG.load_series(G.PANELS_V3), "phone"))
-    assert "gets a 475 px region" in w and "the panel subs at 34.5 px" in w and "the rule names overprint on panels 0, 1" in w
-    assert "bars" not in w and "under two y ticks" not in w, w
+        "tall - it renders as drawn (E99 s106: advice; P72 T47's phone layout - the subs at the floor, the rule names "
+        "laddered, two y ticks - does not hold it: panel 0 writes no two y ticks 77 px apart on its 30 px plot; panel 1's "
+        "bars get no plot under the band)"], warns
 
 
 @pytest.mark.parametrize("preset", [None, "middle", "bravos"])

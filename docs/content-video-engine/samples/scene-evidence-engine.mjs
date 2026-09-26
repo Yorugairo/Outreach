@@ -9210,10 +9210,14 @@ async function mount(doc) {
       if (pp.tip) pp.tip.setAttribute("r", (6 * f).toFixed(3));
       if (pp.name && !pp.muted) pp.name.style.fill = pp.p.getAttribute("stroke");   /* the short badge in its line's own ink: the card has no key */
     }
-    /* ... and the x labels of a plot narrowed for named tags: a label is never written over another (s9.23b), and the
-       axis always states its SPAN (E28 - a time axis says where it starts and where it ends). The two ends are kept
-       and a middle label that would meet either is dropped; when the two ends themselves meet, they become ONE range
-       label from the plot's first date ("Oct '25 - Jul '26"), set from the first label's left edge */
+    lpThinXTicks(S);
+  };
+  /* ... and the x labels of a plot narrowed for named tags: a label is never written over another (s9.23b), and the
+     axis always states its SPAN (E28 - a time axis says where it starts and where it ends). The two ends are kept
+     and a middle label that would meet either is dropped; when the two ends themselves meet, they become ONE range
+     label from the plot's first date ("Oct '25 - Jul '26"), set from the first label's left edge. P72 T47: a phone
+     panel's x labels (lpPanelPhoneFit) keep the same rule. */
+  const lpThinXTicks = (S) => {
     const xt = [];
     for (const m of (S.marks || []).filter((q) => q.role === "xtick" && q.el)) {
       let b = null; try { b = m.el.getBBox(); } catch (e) { b = null; }
@@ -12166,7 +12170,7 @@ async function mount(doc) {
     const yDivs = LFT ? Math.max(1, Math.min(5, Math.floor((B - T) / (2 * LP_LONGFORM.TICK_SPACE * LFT.tick)))) : undefined;
     /* P71 T13 / E99 s102: the second axis, planned before the plot's right edge - its column comes out of the plot (null: today's page, to the byte) */
     const Y2 = lpY2Plan(st, pg, series, { T, B, divs: yDivs || 5, PAL });
-    const R = (P ? 70 : 220) + (Y2 ? Y2.shift : 0);
+    const R = Math.max(P ? 70 : 220, st.panelTagR || 0) + (Y2 ? Y2.shift : 0);   /* P72 T47: a phone panel's margin holds its end tag (lpBuildPanel) */
     const Y = (v) => ax.log ? Math.log10(v) : v;
     /* REFERENCE RULES (the fifth watch, 2026-09-07). A POLICY rate is a constant, not a series: drawn as a line it is a step,
        and a step at this scale reads as a fault. `axes.hlines: [{y, label, color}]` draws it as what it is - a labelled rule
@@ -12236,7 +12240,8 @@ async function mount(doc) {
         lpMark(st, "tick:" + n, "tick", gl, { v: tv, y, x1: L, x2: W - R });
         lpMark(st, "ylab:" + n, "ylabel", lpText(st.chart, "lab", pe ? L - 10 + (pe[0][0] - L) : L - 10, pe ? pe[0][1] + 8 : y + 8, "end", lpTick(tv) + (ax.unit || ""),
           lpPhoneTypeOf(st) ? { style: "font-size:" + lpTypeU(st, "tick") + "px" } : undefined), { v: tv, x: pe ? L - 10 + (pe[0][0] - L) : L - 10, y: pe ? pe[0][1] + 8 : y + 8 }); n++; } tv *= 2; }
-    } else lpYTicks(st, y0, y1, my, L, W - R, ax.unit || "", L - 10, Y2 ? lpY2Divs(y0, y1, yDivs || 5) : yDivs, PJ ? pj : null);   /* P71 T13: a y2 page's left axis states its range too */
+    } else lpYTicks(st, y0, y1, my, L, W - R, ax.unit || "", L - 10, Y2 ? lpY2Divs(y0, y1, yDivs || 5)
+      : st.panelBand > 0 && LFT ? lpPhoneDivs(B - T, y0, y1, LFT.tick) || yDivs : yDivs, PJ ? pj : null);   /* P71 T13: a y2 page's left axis states its range too; P72 T47: a phone panel's, two ticks */
     lpYLabel(st, pg, L, T - (LFT ? LFT.ylab_gap : 12));
     if (Y2) lpY2Draw(st, Y2, { L, R, T, B, W, P, LFT });   /* P71 T13: the right axis's ticks placed, both axes inked, its name written */
     const brkFs = PHONE ? lpTypeU(st, "tick") : P ? 40 : 24;   /* P69 T66: the x ticks' own size, in units (the template's .lab, or the phone type) */
@@ -12444,6 +12449,22 @@ async function mount(doc) {
   const smoothstep = (x) => x * x * (3 - 2 * x);
   const lpInvSmooth = (s) => 0.5 - Math.sin(Math.asin(1 - 2 * clamp01(s)) / 3);   /* smoothstep's inverse, closed form: the period fraction at which an eased value reaches s */
   const lpNiceStep = (x) => { const e = Math.pow(10, Math.floor(Math.log10(x))), f = x / e; return e * (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10); };
+  /* P72 T47 (E28: an axis states its scale) - the divisions a PHONE panel's y axis is drawn in: the most, at most 5,
+     whose nice step writes two ticks or more in [lo, hi] at least TICK_SPACE tick figures apart on a plot `plotU` tall
+     (units; the tick in units) - or 0, none does (ledger_page.longform_phone_divs, line for line). The long form's own
+     rule (a division per two figures of plot) gives ONE division on a phone panel's plot - a step of 10 on a 0-7.6 %
+     axis, which writes "0%" alone. */
+  const lpPhoneDivs = (plotU, lo, hi, tickU) => {
+    const span = hi - lo;
+    if (!(plotU > 0 && span > 0 && tickU > 0)) return 0;
+    for (let d = 5; d >= 1; d--) {
+      const step = lpNiceStep(Math.max(1e-9, span / d));
+      let n = 0;
+      for (let tv = Math.ceil(lo / step - 1e-9) * step; tv <= hi + 1e-9; tv += step) n++;
+      if (n >= 2 && step / span * plotU >= LP_LONGFORM.TICK_SPACE * tickU) return d;
+    }
+    return 0;
+  };
   const lpTick = (v) => String(Math.round(v * 100) / 100);
   const LP_HALO = "paint-order:stroke;stroke:#25313C;stroke-width:7px;stroke-linejoin:round;";   /* a field-coloured halo: a direct label stays legible where a line crosses it */
   const LP_ROW_NAME = "font-weight:700;fill:#F2F2F2";   /* a race row's name; the crossing lane adds the halo to it, because in the lane it is drawn over its own bar */
@@ -13817,6 +13838,9 @@ async function mount(doc) {
                                                                       chart (frame, axes, ticks) drawn, every datum still at zero (a bar's scaleY rounds to 0) */
     OCCLUDE_OP: 0.5,                                               /* P72 T12 (R26-299): a panel in front covers the words behind it from this opacity - a word it
                                                                       covers even in part is not drawn (never '%' without its digits) */
+    PHONE_PX: 12 * 1920 / 390,                                     /* P72 T47: a phone panel's sub and rule names, at the E99 s90 floor (LP_CARD.TYPE_PX; ledger_page.CARD_TYPE_PX) */
+    RULE_BASE: 0.9,                                                /* ... a laddered rule name's baseline this many of its sizes under its line's top (its
+                                                                      descender ends 0.04 em past its LINE_H row, in the plot's 40-unit air) */
   });
   const LP_PANEL_KINDS = Object.freeze(["build_to", "undraw", "figure", "bracket", "spread", "span", "chart_to", "relight", "lit_stretch", "axis_tag", "level_join"]);   /* build_scene_timeline_f.PANEL_SPECIES (P69 T36: the light travels a line on its own panel; P71 T10: a level join reads both ends on its panel) */
   const lpPanelDefault = (n, portrait) => (portrait ? "stack" : n >= 4 ? "quad" : "row");
@@ -13876,9 +13900,10 @@ async function mount(doc) {
     const { pg, list, P, ps, a, T, pageDom } = st.panelCtx, p = list[i], hb = st.panelHome[i];
     const BARS = p.builder === "bars";   /* P69 T8d: a bars panel - the bars builder in the same box (kz: its grown scale, for the 196 px cap) */
     {
-      const W0 = P ? hb.w : a * (LP_PANELS.VB[1] + LP_PANELS.SUB_U);   /* ledger_page.panel_view_w: the home viewBox's width */
+      const band = lpPanelBand(st, pg, P, hb, ps);   /* P72 T47: the phone band (rendered px), or 0 - every other page */
+      const top = P ? 0 : band ? band * LP_PANELS.VB[1] / (ps * hb.h - band) : LP_PANELS.SUB_U;   /* the SUB BAND over a landscape panel's plot (a portrait panel's builder keeps its own 90 px, and a stacked cell has none to spare); at phone the band, in units: top x u = band */
+      const W0 = P ? hb.w : a * (LP_PANELS.VB[1] + top);   /* ledger_page.panel_view_w: the home viewBox's width */
       const geom = P ? { W: hb.w, H: hb.h } : { W: f ? W0 * f : W0, H: LP_PANELS.VB[1] };
-      const top = P ? 0 : LP_PANELS.SUB_U;   /* the SUB BAND over a landscape panel's plot (a portrait panel's builder keeps its own 90 px, and a stacked cell has none to spare) */
       const svg = lpEl("svg", "lp-chart lp-panel-chart", box, { viewBox: "0 " + (-top) + " " + geom.W.toFixed(3) + " " + (geom.H + top).toFixed(3) });
       svg.style.left = "0"; svg.style.top = "0"; svg.style.width = f ? (100 * f).toFixed(4) + "%" : "100%"; svg.style.height = "100%";
       const axes = Object.assign({}, p.axes || {}, { ylabel: String(p.sub || "") }, pageDom && !p.independent && !BARS ? { domain: pageDom } : {});
@@ -13890,7 +13915,9 @@ async function mount(doc) {
                   bars: [], paths: [], labels: [], callout: null, cval: null, inlineBadges: st.inlineBadges || {}, linePts: [],
                   marks: [], markBy: {}, badges: [], inkEls: [], glyphs: [], titleGlyphs: [], rtGlyphs: [], vals: BARS ? p.values || [] : [], vstr: BARS ? p.value_strings || [] : [],
                   emph: BARS && Number.isInteger(p.emphasize) ? p.emphasize : -1,
-                  kind: BARS ? "story" : "dense-line", scene: st.scene, panel: i, pg: pgI, perform: null, boardCentre: st.boardCentre };
+                  kind: BARS ? "story" : "dense-line", scene: st.scene, panel: i, pg: pgI, perform: null, boardCentre: st.boardCentre,
+                  panelBand: band,   /* P72 T47: the line builder reads it (lpPhoneDivs) ... */
+                  panelTagR: band && !BARS ? lpPanelTagR(pgI, T, (ps * hb.h - band) / LP_PANELS.VB[1]) : 0 };   /* ... and the right margin its end tag needs */
       if (T) {   /* the long form's preset, at THIS panel's rendered scale: its words read at the preset's px in its home box */
         const u = ps * hb.w / W0, g = lpLongformGeom(T, 0, 560 * u, 560 * u);   /* one chart unit in rendered px: the panel's width over its viewBox's (the home's: a re-laid-out build keeps its words) */
         S.lfType = Object.assign({}, g, { form: axes.tag_form || "full" });
@@ -13911,12 +13938,44 @@ async function mount(doc) {
       }
       const sub = (S.markBy.axislabel || {}).el;   /* the panel's SUB takes the y label's corner (the card's rule: that corner is the panel title's) */
       if (sub) { sub.classList.add("lp-psub"); sub.style.fill = "var(--lp-chalk)"; sub.style.fontWeight = "700";
-        const fs = Math.min(LP_PANELS.SUB_K * (S.lfType ? S.lfType.tick : P ? 34 : 22), P ? Infinity : LP_PANELS.SUB_MAX * top);
+        const fs = Math.min(LP_PANELS.SUB_K * (S.lfType ? S.lfType.tick : P ? 34 : 22), P ? Infinity : band ? LP_PANELS.PHONE_PX / S.lfType.scale : LP_PANELS.SUB_MAX * top);   /* P72 T47: at phone, at the floor */
         sub.style.fontSize = fs.toFixed(2) + "px";
         sub.setAttribute("y", (-top + 0.92 * fs + 4).toFixed(1));   /* at the top of its own band, clear of the rules' names over the plot */
         if (S.markBy.axislabel.geom) S.markBy.axislabel.geom.y = +sub.getAttribute("y"); }
+      if (band) lpPanelPhoneFit(S, geom, top);   /* P72 T47: the rule names laddered in the band, the x labels thinned */
       return S;
     }
+  };
+  /* P72 T47 (R26-366, R26-316's build half) - A PANELS PAGE AT `longform:phone`, BUILT where the arithmetic allows
+     (ledger_page's "THE PANELS PAGE AT `longform:phone`" block decides and stamps `axes.panel_band_px`). Each panel's plot
+     stands under that BAND (rendered px, the page's one): its sub at the floor (LP_PANELS.PHONE_PX, the band's first
+     PHONE_PX / SUB_MAX), then its RULE NAMES off their rules - two rules 1 % apart cannot each carry a 60 px name at its
+     own rule - one line each at the floor, LP_LONGFORM.LINE_H apart, highest rule first, in the rule's ink, right-aligned
+     at the plot's right end when every name on the panel fits there, else at the panel's right edge less EDGE_PX. Its y
+     axis writes two ticks a label apart (lpPhoneDivs), its x labels thin by the card's rule (lpThinXTicks). A page with
+     no band - every other preset, and a phone page the layout does not hold (T12's WARN names why) - is drawn as it was. */
+  const lpPanelBand = (st, pg, P, hb, ps) => {
+    if (P || !st.lfType || !lpLongformPhoneOf(pg)) return 0;
+    const v = +((pg.axes || {}).panel_band_px);   /* the compiler's (ledger_page.PANEL_BAND_KEY) - lpLongformPhoneOf(pg) only */
+    return Number.isFinite(v) && v > 0 && ps * hb.h > v ? v : 0;
+  };
+  /* ... its right margin (units at `u`) holds its widest end tag - the tag's gap past the line's end, the tag (the
+     compiler's estimate, lpLongformTagUnits) and the panel's edge air: the builder's 220 units hold a 61.4 px "5.0%" at
+     the middle preset's scale, not at a phone panel's (ledger_page.longform_panel_right_u) */
+  const lpPanelTagR = (pgI, T, u) => LP_PHONE.TAG_GAP + lpLongformTagUnits(pgI, T, ((pgI.axes || {}).tag_form) || "full", u) + LP_LONGFORM.EDGE_PX / u;
+  const lpPanelPhoneFit = (S, geom, top) => {
+    const u = S.lfType.scale, fs = LP_PANELS.PHONE_PX / u, W = geom.W, xR = W - (S.plot ? S.plot.R : 220);   /* the plot's right end */
+    const rules = S.kind === "dense-line" ? (S.hlines || []).filter((r) => r.lab).sort((a, b) => +b.h.y - +a.h.y) : [];   /* a bars panel keeps its rules' own fit (lpRuleLabelsClear) */
+    for (const r of rules) { r.lab.style.fontSize = fs.toFixed(3) + "px"; r.lab.setAttribute("text-anchor", "end"); }
+    const fitsPlot = rules.every((r) => lpInkW(r.lab) <= xR);
+    const x = fitsPlot ? xR : W - LP_LONGFORM.EDGE_PX / u, y0 = -top + LP_PANELS.PHONE_PX / LP_PANELS.SUB_MAX / u;
+    rules.forEach((r, k) => {
+      const y = y0 + (k * LP_LONGFORM.LINE_H + LP_PANELS.RULE_BASE) * fs;
+      lpSetTextXY(r.lab, x.toFixed(1), y.toFixed(1));
+      const m = S.markBy["rulelab:" + (S.hlines || []).indexOf(r)];
+      if (m) m.geom = Object.assign({}, m.geom, { x: +x.toFixed(1), y: +y.toFixed(1) });   /* a state restore puts it back here */
+    });
+    lpThinXTicks(S);
   };
   /* P69 T8d - A BARS PANEL: buildLedgerBars, unchanged, in the panel's svg (its x1 runs to the viewBox's width); then the
      panel's SUB takes the y label's corner as a line panel's does, and its PLOT is the bars' own frame (the tick rules'
