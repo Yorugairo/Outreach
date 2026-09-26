@@ -355,6 +355,13 @@ an unresolved source anomaly; this pass does not synthesize a task from it.
 | R26-395 | A solo cannot light two bars. Closed by P72 T46d. | lane B `095c3ad`: `add: true`. |
 | R26-396 | The lit end badge has no box. Closed by P72 T46d. | lane B `095c3ad`: a filled accent box, charcoal type. |
 | R26-370 | Same-unit tiers do not share a scale by default. Closed by P72 T46d. | lane B `095c3ad`: `shared_tier_domains` written unless `independent`. |
+| R26-400 | A stamped prop's contact shadow dips with the stamp's ink (regression, P70 T1b 50b2f85). Closed by P72 T46a. | lane B `81f39ae`: the prop's contact keeps its weight; test_prop_shadow 13/13. |
+| R26-341 | The spread paints under the long-form panel. Closed by P72 T46a. | lane B `81f39ae`: `lpGroundInsert`. |
+| R26-386 | A series cannot be dashed. Closed by P72 T46a. | lane B `81f39ae`: `dash` through the projection's mask twin. |
+| R26-390 | The morph's two-plate ground pops in. Closed by P72 T46a. | lane B `81f39ae`: `MORPH_PLATE.IN` 0.1. |
+| R26-399 | Stale notes and a stale transform-origin. Closed by P72 T46a. | lane B `81f39ae`: paint() clears it; determinism_check's known class retired. |
+| R26-401 | `lpVarHex` returns a raw var(). Closed by P72 T46a. | lane B `81f39ae`: reads the template's palette. |
+| R26-402 | The reference rule pops in at .9. Closed by P72 T46a. | lane B `81f39ae`: it fades with its page's build. |
 | R26-284 | A figure double-prints its bar's value. Closed by P72 T18. | lane B `4b07424`: the figure hands over in place; a restating figure WARNs (s106). |
 | R26-288 | A ring on a bar has no value target. Closed by P72 T18. | lane B `4b07424`: `part: value` rings the printed value as drawn. |
 | R26-255 | A bar figure drifts on a page with states. Closed by P72 T18. | lane B `4b07424`: it rides its bar through a rescale. |
