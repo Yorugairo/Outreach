@@ -383,6 +383,11 @@
           "source_set": "PLATE_OPTS"
         },
         {
+          "token": "morph_series",
+          "means": "R26-149: `;morph_series=<n>` - the series whose area a morph-entering line page becomes (default 0). Refused by name off a line page, out of range, or on a page that does not enter by morph.",
+          "source_set": "PLATE_OPTS"
+        },
+        {
           "token": "plate",
           "means": "Morph prop: plate: The page is born from a plate outline with eased corners.",
           "source_set": "MORPH_SHAPES"

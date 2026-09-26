@@ -16323,7 +16323,12 @@ async function mount(doc) {
   };
   const buildMorph = (st, pg, world, key) => {
     if (world && world.morph && typeof world.morph === "object" && world.morph.prop) return buildPropEnter(st, pg, world, key);   /* P69 T26e: a catalogued PROP's own pixels */
-    const line = (st.linePts || [])[0]; if (!line || line.length < 2 || !(st.axisB > 0)) return null;
+    /* R26-149 (P72 T17): the area is the series `world.morph_series` names (the compiler refuses a bad one by name);
+       absent, the first DRAWN line - the page every morph on the record shipped with. A named series takes its live
+       stroke (a highlighted page's tail, never its muted history). */
+    const msi = world && Number.isInteger(world.morph_series) ? world.morph_series : null;
+    const mdi = msi == null ? 0 : (st.paths || []).findIndex((pp) => (pp.si | 0) === msi && !pp.muted);
+    const line = (st.linePts || [])[mdi]; if (!line || line.length < 2 || !(st.axisB > 0)) return null;
     const G = st.geom || { W: 1000, H: 560 }, n = MORPH.COLS, xL = line[0][0], xR = line[line.length - 1][0];
     const yAt = (x) => { for (let i = 0; i + 1 < line.length; i++) { const a = line[i], q = line[i + 1]; if (x >= a[0] - 1e-9 && x <= q[0] + 1e-9) { const u = (x - a[0]) / Math.max(1e-9, q[0] - a[0]); return a[1] + (q[1] - a[1]) * clamp01(u); } } return line[line.length - 1][1]; };
     const xs = [...Array(n).keys()].map((i) => xL + (i / (n - 1)) * (xR - xL));
@@ -16363,7 +16368,7 @@ async function mount(doc) {
     const A = stripOutline(mesh.verts, n);
     const svg = lpEl("svg", "lp-chart lp-morph", st.page, { viewBox: st.chart.getAttribute("viewBox") });
     svg.setAttribute("style", st.chart.getAttribute("style") || "");
-    const col = (st.paths.filter((pp) => !pp.muted)[0] || {}).p; const stroke = col ? col.getAttribute("stroke") : "var(--lp-chalk)";
+    const col = (msi == null ? st.paths.filter((pp) => !pp.muted)[0] : st.paths[mdi] || {}) || {}; const stroke = col.p ? col.p.getAttribute("stroke") : "var(--lp-chalk)";   /* R26-149: the named line's own ink */
     /* P61 T3b / E99 s52 - THE PROP IS ALREADY INK. A planted prop arrives over a board that is still CREAM (the
        ground is soaking in around it, above), and the chart's paint - a series colour at FILL_A under a chalk line -
        is a paint for CHARCOAL: on cream it is a pale tint with a white outline, and the dark splotch the plate held

@@ -340,6 +340,23 @@ def test_a_melt_may_ask_for_the_weight_phase_and_name_its_material():
             B.parse_exit(bad)
 
 
+def test_the_melt_s_throw_and_morph_lengths_have_their_compiler_twins() -> None:
+    """R26-154 (P72 T17): MELT.T_S (what the throw's pick-up + flight adds to a splash's window) and MELT.M_S (what the
+    morph ending adds) are dials of species/melt.mjs; the compiler carries each beside MELT_S / MELT_W_S / MELT_G_S,
+    one dial written twice. Read off the module itself, so editing either copy alone fails here."""
+    import json
+    import subprocess
+    melt = ROOT / "content/video_engine/scripts/species/melt.mjs"
+    src = (f"import {{ MELT }} from {json.dumps(melt.as_uri())};\n"
+           "console.log(JSON.stringify({ T_S: MELT.T_S, M_S: MELT.M_S, S: MELT.S, W_S: MELT.W_S, G_S: MELT.G_S }));\n")
+    out = subprocess.run([("node.exe" if sys.platform == "win32" else "node"), "--input-type=module", "-e", src],
+                         capture_output=True, text=True, cwd=str(ROOT))
+    assert out.returncode == 0, out.stderr
+    dials = json.loads(out.stdout.strip().splitlines()[-1])
+    assert (B.MELT_T_S, B.MELT_M_S) == (dials["T_S"], dials["M_S"]) == (0.77, 1.3)
+    assert (B.MELT_S, B.MELT_W_S, B.MELT_G_S) == (dials["S"], dials["W_S"], dials["G_S"]), "the pairs already pinned, read the same way"
+
+
 def test_a_melt_may_name_the_ball_s_BODY_COLOUR_and_every_melt_without_one_is_the_ball_that_shipped():
     """P61 T5b / E99 s42 (the operator, 2026-09-15, on T5's ball: *"I would be interested in seeing it just melt to
     the slate gray or the reference color also to see what that looks like"*): `body=<word>` is a suffix of its own,
