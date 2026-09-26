@@ -13545,6 +13545,13 @@ STACK_HOLD_AFTER = 1.0           # doc 29 s9.24: its window runs ~1 s past clear
 STACK_RECEDE_LEAD = 0.9          # verdict.mjs LAST_RECEDE_LEAD - the last proof hands the focus back this early
 STACK_BURST_STAGGER = 0.06       # verdict.mjs BURST_STAGGER - card i is thrown this long after card i-1
 STACK_BURST_S = 0.5              # verdict.mjs BURST_S - each card's own throw
+STACK_ENTER_S = 0.9              # verdict.mjs ENTER_S - a card's flight in (P72 T22: a motion a freeze beat reports)
+STACK_RECEDE_S = 1.0             # verdict.mjs RECEDE_S - its return to the rail
+STACK_CARD_ASPECT = 480 / 1056   # verdict.mjs CARD_H / CARD_W - the box every member stands in, unless it is TALL
+STACK_TALL_SHOW = 0.8            # P72 T22 (R26-169): a member the box would show less than this share of the height of
+#                                  (object-fit cover, left top) is TALL and takes a box of its own shape (`aspect`); a
+#                                  16:9 card (81 %) and the approved walls' wide proofs keep the box, number for number
+STACK_ITEM_KEYS = ("id", "at", "page")   # a member: the picture's asset id, its verbatim beat, and the PAGE it re-presents
 
 
 def stack_window(items: list[dict], clear_at: float) -> tuple[float, float]:
@@ -13573,6 +13580,14 @@ def stack_entry(items, clear_at: float, form: str | None = None,
     for n, it in enumerate(rows, 1):
         if not it.get("id") or it.get("at") is None:
             raise ValueError(f"stack: item {n} needs an `id` (a document docked earlier) and an `at` (its verbatim beat)")
+        extra = sorted(k for k in it if k not in STACK_ITEM_KEYS)
+        if extra:   # P72 T22 (s106): a key the member model does not read is refused by name, never dropped in silence
+            raise ValueError(f"stack: item {n} ({it['id']}) carries {', '.join(extra)} - a member is "
+                             f"{{{', '.join(STACK_ITEM_KEYS)}}}")
+        if "page" in it and not (isinstance(it["page"], str) and it["page"].strip()):
+            raise ValueError(f"stack: item {n} ({it['id']}) page={it['page']!r} - `page` names the ledger page object the "
+                             "member re-presents (a page the cut showed earlier; its picture is `id`, the card the door "
+                             "rendered for it)")
         it["at"] = round(float(it["at"]), 2)
     for a, b in zip(rows, rows[1:]):
         if b["at"] <= a["at"]:
@@ -13595,10 +13610,137 @@ def stack_entry(items, clear_at: float, form: str | None = None,
         raise ValueError(f"stack: the host dock leaves at {exitt} s, before the burst finishes at {want_exit} s "
                          f"({len(rows)} cards, {STACK_BURST_STAGGER} s apart, {STACK_BURST_S} s each) - doc 29 s9.24: "
                          "the window runs past clear_at so the burst finishes ticking")
-    payload = {"items": [{"id": it["id"], "at": it["at"]} for it in rows], "clear_at": clear_at}
+    payload = {"items": [{"id": it["id"], **({"page": it["page"]} if "page" in it else {}), "at": it["at"]} for it in rows],
+               "clear_at": clear_at}
     if form is not None:
         payload["form"] = form
     return payload, enter, exitt
+
+
+def pages_shown(plan, before_s: float) -> set[str]:
+    """P72 T22 (R26-327): every ledger page object the table SHOWS on a row that opens before ``before_s`` - the row's
+    own page (``ledger:<object>:...``) and each state it recasts to (``;then=<object>:<variant>``). A verdict member may
+    re-present one of them (``page=``); a page the cut never showed is not re-presentation."""
+    out: set[str] = set()
+    for row in plan:
+        if float(row[0]) >= float(before_s):
+            continue
+        bare, opts = split_plate_opts(str(row[2]))
+        if not bare.startswith(LEDGER_PREFIX):
+            continue
+        out.add(bare.split(":")[1])
+        out.update(str(v).split(":")[0] for v in opts.get("then", []) if str(v).split(":")[0])
+    return out
+
+
+def _stack_live_kind(ev: dict | None) -> str | None:
+    """What makes a docked member LIVE - the player draws it, so its asset is a fallback or a placeholder."""
+    if not isinstance(ev, dict):
+        return None
+    if ev.get("record"):
+        return "a record (live type)"
+    chart = ev.get("chart")
+    if isinstance(chart, dict):
+        return "a checklist" if chart.get("checklist") else "a chart the player draws"
+    return None
+
+
+def stack_members(stack: dict, evidence: dict, uris: dict, pages: set | frozenset, where: str,
+                  asset_path) -> tuple[dict, list[str]]:
+    """P72 T22 - THE VERDICT STACK's MEMBER MODEL (R26-327, R26-169): each member resolves BY NAME, or the row is refused.
+
+    The stack re-presents documents the cut already showed (doc 29 s9.24). A member is either
+
+      * a DOCUMENT docked in the cut (``id`` in ``evidence`` - read once every row is compiled, because an approved
+        wall re-presents a document docked after it: ep1's ev-hynix-steel-v1, docked at s70, on the s67 wall); or
+      * a PAGE the cut showed earlier (``page=<object>``, one of ``pages``) - its picture is ``id``, the card the door
+        rendered for that page (`authoring.docks.chart_card`: the page's own painter captured at its landing, the page
+        as a texture), which joins the asset map although it was never docked.
+
+    Anything else is REFUSED by name (at the base it compiled and painted a BLANK card - a silent drop, s106). A docked
+    member that is LIVE (a checklist or a chart the player draws, a record's typed words) shows its static asset on the
+    wall, which for a live card is a placeholder - REPORTED by name (s106), with the way out. A member whose picture is
+    TALL (the box would show less than STACK_TALL_SHOW of its height) carries ``aspect`` (h / w) and the player gives
+    it a box of its own shape; every other member's entry is byte-for-byte what it was.
+
+    ``asset_path(aid) -> Path`` raises ValueError naming the id (``dock_asset_path``). Returns (payload, warnings); the
+    uris of every member are written into ``uris``."""
+    from PIL import Image
+    items, warns = [], []
+    for n, it in enumerate(stack.get("items") or [], 1):
+        aid, page = str(it["id"]), it.get("page")
+        what = f"{where}: stack member {n} {aid!r} ({it['at']:g}s)"
+        if page is not None:
+            if page not in pages:
+                raise ValueError(f"{what}: page {page!r} is not shown on any row before the member's beat - the stack "
+                                 "re-presents what the cut already showed (doc 29 s9.24); pages shown so far: "
+                                 f"{', '.join(sorted(pages)) or 'none'}")
+        elif aid not in evidence:
+            raise ValueError(f"{what} was never docked in this cut - the stack re-presents documents already shown (doc "
+                             "29 s9.24); dock it, or name the PAGE it re-presents (`page=<object>`, its picture a card "
+                             "the door rendered for that page)")
+        else:
+            live = _stack_live_kind(evidence.get(aid))
+            if live:
+                warns.append(f"{what} is {live}: its dock is live, and the wall shows its static asset instead (for a "
+                             "live card, a placeholder) - name a card of it (`id` = a picture rendered for the wall), or "
+                             "leave it out. REPORTED (E99 s106)")
+        ap = asset_path(aid)
+        if aid not in uris:
+            uris[aid] = dock_uri(ap)
+        out = {"id": aid, **({"page": page} if page is not None else {}), "at": it["at"]}
+        if not is_video_asset(ap):
+            w, h = Image.open(ap).size
+            if w and h and STACK_CARD_ASPECT / (h / w) < STACK_TALL_SHOW:
+                out["aspect"] = round(h / w, 4)
+        items.append(out)
+    return dict(stack, items=items), warns
+
+
+def dock_freeze_errors(docks: list[dict], row_species: list, evidence: dict, where: str) -> tuple[list[str], list[str]]:
+    """P72 T22 (R26-304) - THE DOCK DOOR'S FREEZE CHECK. `_freeze_row_errors` reads the row's species; a dock is not one,
+    so a card could land or leave inside a freeze beat [at, at + dur) unseen. One light - everything else stops: a dock
+    whose ENTER or EXIT falls inside a beat is REFUSED by name, and so is a verdict stack whose member's beat or clear
+    does (each is an arrival or a leave on the stage). A card that holds across the beat holds with it (its idle is on
+    the life clock, and so is the wall's). A stack card still FLYING in, receding or bursting when a beat opens moves
+    while everything else stops: REPORTED with its numbers (E99 s106 - timing advises). Returns (errors, warnings)."""
+    eps = 1e-6
+    beats = [(float(e["at"]), float(e["at"]) + float(e["dur"])) for e in row_species or []
+             if isinstance(e, dict) and e.get("kind") == SPECIES_FREEZE and _num(e.get("at")) and _num(e.get("dur"))]
+    errs: list[str] = []
+    warns: list[str] = []
+    for a, b in beats:
+        inside = lambda x: a - eps <= float(x) < b - eps   # noqa: E731 - [a, b): at the beat's end life has resumed
+        span = f"the freeze beat ({a:g}-{b:g}s)"
+        for d in docks:
+            if inside(d["enter"]):
+                errs.append(f"{where}: dock {d['slide']} enters at {d['enter']:g}s inside {span} - one light: nothing "
+                            "else lands in it; move the card's word, or the beat")
+            if a + eps < float(d["exit"]) < b - eps:
+                errs.append(f"{where}: dock {d['slide']} leaves at {d['exit']:g}s inside {span} - one light: nothing "
+                            "else leaves in it; hold the card past the beat, or take it off before")
+            st = (evidence.get(d["slide"]) or {}).get("stack")
+            if not st:
+                continue
+            its = st.get("items") or []
+            for it in its:
+                if inside(it["at"]):
+                    errs.append(f"{where}: stack {d['slide']} member {it['id']!r} lands at {it['at']:g}s inside {span} - "
+                                "one light: nothing else lands in it; move the beat off the member's phrase")
+            if inside(st["clear_at"]):
+                errs.append(f"{where}: stack {d['slide']} bursts at {st['clear_at']:g}s inside {span} - one light: the "
+                            "wall's leave is not in it")
+            moving = []
+            for k, it in enumerate(its):
+                nxt = its[k + 1]["at"] if k + 1 < len(its) else float(st["clear_at"]) - STACK_RECEDE_LEAD
+                for verb, m0, m1 in (("flies in", it["at"], it["at"] + STACK_ENTER_S),
+                                     ("recedes", nxt, nxt + STACK_RECEDE_S)):
+                    if m0 < b - eps and m1 > a + eps and not inside(m0):
+                        moving.append(f"{it['id']!r} {verb} {m0:g}-{m1:g}s")
+            if moving:
+                warns.append(f"{where}: stack {d['slide']}: {', '.join(moving)} - still moving inside {span} while "
+                             "everything else stops; move the beat clear of the wall's motion. REPORTED (E99 s106)")
+    return errs, warns
 
 
 def dock_card_profile(asset: Path) -> dict:
@@ -14199,6 +14341,13 @@ def main() -> int:
     _chapter_errs = chapter_errors(chapters, tl.get("words"), tl["runtime_s"], ASPECT)
     if _chapter_errs:
         raise SystemExit("FAIL: " + "; ".join(_chapter_errs))
+    stack_hosts: list[tuple] = []   # P72 T22: (host asset, row) for every verdict stack - its members resolve after the rows
+
+    def _stack_noted(d: dict, aid: str, i: int, a: float, b: float) -> dict:
+        """P72 T22: the host dock's payload as authored, noted for the member model once every dock is known."""
+        stack_hosts.append((aid, i, a, b))
+        return d["stack"]
+
     for i, row in enumerate(plan):
         # exit style is HYBRID (operator, 2026-08-29): mechanical default
         # (E47, 2026-09-06: docks -> DIP, bare -> cut; it was docks -> wipe),
@@ -14640,8 +14789,9 @@ def main() -> int:
                         **({"record": d["record"]} if "record" in d else {}),
                         # a STACK payload: the verdict pile-up - member
                         # ids resolve against the asset-data map in the
-                        # player (every member is docked elsewhere)
-                        **({"stack": d["stack"]} if "stack" in d else {}),
+                        # player; P72 T22: each member resolves BY NAME once
+                        # every row is compiled (stack_members, below the loop)
+                        **({"stack": _stack_noted(d, aid, i, a, b)} if "stack" in d else {}),
                         # a LIVE CHART payload: series emitted by the chart
                         # builder from the same data as the PNG. The player
                         # DRAWS the line; the PNG stays the static fallback.
@@ -14694,6 +14844,11 @@ def main() -> int:
                                         idle=dock_idle(dopt, evidence[aid]),   # P70 T13: the drift-hold, graded by the payload
                                         under=dopt.get("under")))   # P71 T15: hover or blur, the author's choice
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
+        _fz_errs, _fz_warns = dock_freeze_errors(docks, row_species, evidence, f"shot row {i + 1} ({a}-{b}s)")   # P72 T22 / R26-304
+        if _fz_errs:
+            raise SystemExit("FAIL: " + "; ".join(_fz_errs))
+        for _w in _fz_warns:
+            print(f"  [WARN] P72 T22: {_w}")
         # P69 T65 / E99 s110 (2): a ring on a DOCK - on the row, on the stage at its word, the word on the phrase that
         # points at it - and it leaves on the dock's leave. A row with no such ring is the same list, untouched.
         try:
@@ -14822,6 +14977,17 @@ def main() -> int:
     if pm_warn_rows:   # P69 T26e: the prop morphs' findings - the invariants advise (E99 s106/s107)
         print(f"  [WARN] P69 T26e: {len(pm_warn_rows)} prop morph finding(s) - WARNs, not refusals: read the frames "
               f"({'; '.join(sorted(set(pm_warn_rows))[:6])})")
+    for _aid, _i, _a, _b in stack_hosts:   # P72 T22 (R26-327 / R26-169): every member resolves BY NAME, or the build fails
+        _st = evidence[_aid]["stack"]
+        _first = min(float(it["at"]) for it in _st.get("items") or [{"at": _a}])
+        try:
+            evidence[_aid]["stack"], _sw = stack_members(_st, evidence, uris, pages_shown(plan, _first),
+                                                         f"shot row {_i + 1} ({_a}-{_b}s) dock {_aid}",
+                                                         lambda _m: dock_asset_path(_m, EP))
+        except (ValueError, KeyError, TypeError) as exc:
+            raise SystemExit(f"FAIL: {exc}") from exc
+        for _w in _sw:
+            print(f"  [WARN] P72 T22: {_w}")
     if prop_warns:   # P69 T26d: the placement findings, counted once more at the foot of the report
         print(f"  [WARN] P69 T26d: {len(prop_warns)} prop placement finding(s) - WARNs, not refusals (E99 s106): read the "
               f"frames ({'; '.join(sorted(set(prop_warns))[:6])})")

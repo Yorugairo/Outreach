@@ -4,7 +4,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { VERDICT, VERDICT_9X16, verdictGeometry, verdictFocusRect, verdictGatherXf, verdictGather,
-         verdictNextAt, verdictPose, verdictBurst, paintVerdict } from "../../scripts/species/verdict.mjs";
+         verdictNextAt, verdictPose, verdictBurst, paintVerdict, verdictSpotBox, verdictLive } from "../../scripts/species/verdict.mjs";
 
 const near = (a, b, eps = 1e-9) => Math.abs(a - b) <= eps;
 const W = 1920, H = 1080;
@@ -193,11 +193,11 @@ test("a seek IS the play: the same t gives the same bits in any order", () => {
   assert.ok(!/Math\.random|Date\.now|new Date|performance\./.test(src));
 });
 
-test("the painter writes the inline strings and removes the stack outside its life", () => {
+test("the painter writes the inline strings and HIDES the stack outside its life (P72 T22, R26-173)", () => {
   const card = () => ({ style: {} });
   const its = items([3, 5]).map((it) => Object.assign(it, { card: card() }));
   let removed = 0;
-  const st = { sb: { remove: () => removed++ }, items: its, clear_at: 10 };
+  const st = { sb: { remove: () => removed++, style: {} }, items: its, clear_at: 10 };
   assert.equal(paintVerdict(st, 4.5, { enter: 2 }), true);
   const p = verdictPose(its[0], 0, 4.5, 5, 10);
   assert.equal(its[0].card.style.transform,
@@ -211,7 +211,56 @@ test("the painter writes the inline strings and removes the stack outside its li
     `translate(${b.tx}px, ${b.ty}px) translateZ(${b.tz}px) rotate(${b.rot}deg) scale(${b.scale})`);
   assert.match(its[1].card.style.transform, /^translate\([-\d.e]+px, [-\d.e]+px\) translateZ\([\d.e-]+px\) rotate\([-\d.e]+deg\) scale\([\d.e-]+\)$/);
   assert.equal(removed, 0);
+  assert.equal(st.sb.style.display, undefined, "inside its life the painter never writes the box's display");
   assert.equal(paintVerdict(st, 10 + 1.41, { enter: 2 }), false);
+  assert.equal(st.sb.style.display, "none");
   assert.equal(paintVerdict(st, 1.4, { enter: 2 }), false);
-  assert.equal(removed, 2);
+  assert.equal(st.sb.style.display, "none");
+  /* a seek back into the wall paints it again: the state was kept, the box is shown */
+  assert.equal(paintVerdict(st, 4.5, { enter: 2 }), true);
+  assert.equal(st.sb.style.display, "");
+  assert.equal(removed, 0, "the stackbox is never torn down - a seek back could not mount it again (R26-173)");
+  assert.equal(verdictLive(st, 11.4, { enter: 2 }), true);
+  assert.equal(verdictLive(st, 11.41, { enter: 2 }), false);
+});
+
+test("P72 T22 - the wall's LIFE reads the life clock; the choreography reads t (R26-304)", () => {
+  const its = items([3, 5, 7]);
+  /* a held life clock: the rail and the focus drift stand still while t runs, between the events */
+  for (const V of [VERDICT, VERDICT_9X16]) {
+    const g = [0, 1, 2].map((i) => Object.assign({ at: [3, 5, 7][i] }, verdictGeometry(i, V.REF_W, V.REF_H, V, 3)));
+    const at = (t, life) => JSON.stringify(g.map((it, i) => verdictPose(it, i, t, verdictNextAt(g, i, 20, V), 20, V, life)));
+    assert.equal(at(12.0, 11.0), at(12.6, 11.0), "a life clock held at 11.0 holds every pose between the events");
+    assert.notEqual(at(12.0, 12.0), at(12.6, 12.6), "... and the wall lives when it runs");
+    assert.equal(at(12.0, 12.0), at(12.0), "no life clock IS t - the same frame, byte for byte");
+  }
+  /* the painter hands its lifeOf to the pose and to the burst's rest */
+  const card = () => ({ style: {} });
+  const st = { sb: { style: {} }, items: its.map((it) => Object.assign({}, it, { card: card() })), clear_at: 20 };
+  paintVerdict(st, 12.0, { enter: 2 }, VERDICT, () => 11.0);
+  const a = st.items.map((it) => it.card.style.transform);
+  paintVerdict(st, 12.6, { enter: 2 }, VERDICT, () => 11.0);
+  assert.deepEqual(st.items.map((it) => it.card.style.transform), a);
+});
+
+test("P72 T22 - a TALL member takes its own shape with the box's area, inside the safe box (R26-169)", () => {
+  for (const V of [VERDICT, VERDICT_9X16]) {
+    const [sw, sh] = [V.REF_W, V.REF_H];
+    for (let i = 0; i < 9; i++) {
+      const flat = verdictSpotBox(i, sw, sh, V), tall = verdictSpotBox(i, sw, sh, V, 1.25);
+      assert.ok(near(tall.hpx / tall.wpx, 1.25, 1e-9), "its own shape");
+      assert.ok(near(tall.wpx * tall.hpx, flat.wpx * flat.hpx, 1e-6), "the landscape box's area");
+      const [x0, x1, y0, y1] = V.SAFE || [0, sw, 0, sh];
+      assert.ok(tall.cx - tall.wpx / 2 >= x0 + V.TALL_PAD - 1e-9 && tall.cx + tall.wpx / 2 <= x1 - V.TALL_PAD + 1e-9, `spot ${i} x`);
+      assert.ok(tall.cy - tall.hpx / 2 >= y0 + V.TALL_PAD - 1e-9 && tall.cy + tall.hpx / 2 <= y1 - V.TALL_PAD + 1e-9, `spot ${i} y`);
+      const g = verdictGeometry(i, sw, sh, V, 9, Array(9).fill(null).map((_, k) => (k === i ? 1.25 : null)));
+      assert.ok(near(g.asc * tall.wpx, verdictFocusRect(i, V, 1.25).w, 1e-9), "the focus pose in its own shape");
+      assert.ok(near(verdictFocusRect(i, V, 1.25).w * verdictFocusRect(i, V, 1.25).h,
+                     verdictFocusRect(i, V).w * verdictFocusRect(i, V).h, 1e-6), "... with the focus card's area");
+    }
+    /* no aspect: the geometry is the one it was, number for number (the approved walls) */
+    for (let i = 0; i < 9; i++)
+      assert.deepEqual(Object.assign({}, verdictGeometry(i, sw, sh, V, 9), { aspect: undefined }),
+                       Object.assign({}, verdictGeometry(i, sw, sh, V, 9, Array(9).fill(null)), { aspect: undefined }));
+  }
 });

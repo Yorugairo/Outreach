@@ -64,7 +64,22 @@
    which is the engine as it stood before T7c on that form, byte for byte in its goldens.
    TWO SURFACES, ONE CHOREOGRAPHY (P61 T7): `VERDICT` is the full-frame form; `VERDICT_9X16` re-lays the SAME
    phases for a short and names the two it adds. `verdictDials(portrait)` hands the painter one or the other.
-   The dials below are ours to tune (42 s42.5), not findings. doc 29 s9.24's translateZ -940 is stale: the code is -700. */
+   The dials below are ours to tune (42 s42.5), not findings. doc 29 s9.24's translateZ -940 is stale: the code is -700.
+
+   P72 T22 - THE WALL'S LIFE, ITS SCRUB AND ITS TALL CARDS:
+     life    - the rails' named idle, the focus drift, the bob and the breath are LIFE, so they read the engine's LIFE
+               clock (`lifeOf`, species/freeze.mjs lifeClock - t with every frozen second before it taken out): under a
+               freeze beat the wall stands still to the pixel and after it carries on from where it stopped (R26-304).
+               The choreography - enter, focus, recede, gather, burst - is EVENTS on the word clock t; the compiler
+               refuses a member's beat or the clear inside a beat and reports a motion that runs into one.
+     scrub   - outside its life the stackbox is HIDDEN, never torn down, so a seek back into the wall paints it again,
+               and the engine hides it whenever its host dock is off the stage (R26-173: a seek that skipped the clear
+               left the last painted cards standing on every later frame).
+     tall    - a member the compiler found TALLER than the 1056:480 box (`aspect`, h / w - a portrait chart card)
+               takes a box of its own shape with the AREA the landscape box would have had, in the rail spot and in
+               the focus pose alike, kept inside the safe box (the stage on the full frame) by TALL_PAD. Every other
+               member - the approved walls' landscape and wide proofs - keeps the box it had, number for number
+               (R26-169: a portrait card showed 36 % of its height, its header). */
 
 import { idleXf } from "../kinetics/idle.mjs";
 
@@ -125,6 +140,8 @@ export const VERDICT = Object.freeze({
   BURST_S: 0.5,          /* each card's burst clock (quadratic in) - the reference's own 0.50 */
   REMOVE_AFTER: 1.4,     /* the stackbox is removed this long after clear_at ... */
   MOUNT_LEAD: 0.5,       /* ... and when t is earlier than the dock's enter less this */
+  TALL_PAD: 16,          /* P72 T22: a TALL member's box stays this far inside the safe box (the stage on the full frame) -
+                            its tilt's bounding box, its idle walk and its breath (R26-169) */
 });
 
 /* G-l's vertical safe box on a 1080x1920 stage (scripts/gate_vertical_safe_box.py SAFE_X / SAFE_Y): platform chrome
@@ -223,12 +240,36 @@ export const verdictDials = (portrait) => (portrait ? VERDICT_9X16 : VERDICT);
 
 const verdict01 = (v) => Math.min(1, Math.max(0, v));
 
+/* P72 T22 (R26-169): a TALL member's width share - its box keeps the landscape box's AREA in its own shape `a` (h / w) */
+const verdictTallK = (a, V) => Math.sqrt((V.CARD_H / V.CARD_W) / a);
+
+/* ... a centre c for a box of `size` kept inside [lo, hi] (centred when it cannot fit) */
+const verdictFit = (c, size, lo, hi) => (size >= hi - lo ? (lo + hi) / 2 : Math.min(Math.max(c, lo + size / 2), hi - size / 2));
+
 /* THE FOCUS POSE's own rect in stage px - where card i stands while its phrase is spoken, and (for the LAST card)
-   where the wall ENDS: the centre the gather draws toward. */
-export const verdictFocusRect = (i, V = VERDICT) => ({
-  cx: V.ACTIVE_X + (i % 2 ? V.ACTIVE_DX : -V.ACTIVE_DX),
-  cy: V.ACTIVE_Y + (i % V.ACTIVE_ROWS) * V.ACTIVE_ROW_DY,
-  w: V.ACTIVE_W, h: V.ACTIVE_W * V.CARD_H / V.CARD_W });
+   where the wall ENDS: the centre the gather draws toward. A TALL member (`a`, h / w) stands there in its own shape
+   with the landscape focus card's area (P72 T22); without one the rect is the one it always was. */
+export const verdictFocusRect = (i, V = VERDICT, a = null) => {
+  const cx = V.ACTIVE_X + (i % 2 ? V.ACTIVE_DX : -V.ACTIVE_DX), cy = V.ACTIVE_Y + (i % V.ACTIVE_ROWS) * V.ACTIVE_ROW_DY;
+  if (!a) return { cx, cy, w: V.ACTIVE_W, h: V.ACTIVE_W * V.CARD_H / V.CARD_W };
+  const w = V.ACTIVE_W * verdictTallK(a, V);
+  return { cx, cy, w, h: w * a };
+};
+
+/* THE RAIL SPOT's box of card i in stage px, and its CSS rect in % of the stage. A TALL member (P72 T22, R26-169) keeps
+   the spot's centre and the landscape box's area in its own shape, fitted inside the safe box (V.SAFE; the stage on
+   the full frame) by TALL_PAD - so a portrait card taller than its band never leaves the frame the viewer can read. */
+export const verdictSpotBox = (i, stageW, stageH, V = VERDICT, a = null) => {
+  const [L, T, W] = V.SPOTS[i % V.SPOTS.length];
+  const wpx = W / 100 * stageW, hpx = wpx * V.CARD_H / V.CARD_W;
+  const cx = L / 100 * stageW + wpx / 2, cy = T / 100 * stageH + hpx / 2;
+  if (!a) return { L, T, W, wpx, hpx, cx, cy, aspect: null };
+  const w = wpx * verdictTallK(a, V), h = w * a;
+  const [x0, x1, y0, y1] = V.SAFE || [0, stageW, 0, stageH];
+  const fx = verdictFit(cx, w, x0 + V.TALL_PAD, x1 - V.TALL_PAD), fy = verdictFit(cy, h, y0 + V.TALL_PAD, y1 - V.TALL_PAD);
+  return { L: (fx - w / 2) / stageW * 100, T: (fy - h / 2) / stageH * 100, W: w / stageW * 100,
+           wpx: w, hpx: h, cx: fx, cy: fy, aspect: a };
+};
 
 /* THE GATHER's offset for ONE railed card (E99 s59): it draws GATHER_PULL of the way toward the centre card `f`,
    and never so far that its own box reaches that card's CORE (GATHER_CORE of f's rect, plus GATHER_GAP). The rails
@@ -249,19 +290,22 @@ export const verdictGatherXf = (cx, cy, w, h, f, V = VERDICT) => {
    gather's offset toward the centre card. `n` is the wall's own count - ON A GATHERING FORM (V.GATHER, the short's:
    E99 s61) card n-1 is the CENTRE card (the wall ends on it: no rail spot to return to, no gather of its own, and
    its own bearing out). Without a gather - the full frame, which keeps the reference - `last` is false, gx/gy are 0
-   and every bearing is the radial one, which is the geometry as it stood before P61 T7c, number for number. */
-export const verdictGeometry = (i, stageW, stageH, V = VERDICT, n = 0) => {
-  const [L, T, W] = V.SPOTS[i % V.SPOTS.length];
-  const wpx = W / 100 * stageW, hpx = wpx * V.CARD_H / V.CARD_W;
-  const cx = L / 100 * stageW + wpx / 2, cy = T / 100 * stageH + hpx / 2;
-  const f = verdictFocusRect(i, V);
+   and every bearing is the radial one, which is the geometry as it stood before P61 T7c, number for number.
+   `aspects` (P72 T22) is the wall's per-member shape (h / w, or null for the box's own) - a TALL member's box, its
+   focus pose and, for the last card, the centre the gather draws toward; absent, every number is the one it was. */
+export const verdictGeometry = (i, stageW, stageH, V = VERDICT, n = 0, aspects = null) => {
+  const a = aspects ? aspects[i] || null : null;
+  const { L, T, W, wpx, hpx, cx, cy } = verdictSpotBox(i, stageW, stageH, V, a);
+  const f = verdictFocusRect(i, V, a);
   const gathers = !!V.GATHER && n > 0;
   const last = gathers && i === n - 1;
-  const g = gathers && !last ? verdictGatherXf(cx, cy, wpx, hpx, verdictFocusRect(n - 1, V), V) : { gx: 0, gy: 0 };
-  return { L, T, W, last,
+  const g = gathers && !last
+    ? verdictGatherXf(cx, cy, wpx, hpx, verdictFocusRect(n - 1, V, aspects ? aspects[n - 1] || null : null), V)
+    : { gx: 0, gy: 0 };
+  return { L, T, W, last, aspect: a,
            tilt: V.TILTS[i % V.TILTS.length],
            dir: i % 2 ? 1 : -1,
-           adx: f.cx - cx, ady: f.cy - cy, asc: V.ACTIVE_W / wpx,
+           adx: f.cx - cx, ady: f.cy - cy, asc: a ? f.w / wpx : V.ACTIVE_W / wpx,
            gx: g.gx, gy: g.gy,
            bx: last ? 0 : (cx - V.ORIGIN_X * stageW) / (stageW * V.BURST_NORM_X / V.REF_W),
            by: last ? V.BURST_CENTRE_BY : (cy - V.ORIGIN_Y * stageH) / (stageH * V.BURST_NORM_Y / V.REF_H) };
@@ -279,20 +323,22 @@ export const verdictNextAt = (items, i, clearAt, V = VERDICT) =>
 export const verdictGather = (t, clearAt, V = VERDICT) =>
   1 - Math.pow(1 - verdict01((t - (clearAt - V.GATHER_LEAD)) / V.GATHER_LEAD), 3);
 
-/* THE POSE before the clear: enter -> focus -> recede -> idle. a = the pose blend (0 rail, 1 focus). */
-export const verdictPose = (item, i, t, nextAt, clearAt, V = VERDICT) => {
+/* THE POSE before the clear: enter -> focus -> recede -> idle. a = the pose blend (0 rail, 1 focus). `life` is the LIFE
+   clock at t (P72 T22, R26-304): the idle, the drift, the bob and the breath read it, the choreography reads t - with
+   no freeze it IS t, the same number, so every frame is the one it was. */
+export const verdictPose = (item, i, t, nextAt, clearAt, V = VERDICT, life = t) => {
   const e = verdict01((t - item.at) / V.ENTER_S);
   const ee = 1 - Math.pow(1 - e, 3);
   const r = verdict01((t - nextAt) / V.RECEDE_S);
   const rr = r < 0.5 ? 4 * r * r * r
                      : 1 - Math.pow(-2 * r + 2, 3) / 2;
   const a = ee * (1 - rr);
-  const drift = Math.sin(t * V.DRIFT_W + i * V.DRIFT_PHASE);
+  const drift = Math.sin(life * V.DRIFT_W + i * V.DRIFT_PHASE);
   /* THE RAIL'S LIFE. The short's form names an E49 idle kind for the RAILED share of the pose (a = 0), sized by its
      own dials and phased per card; the FOCUS share keeps the continuous wander the hyperframes hand-off asks for
      (s9.24b: "the active card drifts continuously; railed cards hold almost still"). Full-frame keeps the inline
      drift/bob it shipped with, expression for expression - every landscape frame is byte-identical. */
-  const ix = V.IDLE_KIND ? idleXf(V.IDLE_KIND, t, i * V.IDLE_PHASE,
+  const ix = V.IDLE_KIND ? idleXf(V.IDLE_KIND, life, i * V.IDLE_PHASE,
                                   { DRIFT_PX: V.IDLE_DRIFT_PX, BREATH_AMP: V.IDLE_BREATH_AMP }) : null;
   /* THE GATHER (E99 s59, the SHORT's form only since E99 s61): over the last GATHER_LEAD the RAILED share of the
      idle fades out (`hold`) while the card draws toward the centre card - the wall closes and holds its breath.
@@ -302,8 +348,8 @@ export const verdictPose = (item, i, t, nextAt, clearAt, V = VERDICT) => {
   const ge = V.GATHER ? verdictGather(t, clearAt, V) : 0, hold = 1 - ge;
   const dx = ix ? item.adx * a + ix.dx * (1 - a) * hold + drift * V.DRIFT_X_ACTIVE * a
                 : item.adx * a + drift * (V.DRIFT_X_REST * hold + V.DRIFT_X_ACTIVE * a);
-  const dy = ix ? item.ady * a + ix.dy * (1 - a) * hold + Math.cos(t * V.BOB_W + i * V.BOB_PHASE) * V.BOB_ACTIVE * a
-                : item.ady * a + Math.cos(t * V.BOB_W + i * V.BOB_PHASE) * (V.BOB_REST * hold + V.BOB_ACTIVE * a);
+  const dy = ix ? item.ady * a + ix.dy * (1 - a) * hold + Math.cos(life * V.BOB_W + i * V.BOB_PHASE) * V.BOB_ACTIVE * a
+                : item.ady * a + Math.cos(life * V.BOB_W + i * V.BOB_PHASE) * (V.BOB_REST * hold + V.BOB_ACTIVE * a);
   const sc = (ix ? 1 + (ix.scale - 1) * (1 - a) * hold : 1) + (item.asc - 1) * a + drift * V.DRIFT_SCALE * a;
   return { tx: dx + (item.gx || 0) * ge + (1 - ee) * V.ENTER_SWING * item.dir,
            ty: dy + (item.gy || 0) * ge + (1 - ee) * V.ENTER_RISE,
@@ -330,9 +376,10 @@ export const verdictBurst = (item, i, t, clearAt, V = VERDICT, rest = null) => {
    that pose to the frame (P61 T7c). On the form that keeps the REFERENCE the origin is the rail and the string is
    the inline code's own, unrounded: the two together are what make the full frame's burst frame byte-identical to
    the engine as it stood before T7c. */
-function paintBurstCard(st, it, i, t, V) {
+function paintBurstCard(st, it, i, t, V, lifeOf) {
   if (V.GATHER) {
-    const rest = verdictPose(it, i, st.clear_at, verdictNextAt(st.items, i, st.clear_at, V), st.clear_at, V);
+    const rest = verdictPose(it, i, st.clear_at, verdictNextAt(st.items, i, st.clear_at, V), st.clear_at, V,
+                             lifeOf ? lifeOf(st.clear_at) : st.clear_at);
     const b = verdictBurst(it, i, t, st.clear_at, V, rest);
     it.card.style.opacity = b.opacity.toFixed(2);
     it.card.style.transform =
@@ -351,18 +398,25 @@ function paintBurstCard(st, it, i, t, V) {
     ` scale(${b.scale})`;
 }
 
-/* THE PAINTER: writes every card's pose at t. Returns false when the stack is outside its life (the stackbox is
-   removed - the caller forgets its state), true otherwise. */
-export function paintVerdict(st, t, d, V = VERDICT) {
-  if (t > st.clear_at + V.REMOVE_AFTER || t < d.enter - V.MOUNT_LEAD) {
-    st.sb.remove(); return false;
+/* THE WALL'S LIFE: from MOUNT_LEAD before its host dock's enter to REMOVE_AFTER past the clear. */
+export const verdictLive = (st, t, d, V = VERDICT) => !(t > st.clear_at + V.REMOVE_AFTER || t < d.enter - V.MOUNT_LEAD);
+
+/* THE PAINTER: writes every card's pose at t. Returns false when the stack is outside its life, true otherwise.
+   Outside its life the stackbox is HIDDEN, not removed (P72 T22, R26-173): the caller keeps its state, so a seek back
+   into the wall paints it again - a pure function of t in either direction. `lifeOf` maps t to the engine's LIFE clock
+   (R26-304; absent, the life clock is t). */
+export function paintVerdict(st, t, d, V = VERDICT, lifeOf = null) {
+  if (!verdictLive(st, t, d, V)) {
+    st.sb.style.display = "none"; return false;
   }
+  if (st.sb.style.display) st.sb.style.display = "";
+  const life = lifeOf ? lifeOf(t) : t;
   st.items.forEach((it, i) => {
     if (t >= st.clear_at) {
-      paintBurstCard(st, it, i, t, V);
+      paintBurstCard(st, it, i, t, V, lifeOf);
       return;
     }
-    const p = verdictPose(it, i, t, verdictNextAt(st.items, i, st.clear_at, V), st.clear_at, V);
+    const p = verdictPose(it, i, t, verdictNextAt(st.items, i, st.clear_at, V), st.clear_at, V, life);
     it.card.style.opacity = p.opacity.toFixed(2);
     it.card.style.zIndex = p.z;
     it.card.style.transform =

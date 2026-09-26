@@ -45,6 +45,7 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
 import build_scene_timeline_f as BST  # noqa: E402
 import render_baseline as RB  # noqa: E402
+import served_player as SP  # noqa: E402
 
 SURFACE = "verdict-stack-9x16"
 SURFACE_16 = "verdict-stack"                     # the FULL-FRAME form: same choreography, its own raster (E99 s59)
@@ -127,34 +128,26 @@ class Reader:
         return self.page.evaluate(RECTS_JS)
 
     def visible(self, t: float) -> list[dict]:
-        return [r for r in self.at(t) if r["op"] > 0.01]
+        """On screen: not faded out, and laid out (a HIDDEN wall - P72 T22 - lays its cards out at 0 x 0)."""
+        return [r for r in self.at(t) if r["op"] > 0.01 and r["w"] > 0]
 
 
 @pytest.fixture(scope="module")
 def playwright():
     """ONE driver for the whole module: a second `sync_playwright()` inside the first one's loop is refused, and
-    since P61 T7c this module reads two surfaces (the short's and the full frame's)."""
-    from playwright.sync_api import sync_playwright
-    with sync_playwright() as pw:
+    since P61 T7c this module reads two surfaces (the short's and the full frame's). Started through the ONE guarded
+    helper (served_player.launch, R26-351): the driver is stopped however the module ends (P72 T22)."""
+    pw, br = SP.launch()
+    try:
         yield pw
+    finally:
+        SP.closer(pw, br)()
 
 
 def _reader(pw, surface: str, aspect: str, size: tuple[int, int]):
     tl, uris, _t, got = RB.load_surface(surface)
     assert got == aspect, f"{surface} is not a {aspect} surface"
-    with tempfile.TemporaryDirectory() as td:
-        page_path = Path(td) / f"{surface}.html"
-        page_path.write_text(RB.instantiate(tl, uris), encoding="utf-8")
-        srv, port = RB.serve(Path(td))
-        try:
-            browser = pw.chromium.launch(headless=True)
-            page = browser.new_context(viewport={"width": size[0], "height": size[1]}).new_page()
-            page.goto(f"http://127.0.0.1:{port}/{surface}.html", wait_until="networkidle", timeout=180000)
-            RB.prepare_page(page, size[0], size[1])
-            yield Reader(page)
-            browser.close()
-        finally:
-            srv.shutdown()
+    yield from _reader_of(pw, tl, uris, size)   # P72 T22: one served page helper; its browser closes however it ends
 
 
 @pytest.fixture(scope="module")
@@ -605,3 +598,302 @@ def test_two_seeks_to_one_instant_give_one_frame(reader) -> None:
         forward = reader.at(t)
         reader.at(20.0)
         assert reader.at(t) == forward, f"two seeks to {t}s gave two frames"
+
+
+# --------------------------------------------------------------------- P72 T22: the member model, the freeze, the
+# scrub, the portrait card (R26-327, R26-304, R26-173, R26-169)
+#
+# R26-327: the compiler never read the members - a member that was never docked (a page, a typo) compiled and painted a
+# BLANK card, a silent drop. Now each member resolves by name: a document docked earlier in the cut, or a PAGE shown
+# earlier (`page=<object>`, its picture a card the door rendered - chart_card, the page as a texture), or it is refused
+# by name; a LIVE dock (a checklist, a chart the player draws, a record) shown as its static asset is WARNED by name.
+# R26-304: the stack's life (the rails' idle, the drift, the bob, the breath) reads the LIFE clock, so it stands still
+# under a freeze beat; the dock door refuses a dock that enters or leaves inside a beat, and a stack whose beats do.
+# R26-173: a seek that lands where the host dock is not live leaves no card standing (a ghost), and a seek back in
+# mounts the wall again. R26-169: a TALL member (a portrait chart card) takes a box of its own shape - the same area as
+# the landscape box it would have had - so the wall shows the whole card, not its header.
+
+T22_FREEZE = (14.9, 0.6)   # after card 8's enter (13.8 + 0.9) and card 7's recede (13.8 + 1.0), before the gather (15.6)
+TALL = 1.25                # a 1080 x 1350 chart card (the 4:5 portrait card a short's page takes)
+CARD_BOX_JS = "() => { const c = document.querySelector('.stackcard'); return [c.offsetWidth, c.offsetHeight]; }"
+
+
+def _tall_png(w: int = 1080, h: int = 1350) -> str:
+    """A portrait card: a red header band, a green body, a YELLOW source foot - the foot is what a clipped card loses."""
+    import base64
+    import io
+    from PIL import Image, ImageDraw
+    im = Image.new("RGB", (w, h), (30, 32, 38))
+    d = ImageDraw.Draw(im)
+    d.rectangle([0, 0, w, 140], fill=(200, 60, 60))
+    d.rectangle([60, 300, w - 60, h - 200], fill=(40, 150, 110))
+    d.rectangle([0, h - 120, w, h], fill=(230, 190, 40))
+    buf = io.BytesIO()
+    im.save(buf, "PNG")
+    return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
+
+
+def _reader_of(pw, tl: dict, uris: dict, size: tuple[int, int]):
+    """A Reader on a timeline - a golden surface as it is (`_reader`) or changed by a test (P72 T22)."""
+    with tempfile.TemporaryDirectory() as td:
+        page_path = Path(td) / "t22.html"
+        page_path.write_text(RB.instantiate(tl, uris), encoding="utf-8")
+        srv, port = RB.serve(Path(td))
+        browser = None
+        try:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_context(viewport={"width": size[0], "height": size[1]}).new_page()
+            page.goto(f"http://127.0.0.1:{port}/t22.html", wait_until="networkidle", timeout=180000)
+            RB.prepare_page(page, size[0], size[1])
+            yield Reader(page)
+        finally:
+            SP.run_all(browser.close if browser is not None else None, srv.shutdown)
+
+
+def _surface(name: str) -> tuple[dict, dict]:
+    import copy
+    tl, uris, _t, _a = RB.load_surface(name)
+    return copy.deepcopy(tl), dict(uris)
+
+
+@pytest.fixture(scope="module")
+def frozen(playwright):
+    """The short's wall with a freeze beat over the settled mosaic (the host's scene carries the species)."""
+    tl, uris = _surface(SURFACE)
+    at, dur = T22_FREEZE
+    tl["scenes"][0]["species"] = [{"kind": "freeze", "at": at, "dur": dur,
+                                   "target": {"kind": "point", "x": 0.5, "y": 0.5}}]
+    yield from _reader_of(playwright, tl, uris, (STAGE_W, STAGE_H))
+
+
+@pytest.fixture(scope="module")
+def tall(playwright):
+    """The short's wall with member 1 a portrait chart card, its aspect written as the compiler writes it."""
+    tl, uris = _surface(SURFACE)
+    host = next(iter(tl["evidence"]))
+    tl["evidence"][host]["stack"]["items"][0]["aspect"] = TALL
+    uris["ev-golden-stack9-1"] = _tall_png()
+    yield from _reader_of(playwright, tl, uris, (STAGE_W, STAGE_H))
+
+
+def _moved(a: list[dict], b: list[dict]) -> list[float]:
+    return [round(max(abs(p["x"] - q["x"]), abs(p["y"] - q["y"]), abs(p["w"] - q["w"]), abs(p["h"] - q["h"])), 2)
+            for p, q in zip(a, b)]
+
+
+@needs_browser
+def test_a_seek_past_the_host_dock_leaves_no_ghost(reader) -> None:
+    """R26-173: the burst's cards stood as ghosts on every frame after a seek that skipped the clear (the stackbox is
+    on the stage, and the host dock that paints it was no longer live). Any seek past the wall's life shows none."""
+    for t in (17.95, 18.5, 20.0, 25.0):
+        assert len(reader.visible(10.0)) == 6, "the wall is not standing at 10.0s - the seek proves nothing"
+        assert reader.visible(t) == [], f"a seek 10.0 -> {t}s leaves cards standing past the wall's life"
+    assert len(reader.visible(T_MOSAIC)) == 8
+    assert reader.visible(0.5) == [], "a seek back before the host dock leaves the wall standing"
+
+
+@needs_browser
+def test_a_seek_back_into_the_wall_mounts_it_again(reader) -> None:
+    """The ghost's cure must not be a wall that never comes back: after a seek past its life, a seek into the mosaic
+    paints the SAME frame a play reaches."""
+    reader.at(10.0)
+    want = reader.at(T_MOSAIC)
+    assert len([r for r in want if r["op"] > 0.01 and r["w"] > 0]) == 8, "the mosaic is not standing - the seek proves nothing"
+    for away in (20.0, 17.95, 0.5):
+        reader.at(away)
+        assert reader.at(T_MOSAIC) == want, f"a seek {away} -> {T_MOSAIC}s paints another wall"
+
+
+@needs_browser
+def test_a_stack_under_a_freeze_holds_still(frozen) -> None:
+    """R26-304: the rails' idle, the focus card's drift and the breath are LIFE - under a freeze beat they stop, every
+    card, to the pixel; outside the beat they move as they did, and after it they carry on from where they stopped."""
+    at, dur = T22_FREEZE
+    held = [frozen.at(round(at + k * dur / 4, 3)) for k in (0.2, 1, 2, 3, 3.8)]
+    assert len(held[0]) == len(ITEMS_AT)
+    for other in held[1:]:
+        worst = max(_moved(held[0], other))
+        assert worst <= 0.01, f"the wall moves {worst}px inside the freeze beat {at}-{at + dur}s - it keeps breathing"
+    before = _moved(frozen.at(at - 0.5), frozen.at(at - 0.05))
+    assert max(before) >= 0.3, "the wall is still before the beat - the test proves nothing"
+    after = _moved(frozen.at(at + dur), held[-1])
+    assert max(after) <= 1.0, f"the wall jumps {max(after)}px as life resumes - it did not carry on from the held pose"
+
+
+@needs_browser
+def test_a_portrait_card_on_the_short_s_wall_shows_the_whole_card(tall) -> None:
+    """R26-169: a portrait chart card on the 9:16 wall was clipped to its header (object-fit cover in a 1056:480 box:
+    36 % of its height). A TALL member takes a box of its own shape - in focus and on the rail."""
+    import io
+    from PIL import Image
+    for t in (3.1, T_MOSAIC):
+        tall.at(t)
+        ow, oh = tall.page.evaluate(CARD_BOX_JS)
+        assert abs(oh / ow - TALL) <= 0.02, f"at {t}s the tall card's box is {ow}x{oh} - not its own shape {TALL}"
+    frame = RB.frame_png(tall.page, 3.1, (STAGE_W, STAGE_H))
+    import numpy as np
+    px = np.asarray(Image.open(io.BytesIO(frame)).convert("RGB")).astype(int)
+    foot = int(((px[..., 0] > 200) & (px[..., 1] > 160) & (px[..., 1] < 215) & (px[..., 2] < 80)).sum())
+    assert foot > 2000, f"the card's source foot is not on the frame ({foot} px) - the wall shows only its head"
+
+
+@needs_browser
+def test_a_portrait_card_keeps_the_rails_area_and_stays_in_the_safe_box(tall, reader) -> None:
+    """Its box has the AREA the landscape box would have had (its weight in the mosaic unchanged), and - taller than
+    the spot it stands in - it is kept inside G-l's safe box for its whole life."""
+    tall.at(T_MOSAIC)
+    reader.at(T_MOSAIC)
+    ow, oh = tall.page.evaluate(CARD_BOX_JS)
+    bw, bh = reader.page.evaluate(CARD_BOX_JS)
+    assert abs(ow * oh / (bw * bh) - 1) <= 0.04, f"the tall box is {ow}x{oh}, the landscape one {bw}x{bh} - not one area"
+    bad = []
+    t = ITEMS_AT[0] + 0.9
+    while t <= CLEAR_AT:
+        r = [x for x in tall.at(round(t, 2)) if x["i"] == 0][0]
+        if r["op"] > 0.99 and (r["x"] < SAFE_X[0] or r["x"] + r["w"] > SAFE_X[1] or r["y"] < SAFE_Y[0]
+                               or r["y"] + r["h"] > SAFE_Y[1]):
+            bad.append((round(t, 2), round(r["x"]), round(r["y"]), round(r["w"]), round(r["h"])))
+        t += 0.25
+    assert not bad, f"the tall card leaves x{SAFE_X} y{SAFE_Y}: {bad[:5]}"
+
+
+def test_the_engine_hands_the_stack_the_life_clock() -> None:
+    """R26-304: drawStack gives the painter the engine's life clock (lifeT), the one every other life reads."""
+    engine = (ROOT / "docs/content-video-engine/samples/scene-evidence-engine.mjs").read_text(encoding="utf-8")
+    m = re.search(r"const drawStack = \(slot, t, d\) => \{(.*?)\n  \};", engine, re.S)
+    assert m, "drawStack is gone"
+    assert "lifeT" in m.group(1), "the verdict stack is painted on the wall clock - a freeze beat cannot hold it"
+    src = MODULE.read_text(encoding="utf-8")
+    assert re.search(r"idleXf\(V\.IDLE_KIND, life\b", src), "the rails' named idle does not read the life clock"
+
+
+# ---- the member model (the compiler) ----------------------------------------------------------------------------
+
+
+def _png(path: Path, w: int, h: int) -> Path:
+    from PIL import Image
+    path.parent.mkdir(parents=True, exist_ok=True)
+    Image.new("RGB", (w, h), (40, 40, 40)).save(path)
+    return path
+
+
+def _members(tmp_path: Path, items: list[dict], evidence: dict, pages=frozenset(), sizes: dict | None = None):
+    files = {aid: _png(tmp_path / f"{aid}.png", *wh) for aid, wh in (sizes or {}).items()}
+
+    def asset(aid: str) -> Path:
+        if aid not in files:
+            raise ValueError(f"{aid!r}: no dock asset found")
+        return files[aid]
+    stack, _e, _x = BST.stack_entry(items, 20.0)
+    uris: dict = {}
+    payload, warns = BST.stack_members(stack, evidence, uris, pages, "row 23 dock h-stack", asset)
+    return payload, warns, uris
+
+
+LANDSCAPE, WIDE, PORTRAIT = (1056, 480), (2112, 520), (1080, 1350)
+
+
+def test_a_member_docked_earlier_resolves_and_takes_the_landscape_box(tmp_path) -> None:
+    ev = {"a": {"badges": []}, "b": {"badges": []}}
+    payload, warns, uris = _members(tmp_path, [{"id": "a", "at": 2.0}, {"id": "b", "at": 4.0}], ev,
+                                    sizes={"a": LANDSCAPE, "b": WIDE})
+    assert warns == []
+    assert payload["items"] == [{"id": "a", "at": 2.0}, {"id": "b", "at": 4.0}], \
+        "a landscape or a WIDE member (the approved nine-proof wall's 0.25 / 0.30) keeps the box - no aspect written"
+    assert set(uris) == {"a", "b"}
+
+
+def test_a_tall_member_writes_its_own_aspect(tmp_path) -> None:
+    ev = {"a": {"badges": []}, "b": {"badges": []}}
+    payload, _w, _u = _members(tmp_path, [{"id": "a", "at": 2.0}, {"id": "b", "at": 4.0}], ev,
+                               sizes={"a": PORTRAIT, "b": (1920, 1080)})
+    assert payload["items"][0] == {"id": "a", "at": 2.0, "aspect": 1.25}
+    assert "aspect" not in payload["items"][1], "a 16:9 card shows 81 % of its height in the box - not a tall member"
+    assert BST.STACK_CARD_ASPECT == pytest.approx(480 / 1056)
+
+
+def test_a_member_never_docked_is_refused_by_name(tmp_path) -> None:
+    """At the base it compiled and painted a BLANK card - neither advice nor refusal (s106)."""
+    with pytest.raises(ValueError, match=r"'ghost-doc'.*never docked.*re-presents"):
+        _members(tmp_path, [{"id": "a", "at": 2.0}, {"id": "ghost-doc", "at": 4.0}], {"a": {"badges": []}},
+                 sizes={"a": LANDSCAPE, "ghost-doc": LANDSCAPE})
+
+
+def test_a_page_member_re_presents_a_page_shown_earlier(tmp_path) -> None:
+    """R26-327: a PAGE may be a member - the page the cut showed earlier, its picture the card the door rendered for it
+    (chart_card: the page as a texture). Its uri joins the asset map although it was never docked."""
+    payload, warns, uris = _members(
+        tmp_path, [{"id": "a", "at": 2.0}, {"id": "card-monitor", "page": "ev-memory-monitor-v1", "at": 4.0}],
+        {"a": {"badges": []}}, pages={"ev-memory-monitor-v1"}, sizes={"a": LANDSCAPE, "card-monitor": LANDSCAPE})
+    assert warns == []
+    assert payload["items"][1] == {"id": "card-monitor", "page": "ev-memory-monitor-v1", "at": 4.0}
+    assert "card-monitor" in uris
+
+
+def test_a_page_member_the_cut_never_showed_is_refused_by_name(tmp_path) -> None:
+    with pytest.raises(ValueError, match=r"page 'ev-unseen-v1'.*not shown"):
+        _members(tmp_path, [{"id": "a", "at": 2.0}, {"id": "card-x", "page": "ev-unseen-v1", "at": 4.0}],
+                 {"a": {"badges": []}}, pages={"ev-other-v1"}, sizes={"a": LANDSCAPE, "card-x": LANDSCAPE})
+    with pytest.raises(ValueError, match=r"'card-y'.*no dock asset"):
+        _members(tmp_path, [{"id": "a", "at": 2.0}, {"id": "card-y", "page": "ev-other-v1", "at": 4.0}],
+                 {"a": {"badges": []}}, pages={"ev-other-v1"}, sizes={"a": LANDSCAPE})
+
+
+def test_a_live_member_is_warned_by_name(tmp_path) -> None:
+    """A checklist, a chart the player draws, a record: the wall shows the dock's static asset, which for a live card
+    is a placeholder ("(live card - see series payload)") - REPORTED, never dropped (s106)."""
+    ev = {"a": {"badges": []}, "board": {"badges": [], "chart": {"checklist": {"rows": []}}},
+          "karp": {"badges": [], "record": {"words": []}}}
+    payload, warns, _u = _members(tmp_path, [{"id": "a", "at": 2.0}, {"id": "board", "at": 4.0},
+                                             {"id": "karp", "at": 6.0}],
+                                  ev, sizes={"a": LANDSCAPE, "board": LANDSCAPE, "karp": (1, 1)})
+    assert len(warns) == 2 and "board" in warns[0] and "karp" in warns[1], warns
+    assert all("live" in w and "static" in w for w in warns), warns
+    assert [it["id"] for it in payload["items"]] == ["a", "board", "karp"]
+
+
+@pytest.mark.parametrize("bad, needle", [({"page": ""}, "page"), ({"page": 7}, "page"), ({"colour": "red"}, "colour")])
+def test_a_malformed_member_key_is_refused_by_name(bad, needle) -> None:
+    items = [{"id": "a", "at": 2.0}, dict({"id": "b", "at": 4.0}, **bad)]
+    with pytest.raises(ValueError, match=needle):
+        BST.stack_entry(items, 8.0)
+
+
+def test_pages_shown_reads_the_table_up_to_the_beat() -> None:
+    plan = [(0.0, 10.0, "ledger:ev-a-v1:line:12:right:axes:cut;idle=live;then=ev-b-v1:bars", (0, 0, 0), []),
+            (10.0, 20.0, "world-desk-v1", (0, 0, 0), []),
+            (20.0, 30.0, "ledger:ev-c-v1:line", (0, 0, 0), [])]
+    assert BST.pages_shown(plan, 15.0) == {"ev-a-v1", "ev-b-v1"}
+    assert BST.pages_shown(plan, 25.0) == {"ev-a-v1", "ev-b-v1", "ev-c-v1"}
+
+
+# ---- the dock door's freeze check (R26-304 (b)) --------------------------------------------------------------------
+
+
+FZ_ROW = [{"kind": "freeze", "at": 12.0, "dur": 0.8, "target": {"kind": "point", "x": 0.5, "y": 0.5}}]
+
+
+def _dock(slide: str, enter: float, exitt: float) -> dict:
+    return BST.dock_entry(slide, 0, enter, exitt, 0)
+
+
+@pytest.mark.parametrize("enter, exitt, needle", [(12.3, 20.0, "enters"), (5.0, 12.5, "leaves")])
+def test_a_dock_that_lands_or_leaves_inside_a_freeze_is_refused_by_name(enter, exitt, needle) -> None:
+    errs, _w = BST.dock_freeze_errors([_dock("dock-x", enter, exitt)], FZ_ROW, {}, "row 4")
+    assert len(errs) == 1 and "dock-x" in errs[0] and needle in errs[0] and "12-12.8" in errs[0], errs
+
+
+def test_a_dock_that_holds_across_a_freeze_stands_with_it() -> None:
+    errs, warns = BST.dock_freeze_errors([_dock("dock-x", 5.0, 20.0), _dock("dock-y", 12.8, 20.0)], FZ_ROW, {}, "row 4")
+    assert errs == [] and warns == [], "a card that holds across the beat holds with it; the beat's end is life again"
+
+
+def test_a_stack_whose_beat_or_clear_falls_in_a_freeze_is_refused_and_its_motion_advised() -> None:
+    stack, enter, exitt = BST.stack_entry([{"id": "a", "at": 8.0}, {"id": "b", "at": 12.2}], 16.0)
+    ev = {"h-stack": {"badges": [], "stack": stack}}
+    errs, _w = BST.dock_freeze_errors([_dock("h-stack", enter, exitt)], FZ_ROW, ev, "row 23")
+    assert len(errs) == 1 and "'b'" in errs[0] and "12.2" in errs[0], errs
+    stack, enter, exitt = BST.stack_entry([{"id": "a", "at": 8.0}, {"id": "b", "at": 11.5}], 16.0)
+    ev = {"h-stack": {"badges": [], "stack": stack}}
+    errs, warns = BST.dock_freeze_errors([_dock("h-stack", enter, exitt)], FZ_ROW, ev, "row 23")
+    assert errs == [] and len(warns) == 1 and "'b'" in warns[0] and "REPORTED" in warns[0], (errs, warns)
