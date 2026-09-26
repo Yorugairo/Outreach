@@ -122,7 +122,7 @@ PLATE_OPTS = ("idle", "drift", "arrive", "mass", "morph", "then", "card", "use",
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
 STATE_MAX = 3
 DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band", "centre_y", "centre_x", "read", "read_s", "park_s",
-             "press", "stack", "behind", "embed", "cutout", "fit", "depth", "prop", "ink", "place", "rot", "moves", "after", "after_beat", "names", "idle", "under", "verdict")   # P71 T19: verdict={state: tick|cross|buy|sell, at} - a CHART CARD's state, landing on its word (DOCK_VERDICTS)   # P71 T15 / E99 s124 amended: under=hover|blur - the author's choice, by the beat's goal, of what a dock does to the chart it sits over (DOCK_UNDER)   # P69 T81 / E99 s112: after="<phrase>" - a STAMP's contact lands just AFTER the phrase's last word ends (+ after_beat s, default authoring.words.STAMP_AFTER_BEAT_S), the enter resolved from that contact; names="<phrase>" - the word the stamp punctuates, for the advice (`stamp_timing_advice`)   # P69 T26d / E99 s106: place={x, y, w} - a PROP's AUTHORED place (stage fractions: its painted centre and painted width), honoured exactly; rot=<deg> - its resting angle; moves=[{at, x, y, w, rot, dur, ease}] - where it goes AFTER it lands, on its own clock (the fit is the default, and advises)   # R26-246 (b) / E99 s87: prop=True - the payload is a catalogued cutout ADDED TO THE WORLD, bare (no card, no frame, no shadow, no rail); ink=own|page - whether that art keeps its own colour or is laid down in the page's own ink, as a real impression would be (the operator picks on the frame)   # P58 T6 / E98 s4: depth=<k> - the card stands on a LAYER'S plane and takes that share of the one camera's move (kinetics/camera.mjs PARALLAX - the page's own vocabulary and the same range); it composes with behind= and the pair is refused by name when they disagree   # P50 T7: embed=<name> - the card lands ON a surface the plate declares (a poster, a screen, a paper), projected onto its four measured corners   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
+             "press", "stack", "behind", "embed", "cutout", "fit", "depth", "prop", "ink", "place", "rot", "moves", "after", "after_beat", "names", "idle", "under", "verdict", "park_at")   # P71 T23 / A19: park_at={datum, series?, side?, anchor?} - the read card parks to a chip AT its datum, a leader joining them (PARK_AT_KEYS)   # P71 T19: verdict={state: tick|cross|buy|sell, at} - a CHART CARD's state, landing on its word (DOCK_VERDICTS)   # P71 T15 / E99 s124 amended: under=hover|blur - the author's choice, by the beat's goal, of what a dock does to the chart it sits over (DOCK_UNDER)   # P69 T81 / E99 s112: after="<phrase>" - a STAMP's contact lands just AFTER the phrase's last word ends (+ after_beat s, default authoring.words.STAMP_AFTER_BEAT_S), the enter resolved from that contact; names="<phrase>" - the word the stamp punctuates, for the advice (`stamp_timing_advice`)   # P69 T26d / E99 s106: place={x, y, w} - a PROP's AUTHORED place (stage fractions: its painted centre and painted width), honoured exactly; rot=<deg> - its resting angle; moves=[{at, x, y, w, rot, dur, ease}] - where it goes AFTER it lands, on its own clock (the fit is the default, and advises)   # R26-246 (b) / E99 s87: prop=True - the payload is a catalogued cutout ADDED TO THE WORLD, bare (no card, no frame, no shadow, no rail); ink=own|page - whether that art keeps its own colour or is laid down in the page's own ink, as a real impression would be (the operator picks on the frame)   # P58 T6 / E98 s4: depth=<k> - the card stands on a LAYER'S plane and takes that share of the one camera's move (kinetics/camera.mjs PARALLAX - the page's own vocabulary and the same range); it composes with behind= and the pair is refused by name when they disagree   # P50 T7: embed=<name> - the card lands ON a surface the plate declares (a poster, a screen, a paper), projected onto its four measured corners   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
 # P70 T13 - THE DRIFT-HOLD (the operator, 2026-09-24; HyperFrames drift-hold; E99 s124 as amended): `idle` on a dock names
 # the HOLD - the held card turns under a degree, breathes and carries one light sweep, each one whole cycle across its
 # held span (kinetics/idle.mjs IDLE_HOLD, its dials read off drift-hold.html). OPT-IN per dock: a dock that names none is
@@ -152,6 +152,22 @@ DOCK_UNDER = ("hover", "blur")
 # (`_check_dock_verdict`). Written on the entry only when the row names it.
 DOCK_VERDICTS = ("tick", "cross", "buy", "sell")
 DOCK_VERDICT_KEYS = ("state", "at")
+# P71 T23 - A CARD JOINS ITS DATE (harvest v2 A19 / R4; BRAVOS-USE-WHEN :105 "a headline belongs to one date on the line,
+# and the join IS the claim"). `park_at: {datum, series?, side?}` on a held CARD dock: the card READS in the plot's
+# empty room at the date's side (E65's own `read_in_room`, the room that holds the park - read, never edited), then
+# PARKS to a CHIP beside its datum, and a leader joins the chip to a ring on the datum. Measured first (E38): BOOM 00:45
+# (VERIFY.md A19) - the card in the plot's empty upper-right, a dashed ring on the datum (r 17 px at 1280 -> 25 at 1920),
+# a straight leader from the card's near edge, ring edge to card edge 50 px at 1280 -> the chip's near edge sits
+# PARK_AT_GAP_PX = 75 off the datum, the datum at 0.44 of the card's height (PARK_AT_ANCHORS[0]); STK 8:07 - the chip
+# BESIDE the latest peak, 198 px wide at 1920, under E45's floor, so the chip takes the floor (DOCK_ON_PAGE_MIN_W).
+# The compiler's estimate below chooses the side and the anchor and is the entry's `place`; the engine moves the chip by
+# its datum's travel (a rescale carries it) and rings the datum's LIVE position. The compiled entry carries the option's
+# own keys, resolved ({datum, series, side, anchor}), so a plan read back from the cut (derive_beat_moves) re-authors it.
+PARK_AT_KEYS = ("datum", "series", "side", "anchor")
+PARK_AT_SIDES = ("right", "left", "above", "below")   # the side of its datum the chip parks on, tried in this order
+PARK_AT_GAP_PX = 75          # the engine's DOCK_PARK_AT.GAP_PX - one dial written twice; test_card_at_its_date holds the pair
+PARK_AT_ANCHORS = (0.44, 0.2, 0.8, 0.0, 1.0)   # `anchor`: where along the chip's near edge the datum stands (its height beside, its width above or below), tried in order (BOOM's 0.44 first)
+PARK_AT_REFUSED = ("prop", "cutout", "press", "embed", "centre", "centre_x", "centre_y", "centre_w", "centre_band", "moves")
 CENTRE_MAX_H = 0.58                                 # a centred card takes at most this share of the stage height (the page's title and source stay in view)
 CENTRE_W = 0.74                                     # a centred card's width as a share of the stage - the reading size, not the parked card's
 CENTRE_BAND = 0.64                                  # ... and is centred in the band ABOVE the caption strip (which sits at ~0.64-0.70 of a portrait stage), never under it
@@ -9647,6 +9663,9 @@ def dock_opts(raw) -> dict:
         if k == "verdict":   # P71 T19: a chart card's state on its word
             _check_dock_verdict(v, raw)
             continue
+        if k == "park_at":   # P71 T23: the read card parks at its datum
+            _check_dock_park_at(v, raw)
+            continue
         if k == "card_aspect":
             if isinstance(v, bool) or not isinstance(v, (int, float)) or v <= 0:
                 raise ValueError("dock: card_aspect must be a positive number (the card's height over its width)")
@@ -9666,7 +9685,7 @@ def dock_opts(raw) -> dict:
         if k == "read":   # the READING box of a centred card that then parks (2026-09-10): the same centre keys, its own
             if not isinstance(v, dict) or not v or any(rk not in ("centre_w", "centre_x", "centre_y", "card_aspect") for rk in v):
                 raise ValueError("dock: read must be a dict of centre_w|centre_x|centre_y|card_aspect - the box the card pops at before it parks to its place")
-            if not raw.get("centre"):
+            if not raw.get("centre") and raw.get("park_at") is None:   # P71 T23: a card joined to its date reads, then parks at it
                 raise ValueError("dock: read is a CENTRED card's option (the park target is its centred place)")
             for rk, rv in v.items():
                 if isinstance(rv, bool) or not isinstance(rv, (int, float)) or rv <= 0 or (rk != "card_aspect" and rv > 1.0):
@@ -11013,6 +11032,30 @@ def verdict_tile_error(ev: dict | None, verdict: dict, enter: float, exitt: floa
         return (f"its verdict lands at {at}s, outside the tile's life {float(enter)}-{float(exitt)}s - a state lands on "
                 "its word while the tile is on the stage")
     return None
+
+
+def _check_dock_park_at(v, raw: dict) -> None:
+    """P71 T23: `park_at` is `{datum, series?, side?, anchor?}` on a held CARD - the datum a non-negative integer index of
+    the page's series (`series`, default 0); `side` (right | left | above | below) and `anchor` (0..1, where along the
+    chip's near edge the datum stands) the author's, else the compiler's search. ValueError names the key; the caller
+    names the row.
+    Beside another park (a centred box, a prop's place and moves) or on a dock that is no held card, refused by name."""
+    if not isinstance(v, dict) or "datum" not in v or set(v) - set(PARK_AT_KEYS):
+        raise ValueError(f"dock: park_at must be a dict of {'|'.join(PARK_AT_KEYS)} with a `datum` - the index of the date on "
+                         f"the page's line (or bar) the card joins, not {v!r}")
+    for k in ("datum", "series"):
+        if k in v and not _is_index(v[k]):
+            raise ValueError(f"dock: park_at.{k} must be a non-negative integer index, not {v[k]!r}")
+    if "side" in v and v["side"] not in PARK_AT_SIDES:
+        raise ValueError(f"dock: park_at.side must be {'|'.join(PARK_AT_SIDES)} - the side of its datum the chip parks on")
+    if "anchor" in v and not (_finite(v["anchor"]) and 0.0 <= v["anchor"] <= 1.0):
+        raise ValueError("dock: park_at.anchor must be a share 0..1 - where along the chip's near edge its datum stands")
+    for other, on in (("stamp", raw.get("arrive") == "stamp"), *((k, raw.get(k) is not None) for k in PARK_AT_REFUSED)):
+        if on:
+            raise ValueError(f"dock: park_at and {other} cannot be combined - park_at IS the park (a chip at its datum), "
+                             "a held CARD's: a prop lives in the world and a stamp is drawn over it (E99 s128), a cutout "
+                             "and a press card have no chip, a card on a surface is part of the plate, and a centred box "
+                             "is another park")
 
 
 def under_choice_note(world: dict | None, dopt: dict | None, label: str, boxes: list | None = None,
@@ -13062,6 +13105,196 @@ def read_in_room(boxes: dict, place: dict, read_box: dict, aspect: str | None,
     return best
 
 
+# ---- P71 T23: A CARD JOINS ITS DATE - the chip at its datum and the read in the plot's empty room -------------------
+def _park_at_scale(page: dict, boxes: dict, field: str):
+    """(x of a datum's x, y of a value) in stage px - the ESTIMATE the chip is placed on. x: the data's x extent over the
+    plot box (P71 T10's estimate, `_lj_place_warn`). y: on a MEASURED page the data's own vertical extent is the ink's -
+    the largest value sits in the mask's first inked row, the smallest in its last - so the scale is pinned to those two
+    rows' centres (the plot box also carries the basis label and the x ticks, which put a plain plot-box estimate ~40 px
+    off on the railway page); unmeasured, the plot box. Pure."""
+    plot, mask = boxes["plot"], boxes.get("data_mask")
+    if field == "bar":
+        vals = [float(v) for v in page.get("values") or []] or [0.0]
+        lo, hi = min([0.0, *vals]), max([0.0, *vals]) or 1.0
+    else:
+        ys = [float(q[1]) for s_ in page.get("series") or [] for q in s_.get("pts") or []] or [0.0]
+        ax = page.get("axes") or {}
+        lo = float(ax["ymin"]) if _num(ax.get("ymin")) else min(ys)
+        hi = float(ax["ymax"]) if _num(ax.get("ymax")) else max(ys)
+    top, bot = plot["y"], plot["y"] + plot["h"]
+    rows = [r for r, line in enumerate(mask or []) if "1" in line]
+    if rows and field != "bar":
+        ch = plot["h"] / len(mask)
+        top, bot = plot["y"] + (rows[0] + 0.5) * ch, plot["y"] + (rows[-1] + 0.5) * ch
+    return lambda v: top + (bot - top) * (1 - (float(v) - lo) / ((hi - lo) or 1.0))
+
+
+def park_at_datum_px(page: dict, si: int, i: int, aspect: str | None) -> tuple[float, float]:
+    """The datum's ESTIMATED stage px (`_park_at_scale`). The engine draws the ring at the datum's LIVE position and
+    moves the chip only by the datum's travel, so this chooses where the chip is placed; the leader absorbs its error.
+    ValueError names a date the chart does not have (joining it would be an untruth)."""
+    builder = str(page.get("builder") or "")
+    field = LEVEL_JOIN_BUILDERS.get(builder)
+    if field is None:
+        raise ValueError(f"park_at: a {builder or 'plate'} page has no date to join - a card parks at a LINE page's datum "
+                         f"or a BARS page's bar ({'|'.join(LEVEL_JOIN_BUILDERS)})")
+    boxes = LPG.page_boxes(page, aspect or "16:9")
+    plot, yof = boxes["plot"], _park_at_scale(page, boxes, field)
+    if field == "bar":
+        vals = [float(v) for v in page.get("values") or []]
+        if si:
+            raise ValueError(f"park_at: series {si} on a bars page - its bars are series 0")
+        if i >= len(vals):
+            raise ValueError(f"park_at: datum {i} is past the page's last datum ({len(vals) - 1})")
+        return round(plot["x"] + (i + 0.5) / len(vals) * plot["w"], 1), round(yof(vals[i]), 1)
+    ser = page.get("series") or []
+    if si >= len(ser):
+        raise ValueError(f"park_at: series {si} is past the page's last series ({len(ser) - 1})")
+    pts = ser[si].get("pts") or []
+    if i >= len(pts):
+        raise ValueError(f"park_at: datum {i} is past series {si}'s last datum ({len(pts) - 1})")
+    xs = [float(q[0]) for s_ in ser for q in s_.get("pts") or []]
+    x = plot["x"] + (float(pts[i][0]) - min(xs)) / ((max(xs) - min(xs)) or 1.0) * plot["w"]
+    return round(x, 1), round(yof(pts[i][1]), 1)
+
+
+# A rule's label ("1843 level") is page ink no measured box names (`page_text_boxes` has none): the engine sets it
+# right-aligned at the plot's end, just above its rule. Estimated [MEASURED on the railway page, 16:9 full stage:
+# "1843 level" 148 x ~28 px, its right edge 10 px inside the plot, its foot 13 px over the rule]: PARK_AT_RULE_PX the
+# type, PARK_AT_RULE_EM its advance per character, PARK_AT_RULE_INSET its right edge inside the plot's, PARK_AT_RULE_PAD
+# the air round the estimate.
+PARK_AT_RULE_PX, PARK_AT_RULE_EM, PARK_AT_RULE_INSET, PARK_AT_RULE_PAD = 30, 0.56, 10, 8
+
+
+def park_at_rule_boxes(page: dict, aspect: str | None) -> list[tuple[str, dict]]:
+    """The page's labelled reference rules' labels, estimated as boxes (name, rect) in stage px - obstacles for the chip."""
+    field = LEVEL_JOIN_BUILDERS.get(str(page.get("builder") or ""))
+    ax = page.get("axes") or {}
+    rules = [h for h in (ax.get("hlines") or ([ax["hline"]] if isinstance(ax.get("hline"), dict) else []))
+             if isinstance(h, dict) and h.get("label") and _num(h.get("y"))]
+    if not field or not rules:
+        return []
+    boxes = LPG.page_boxes(page, aspect or "16:9")
+    plot, yof, pad = boxes["plot"], _park_at_scale(page, boxes, field), PARK_AT_RULE_PAD
+    out = []
+    for h in rules:
+        w = len(str(h["label"])) * PARK_AT_RULE_EM * PARK_AT_RULE_PX
+        y = yof(h["y"])
+        right = plot["x"] + plot["w"] - PARK_AT_RULE_INSET
+        out.append((f"the rule label {h['label']!r}", {"x": round(right - w - pad), "y": round(y - PARK_AT_RULE_PX - pad),
+                                                        "w": round(w + 2 * pad), "h": round(PARK_AT_RULE_PX + 2 * pad)}))
+    return out
+
+
+def park_at_box(side: str, ay: float, X: float, Y: float, w: float, h: float) -> dict:
+    """The chip's box beside a datum at (X, Y) - the engine's `dockParkBox`, mirrored: its near edge PARK_AT_GAP_PX off
+    the datum, the datum `ay` along that edge. Pure."""
+    if side in ("right", "left"):
+        x, y = (X + PARK_AT_GAP_PX if side == "right" else X - PARK_AT_GAP_PX - w), Y - ay * h
+    else:
+        x, y = X - ay * w, (Y - PARK_AT_GAP_PX - h if side == "above" else Y + PARK_AT_GAP_PX)
+    return {"x": round(x), "y": round(y), "w": round(w), "h": round(h)}
+
+
+def _outside_px(box: dict, bounds: dict) -> float:
+    """The area of `box` outside `bounds`."""
+    return box["w"] * box["h"] - _overlap_area(box, bounds)
+
+
+def park_at_place(world: dict | None, park_at: dict, aspect: str | None, card_aspect: float | None,
+                  others: list[dict] | None = None) -> dict:
+    """P71 T23: where a card joined to its date PARKS - a chip of E45's floor width (`DOCK_ON_PAGE_MIN_W`; STK's 198 px
+    chip is under it) at the card's own aspect, beside the datum's estimated px. The side and the anchor are searched in
+    PARK_AT_SIDES x PARK_AT_ANCHORS order over the boxes on the safe stage clear of the page's words, the caption band
+    and the data's ink (the author's `side` / `anchor` alone when named - s106: where it sits is the author's); of those, the one
+    whose own room holds the WIDEST read (`park_at_room_read` - the card reads before it parks, legibility first), the
+    first in order on a tie. Nothing clear: the least covered (off the stage, then words, then ink), and one WARN with
+    its numbers - never a refusal (s106).
+    `others`: the chips of the row's earlier joined cards still on stage (the proof walk: one card per episode) - words
+    to this search, so two joins never stack. Returns {x, y, w, h, room, side, ay, datum: [X, Y], notes}. ValueError: no
+    ledger page, or a date it lacks."""
+    if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER or not isinstance(world.get("page"), dict):
+        raise ValueError("park_at: a card joins its date on a ledger page's chart - this world has none (a picture plate "
+                         "has no date to join)")
+    page, si, i = world["page"], park_at.get("series", 0), park_at["datum"]
+    X, Y = park_at_datum_px(page, si, i, aspect)
+    w = DOCK_ON_PAGE_MIN_W
+    h = _read_card_h(w, card_aspect)
+    boxes = LPG.page_boxes(page, aspect or "16:9")
+    groups = prop_obstacle_groups(page, aspect)[0]
+    words = (page_text_boxes(page, aspect) + list(groups["caption"]) + park_at_rule_boxes(page, aspect)
+             + [("another joined card's chip", dict(o)) for o in (others or []) if isinstance(o, dict)])
+    ink = [r for _n, r in groups["data"]]
+
+    def cost(b: dict) -> tuple:
+        return (round(_outside_px(b, boxes["safe"])), round(sum(_overlap_area(b, r) for _n, r in words)),
+                round(sum(_overlap_area(b, r) for r in ink)))
+
+    sides = (park_at["side"],) if park_at.get("side") else PARK_AT_SIDES
+    anchors = (float(park_at["anchor"]),) if park_at.get("anchor") is not None else PARK_AT_ANCHORS
+    cands = [(cost(b), k, sd, ay, b) for k, (sd, ay, b) in
+             enumerate((sd, ay, park_at_box(sd, ay, X, Y, w, h)) for sd in sides for ay in anchors)]
+    clear = [c for c in cands if c[0] == (0, 0, 0)]
+    if clear:   # legibility first: the clear chip whose room reads the card widest
+        solo = dock_read_box(aspect, None, card_aspect)
+        reads = [(park_at_room_read(boxes, dict(c[4], side=c[2], datum=[X, Y]), solo, aspect, card_aspect,
+                                    [r for _n, r in page_text_boxes(page, aspect)] + list(others or [])) or {}).get("w", 0)
+                 for c in clear]
+        clear = [clear[max(range(len(clear)), key=lambda n: (reads[n], -n))]]
+    (off, over_w, over_i), _k, side, ay, box = clear[0] if clear else min(cands, key=lambda c: (c[0], c[1]))
+    plot = boxes["plot"]
+    inside = (plot["x"] <= box["x"] + box["w"] / 2 <= plot["x"] + plot["w"]
+              and plot["y"] <= box["y"] + box["h"] / 2 <= plot["y"] + plot["h"])
+    notes = [] if clear else [
+        f"its chip at datum {i} (series {si}, est. [{X:.0f}, {Y:.0f}] px) parks {side} at [{box['x']}, {box['y']}, "
+        f"{box['w']}, {box['h']}] over {over_w:.0f} px^2 of the page's words or caption band, {over_i:.0f} px^2 of the "
+        f"data's ink and {off:.0f} px^2 off the safe stage - no clear spot beside its datum at the chip's size; name "
+        "another `side`, or join a date with room round it (REPORTED, the frame read decides - E99 s106)"]
+    return {**box, "room": ("empty" if inside else "outside") if clear else "overlap", "side": side, "ay": ay,
+            "datum": [X, Y], "notes": notes}
+
+
+def park_at_room_read(boxes: dict, chip: dict, read_box: dict, aspect: str | None, card_aspect: float | None,
+                      blocked: list[dict]) -> dict | None:
+    """E65's READ for a chip at its datum - `read_in_room` with the chip as its park (read, never edited) - kept only
+    when it stands on the chip's own side of the datum (`chip["side"]`, `chip["datum"]`): a room the chip is not in is
+    E65's fallback to the widest room anywhere, which is not the date's side. None otherwise. Pure."""
+    moved = read_in_room(boxes, chip, read_box, aspect, card_aspect, blocked)
+    if not moved or not chip.get("datum"):
+        return moved
+    X, Y = chip["datum"]
+    cx, cy = moved["x"] + moved["w"] / 2, moved["y"] + moved["h"] / 2
+    ok = {"right": cx > X, "left": cx < X, "above": cy < Y, "below": cy > Y}.get(chip.get("side"), True)
+    return moved if ok else None
+
+
+def park_at_read(world: dict | None, chip: dict, read_box: dict | None, aspect: str | None, card_aspect: float | None,
+                 e63: dict, dopt: dict, stamps: list[dict] | None = None) -> tuple[dict, str | None]:
+    """P71 T23 (3): a card joined to its date READS on the plot at its date (A19's own form, BOOM 00:45) - in E65's room:
+    `read_in_room` with the chip as its park, so the room taken is the empty room that holds the chip, at the date's side
+    (E65's placer, READ, never edited; the room first because the card reads ON the plot). Returns (the read decision in
+    `read_over_build`'s shape, a WARN or None). A dock that names `under` AND its own `read` keeps them (s124 (3), T15:
+    E63's decision `e63` stands). Nothing in the room holds the read at the floor: `e63` stands (a band, or deferred) and
+    the WARN says the author may read it over the ink by `under` (s124)."""
+    if dopt.get("under") and dopt.get("read"):
+        return e63, None
+    page = (world or {}).get("page") if isinstance((world or {}).get("page"), dict) else None
+    if not page or not read_box:
+        return e63, None
+    boxes = LPG.page_boxes(page, aspect or "16:9")
+    blocked = [s for s in (stamps or []) if isinstance(s, dict)] + [r for _n, r in page_text_boxes(page, aspect)]
+    moved = park_at_room_read(boxes, chip, read_box, aspect, card_aspect, blocked)
+    if not moved:
+        return e63, ("the plot's empty room at its date holds no read at the legibility floor - it reads where E63 puts it "
+                     "(a band, or at its chip); to read it over the ink name `under` (hover | blur) and its `read` "
+                     "(E99 s124 (3))")
+    return {"read_place": moved,
+            "read_moved": {"from": [read_box["x"], read_box["y"], read_box["w"], read_box["h"]],
+                           "to": [moved["x"], moved["y"], moved["w"], moved["h"]],
+                           "why": "P71 T23: a card joined to its date reads on the plot, in its empty room at the date's "
+                                  "side - E65: the plot's own empty room"}}, None
+
+
 # ---- THE CAPTION'S BAND UNDER A CARD (ruling E62, 2026-09-11) ---------------------------------
 # "Under a card the caption keeps its size and MOVES; it shrinks only when no band fits." The
 # demotion s9.25 #2 ruled on 2026-09-02 was a demotion in SIZE (64 px / 800 -> 33 px / 600), and the
@@ -13903,7 +14136,8 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
                rot: float | None = None, moves: list | None = None, handed: bool = False,
                authored_place: dict | None = None, authored_moves: list | None = None,
                names: str | None = None, idle: str | None = None, under: str | None = None,
-               verdict: dict | None = None) -> dict:
+               verdict: dict | None = None,
+               park_at: dict | None = None) -> dict:
     """One dock on a compiled scene.
 
     Spans come from the dock: evidence enters before its claim and holds through the whole
@@ -13993,6 +14227,10 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
         # P71 T19: a chart card's verdict - its state and the second of its word. Written only when the row names it, so
         # every other entry is byte-for-byte what it was.
         **({"verdict": {"state": verdict["state"], "at": round(float(verdict["at"]), 2)}} if verdict else {}),
+        # P71 T23: the datum a card joined to its date parks at - the option's own keys, resolved ({datum, series, side,
+        # anchor}, `park_at_place`), so the cut reads back as the option it was; the engine moves the chip by the datum's
+        # travel and draws the leader. Written only when the row names it, so every other entry is byte-for-byte what it was.
+        **({"park_at": dict(park_at)} if park_at else {}),
         **({"centre": True} if (centre or (read_deferred and place)) and place else {}),   # the design pass: a centred card sits at its box from its first frame - no reading size, no park
     }
 
@@ -14846,6 +15084,16 @@ def main() -> int:
             # R26-221: ... and on a picture plate the BOX is the slot - a row that authored one (or a plate that
             # declared the room) has already said where this card goes, on either slot, so it is never dropped here
             eplace = dplace if (slot == 0 or centred or (place is None and dplace)) else None
+            _pk = None   # P71 T23: a card joined to its date parks to a chip AT its datum (A19) - the chip IS its park
+            if dopt.get("park_at") is not None:
+                try:
+                    _pk = park_at_place(world, dopt["park_at"], ASPECT, dopt.get("card_aspect"),
+                                        [_d["place"] for _d in docks if _d.get("park_at") and float(_d["exit"]) > float(enter)])
+                except ValueError as exc:
+                    raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s) dock {aid}: {exc}") from exc
+                eplace, centred = {k: _pk[k] for k in ("x", "y", "w", "h", "room")}, False   # it reads, then parks
+                for _n in _pk["notes"]:
+                    print(f"  [WARN] P71 T23: shot row {i + 1} ({a}-{b}s) dock {aid}: {_n}")
             if not stamp_fit:   # P69 T5: a row's other dock over a stamp's mark or its ring - P69 T26d / E99 s106: REPORTED, not refused
                 _clash = stamp_clash_error(f"shot row {i + 1} ({a}-{b}s) dock {aid}", eplace, stamp_boxes)
                 if _clash:
@@ -14861,6 +15109,12 @@ def main() -> int:
                                   page_build_windows(world, row_species, a), _aspect_of_card,
                                   [] if stamp_fit else stamp_boxes,   # P71 T5: the read clears the stamps too
                                   under=dopt.get("under")) or {}   # P71 T15: a dock that chose the chart keeps its read over it
+            if _pk:   # P71 T23 (3): it reads ON the plot at its date - E65's room that holds its chip (read, not edited)
+                e63, _pkn = park_at_read(world, _pk, _read_box, ASPECT, _aspect_of_card, e63, dopt,
+                                         ([] if stamp_fit else stamp_boxes)
+                                         + [_d["place"] for _d in docks if _d.get("park_at") and float(_d["exit"]) > float(enter)])
+                if _pkn:
+                    print(f"  [WARN] P71 T23: shot row {i + 1} ({a}-{b}s) dock {aid}: {_pkn}")
             if e63.get("read_place"):
                 rplace = e63["read_place"]
                 read_moves.append(f"{sid}.{aid} -> {e63['read_moved']['to']}")
@@ -14993,7 +15247,9 @@ def main() -> int:
                                         names=dopt.get("names") or dopt.get("after"),   # P69 T81: the word a stamp punctuates
                                         idle=dock_idle(dopt, evidence[aid]),   # P70 T13: the drift-hold, graded by the payload
                                         under=dopt.get("under"),   # P71 T15: hover or blur, the author's choice
-                                        verdict=dopt.get("verdict")))   # P71 T19: a chart card's state on its word
+                                        verdict=dopt.get("verdict"),   # P71 T19: a chart card's state on its word
+                                        park_at={"datum": dopt["park_at"]["datum"], "series": dopt["park_at"].get("series", 0),
+                                                 "side": _pk["side"], "anchor": _pk["ay"]} if _pk else None))   # P71 T23: the join
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
         _fz_errs, _fz_warns = dock_freeze_errors(docks, row_species, evidence, f"shot row {i + 1} ({a}-{b}s)")   # P72 T22 / R26-304
         if _fz_errs:

@@ -5358,6 +5358,98 @@ SURFACES.update({"hub-spoke-fail": hub_spoke_fail})
 FRAME_T.update({"hub-spoke-fail": 9.6})   # the spokes drawn (7.34), the money on them, the failure 1.0 s old - disc settled, X struck
 
 
+# ---- P71 T23 (was P69 T67; harvest v2 A19 / R4): A CARD JOINS ITS DATE ------------------------------------------------
+#   card-reads-in-the-empty-room  Steel and Paper H row 9's railway page (the committed ev-railway-index-v1 object, full
+#                                 stage, 16:9: the rise drawn to the peak, then the fall, as H's "crashed" beat draws it)
+#                                 with a headline card naming `park_at: {datum: 53}` (the peak, 6 Oct 1845 - A19's "a card
+#                                 docks onto the plot at its peak") and `under: "hover"`: it READS in the plot's empty room
+#                                 at the date's side (E65's own read_in_room: the upper right, over the fall's empty
+#                                 room), lifted - read mid-read.
+#   card-parks-at-its-date        the same beat after the park: the card shrunk to a chip at E45's floor width right of the
+#                                 peak and the leader drawn from it to a dashed ring on the datum (BOOM 00:45's form). The
+#                                 compiler's mask reads the chip's corner in one cell the rise's ink touches (a WARN with
+#                                 its numbers, s106); the probe measures the chip clear of the ink (test_card_at_its_date).
+# The card is a synthetic headline (paper, a headline's bars over a photo block), a committed input like every other.
+DATE_PLATE = LIT_PLATE
+DATE_CARD = "ev-golden-headline"
+DATE_CARD_PX = (528, 300)
+DATE_CARD_ASPECT = 0.6657   # the CARD's h / w at the chip's width (the row's `card_aspect` is the card's, chrome and all): the
+                            # picture's 300/528 in a frame 38 px narrower than the card, plus 45 px of chrome
+                            # (DOCK_CARD_CHROME_W / _H): ((240 - 38) * 300 / 528 + 45) / 240 [DERIVED]
+DATE_DATUM = DATE_PEAK = 53
+DATE_ENTER, DATE_EXIT, DATE_READ_S = 4.0, 16.0, 2.0   # the author's read_s: a headline's words take two seconds to read
+DATE_RESCALE_AT, DATE_RESCALE_S = 10.0, 1.2
+DATE_RESCALE = {"kind": "chart_to", "at": DATE_RESCALE_AT, "dur": DATE_RESCALE_S, "to": "rescale", "window": [1844.5, 1850.21]}
+DATE_OVER_INK_READ = {"centre_w": 0.36, "centre_x": 0.30, "centre_y": 0.50}   # the author's read over the rise's own ink (s124 (3))
+DATE_BLUR_REGION = (940, 300, 1100, 820)   # the plot beside that read (stage px): the fall's ink and its rules, which the veil blurs
+DATE_SPECIES = [
+    {"kind": "build_to", "at": 0.0, "dur": 0.4, "series": 0, "target": {"kind": "datum", "index": DATE_PEAK}},   # the rise to the peak
+    {"kind": "build_to", "at": 2.0, "dur": 1.2, "series": 0, "target": {"kind": "datum", "index": 139}},   # "crashed": the fall draws
+]
+
+
+def card_at_date_surface(under: str | None = "hover", read: dict | None = None, rescale: bool = False,
+                         datum: int = DATE_DATUM) -> tuple[dict, dict]:
+    """The P71 T23 bench, compiled the way the row loop compiles it: `park_at_place` (the chip), the read box (the row's own
+    `read`, else the card's solo box), E63's `read_over_build`, then `park_at_read` (E65's room at the date's side) and
+    `dock_entry`. `under` the author's choice (hover by default here, as acceptance 1 names it); `read` an authored reading
+    box (with `under`, it stands over the ink - s124 (3)); `rescale` a chart_to rescale after the park (the chip follows);
+    `datum` the date joined (the peak)."""
+    import build_scene_timeline_f as BST
+    species = [dict(e) for e in DATE_SPECIES] + ([dict(DATE_RESCALE)] if rescale else [])
+    assert not BST.validate_species(species, (0, 0, 0), DATE_PLATE), BST.validate_species(species, (0, 0, 0), DATE_PLATE)
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        world = BST.world_for_plate(DATE_PLATE, (0, 0, 0), LIT_PROJECT)
+        BST.stamp_full_stage(world["page"])
+        if rescale:   # the derived chart state the rescale moves to, as the compiler derives it
+            BST.derive_rescale_states(world, species, DATE_PLATE, LIT_PROJECT, sid="s01")
+        opts = BST.dock_opts({"park_at": {"datum": datum}, "card_aspect": DATE_CARD_ASPECT, "read_s": DATE_READ_S,
+                              **({"under": under} if under else {}), **({"read": dict(read)} if read else {})})
+        page = world["page"]
+        pk = BST.park_at_place(world, opts["park_at"], "16:9", DATE_CARD_ASPECT)
+        chip = {k: pk[k] for k in ("x", "y", "w", "h", "room")}
+        rd = opts.get("read") or {}
+        rplace = BST.centred_place(BST.dock_place(world, "16:9"), "16:9", DATE_CARD_ASPECT, page, rd.get("centre_w"), None,
+                                   rd.get("centre_y"), rd.get("centre_x")) if rd else None
+        read_box = BST.dock_read_box("16:9", rplace, DATE_CARD_ASPECT)
+        e63 = BST.read_over_build(chip, read_box, page, "16:9", DATE_ENTER, DATE_ENTER + DATE_READ_S,
+                                  BST.page_build_windows(world, species, 0.0), DATE_CARD_ASPECT, [], under=opts.get("under")) or {}
+        e63, _note = BST.park_at_read(world, pk, read_box, "16:9", DATE_CARD_ASPECT, e63, opts, [])
+    finally:
+        BST.ASPECT = saved
+    ev = {DATE_CARD: {"title": "Golden headline card", "source": "golden", "species": "deck",
+                      "document": {"path": "golden", "sha256": "0" * 64}, "badges": []}}
+    docks = [BST.dock_entry(DATE_CARD, 0, DATE_ENTER, DATE_EXIT, 0, BST.DOCK_KIND_IMAGE, chip,
+                            read_place=e63.get("read_place") or rplace, read_s=DATE_READ_S,
+                            read_moved=e63.get("read_moved"), read_deferred=bool(e63.get("read_deferred")),
+                            under=opts.get("under"),
+                            park_at={"datum": datum, "series": 0, "side": pk["side"], "anchor": pk["ay"]})]
+    uris = _base_uris()
+    uris[DATE_CARD] = uri("image/png", png_bars(DATE_CARD_PX[0], DATE_CARD_PX[1], (250, 247, 240),
+                                                [(0.06, 0.08, 0.90, 0.20), (0.06, 0.24, 0.62, 0.34), (0.06, 0.42, 0.30, 0.46),
+                                                 (0.12, 0.54, 0.88, 0.96)]))   # two headline lines, a dateline, a photo block
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": docks, "species": species}]
+    tl = _timeline(f"Golden: a card joins its date (park_at, under {under or 'unnamed'})", scenes, ev, "16:9")
+    tl["captions"], tl["caption_pages"] = [], []   # the harness's caption would sit on the plot: the join is the frame
+    return tl, uris
+
+
+def card_reads_in_the_empty_room() -> tuple[dict, dict]:
+    return card_at_date_surface()
+
+
+def card_parks_at_its_date() -> tuple[dict, dict]:
+    return card_at_date_surface()
+
+
+SURFACES.update({"card-reads-in-the-empty-room": card_reads_in_the_empty_room, "card-parks-at-its-date": card_parks_at_its_date})
+FRAME_T.update({"card-reads-in-the-empty-room": round(DATE_ENTER + 1.6, 2),   # the pop settled (0.45) and the hover risen (0.45 + 0.30 + 0.50): reading
+                "card-parks-at-its-date": round(DATE_ENTER + DATE_READ_S + 0.7 + 0.35 + 0.6, 2)})   # the park (0.7) and the leader (0.35) done, held 0.6 s
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

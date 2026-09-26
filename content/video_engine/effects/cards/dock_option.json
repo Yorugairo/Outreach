@@ -648,6 +648,86 @@
       }
     },
     {
+      "id": "dock_option:park_at",
+      "axis": "dock_option",
+      "token": "park_at",
+      "title": "The card joins its date",
+      "aliases": [
+        {
+          "name": "card docks onto the plot at its date or peak",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:103"
+        },
+        {
+          "name": "park it to a chip at the datum",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:106"
+        }
+      ],
+      "does": "A held card reads in the plot's empty room at its date (E65), then parks to a chip beside its datum and a leader draws from the chip to a dashed ring on the datum; the chip travels with its date across a rescale.",
+      "when": "A headline belongs to one date on the line and the join IS the claim (A19: 'the warnings began here'); the proof walk's card at each episode (R4). Not on a prop, stamp, cutout, press card or embed, nor beside a centred box; over the ink only by the author's `under` + `read` (s124 (3)).",
+      "when_source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:103",
+      "author": {
+        "key": "dock option {'park_at': {'datum': <index>, 'series'?: <index>, 'side'?: 'right'|'left'|'above'|'below', 'anchor'?: 0..1}} (PARK_AT_KEYS; the side and anchor are the compiler's search - park_at_place - unless the author names them)",
+        "example": "{'park_at': {'datum': 53}, 'card_aspect': 0.6657, 'read_s': 2.0, 'under': 'hover'}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py:card_at_date_surface",
+        "check": "dock_option"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [
+        {
+          "token": "datum",
+          "means": "The index of the date on the page's line (or bar) the card joins; refused by name past the chart's last datum.",
+          "source_set": null
+        },
+        {
+          "token": "series",
+          "means": "The line the datum is on (default 0).",
+          "source_set": null
+        },
+        {
+          "token": "side",
+          "means": "The author's side of the datum for the chip (right | left | above | below); absent, the first clear side whose room reads the card widest.",
+          "source_set": null
+        },
+        {
+          "token": "anchor",
+          "means": "Where along the chip's near edge its datum stands, 0..1 (BOOM's 0.44 first in the search); the compiled entry carries the resolved side and anchor.",
+          "source_set": null
+        }
+      ],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "dockParkBox",
+        "also": [
+          "DOCK_PARK_AT",
+          "dockParkAtPts",
+          "paintDockJoins"
+        ],
+        "note": "dockGeom parks at dockParkBox (the chip moved by its datum's travel); paintDockJoins draws the join on #species-under; compiler park_at_place / park_at_read (E65's read_in_room)"
+      },
+      "doctrine": [
+        "P71 T23",
+        "E65",
+        "E63",
+        "E99 s124",
+        "E99 s106",
+        "E45",
+        "E49 amended 2026-09-08"
+      ],
+      "status": "draft",
+      "proof": {
+        "golden": "card-parks-at-its-date",
+        "test": "content/video_engine/tests/test_card_at_its_date.py::test_the_card_reads_in_the_empty_room_then_parks_at_its_date_with_a_leader",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "dock_opts accepts it, the compiler places the chip and the read and writes the join, the engine parks and draws it (goldens card-reads-in-the-empty-room and card-parks-at-its-date); no committed row names it - it awaits P71-HG1"
+      }
+    },
+    {
       "id": "dock_option:place",
       "axis": "dock_option",
       "token": "place",

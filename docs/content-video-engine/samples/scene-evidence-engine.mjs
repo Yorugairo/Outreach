@@ -7278,11 +7278,33 @@ async function mount(doc) {
     return cur;
   };
 
+  /* P71 T23 - A CARD JOINS ITS DATE (harvest v2 A19 / R4; "a headline belongs to one date on the line, and the join IS
+     the claim"). The compiler writes `park_at: {datum, series, side, anchor}` only when the row names it; the card reads in
+     the plot's empty room (its `read_place`), then parks to a CHIP beside its datum: the compiled `place` (the compiler
+     chose the side and the anchor clear of the page's words and the data's ink, on its estimate of the datum), MOVED BY
+     THE DATUM'S TRAVEL - where the datum stands this frame (lpDatumNow: lerped across a rescale / extend) less where it
+     stands on the page's first chart state, both in the active chart's own frame. So on the page as built the chip IS
+     its place to the pixel (M25 reads it there), and when a rescale moves the data the chip travels with its date. A
+     datum neither state has parks at the place. Then a leader joins the chip to a ring ON the datum (paintDockJoins).
+       DOCK_PARK_AT.RING_R 25 [MEASURED: BOOM 00:45 (VERIFY.md A19) at 1280 px - the ring r 17, x 1.5 to the 1920 stage];
+       GAP_PX 75 (the compiler's PARK_AT_GAP_PX: ring edge to card edge 50 px at 1280, x 1.5 - the leader's length the
+         chip is placed at; the drawn leader runs to the LIVE datum, so it absorbs the estimate's error);
+       LINE_W 3, HEAD_PX 9, RING_DASH "10 9" [MEASURED: BOOM's leader and ring stroke 2 px, its arrowhead 6 px, its
+         ring's dash ~7 on ~6 at 1280, x 1.5]; IN_S 0.35 [DERIVED: the leader draws on after the park lands, on the
+         retract's own order of length (DOCK_RETRACT_S) - a join read as one stroke, not a slow reveal]. The chalk ink is
+         the hand's on a charcoal ledger page (E22). */
+  const DOCK_PARK_AT = Object.freeze({ GAP_PX: 75, RING_R: 25, LINE_W: 3, HEAD_PX: 9, RING_DASH: "10 9", IN_S: 0.35, INK: "#F2F2F2" });
+  const dockParkBox = (d, P) => {   /* the chip this frame: the compiled place, moved by its datum's travel since the page's first state */
+    const m = dockParkAtPts(d);
+    if (!m || !m.home || !P) return P;
+    return { x: P.x + m.now[0] - m.home[0], y: P.y + m.now[1] - m.home[1], w: P.w, h: P.h };
+  };
+
   /* the placed card's layout box at t: reading size, then the minimum-jerk park. `parks` is
      recomputed from the LIVE span because the coalescer above can extend a dock's exit. */
   const dockGeom = (el, d, t) => {
     if (!d.place) return null;
-    const R = dockReadRect(el, d), P = d.place;
+    const R = dockReadRect(el, d), P = d.park_at ? dockParkBox(d, d.place) : d.place;   /* P71 T23: a card joined to its date parks at its datum's chip */
     if (d.centre && !d.read_place && d.moves) { const q = propPose(d, t, 0); return { x: q.x, y: q.y, w: q.w }; }   /* P69 T26d: a prop that MOVES after it lands */
     if (d.centre && !d.read_place) return { x: P.x, y: P.y, w: P.w };   /* a CENTRED card (the design pass): its box from the first frame, whatever its life - unless the row named a reading box it pops at first */
     const readS = d.read_s != null ? d.read_s : DOCK_READ_S;
@@ -19318,6 +19340,55 @@ async function mount(doc) {
     const q = new DOMPoint(v[0], v[1]).matrixTransform(m), sb = $("stage").getBoundingClientRect(), k = STAGE_W / Math.max(1, sb.width);
     return { x: (q.x - sb.left) * k, y: (q.y - sb.top) * k, w: 0, h: 0 };
   };
+  /* P71 T23 - THE JOIN: a leader from the parked chip to a dashed ring on its datum, drawn on over IN_S once the park has
+     landed and leaving with the card. It annotates the DATUM, so it paints on the chart's layer beneath the docks
+     (#species-under, E49 amended 2026-09-08: "the drawn circles should be on the layer beneath the card") - called
+     right after paintSpecies, which clears that layer every frame. The leader leaves the chip AS DRAWN (stageBox: a
+     hover's lift and step and the idle included) from its near edge, level with the datum where the edge allows. Pure in
+     t: the clock is the dock's own, the ends are this frame's.
+     dockParkAtPts: the joined datum in STAGE px - `now` this frame (lpDatumNow, the resolver's own datum law) and `home`
+     on the page's first chart state (lpMarkDatumOn) - both carried through the ACTIVE chart's viewBox (the resolver's
+     letterbox law), so their difference is the data's own travel and the camera cancels out of it. */
+  const dockParkAtPts = (d) => {
+    const pk = d && d.park_at; if (!pk) return null;
+    const world = wB.classList.contains("ledger") ? wB : wA, st = world.__lp;
+    const S = st ? ((st.states && st.states[st.active | 0]) || st) : null, svg = S && S.chart;
+    if (!svg || !svg.viewBox || !svg.viewBox.baseVal) return null;
+    const b = stageBox(svg), vb = svg.viewBox.baseVal, k = Math.min(b.w / vb.width, b.h / vb.height);
+    const map = (q) => q ? [b.x + (b.w - vb.width * k) / 2 + (q[0] - (vb.x || 0)) * k, b.y + (b.h - vb.height * k) / 2 + (q[1] - (vb.y || 0)) * k] : null;
+    const now = map(lpDatumNow(st, pk.series | 0, pk.datum | 0));
+    return now ? { now, home: map(lpMarkDatumOn((st.states && st.states[0]) || st, pk.series | 0, pk.datum | 0)) } : null;
+  };
+  const parkSvg = (tag, at) => { const n = document.createElementNS("http://www.w3.org/2000/svg", tag); for (const k in at) n.setAttribute(k, at[k]); return spUnder.appendChild(n); };
+  const paintDockJoins = (live, t) => {
+    for (const d of live) {
+      if (!d.park_at || !(d.park || d.centre)) continue;   /* a card too short to park never reaches its chip */
+      const L = DOCK_LIVE[d.slide], m = L ? dockParkAtPts(d) : null, q = m && m.now;
+      if (!q) continue;
+      const rs = d.read_s != null ? d.read_s : DOCK_READ_S, ps = d.park_s != null ? d.park_s : DOCK_PARK_S;
+      const landed = d.centre ? d.enter + DOCK_POP_S : d.enter + rs + ps;
+      const k = minJerk((t - landed) / DOCK_PARK_AT.IN_S), op = t > d.exit ? 1 - expoOut(clamp01((t - d.exit) / EXIT)) : 1;
+      if (k <= 0.001 || op <= 0.001) continue;
+      const b = stageBox(L.el); if (!(b.w > 1 && b.h > 1)) continue;
+      const side = d.park_at.side, pad = 12, P = DOCK_PARK_AT;
+      const clampTo = (v, lo, hi) => Math.min(Math.max(v, lo), Math.max(lo, hi));
+      const e = side === "left" ? [b.x + b.w, clampTo(q[1], b.y + pad, b.y + b.h - pad)]
+        : side === "above" ? [clampTo(q[0], b.x + pad, b.x + b.w - pad), b.y + b.h]
+        : side === "below" ? [clampTo(q[0], b.x + pad, b.x + b.w - pad), b.y]
+        : [b.x, clampTo(q[1], b.y + pad, b.y + b.h - pad)];
+      const dx = q[0] - e[0], dy = q[1] - e[1], len = Math.hypot(dx, dy);
+      if (len <= P.RING_R + 1) continue;
+      const ux = dx / len, uy = dy / len, sx = q[0] - ux * P.RING_R, sy = q[1] - uy * P.RING_R;   /* the ring's edge */
+      const hx = e[0] + (sx - e[0]) * k, hy = e[1] + (sy - e[1]) * k, H = P.HEAD_PX;
+      const g = { stroke: P.INK, "stroke-width": P.LINE_W, "stroke-linecap": "round", fill: "none", opacity: op.toFixed(3) };
+      parkSvg("line", Object.assign({ class: "parklead", x1: e[0].toFixed(2), y1: e[1].toFixed(2), x2: hx.toFixed(2), y2: hy.toFixed(2) }, g));
+      parkSvg("path", Object.assign({}, g, { class: "parkhead", "stroke-linejoin": "round",
+        d: "M" + (hx - ux * H + uy * H * 0.6).toFixed(2) + " " + (hy - uy * H - ux * H * 0.6).toFixed(2) + "L" + hx.toFixed(2) + " " + hy.toFixed(2)
+          + "L" + (hx - ux * H - uy * H * 0.6).toFixed(2) + " " + (hy - uy * H + ux * H * 0.6).toFixed(2) }));
+      parkSvg("circle", Object.assign({}, g, { class: "parkring", cx: q[0].toFixed(2), cy: q[1].toFixed(2), r: P.RING_R,
+        "stroke-dasharray": P.RING_DASH, opacity: (op * k).toFixed(3) }));
+    }
+  };
   /* P72 T18 / R26-288 (E56: a ring circles a NUMBER on a chart) - A BAR'S VALUE AS A TARGET. A bar target resolved to
      the whole bar, so a ring meant for "94%" circled the bar and crossed its name. `part: "value"` resolves to what the
      page prints for that bar - its value label, or on an emphasized bar the pill that carries its count - as DRAWN this
@@ -25942,6 +26013,7 @@ async function mount(doc) {
     cap.classList.toggle("stage", stage);
     cap.classList.toggle("phrase", stage && PHRASE);
     paintSpecies(sc, t);
+    paintDockJoins(live, t);   /* P71 T23: the leader and the ring of a card joined to its date - on the chart's layer */
     paintChapters(t);   /* P70 T9: the acts, over every scene they cover (a timeline with none returns at once) */
     /* on a LEDGER PAGE the stage caption sits in the page's declared quiet zone (s9.25 #2, s9.28 C2:
        never over the emphasized datum); elsewhere it is centred */

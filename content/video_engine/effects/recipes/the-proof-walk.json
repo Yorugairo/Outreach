@@ -1,0 +1,52 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:the-proof-walk",
+ "title": "The proof walk - each episode's card at its date",
+ "aliases": [],
+ "acts": [
+  "SPANS",
+  "QUOTES"
+ ],
+ "members": [
+  {
+   "card": "page_species:lit_stretch",
+   "offset_s": 0.0,
+   "role": "the episode's stretch of the long line lights on its word - the light travels it (T36)"
+  },
+  {
+   "card": "page_species:axis_tag",
+   "offset_s": 0.6,
+   "role": "the episode's year becomes an accent pill on the x axis - the era named where it stands (T9)"
+  },
+  {
+   "card": "dock_option:park_at",
+   "offset_s": 1.0,
+   "role": "the episode's card reads in the plot's empty room, then parks to a chip at its date with a leader - the join IS the claim"
+  },
+  {
+   "card": "page_species:figure",
+   "offset_s": 3.6,
+   "role": "the episode's number is written at its datum as the card parks (T20's check or cross where it is a verdict)"
+  }
+ ],
+ "window_s": 6.0,
+ "does": "One long line walks its episodes: each stretch lights, its year is tagged on the axis, its card reads in the plot's empty room and parks to its date with a leader, its number is written - one episode per sentence.",
+ "use_when": {
+  "act": "SPANS - one long line proves a pattern by walking its episodes (BRAVOS-USE-WHEN R4)",
+  "moment": "proof",
+  "shape": "series + named dates",
+  "use": "one long line proves a pattern by walking its episodes, each with its card (R4; BUB 7:22, RST 07:22-08:22 'the credit market began flashing warning signs')",
+  "dont": "a card would read over the plot (E63: it reads in the plot's empty room and parks to a chip - over the ink only by the author's `under`, s124 (3)); one episode per sentence, never two cards reading at once"
+ },
+ "doctrine": [
+  "P71 T23",
+  "E65",
+  "E63",
+  "E99 s124",
+  "E99 s70",
+  "E99 s106"
+ ],
+ "status": "candidate",
+ "source": "P71 T23 (harvest v2 R4, n=1; BRAVOS-USE-WHEN :931). Its park_at member is pinned by the goldens card-reads-in-the-empty-room and card-parks-at-its-date; the whole walk is proved as a private TEST-BED beat on H row 9's railway page (P71 T23 frames/, labelled as one); no approved cut carries it",
+ "count": 0
+}
