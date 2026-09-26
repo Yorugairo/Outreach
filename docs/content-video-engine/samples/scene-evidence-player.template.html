@@ -622,7 +622,23 @@
      second differ. Only the colour flip stays a transition (it is not motion). */
   #caption.stage .cw { transition: color .12s linear; }
   /* 4.2 quiet mode - smaller, static, single fade, keywords still coloured */
-  #caption.quiet { font-size: 33px; font-weight: 600; }
+  #caption.quiet { font-size: 40px; font-weight: 800; }
+  /* P71 T8b (E99 s126 (2)): THE LANDSCAPE QUIET STRIP READS AT THE SQUINT. M48 read the 33 px / 600 strip at 4.00-4.21 px
+     cap at 320 px wide against the reference's 4.285 (caption-squint-floor.v1.json: Wealth Logic's burned-in strip, E38)
+     and its pale words as low as 1.79 contrast on a cream page or a bright plate. The strip now takes the anchored
+     caption's own size (#caption: 40 px) at the stage caption's weight (800: at 700 the thin stems blur into the stroke
+     at 320 px and a mid-grey ground read 3.72) - still ONE line inside ledger_page.CAPTION_ANCHOR["16:9"] (878-960), so
+     no layout kept clear of the strip moves - and the reference's own form of contrast, a dark STROKE in the text shadow
+     (white caps in a black stroke; doc 29 Part 5: transparent glyphs + text shadow, no pill, no panel), on every world:
+     the strip crosses a page, a plate and a map alike. The stroke is P72 T14's measured backing at its full strength
+     (8 offsets at 0.1 em, a doubled 0.16 em core, a 0.34 em halo, the page's near-black), over the template's own two.
+     9:16 is not matched: the shorts' quiet strip (E62, 48 px / 800) paints exactly what it painted. */
+  html:not([data-aspect="9:16"]) #caption.quiet {
+    text-shadow: .1em 0 0 rgb(8,11,14), -.1em 0 0 rgb(8,11,14), 0 .1em 0 rgb(8,11,14), 0 -.1em 0 rgb(8,11,14),
+                 .0707em .0707em 0 rgb(8,11,14), -.0707em .0707em 0 rgb(8,11,14), .0707em -.0707em 0 rgb(8,11,14),
+                 -.0707em -.0707em 0 rgb(8,11,14), 0 0 .16em rgb(8,11,14), 0 0 .16em rgb(8,11,14),
+                 0 0 .34em rgba(8,11,14,.85), 0 2px 14px rgba(0,0,0,.94), 0 0 5px rgba(0,0,0,.85);
+  }
   #caption.quiet .cg { transform: none !important; opacity: 1 !important; }
   /* PHRASE (shorts, 2026-09-05): the line is read, not chased - every word legible from the page's start, the spoken-word
      flip retired; only a keyword is punctuated (it re-pops and brightens when spoken, and stays) */

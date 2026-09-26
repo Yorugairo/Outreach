@@ -111,7 +111,7 @@ WORLD_PINS = {
     "line": "a4bc296c71783adb5b4b9f6bb7f70dd32d47927e7c6a11056829d4095214ff66",
     "cross": "a4cb3f567a0756c03a81b37c4c2c8d063d36ed252f98fbfed99f206d4d738459",
 }
-FRAME_94_PIN = "9766aba65d8b9f2d956bb07111c3ea31730a3aee0ffb0258dde55761eabe42e7"   # re-pinned on purpose by P69 T37c: the default page's title glows (was 85dc693d...)
+FRAME_94_PIN = "afcf9942ac3af3a6197463f4a8fe79a868f8843a10d55393c522385d87409752"   # re-pinned on purpose by P71 T8b: the quiet caption strip is 40 px / 800 with its stroke (was 9766aba6..., P69 T37c's title glow; before that 85dc693d...)
 
 
 def _episode(tmp: Path) -> Path:
