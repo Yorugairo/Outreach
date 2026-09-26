@@ -1,0 +1,61 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:trace-to-the-level",
+ "title": "The trace to its level",
+ "aliases": [
+  {
+   "name": "Trace -> endpoint -> guide -> pill",
+   "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:819"
+  }
+ ],
+ "acts": [
+  "TURNS",
+  "SPANS"
+ ],
+ "members": [
+  {
+   "card": "page_species:build_to",
+   "offset_s": 0.0,
+   "options": {
+    "dur": 0.6
+   },
+   "role": "the line runs on to the datum the sentence names and stops there; the tip lands lit in the series' own bloom"
+  },
+  {
+   "card": "page_species:axis_tag",
+   "offset_s": 0.37,
+   "options": {
+    "dur": 0.5
+   },
+   "role": "on the date's word its x tick springs into an accent pill and a dotted guide drops from the tip to it"
+  },
+  {
+   "card": "page_species:level_join",
+   "offset_s": 0.9,
+   "options": {
+    "dur": 1.4
+   },
+   "role": "on the number a ring lands on the tip, the dashed level runs to the value axis ({y}) and the level is written off the rule (C14)"
+  }
+ ],
+ "window_s": 3.0,
+ "does": "A line draws on to the datum the sentence names, its date becomes a pill on the x axis, and on the number a ring lands on the tip and a dashed level runs to the value axis with the level written beside it, never on the rule.",
+ "use_when": {
+  "act": "TURNS - a series read off as one number (BRAVOS-USE-WHEN R21)",
+  "moment": "hook / proof",
+  "shape": "a line whose last drawn datum is the number the sentence says, on a page whose end tag does not already print it",
+  "use": "a sentence that names a date and a level ('Last year: a hundred and twenty-one billion'): trace to the datum, pill the date, ring the tip, run the level to the axis and write it",
+  "dont": "the level is a value already on the chart - a rule or the series' end tag (E53 addendum; H row 15's 5.5 is a rule); a level the page's arithmetic does not give (E28)"
+ },
+ "doctrine": [
+  "E53 addendum",
+  "E28",
+  "E99 s60",
+  "E99 s70",
+  "P71 T9",
+  "P71 T10"
+ ],
+ "status": "candidate",
+ "source": "P71 T36 (harvest v2 R21; DOM 00:39-00:50.5, BOOM 00:36-00:41.5); proved as a private test-bed beat by projects/_proofs/p71-recipes/proof_t36.py on Steel and Paper H row 16 ('Between 2020 and 2024 ... a hundred and twenty-one billion', take 256.48 s) on ev-debt-issuance-line-v1 - no approved cut carries it",
+ "count": 0
+}

@@ -446,11 +446,9 @@ def test_every_wired_card_is_in_a_recipe():
     # invented for them here.
     # P69 T37's solo (page_species:solo) is tested alone in test_solo.py and pinned by the solo-chipmakers golden (H row
     # 10's divergence page); its recipe is the harvest's R24 `isolate-then-quantify-the-tail` (P69 T44), not invented here.
-    # P71 T9's axis tag (page_species:axis_tag) is tested alone in test_axis_tag.py and pinned by the axis-tag-two-thousand
-    # golden; no body row adopts it before P71-HG1 (common rule (f)), so no recipe is invented for it here.
-    # P71 T10's level join (page_species:level_join) is tested alone in test_level_join.py and pinned by the
-    # level-join-half-a-point golden (H row 14's yardstick); no committed beat plays it until HG1 (P71 T38), and its
-    # recipes are P71 T34-T36's, not invented here.
+    # P71 T9's axis tag (page_species:axis_tag) and T10's level join (page_species:level_join) are composed by P71 T36's
+    # candidate recipe:trace-to-the-level (the trace, the date's pill, the level to the value axis - harvest R21), proved
+    # as a private test-bed beat on H row 16 (projects/_proofs/p71-recipes/proof_t36.py), so they are no longer excepted.
     # P70 T3's fill gauge (page_builder:progress, now wired: its painter is the `;form=gauge` branch of buildLedgerBars) is
     # tested alone in test_fill_gauge.py and pinned by the gauge-94 golden; no committed beat plays it until P70-HG1, so
     # no recipe is invented for it here.
@@ -467,7 +465,7 @@ def test_every_wired_card_is_in_a_recipe():
                          "page_builder:combo+segments", "page_builder:line+break", "page_builder:line+schematic",
                          "page_builder:progress",
                          "page_enter:surface",
-                         "page_species:axis_tag", "page_species:explode", "page_species:level_join", "page_species:member", "page_species:solo",
+                         "page_species:explode", "page_species:member", "page_species:solo",
                          "plate_option:bar_style",
                          "plate_option:build", "plate_option:caption_room", "plate_option:domain", "plate_option:readability",
                          "plate_option:room", "species:balance", "species:chapter", "species:equation", "species:freeze"], uncovered

@@ -1,0 +1,58 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:the-divergence-spread",
+ "title": "The divergence spread",
+ "aliases": [
+  {
+   "name": "Divergence spread",
+   "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:949"
+  }
+ ],
+ "acts": [
+  "COMPARES",
+  "SPANS"
+ ],
+ "members": [
+  {
+   "card": "page_species:build_to",
+   "offset_s": 0.0,
+   "options": {
+    "dur": 1.2
+   },
+   "role": "the line that ran away draws on its own word and lands with its end tag"
+  },
+  {
+   "card": "page_species:build_to",
+   "offset_s": 1.4,
+   "options": {
+    "dur": 1.2
+   },
+   "role": "the line that stayed flat draws on its word (a peer that moves with it draws beside it) and lands with its end tag"
+  },
+  {
+   "card": "page_species:spread",
+   "offset_s": 3.66,
+   "options": {
+    "dur": 2.0
+   },
+   "role": "the gap between the two lines bleeds full of ink left to right on the word that names what the gap means"
+  }
+ ],
+ "window_s": 6.0,
+ "does": "Two series draw one after the other, each on its own word and each landing with its end tag, then the region between them bleeds full of ink - the gap itself becomes the thing on the page.",
+ "use_when": {
+  "act": "SPANS - two once-together series now apart (BRAVOS-USE-WHEN R27)",
+  "moment": "proof",
+  "shape": "two series on one scale and one unit, sharing a start",
+  "use": "a sentence that names both lines and then what the distance between them means ('Chipmakers doubling while their customers sit flat ... is textbook profit-taking')",
+  "dont": "the gap is not the claim; two units or two scales (E79 panels); a page where the two lines are a derived chart state (the spread waits while a derived state stands - H row 10)"
+ },
+ "doctrine": [
+  "E28",
+  "E99 s60",
+  "E99 s70"
+ ],
+ "status": "candidate",
+ "source": "P71 T36 (harvest v2 R27; D40 04:30-04:50 read 2026-09-25: two lines, their end pills, the gap filled - no bracket; BOOM 08:35 the wedge fill); proved as a private test-bed beat by projects/_proofs/p71-recipes/proof_t36.py on Steel and Paper H row 10's sentence ('Chipmakers doubling ... textbook profit-taking', take 94.08 s) on ev-divergence-v1 as its own page - no approved cut carries it",
+ "count": 0
+}
