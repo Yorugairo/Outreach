@@ -1636,7 +1636,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T18: The "?" at the unknown, the collage that resolves into it, the predictions board (was P69 T53)
-- Status: pending
+- Status: done - lane B `51bb2e8`: chip `glyph: "?"` (+ `glyph_at`) above the card (HIS 01:48's place and spring); the stage species `unknown` (BOOM 08:52's pop; size default 122, 240 on H row 23's room) with `under: blur` (F12); card `species:unknown`, recipe `the-predictions-board` (candidate), golden `unknown-decide`. At HG1: CHN's collage also SHRINKS as it recedes (ours blurs in place - T19's pile pose); the pulse swell / glow / leave are derived; our crimson is lighter than Bravos's
 - Owner: implementation_luna (LANE B)
 - Depends on: T12 (`chip.mjs`); T15 (`under: blur`, the blur a collage recedes under); P70 T1c (`chip.mjs`)
 - Harvest:
@@ -2032,7 +2032,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T25: The scale-out reveal and the projected overtake (was P69 T74)
-- Status: pending
+- Status: done - lane B `96a41cb`: `opens_on` + `extend {field}` (the lone bar widens to its field, the rank computed) and a `projected` bar + `extend {bar}` (dashed, a bracket to #1 with the gap); `extend` grew a bars branch (the plan's reuse did not hold); golden `projected-overtake`, recipe `scale-out-then-the-overtake` (candidate). At HG1: D40's bracket runs to TODAY's bar with a ratio ("10X"); ours to #1 with the gap. Finding R26-403
 - Owner: implementation_luna (LANE B), then reviewer (E77: a forecast labelled; the rank computed)
 - Depends on: P70 T3 committed (`buildLedgerBars`); T16 (the projection grammar: `label`, `tier`)
 - Harvest: v2 A50 "Scale-out reveal" (D40 15:02-15:06 (G): $120B, "18th Largest Holder"); A51 "Projected overtake"
@@ -2133,7 +2133,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T27: The lead-lag bracket across two series; the travelling ring and the phase slide DROPPED (was P69 T75)
-- Status: pending
+- Status: done - lane B `ffa1a21`: the two-series bracket, the lag computed and written, as a level or BOOM 16:27's elbow; `claim: lead_lag` for ends on two axes; golden `lead-lag-bracket` (a reference beat - H row 9's 7 % / 8 % datums exist on no object). At HG1: BOOM rings the LAGGING datum and writes the label past the vertical; ours rings the leader. Acceptance 2 (P69 plan :388 A52 / A54 marked dropped) is T0's
 - Owner: implementation_luna (LANE B), then reviewer (a measured lag computed; s102 on unlike scales)
 - Depends on: P70 T5 committed (it owns `paintBracket`); T13 (s102's conditions for two unlike scales)
 - Harvest:
@@ -2181,7 +2181,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T28: The line painter - the trace before the furniture, and the line changing ink at a point (was P69 T76; F18 is done)
-- Status: pending
+- Status: done - lane B `9989cca`: `;...:trace` (the line on bare ground, then the furniture) and `ink_from: {x, color?}` (the stretch past x redrawn in a new ink with its glow); goldens `enter-trace`, `ink-from-crash`. At HG1: our fall red reads a pale salmon beside Bravos's saturated crimson (the same hue question as P72-HG1 item (11)); our trace 2.0 s vs Bravos's 3.1. Findings R26-401 / R26-402
 - Owner: implementation_luna (LANE B)
 - Depends on: T13 and T16 (`buildLedgerLine`, waves 3-4)
 - Harvest: v2 A41 "Trace first, furniture after" (HIS 00:04-00:06, 05:50-05:51.5); A21 "The line changes ink at a
@@ -2228,7 +2228,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T29: Glow edges - a glow outline on a bar or region; F14 DROPPED; the stamp slab retired (was P69 T77)
-- Status: pending
+- Status: done - lane B `3e92c92`: `glow` species - the named bar / span's edge near-white in its colour with T10's halos in the edge's light (ONE glow system: `lpFillGlow` + `LP_GLOW_EDGE`, measured off BUB #3); `pulse` one event per blink; golden `glow-outline-bar`
 - Owner: implementation_luna (LANE B)
 - Depends on: T12 (one light grammar: `lit`). P70 T1b (the stamp's paint) is committed at `50b2f85`; T29 draws no
   stamp ring, so it does not wait on P70 T1c.

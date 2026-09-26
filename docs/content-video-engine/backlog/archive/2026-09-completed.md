@@ -318,6 +318,13 @@ an unresolved source anomaly; this pass does not synthesize a task from it.
 | R26-322 | `melt:morph`'s hand ring is read before the outgoing page paints. Closed by P72 T21. | lane B `7263013`: read after `paint(wA, prev)`, from a mount keyed to this boundary. |
 | R26-324 | The title glow is not repainted after a colour change (6/255). Closed by P72 T21. | lane B `7263013`: the title leaves layout and returns in the same frame. |
 | R26-376 | The dock-depth card seeks 69 px higher than it plays. Closed by P72 T21. | lane B `7263013`: `dockCam` from the placed height; its badge row off the stage is R26-398. |
+| R26-328 | A re-docking of the same id keeps the first box. Closed by P72 T19. | lane B `89de388`: the coalescer merges only a same box; a new box is a new docking (H row 23's workaround no longer needed). |
+| R26-285 | A dip's docks retract over the incoming scene. Closed by P72 T19. | lane B `89de388`: the docks ending on its boundary, and their wash, go at the black; the snap never crosses a landing. |
+| R26-271 | The prop hatch ignores the dock camera. Closed by P72 T19. | lane B `89de388`: the hatch lines ride the arrival prefix and a depth dock's plane, and take the arrival's blur. |
+| R26-320 | A press card cannot hold with the drift-hold. Closed by P72 T19. | lane B `89de388`: `idle: hold` on a press card drifts on its own span with the light band. |
+| R26-267 | A dock cannot ride another dock's read and park. Closed by P72 T19. | lane B `89de388`: `rel: {pin, inherit?}` (E97; translation by default); a bad pin refused across the cut. |
+| R26-202 | A throw cannot pick its entry edge (b); the over-build landing (a). Closed by P72 T19 (b) and P72 T7 (a). | lane B `89de388`: `side: left|right|bottom` on a throw; `top` refused (a drop). |
+| R26-343 | A park leaves the long form's key rail at full size. Closed by P72 T19. | lane B `89de388`: the key rail scales about the chart's anchor on a park and returns on the un-park. |
 | R26-284 | A figure double-prints its bar's value. Closed by P72 T18. | lane B `4b07424`: the figure hands over in place; a restating figure WARNs (s106). |
 | R26-288 | A ring on a bar has no value target. Closed by P72 T18. | lane B `4b07424`: `part: value` rings the printed value as drawn. |
 | R26-255 | A bar figure drifts on a page with states. Closed by P72 T18. | lane B `4b07424`: it rides its bar through a rescale. |
