@@ -138,29 +138,61 @@ export const stripOutline = (verts, n) => [...verts.slice(0, n), ...verts.slice(
      - a column thinner than MIN_H of the outline's height is opened symmetrically to it, because two coincident
        vertices are a degenerate triangle and arapPrepare's Cholesky refuses the Laplacian they make. At 0.02 of the
        height on a 96-vertex circle the flattening is under a pixel at our sizes and every det J stays positive.
-   Pure: the same outline and n give the same strip, vertex for vertex. */
-export const STRIP = Object.freeze({ EPS_X: 0.004, MIN_H: 0.02 });
+   Pure: the same outline and n give the same strip, vertex for vertex.
+   P72 T24 / R26-150 - THE STRIP TAKES AN AXIS, AND NAMES THE BAY IT FILLS. The columns above run along x, and a
+   column's extent is ONE interval, so a silhouette that doubles back across a column (a C-shaped horseshoe: the two
+   arms and the bay between them on one vertical line) has its bay filled - the column's shadow, not the shape. Two
+   things answer that, both here and both pure:
+     - `o.axis` (radians): the strip is taken in the outline's own frame turned by -axis about its area centroid and
+       turned back, so its columns run ALONG that direction (a proper rotation: every triangle keeps its winding, so
+       the strip is still the topology `stripMesh` carries). axis 0 - the default - is the x strip above, to the digit;
+     - `bays`: every run of columns whose boundary crossings make MORE than one interval - the places this strip
+       fills a bay the shape does not have - whose filled area is more than BAY_MIN of the outline's own area, as
+       {from, to, share} (the first and last column, the share of the outline's area the strip adds there). [] when
+       the strip IS the shape, to that share.
+   BAY_MIN [DERIVED, measured]: a bay is judged by the AREA the strip adds, not by one column's gap - the lobed
+   golden blob's leftmost lobes overlap in x, so its columns 1-2 cross it four times with a gap of 0.21 of its height,
+   and the strip adds 0.8 % of its area there (invisible, and the golden that ships it); the horseshoe's bay adds 41 %.
+   0.05 is a twentieth of the shape: six times the fold, an eighth of the horseshoe's bay.
+   `stripFor` (below, after the invariants it uses) picks the axis. */
+export const STRIP = Object.freeze({ EPS_X: 0.004, MIN_H: 0.02, BAY_MIN: 0.05 });
+const stripClean = (poly) => (poly || []).filter((p) => Array.isArray(p) && Number.isFinite(+p[0]) && Number.isFinite(+p[1])).map((p) => [+p[0], +p[1]]);
+const stripTurn = (p, c, a) => { const cs = Math.cos(a), sn = Math.sin(a), x = p[0] - c[0], y = p[1] - c[1]; return [c[0] + x * cs - y * sn, c[1] + x * sn + y * cs]; };
+const stripBays = (gaps, pitch, area, min) => {   /* runs of columns with a gap, each with the share of `area` it fills */
+  const runs = [];
+  gaps.forEach((g, i) => { if (!(g > 0)) return; const r = runs[runs.length - 1]; if (r && r.to === i - 1) { r.to = i; r.fill += g * pitch; } else runs.push({ from: i, to: i, fill: g * pitch }); });
+  return runs.map((r) => ({ from: r.from, to: r.to, share: +(r.fill / Math.max(1e-9, area)).toFixed(4) })).filter((r) => r.share > min);
+};
 export const polyStrip = (poly, n = 48, o = {}) => {
-  const P = Object.assign({}, STRIP, o), pts = (poly || []).filter((p) => Array.isArray(p) && Number.isFinite(+p[0]) && Number.isFinite(+p[1])).map((p) => [+p[0], +p[1]]);
-  if (pts.length < 3 || !(n >= 2)) return null;
+  const P = Object.assign({}, STRIP, o), raw = stripClean(poly);
+  if (raw.length < 3 || !(n >= 2)) return null;
+  const axis = Number.isFinite(+P.axis) ? +P.axis : 0, pc = axis ? centroid(raw) : null;
+  const pts = axis ? raw.map((p) => stripTurn(p, pc, -axis)) : raw;
   const B = bbox(pts);
   if (!(B.w > 0 && B.h > 0)) return null;
   const inset = B.w * P.EPS_X, x0 = B.x + inset, x1 = B.x + B.w - inset, minH = B.h * P.MIN_H;
-  const top = [], bot = [];
+  const top = [], bot = [], gaps = [];
   for (let i = 0; i < n; i++) {
     const x = x0 + (i / (n - 1)) * (x1 - x0);
     let lo = Infinity, hi = -Infinity;
+    const ys = [];
     for (let k = 0, m = pts.length; k < m; k++) {
       const a = pts[k], b = pts[(k + 1) % m];
       if ((a[0] > x) === (b[0] > x)) continue;   /* the edge does not straddle this column */
       const y = a[1] + (b[1] - a[1]) * ((x - a[0]) / (b[0] - a[0]));
-      lo = Math.min(lo, y); hi = Math.max(hi, y);
+      lo = Math.min(lo, y); hi = Math.max(hi, y); ys.push(y);
     }
+    ys.sort((p, q) => p - q);
+    let gap = 0;   /* inside is [y0, y1], [y2, y3], ...: the stretch between y(2k-1) and y(2k) is OUTSIDE the shape */
+    for (let k = 1; k + 1 < ys.length; k += 2) gap += ys[k + 1] - ys[k];
+    gaps.push(gap);
     if (!(hi > -Infinity)) { lo = hi = (B.y + B.h / 2); }   /* a column the boundary misses: the outline's own middle */
     if (hi - lo < minH) { const c = (lo + hi) / 2; lo = c - minH / 2; hi = c + minH / 2; }
     top.push([x, lo]); bot.push([x, hi]);
   }
-  return { top, bot, n };
+  const back = (q) => (axis ? stripTurn(q, pc, axis) : q);
+  const bays = stripBays(gaps, (x1 - x0) / (n - 1), Math.abs(polyArea(pts)), P.BAY_MIN);
+  return { top: axis ? top.map(back) : top, bot: axis ? bot.map(back) : bot, n, axis, bays };
 };
 /* the prepared morph for ANY shared-topology mesh: rest verts in `mesh`, target verts `Bv`, one pinned vertex that travels the chord */
 export const arapPrepareMesh = (mesh, Bv, pin) => {
@@ -263,6 +295,68 @@ export const morphInvariants = (frames, W, o = {}) => {
 };
 /* the SVG path of an outline */
 export const outlinePath = (pts) => pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ") + " Z";
+/* ---- P72 T24 / R26-163 + R26-150: WHICH WAY THE STRIP RUNS -------------------------------------------------------- */
+/* A planted source's strip was always the x strip, and two sources break it. The TIE (P61 T3d, the real beat): a tall,
+   slanted silhouette 33 x 90 px sampled by 48 vertical columns 0.7 px wide, whose top and bottom rows slope TOGETHER on
+   its left columns (a shear near 20:1); the polar decomposition reads a shear that size as a large rotation its
+   neighbours do not share, and the least-squares solve folds one triangle (measured: min det -0.183 over t 0.21-0.42,
+   one triangle of column 3; the target Jacobians never went below 1). And the HORSESHOE (R26-150): a C whose bay the x
+   strip fills. The two are NOT the same fault (P72 T24, the parent's ruling on the tie): a FOLD is invisible on the
+   frame (the tie's is a slightly wavy bottom edge, on a beat the operator approved growing upright, E99 s62) and a
+   turn onto another axis is a visible change of the approved motion, so a fold is REPORTED and never cured by a turn;
+   a BAY is the shape itself broken (the horseshoe's 41 %), and only a bay turns the strip. So:
+     1. the x strip whenever it keeps the shape (no bay) - the strip every source always had, to the digit, whatever its
+        det: sound (`refused: null`) or folded (`refused: "fold"` with `fold`: the worst det, its triangle and column,
+        and the first and last shape-clock instants t at which any solved triangle has det <= 0 - for the probe and
+        M17's WARN, s106: a finding, never a refusal of the morph);
+     2. else the first other axis whose strip keeps the shape and never inverts (min det over SAMPLES + 1 instants, the
+        solved mesh and the interpolated Jacobians both, > 0): the outline's own dominant axis and its normal, then
+        vertical, then the dominant axis turned by STEP_DEG each way - every axis in [-90, 90) degrees, so the morph turns
+        the prop by at most a quarter turn onto the target's columns;
+     3. else the first axis that does not invert, and `refused: "bay"` with its `bays` (the columns it fills) - named,
+        for the probe and the gate, never a silent fill; a pair that inverts on every axis keeps the x strip, `refused:
+        "bay"` with its `fold`.
+   Pure: the same outline, target and n give the same answer. `tried` lists each axis read, for the record. */
+export const STRIP_AXES = Object.freeze({ STEP_DEG: 15, TURNS: 5, SAMPLES: 24 });
+const stripAxisNorm = (a) => { let v = a; while (v >= Math.PI / 2 - 1e-12) v -= Math.PI; while (v < -Math.PI / 2 - 1e-12) v += Math.PI; return Math.abs(v) < 1e-12 ? 0 : v; };
+const stripWorstDet = (S, Bv, pin, samples) => {   /* {det, fold}: the worst det over the samples; `fold` when it is <= 0 */
+  let prep;
+  try { prep = arapPrepareMesh(stripMesh(S.top, S.bot), Bv, pin); } catch (e) { return { det: -Infinity, fold: null }; }   /* not positive definite: a strip that cannot be carried */
+  const V = prep.mesh.verts;
+  let w = Infinity, wt = 0, wi = -1, t0 = null, t1 = null;
+  for (let s = 0; s <= samples; s++) {
+    const t = s / samples, A = arapAt(prep, t);
+    prep.mesh.tris.forEach(([i, j, k], ti) => {
+      const d = Math.min(det2x2(A.jacobians[ti]), det2x2(triJacobian(V[i], V[j], V[k], A.verts[i], A.verts[j], A.verts[k])));
+      if (d <= 0) { if (t0 == null) t0 = t; t1 = t; }
+      if (d < w) { w = d; wt = t; wi = ti; }
+    });
+  }
+  return { det: w, fold: w > 0 ? null : { min_det: +w.toFixed(4), triangle: wi, column: wi >> 1, worst_t: +wt.toFixed(4), t0, t1 } };
+};
+export const stripFor = (poly, Bv, n = 48, pin = n + (n >> 1), o = {}) => {
+  const P = Object.assign({}, STRIP_AXES, o), x0 = polyStrip(poly, n);
+  if (!x0) return null;
+  const ax = dominantAxis(stripClean(poly)), step = P.STEP_DEG * Math.PI / 180, cands = [];
+  const add = (a) => { const v = stripAxisNorm(a); if (!cands.some((c) => Math.abs(c - v) < 1e-9)) cands.push(v); };
+  [0, ax, ax + Math.PI / 2, Math.PI / 2].forEach(add);
+  for (let k = 1; k <= P.TURNS; k++) { add(ax + k * step); add(ax - k * step); }
+  const tried = [], seen = new Map();
+  const read = (a) => {
+    if (!seen.has(a)) {
+      const S = a === 0 ? x0 : polyStrip(poly, n, { axis: a });
+      const m = S ? stripWorstDet(S, Bv, pin, P.SAMPLES) : { det: -Infinity, fold: null };
+      seen.set(a, { S, det: m.det, fold: m.fold });
+      tried.push({ axis_deg: +(a * 180 / Math.PI).toFixed(2), bays: S ? S.bays.length : null, det: Number.isFinite(m.det) ? +m.det.toFixed(4) : null });
+    }
+    return seen.get(a);
+  };
+  const x = read(0);
+  if (!x0.bays.length) return Object.assign({}, x0, { det: x.det, fold: x.fold, refused: x.det > 0 ? null : "fold", tried });   /* 1: a fold is reported, never turned away */
+  for (const a of cands) { const r = read(a); if (r.S && !r.S.bays.length && r.det > 0) return Object.assign({}, r.S, { det: r.det, fold: null, refused: null, tried }); }
+  for (const a of cands) { const r = read(a); if (r.S && r.det > 0) return Object.assign({}, r.S, { det: r.det, fold: null, refused: "bay", tried }); }
+  return Object.assign({}, x0, { det: x.det, fold: x.fold, refused: "bay", tried });
+};
 
 /* ---- P69 T26e / E99 s107: A PROP'S OWN PIXELS RIDE THE MESH ------------------------------------------------------
    A catalogued prop is a PICTURE with an alpha, not an outline. Its morph source is described from that alpha, as a

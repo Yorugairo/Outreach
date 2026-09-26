@@ -59,6 +59,8 @@ SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pa
             "melt-morph",       # P61 T3 / R26-117: THE HAND-OVER FRAME of `melt:morph` - the ball finished and the next page's page_enter:morph opening on its ring as the prop, one clock, no cut (its ball, its midpoint and its build ride PROOF_FRAMES)
             "morph-planted",    # P48 T5b / R26-16: THE PLANTED SOURCE - the traced silhouette of the plate's own dark form standing on the arriving page's board exactly where it stood, before it deforms (its midpoint rides PROOF_FRAMES)
             "melt-gather-morph",   # P61 T6 proof B / E99 s2: THE GATHER INTO A FULL CHART - `melt:gather:morph`, the two composing by construction; the gather at its midpoint (its point and the chart it becomes ride PROOF_FRAMES)
+            "melt-morph-two-inks",    # P72 T24 / R26-148: `melt-morph` whose arriving area is series 1's teal (`morph_series`), half way through the hand - the ball's own inks giving way to another series' ink on the one deforming shape
+            "morph-planted-plates",   # P72 T24 / R26-152: `morph-planted` over the two-plate ground (`field: plates`) - the inked plate half over the cream at a tenth of the ground's window, the planted prop still its field's ink
             "newsreel-strip-9x16",  # P52 T6: 9:16 THE DEFAULT strip law - the caption keeps its E62 band, the crawl runs below it
             "newsreel-strip-above", # P52 T6: 9:16 the ALTERNATIVE (`cap_band: "above"`) - the crawl takes the strip, the caption moves above it
             "occluder-dock",     # P50 T15 / HF-17: a dock BEHIND the plate's foreground layer - the depth cue by occlusion, not blur

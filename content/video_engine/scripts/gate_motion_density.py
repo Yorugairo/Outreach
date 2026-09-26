@@ -4480,10 +4480,71 @@ def _morphs(scenes: list[dict]) -> list[tuple[str, str]]:
     return out
 
 
+# P72 T24 / R26-163: A PLANTED SOURCE stands where the element stood (R26-16: "a real element of the outgoing world at
+# its last frame") - it is never re-placed on the chart's box, so the morph carries a translation, a turn and a change of
+# size BY CONSTRUCTION, and the brief's centroid / axis / area invariants (written for a named prop the engine builds
+# ON the target's own centroid and axis) are unreachable for it: the tie read 27.3 % W / 40.7 deg / 0.01 on the beat the
+# operator ruled VALID (E99 s62). They are REPORTED with their numbers and said to be unjudged; det J > 0 - the one
+# invariant that is about the morph and not about where the prop stood - is judged as before. The melt's ball is the
+# same door handed at run time (the timeline carries no world.morph), so the measurement's own `source` names it.
+MORPH_PLANTED_SOURCES = ("planted", "handed")
+MORPH_ADVICE_NAMED = "the morph does not read as one thing changing (move the prop onto the chart's box, keep its axis, keep its area)"
+MORPH_ADVICE_PLANTED = ("a strip fold or a filled bay on a planted source (arap.mjs stripFor keeps the x strip on a fold - the "
+                        "approved motion is never turned to cure an invisible fault - and turns it only for a bay): a prop "
+                        "standing where it stood is never moved to pass; read the named frames, re-trace the element if it shows")
+
+
+def _morph_planted_source(scenes: list[dict], key: str, r: dict) -> str | None:
+    """'planted' / 'handed' when the morph under `key` starts from a real element (world.morph.poly, or the player's
+    own reading of the source), else None - a named prop, a morph_to, a prop morph."""
+    src = r.get("source")
+    if src in MORPH_PLANTED_SOURCES:
+        return str(src)
+    for s in scenes:
+        if str(s.get("scene_id", "?")) == key:
+            m = (s.get("world") or {}).get("morph")
+            if isinstance(m, dict) and isinstance(m.get("poly"), list):
+                return "handed" if m.get("hand") else "planted"
+    return None
+
+
+def _morph_strip_bays(r: dict) -> str | None:
+    """R26-150: the strip a planted morph ran on fills a bay (arap.mjs `stripFor` refused every axis that keeps it)."""
+    strip = r.get("strip") if isinstance(r.get("strip"), dict) else None
+    if not strip or strip.get("refused") != "bay":
+        return None
+    spans = ", ".join(f"columns {b.get('from')}-{b.get('to')} ({100 * float(b.get('share', 0)):.0f} % of its area)"
+                      for b in strip.get("bays") or [])
+    return (f"its strip fills a bay the shape does not have at {spans or 'unnamed columns'} on every axis "
+            f"(taken at {float(strip.get('axis_deg', 0)):.0f} deg) - the silhouette doubles back; trace an element "
+            "that is one piece across, or split it")
+
+
+def _morph_strip_fold(scenes: list[dict], key: str, r: dict) -> str | None:
+    """R26-163 (the parent's ruling on the tie): the planted strip's fold BY NAME - its worst det, the triangle and strip
+    column, and the window it holds (the morph's own u, and in seconds on the page's span when the key is a page)."""
+    strip = r.get("strip") if isinstance(r.get("strip"), dict) else None
+    fold = (strip or {}).get("fold")
+    if not isinstance(fold, dict):
+        return None
+    txt = (f"a strip fold on the planted source: triangle {fold.get('triangle')} (strip column {fold.get('column')}), "
+           f"min det {float(fold.get('min_det', 0)):.3f}")
+    u0, u1 = fold.get("u0"), fold.get("u1")
+    if u0 is not None and u1 is not None:
+        txt += f", over u {float(u0):.2f}-{float(u1):.2f} of the morph"
+        sc = next((s for s in scenes if str(s.get("scene_id", "?")) == key), None)
+        if sc and sc.get("span"):
+            ms = float(((sc.get("world") or {}).get("page") or {}).get("morph_s") or MORPH_S)
+            t0 = float(sc["span"][0])
+            txt += f" ({_mm(t0 + float(u0) * ms)}-{_mm(t0 + float(u1) * ms)}, {t0 + float(u0) * ms:.2f}-{t0 + float(u1) * ms:.2f} s)"
+    return txt
+
+
 def _morph_gate(scenes: list[dict], inv: dict | str | None) -> Gate | None:
     """M17 (P47 T3; P48 T5 per morph): the three match-cut invariants per MORPH - a page's enter morph and every morph_to -
     measured in the player - INFO until measured (no silent skip), WARN naming the invariant that failed, PASS with the
-    numbers. No morph, no row."""
+    numbers. No morph, no row. P72 T24 (R26-163): a PLANTED or HANDED source is judged on det J alone (its three are
+    reported, unjudged), and a strip that fills a bay is named (R26-150)."""
     morphs = _morphs(scenes)
     if not morphs:
         return None
@@ -4491,21 +4552,39 @@ def _morph_gate(scenes: list[dict], inv: dict | str | None) -> Gate | None:
         return Gate("M17", "INFO", f"{len(morphs)} morph(s), invariants not measured - run measure_morph.py <build> (writes {MORPH_INVARIANTS_NAME})", SRC_M17)
     if inv == "stale":
         return Gate("M17", "INFO", f"{MORPH_INVARIANTS_NAME} measured another player.html - re-run measure_morph.py <build>", SRC_M17)
-    rows, bad = [], []
+    rows, bad, advice = [], [], set()
     for key, label in morphs:
         r = (inv.get("scenes") or {}).get(key)
         sc = {"scene_id": label}   # the row names the morph, not only its page
         if not r:
-            bad.append(f"{label}: not in the measurement"); continue
-        fails = [n for n, ok in (("centroid", r.get("centroid_ok")), ("axis", r.get("axis_ok")), ("area", r.get("area_ok"))) if not ok]
+            bad.append(f"{label}: not in the measurement"); advice.add(MORPH_ADVICE_NAMED); continue
+        planted = _morph_planted_source(scenes, key, r)
+        judged = () if planted else (("centroid", r.get("centroid_ok")), ("axis", r.get("axis_ok")), ("area", r.get("area_ok")))
+        fails = [n for n, ok in judged if not ok]
         if r.get("min_det", 1) <= 0:
             fails.append("det J <= 0")
         # P50 T12: WHICH METHOD ran is part of the reading - Method A's det is a measurement, Method B's is a guarantee
-        txt = (f"{sc.get('scene_id')}: method {str(r.get('method') or 'arap')}, centroid {100 * float(r.get('centroid_shift', 0)):.1f} % W, "
-               f"axis {float(r.get('axis_deg', 0)):.1f} deg, area {float(r.get('area_ratio', 0)):.2f}, min det {float(r.get('min_det', 0)):.3f}")
+        three = (f"centroid {100 * float(r.get('centroid_shift', 0)):.1f} % W, "
+                 f"axis {float(r.get('axis_deg', 0)):.1f} deg, area {float(r.get('area_ratio', 0)):.2f}")
+        if planted:
+            strip = r.get("strip") if isinstance(r.get("strip"), dict) else {}
+            along = f", strip along {float(strip.get('axis_deg', 0)):.0f} deg" if strip else ""
+            txt = (f"{sc.get('scene_id')}: method {str(r.get('method') or 'arap')}, a {planted} source ({three} not judged: "
+                   f"it stands where the element stood), min det {float(r.get('min_det', 0)):.3f}{along}")
+        else:
+            txt = f"{sc.get('scene_id')}: method {str(r.get('method') or 'arap')}, {three}, min det {float(r.get('min_det', 0)):.3f}"
+        fold = _morph_strip_fold(scenes, key, r) if planted and r.get("min_det", 1) <= 0 else None
+        if fold:
+            txt += " - " + fold
+        bay = _morph_strip_bays(r) if planted else None
+        if bay:
+            fails.append("the strip's bay")
+            txt += " - " + bay
         (bad if fails else rows).append(txt + (" - FAILS " + ", ".join(fails) if fails else ""))
+        if fails:
+            advice.add(MORPH_ADVICE_PLANTED if planted else MORPH_ADVICE_NAMED)
     if bad:
-        return Gate("M17", "WARN", "; ".join(bad + rows) + " - the morph does not read as one thing changing (move the prop onto the chart's box, keep its axis, keep its area)", SRC_M17)
+        return Gate("M17", "WARN", "; ".join(bad + rows) + " - " + "; ".join(a for a in (MORPH_ADVICE_NAMED, MORPH_ADVICE_PLANTED) if a in advice), SRC_M17)
     return Gate("M17", "PASS", "; ".join(rows), SRC_M17)
 
 

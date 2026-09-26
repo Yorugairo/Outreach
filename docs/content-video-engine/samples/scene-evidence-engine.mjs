@@ -3453,29 +3453,61 @@ async function mount(doc) {
        - a column thinner than MIN_H of the outline's height is opened symmetrically to it, because two coincident
          vertices are a degenerate triangle and arapPrepare's Cholesky refuses the Laplacian they make. At 0.02 of the
          height on a 96-vertex circle the flattening is under a pixel at our sizes and every det J stays positive.
-     Pure: the same outline and n give the same strip, vertex for vertex. */
-  const STRIP = Object.freeze({ EPS_X: 0.004, MIN_H: 0.02 });
+     Pure: the same outline and n give the same strip, vertex for vertex.
+     P72 T24 / R26-150 - THE STRIP TAKES AN AXIS, AND NAMES THE BAY IT FILLS. The columns above run along x, and a
+     column's extent is ONE interval, so a silhouette that doubles back across a column (a C-shaped horseshoe: the two
+     arms and the bay between them on one vertical line) has its bay filled - the column's shadow, not the shape. Two
+     things answer that, both here and both pure:
+       - `o.axis` (radians): the strip is taken in the outline's own frame turned by -axis about its area centroid and
+         turned back, so its columns run ALONG that direction (a proper rotation: every triangle keeps its winding, so
+         the strip is still the topology `stripMesh` carries). axis 0 - the default - is the x strip above, to the digit;
+       - `bays`: every run of columns whose boundary crossings make MORE than one interval - the places this strip
+         fills a bay the shape does not have - whose filled area is more than BAY_MIN of the outline's own area, as
+         {from, to, share} (the first and last column, the share of the outline's area the strip adds there). [] when
+         the strip IS the shape, to that share.
+     BAY_MIN [DERIVED, measured]: a bay is judged by the AREA the strip adds, not by one column's gap - the lobed
+     golden blob's leftmost lobes overlap in x, so its columns 1-2 cross it four times with a gap of 0.21 of its height,
+     and the strip adds 0.8 % of its area there (invisible, and the golden that ships it); the horseshoe's bay adds 41 %.
+     0.05 is a twentieth of the shape: six times the fold, an eighth of the horseshoe's bay.
+     `stripFor` (below, after the invariants it uses) picks the axis. */
+  const STRIP = Object.freeze({ EPS_X: 0.004, MIN_H: 0.02, BAY_MIN: 0.05 });
+  const stripClean = (poly) => (poly || []).filter((p) => Array.isArray(p) && Number.isFinite(+p[0]) && Number.isFinite(+p[1])).map((p) => [+p[0], +p[1]]);
+  const stripTurn = (p, c, a) => { const cs = Math.cos(a), sn = Math.sin(a), x = p[0] - c[0], y = p[1] - c[1]; return [c[0] + x * cs - y * sn, c[1] + x * sn + y * cs]; };
+  const stripBays = (gaps, pitch, area, min) => {   /* runs of columns with a gap, each with the share of `area` it fills */
+    const runs = [];
+    gaps.forEach((g, i) => { if (!(g > 0)) return; const r = runs[runs.length - 1]; if (r && r.to === i - 1) { r.to = i; r.fill += g * pitch; } else runs.push({ from: i, to: i, fill: g * pitch }); });
+    return runs.map((r) => ({ from: r.from, to: r.to, share: +(r.fill / Math.max(1e-9, area)).toFixed(4) })).filter((r) => r.share > min);
+  };
   const polyStrip = (poly, n = 48, o = {}) => {
-    const P = Object.assign({}, STRIP, o), pts = (poly || []).filter((p) => Array.isArray(p) && Number.isFinite(+p[0]) && Number.isFinite(+p[1])).map((p) => [+p[0], +p[1]]);
-    if (pts.length < 3 || !(n >= 2)) return null;
+    const P = Object.assign({}, STRIP, o), raw = stripClean(poly);
+    if (raw.length < 3 || !(n >= 2)) return null;
+    const axis = Number.isFinite(+P.axis) ? +P.axis : 0, pc = axis ? centroid(raw) : null;
+    const pts = axis ? raw.map((p) => stripTurn(p, pc, -axis)) : raw;
     const B = bbox(pts);
     if (!(B.w > 0 && B.h > 0)) return null;
     const inset = B.w * P.EPS_X, x0 = B.x + inset, x1 = B.x + B.w - inset, minH = B.h * P.MIN_H;
-    const top = [], bot = [];
+    const top = [], bot = [], gaps = [];
     for (let i = 0; i < n; i++) {
       const x = x0 + (i / (n - 1)) * (x1 - x0);
       let lo = Infinity, hi = -Infinity;
+      const ys = [];
       for (let k = 0, m = pts.length; k < m; k++) {
         const a = pts[k], b = pts[(k + 1) % m];
         if ((a[0] > x) === (b[0] > x)) continue;   /* the edge does not straddle this column */
         const y = a[1] + (b[1] - a[1]) * ((x - a[0]) / (b[0] - a[0]));
-        lo = Math.min(lo, y); hi = Math.max(hi, y);
+        lo = Math.min(lo, y); hi = Math.max(hi, y); ys.push(y);
       }
+      ys.sort((p, q) => p - q);
+      let gap = 0;   /* inside is [y0, y1], [y2, y3], ...: the stretch between y(2k-1) and y(2k) is OUTSIDE the shape */
+      for (let k = 1; k + 1 < ys.length; k += 2) gap += ys[k + 1] - ys[k];
+      gaps.push(gap);
       if (!(hi > -Infinity)) { lo = hi = (B.y + B.h / 2); }   /* a column the boundary misses: the outline's own middle */
       if (hi - lo < minH) { const c = (lo + hi) / 2; lo = c - minH / 2; hi = c + minH / 2; }
       top.push([x, lo]); bot.push([x, hi]);
     }
-    return { top, bot, n };
+    const back = (q) => (axis ? stripTurn(q, pc, axis) : q);
+    const bays = stripBays(gaps, (x1 - x0) / (n - 1), Math.abs(polyArea(pts)), P.BAY_MIN);
+    return { top: axis ? top.map(back) : top, bot: axis ? bot.map(back) : bot, n, axis, bays };
   };
   /* the prepared morph for ANY shared-topology mesh: rest verts in `mesh`, target verts `Bv`, one pinned vertex that travels the chord */
   const arapPrepareMesh = (mesh, Bv, pin) => {
@@ -3578,6 +3610,68 @@ async function mount(doc) {
   };
   /* the SVG path of an outline */
   const outlinePath = (pts) => pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ") + " Z";
+  /* ---- P72 T24 / R26-163 + R26-150: WHICH WAY THE STRIP RUNS -------------------------------------------------------- */
+  /* A planted source's strip was always the x strip, and two sources break it. The TIE (P61 T3d, the real beat): a tall,
+     slanted silhouette 33 x 90 px sampled by 48 vertical columns 0.7 px wide, whose top and bottom rows slope TOGETHER on
+     its left columns (a shear near 20:1); the polar decomposition reads a shear that size as a large rotation its
+     neighbours do not share, and the least-squares solve folds one triangle (measured: min det -0.183 over t 0.21-0.42,
+     one triangle of column 3; the target Jacobians never went below 1). And the HORSESHOE (R26-150): a C whose bay the x
+     strip fills. The two are NOT the same fault (P72 T24, the parent's ruling on the tie): a FOLD is invisible on the
+     frame (the tie's is a slightly wavy bottom edge, on a beat the operator approved growing upright, E99 s62) and a
+     turn onto another axis is a visible change of the approved motion, so a fold is REPORTED and never cured by a turn;
+     a BAY is the shape itself broken (the horseshoe's 41 %), and only a bay turns the strip. So:
+       1. the x strip whenever it keeps the shape (no bay) - the strip every source always had, to the digit, whatever its
+          det: sound (`refused: null`) or folded (`refused: "fold"` with `fold`: the worst det, its triangle and column,
+          and the first and last shape-clock instants t at which any solved triangle has det <= 0 - for the probe and
+          M17's WARN, s106: a finding, never a refusal of the morph);
+       2. else the first other axis whose strip keeps the shape and never inverts (min det over SAMPLES + 1 instants, the
+          solved mesh and the interpolated Jacobians both, > 0): the outline's own dominant axis and its normal, then
+          vertical, then the dominant axis turned by STEP_DEG each way - every axis in [-90, 90) degrees, so the morph turns
+          the prop by at most a quarter turn onto the target's columns;
+       3. else the first axis that does not invert, and `refused: "bay"` with its `bays` (the columns it fills) - named,
+          for the probe and the gate, never a silent fill; a pair that inverts on every axis keeps the x strip, `refused:
+          "bay"` with its `fold`.
+     Pure: the same outline, target and n give the same answer. `tried` lists each axis read, for the record. */
+  const STRIP_AXES = Object.freeze({ STEP_DEG: 15, TURNS: 5, SAMPLES: 24 });
+  const stripAxisNorm = (a) => { let v = a; while (v >= Math.PI / 2 - 1e-12) v -= Math.PI; while (v < -Math.PI / 2 - 1e-12) v += Math.PI; return Math.abs(v) < 1e-12 ? 0 : v; };
+  const stripWorstDet = (S, Bv, pin, samples) => {   /* {det, fold}: the worst det over the samples; `fold` when it is <= 0 */
+    let prep;
+    try { prep = arapPrepareMesh(stripMesh(S.top, S.bot), Bv, pin); } catch (e) { return { det: -Infinity, fold: null }; }   /* not positive definite: a strip that cannot be carried */
+    const V = prep.mesh.verts;
+    let w = Infinity, wt = 0, wi = -1, t0 = null, t1 = null;
+    for (let s = 0; s <= samples; s++) {
+      const t = s / samples, A = arapAt(prep, t);
+      prep.mesh.tris.forEach(([i, j, k], ti) => {
+        const d = Math.min(det2x2(A.jacobians[ti]), det2x2(triJacobian(V[i], V[j], V[k], A.verts[i], A.verts[j], A.verts[k])));
+        if (d <= 0) { if (t0 == null) t0 = t; t1 = t; }
+        if (d < w) { w = d; wt = t; wi = ti; }
+      });
+    }
+    return { det: w, fold: w > 0 ? null : { min_det: +w.toFixed(4), triangle: wi, column: wi >> 1, worst_t: +wt.toFixed(4), t0, t1 } };
+  };
+  const stripFor = (poly, Bv, n = 48, pin = n + (n >> 1), o = {}) => {
+    const P = Object.assign({}, STRIP_AXES, o), x0 = polyStrip(poly, n);
+    if (!x0) return null;
+    const ax = dominantAxis(stripClean(poly)), step = P.STEP_DEG * Math.PI / 180, cands = [];
+    const add = (a) => { const v = stripAxisNorm(a); if (!cands.some((c) => Math.abs(c - v) < 1e-9)) cands.push(v); };
+    [0, ax, ax + Math.PI / 2, Math.PI / 2].forEach(add);
+    for (let k = 1; k <= P.TURNS; k++) { add(ax + k * step); add(ax - k * step); }
+    const tried = [], seen = new Map();
+    const read = (a) => {
+      if (!seen.has(a)) {
+        const S = a === 0 ? x0 : polyStrip(poly, n, { axis: a });
+        const m = S ? stripWorstDet(S, Bv, pin, P.SAMPLES) : { det: -Infinity, fold: null };
+        seen.set(a, { S, det: m.det, fold: m.fold });
+        tried.push({ axis_deg: +(a * 180 / Math.PI).toFixed(2), bays: S ? S.bays.length : null, det: Number.isFinite(m.det) ? +m.det.toFixed(4) : null });
+      }
+      return seen.get(a);
+    };
+    const x = read(0);
+    if (!x0.bays.length) return Object.assign({}, x0, { det: x.det, fold: x.fold, refused: x.det > 0 ? null : "fold", tried });   /* 1: a fold is reported, never turned away */
+    for (const a of cands) { const r = read(a); if (r.S && !r.S.bays.length && r.det > 0) return Object.assign({}, r.S, { det: r.det, fold: null, refused: null, tried }); }
+    for (const a of cands) { const r = read(a); if (r.S && r.det > 0) return Object.assign({}, r.S, { det: r.det, fold: null, refused: "bay", tried }); }
+    return Object.assign({}, x0, { det: x.det, fold: x.fold, refused: "bay", tried });
+  };
 
   /* ---- P69 T26e / E99 s107: A PROP'S OWN PIXELS RIDE THE MESH ------------------------------------------------------
      A catalogued prop is a PICTURE with an alpha, not an outline. Its morph source is described from that alpha, as a
@@ -16787,7 +16881,7 @@ async function mount(doc) {
      build. Behind kinetics.arap_morph: with the flag off a morph page behaves as a mount of the same length, so an old
      render is one flag away. The three match-cut invariants (the brief B4) are computed by __morphInvariants for M17. */
   const MORPH = { S: 2.0, FILL_A: 0.28, COLS: 48, TEAR: 14, TAB_W: 0.92, TAB_H: 0.85,
-                  GROUND: 0.75, SEED_LAG: 0.6, SEED_R: 0.6, SEED_POW: 0.7, INK: "#25313C" };   /* dials (42 s42.5): the morph's seconds, the fill, the strip's columns, the tab's tear (viewBox px) and its size as a share of the target's box */
+                  GROUND: 0.75, GROUND_MIN_S: 0.6, SEED_LAG: 0.6, SEED_R: 0.6, SEED_POW: 0.7, INK: "#25313C" };   /* dials (42 s42.5): the morph's seconds, the fill, the strip's columns, the tab's tear (viewBox px) and its size as a share of the target's box */
   /* P61 T3b / E99 s52 - THE GROUND'S OWN THREE DIALS. The operator, on the planted morph: "the actual morph is fine,
      but going from the ink splotch to the full fill on the board instantly around it is the problem here."
        GROUND    the share of the morph's OWN seconds the page's field takes to arrive. 0.75 of the 2.0 s default is
@@ -16804,7 +16898,16 @@ async function mount(doc) {
                  of the clock); the seed has to be out from under the prop by then or the first half-second holds a
                  bare cream page, so it runs on u^0.7 - 32 % of the way at the same instant.
        INK       the field's charcoal, the colour the planted prop is painted in while the ground is still cream.
-                 The splotch is ALREADY ink (that is what was traced), so it stays ink until the board is. */
+                 The splotch is ALREADY ink (that is what was traced), so it stays ink until the board is.
+     P72 T24 / R26-153 - GROUND_MIN_S, THE SOAK'S OWN FLOOR IN SECONDS. GROUND is a SHARE of the morph's seconds, so
+     a short `morph=<s>` got a short soak: a 0.3 s morph soaked its board in 0.225 s, its crisp rect arriving in
+     0.05 s and its steepest frame carrying 0.22 of the board - the snap E99 s52 refused, by another door. The ground
+     now takes max(GROUND_MIN_S, GROUND x the morph's seconds): a morph under 0.8 s soaks for 0.6 s and its board
+     finishes arriving AFTER the prop has become the area (the build starts on a board still soaking - the soak and
+     the line are two clocks, and each keeps its own). [DERIVED, measured on morph-planted's frames: the soak's
+     steepest 0.02 s frame is 2.45 x (0.02 / window) of the board at 2.0 s and at 0.3 s alike, so 0.6 s puts it at
+     0.08 - under test_melt_morph's GROUND_STEP_MAX 1/8 by the ~1.5 x that test keeps for the punch.] Every morph
+     of 0.8 s or more (the 2.0 s default, every golden) keeps the window it had, to the frame. */
   /* the two shapes as STRIPS of MORPH.COLS columns (arap.mjs stripMesh): the target is the series sampled at n x-positions over
      its baseline; the prop is a strip of the same columns placed on the target's area centroid and turned to its dominant
      axis, so the centroid and axis invariants hold by construction and the morph is a change of SHAPE, not a move. A fan
@@ -16820,6 +16923,15 @@ async function mount(doc) {
       top.push([x, -h / 2 + dy]); bot.push([x, h / 2 - dy]);
     }
     return { top, bot };
+  };
+  /* P72 T24: a strip fold's window, carried from the SHAPE's clock (arap t) onto the MORPH's own (u, the share of the
+     morph's seconds) through the very easing paintMorph runs it on (monotone, so a bisection inverts it) - the gate
+     turns u into seconds on the page's span. */
+  const morphFoldU = (f) => {
+    if (!f) return null;
+    const ease = (u) => (kin("min_jerk") ? minJerk(u) : expoOut(clamp01(u)));
+    const inv = (k) => { let lo = 0, hi = 1; for (let i = 0; i < 40; i++) { const m = (lo + hi) / 2; if (ease(m) < k) lo = m; else hi = m; } return +((lo + hi) / 2).toFixed(4); };
+    return Object.assign({}, f, { u0: f.t0 == null ? null : inv(f.t0), u1: f.t1 == null ? null : inv(f.t1) });
   };
   const buildMorph = (st, pg, world, key) => {
     if (world && world.morph && typeof world.morph === "object" && world.morph.prop) return buildPropEnter(st, pg, world, key);   /* P69 T26e: a catalogued PROP's own pixels */
@@ -16846,7 +16958,7 @@ async function mount(doc) {
        under a series. P61 T3 hands the melt's BALL in through the same door - the ring is geometry, and this path does
        not know or care whether it came from a still or from a ball. */
     const src = world && world.morph, sPoly = src && typeof src === "object" && Array.isArray(src.poly) ? src.poly : null;
-    let topA, botA;
+    let topA, botA, strip = null;
     if (sPoly) {
       /* THROUGH THE RENDERED BOXES, not the CSS ones: a page carries its own envelope (the punch's scale, a card, a
          plane), and a stage fraction is a place ON THE SCREEN. `lpChartBox` is pre-transform - right for the thread,
@@ -16857,9 +16969,15 @@ async function mount(doc) {
       const pr = st.root.getBoundingClientRect(), cr = st.chart.getBoundingClientRect();
       const fit = threadFit({ x: cr.left - pr.left, y: cr.top - pr.top, w: cr.width, h: cr.height }, G.W, G.H);
       const lw = pr.width || G.W, lh = pr.height || G.H;
-      const S = polyStrip(sPoly.map((p) => threadToLocal(fit, [p[0] * lw, p[1] * lh])), n);
+      /* P72 T24 / R26-163 + R26-150: WHICH WAY THE STRIP RUNS is measured on this pair (arap.mjs `stripFor`): the x
+         strip whenever it keeps the shape - every source on the record, the tie included: its fold is invisible and
+         is REPORTED (`fold`, M17 WARNs it), never cured by a turn of an approved motion (the parent's ruling) - else,
+         only for a bay the x strip fills (a horseshoe), the first axis that keeps the shape; a strip that fills a bay
+         on every axis says so. */
+      const S = stripFor(sPoly.map((p) => threadToLocal(fit, [p[0] * lw, p[1] * lh])), [...topB, ...botB], n, n + (n >> 1));
       if (!S) return null;
       topA = S.top; botA = S.bot;
+      strip = { axis_deg: +(S.axis * 180 / Math.PI).toFixed(2), bays: S.bays, refused: S.refused, tried: S.tried, fold: morphFoldU(S.fold) };
     } else {
       const prop = morphProp(typeof src === "string" ? src : "tab", n, w, h);
       topA = prop.top.map(place); botA = prop.bot.map(place);
@@ -16881,7 +16999,8 @@ async function mount(doc) {
       ? lpEl("path", "morph-ground", svg, { d: outlinePath(A), fill: MORPH.INK, "fill-opacity": 1, stroke: "none" })
       : null;   /* PLANTED only: a handed ball is painted by the melt itself and a named prop was never on a cream board */
     const path = lpEl("path", "morph", svg, { d: outlinePath(A), fill: stroke, "fill-opacity": MORPH.FILL_A, stroke: "var(--lp-chalk)", "stroke-width": 3 });
-    return { svg, ground, path, prep, A, B, W: G.W, stroke, hand: !!(sPoly && src.hand) };
+    return { svg, ground, path, prep, A, B, W: G.W, stroke, hand: !!(sPoly && src.hand), strip,
+             source: sPoly ? (src.hand ? "handed" : "planted") : "named" };   /* P72 T24: what M17 reads (`__morphInvariants`) */
   };
   const paintMorph = (st, pg, world, u, c, g = 1, key = "") => {   /* `g` (P61 T3b): how far the page's GROUND has arrived - 1 on every page whose board was already there */
     if (st.morph === undefined) st.morph = buildMorph(st, pg, world, key);
@@ -18509,7 +18628,7 @@ async function mount(doc) {
        from the page's first frame, which for the 2.0 s default ends exactly where the punch opens. The HANDED page
        keeps b = 1, and that is not an exception to the rule but the rule: its ground did not leave, so there is
        nothing for it to arrive by, and any ramp there would fade a board OUT from under the ball. */
-    const groundS = morphOn && !handed ? Math.max(0.05, morphS * MORPH.GROUND) : 0;
+    const groundS = morphOn && !handed ? Math.max(MORPH.GROUND_MIN_S, morphS * MORPH.GROUND) : 0;   /* R26-153 (P72 T24): a floor in seconds, never a share alone */
     const b = morphOn ? (handed ? 1 : clamp01((t - scene.span[0]) / groundS)) : mount ? mu : clamp01((tr - LP.ROLL - LP.SAVOR) / LP.FIELD);   /* R26-50: a mounting page's soak runs over mount_s from the scene's first frame (its cream is already the ground) */
     for (const bl of st.blobs) {
       /* STEP MOTION under km_ink (operator: "too smooth"): a stain's progress is a seeded staircase on the stepped clock, its own phase */
@@ -25685,7 +25804,8 @@ async function mount(doc) {
       if (M.method === "a") worst = Math.min(worst, morphAMinDet(M.mesh.verts, morphAAt(M.aPrep, i / 24).outline, M.mesh.tris));
       else { const d = minDet(M.prep, i / 24); worst = Math.min(worst, d.target, d.solved); }
     }
-    return { ...inv, end_error: endErr, min_det: worst, n: M.A.length, u: M.u, method: M.method || "arap", morph_a_offset: M.aPrep ? M.aPrep.offset : null };
+    return { ...inv, end_error: endErr, min_det: worst, n: M.A.length, u: M.u, method: M.method || "arap", morph_a_offset: M.aPrep ? M.aPrep.offset : null,
+             source: M.source || null, strip: M.strip || null };   /* P72 T24 / R26-163: a planted or handed source, and the strip its morph runs on */
   };
 }
 

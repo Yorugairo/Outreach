@@ -5,7 +5,7 @@
 // through the same door, which is the whole point: the ring is geometry, and the page cannot tell them apart.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { STRIP, polyStrip, stripMesh, stripOutline, arapPrepareMesh, arapAt, minDet, bbox, polyArea }
+import { STRIP, polyStrip, stripFor, stripMesh, stripOutline, arapPrepareMesh, arapAt, minDet, bbox, polyArea }
   from "../../scripts/kinetics/arap.mjs";
 import { contourSilhouette, contourLuma, contourBitmap } from "../../scripts/kinetics/contour.mjs";
 import { MELT, MELT_ENDINGS, meltOpts, meltHandAt, meltHandDelay, meltHandSecs, meltHandRing }
@@ -206,4 +206,56 @@ test("the handed ring goes through polyStrip and morphs without inverting - the 
   const n = 48, S = polyStrip(h.ring, n), T = areaUnder(n);
   const prep = arapPrepareMesh(stripMesh(S.top, S.bot), [...T.top, ...T.bot], n + (n >> 1));
   for (const t of [0, 0.5, 1]) assert.ok(minDet(prep, t).target > 0, `t=${t}`);
+});
+
+/* ---- P72 T24 / R26-150 + R26-163: the strip takes an axis, names the bay it fills, and `stripFor` picks the axis ---- */
+const horseshoe = [[400, 200], [500, 200], [500, 235], [430, 235], [430, 285], [500, 285], [500, 320], [400, 320]];   /* opens right */
+const inPoly = (pt, poly) => { let c = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { const a = poly[i], b = poly[j];
+  if ((a[1] > pt[1]) !== (b[1] > pt[1]) && pt[0] < (b[0] - a[0]) * (pt[1] - a[1]) / (b[1] - a[1]) + a[0]) c = !c; } return c; };
+
+test("axis 0 is the x strip to the digit, and the ball and the lobed blob fill no bay", () => {
+  for (const p of [circle(500, 300, 80), lobed(500, 300, 80)]) {
+    const S = polyStrip(p, 48), T = polyStrip(p, 48, { axis: 0 });
+    assert.deepEqual([S.top, S.bot], [T.top, T.bot]);
+    assert.equal(S.axis, 0);
+    assert.deepEqual(S.bays, [], "a fold under BAY_MIN of the area is not a bay");
+  }
+});
+
+test("the x strip names the horseshoe's bay; stripFor turns the strip across the opening and keeps it", () => {
+  const S = polyStrip(horseshoe, 48);
+  assert.equal(S.bays.length, 1);
+  assert.ok(S.bays[0].share > STRIP.BAY_MIN, "the bay is a share of the shape's area");
+  const n = 48, T = areaUnder(n), R = stripFor(horseshoe, [...T.top, ...T.bot], n, n + (n >> 1));
+  const out = stripOutline([...R.top, ...R.bot], n);
+  assert.equal(R.refused, null);
+  assert.deepEqual(R.bays, []);
+  assert.ok(R.det > 0, "and it never inverts");
+  assert.equal(inPoly([465, 260], out), false, "the bay stays open");
+  assert.ok(inPoly([465, 215], out) && inPoly([465, 305], out) && inPoly([415, 260], out), "the arms and the back are carried");
+});
+
+test("stripFor is pure and keeps a sound x strip", () => {
+  const n = 48, T = areaUnder(n), B = [...T.top, ...T.bot], p = lobed(500, 300, 80);
+  const a = stripFor(p, B, n, n + (n >> 1)), b = stripFor(p, B, n, n + (n >> 1)), x = polyStrip(p, n);
+  assert.deepEqual(a, b);
+  assert.equal(a.axis, 0);
+  assert.deepEqual([a.top, a.bot], [x.top, x.bot]);
+  assert.equal(stripFor(null, B, n), null);
+});
+
+/* THE TIE (P61 T3d's real beat), as the player hands it to stripFor: the traced silhouette in the page's own chart px and
+   the area under its series, rounded to 0.1 px (measured off build-p61-planted by the P72 T24 probe) */
+const TIE = [[294.7,428.2],[296.2,427.7],[297.2,428.7],[299.2,428.7],[301.6,431.1],[301.6,434.1],[303.6,439.0],[303.6,444.0],[304.6,445.0],[304.6,449.9],[306.6,454.9],[306.6,460.8],[309.6,468.7],[309.6,471.7],[310.6,472.7],[310.6,475.7],[312.5,480.6],[312.5,484.6],[313.5,485.6],[313.5,488.5],[315.5,493.5],[315.5,500.4],[312.5,505.3],[312.5,507.3],[304.1,517.7],[299.2,517.7],[285.8,503.4],[282.8,499.4],[282.8,497.4],[281.8,496.4],[282.8,466.8],[283.8,465.8],[283.8,461.8],[282.8,459.8],[283.8,458.8],[283.8,448.9],[284.8,447.9],[284.8,446.0],[283.8,445.0],[284.8,444.0],[284.8,434.1],[288.3,429.6]];
+const TIE_TARGET = [[150,715.1],[162.3,720.0],[174.7,726.7],[187.0,721.1],[199.4,711.3],[211.7,682.3],[224.0,633.3],[236.4,547.4],[248.7,495.3],[261.1,504.4],[273.4,513.9],[285.7,531.9],[298.1,542.6],[310.4,545.5],[322.8,562.7],[335.1,533.8],[347.4,513.8],[359.8,467.4],[372.1,441.8],[384.5,392.1],[396.8,369.8],[409.1,282.7],[421.5,251.3],[433.8,256.8],[446.2,231.5],[458.5,197.5],[470.9,187.5],[483.2,190.8],[495.5,232.0],[507.9,236.8],[520.2,264.2],[532.6,254.6],[544.9,280.9],[557.2,300.7],[569.6,272.9],[581.9,224.5],[594.3,162.2],[606.6,164.4],[618.9,156.0],[631.3,141.2],[643.6,184.1],[656.0,267.9],[668.3,258.5],[680.6,224.4],[693.0,258.8],[705.3,238.8],[717.7,201.8],[730,249.4],[150,771],[162.3,771],[174.7,771],[187.0,771],[199.4,771],[211.7,771],[224.0,771],[236.4,771],[248.7,771],[261.1,771],[273.4,771],[285.7,771],[298.1,771],[310.4,771],[322.8,771],[335.1,771],[347.4,771],[359.8,771],[372.1,771],[384.5,771],[396.8,771],[409.1,771],[421.5,771],[433.8,771],[446.2,771],[458.5,771],[470.9,771],[483.2,771],[495.5,771],[507.9,771],[520.2,771],[532.6,771],[544.9,771],[557.2,771],[569.6,771],[581.9,771],[594.3,771],[606.6,771],[618.9,771],[631.3,771],[643.6,771],[656.0,771],[668.3,771],[680.6,771],[693.0,771],[705.3,771],[717.7,771],[730,771]];
+
+test("the tie's x strip folds and is KEPT, the fold named - never turned away (the parent's ruling)", () => {
+  const n = 48, R = stripFor(TIE, TIE_TARGET, n, n + (n >> 1)), x = polyStrip(TIE, n);
+  assert.equal(R.axis, 0, "the approved upright strip");
+  assert.deepEqual([R.top, R.bot], [x.top, x.bot], "vertex for vertex");
+  assert.equal(R.refused, "fold");
+  assert.ok(R.det <= 0 && R.fold.min_det <= 0);
+  assert.equal(R.fold.column, R.fold.triangle >> 1);
+  assert.ok(0 < R.fold.t0 && R.fold.t0 <= R.fold.worst_t && R.fold.worst_t <= R.fold.t1 && R.fold.t1 < 1, JSON.stringify(R.fold));
+  assert.deepEqual(R.tried.map((r) => r.axis_deg), [0], "no other axis is read when the x strip keeps the shape");
 });

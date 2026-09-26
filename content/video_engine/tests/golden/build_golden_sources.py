@@ -2859,6 +2859,50 @@ FRAME_T["melt-gather-morph"] = 15.57   # THE GATHER at its own midpoint (15.00 -
                                        # and the chart it becomes ride PROOF_FRAMES.
 
 
+# ---- P72 T24: THE MORPH'S TWO UNTESTED GOLDENS (R26-148, R26-152) --------------------------------------------------
+# `melt-morph-two-inks` (R26-148) - `melt-morph` with ONE difference: the arriving page's area is the series the row
+#                names (`world.morph_series` 1, R26-149's key - the compiler's own page check runs over it), so the ball
+#                is painted in the OUTGOING chart's own inks (the melt's mix of all four marks) and hands its ring to an
+#                area in the INCOMING series' teal, not the crimson the one-file goldens always carried on both sides.
+#                Judged half way through the hand (17.25, `melt-morph@proof-050`'s instant): the one shape carrying
+#                both paints, the only frame a hue change as well as an alpha one could show.
+# `morph-planted-plates` (R26-152) - `morph-planted` with ONE difference: the arriving page names `field: plates` (E99
+#                s35's continuity field, the two generated plates `_two_plate_page` puts on a page), so its ground
+#                arrives as the inked plate cross-fading over the blank one on the morph's own ground clock (`b`,
+#                MORPH.GROUND of the 2.0 s), under the planted prop - where the soak spreads out of the splotch.
+#                Judged at 15.15, a tenth of the ground's window: the inked plate half over the cream (expoOut 0.5).
+TWO_INKS_SERIES = 1   # the teal series (SEMICONDUCTOR STOCKS) - the page's second, a different ink from scene 1's first
+
+
+def melt_morph_two_inks() -> tuple[dict, dict]:
+    """P72 T24 / R26-148 - the ball hands its ring to a page whose area is a DIFFERENT ink from the chart it left."""
+    import build_scene_timeline_f as BST
+    tl, uris = melt_morph()
+    page2 = tl["scenes"][1]["world"]["page"]
+    err = BST.morph_series_page_error(page2, TWO_INKS_SERIES, "melt-morph-two-inks: s02")
+    assert err is None, err     # the COMPILER's own refusal for `morph_series` runs over the fixture before it is written
+    assert page2["series"][TWO_INKS_SERIES]["color"] != tl["scenes"][0]["world"]["page"]["series"][0]["color"]
+    tl["scenes"][1]["world"]["morph_series"] = TWO_INKS_SERIES
+    tl["title"] = "Golden: the melt's ball becomes the next full chart in another series' ink"
+    return tl, uris
+
+
+def morph_planted_plates() -> tuple[dict, dict]:
+    """P72 T24 / R26-152 - the planted morph page whose ground arrives by the two-plate cross-fade."""
+    import build_scene_timeline_f as BST
+    tl, uris = morph_planted()
+    page2 = tl["scenes"][1]["world"]["page"]
+    _two_plate_page(page2, uris)
+    page2["field"] = BST.page_field_spec("plates", page2, "morph-planted-plates: s02")   # the COMPILER's own refusal
+    tl["title"] = "Golden: the page morphs out of a planted element over the two-plate ground"
+    return tl, uris
+
+
+SURFACES.update({"melt-morph-two-inks": melt_morph_two_inks, "morph-planted-plates": morph_planted_plates})
+FRAME_T["melt-morph-two-inks"] = 17.25    # HALF WAY THROUGH THE HAND (16.595 -> 17.90): part ball, part teal area
+FRAME_T["morph-planted-plates"] = 15.15   # a TENTH of the ground's 1.5 s: the inked plate half over the blank one
+
+
 # ---- P58 T6 (c): THE SLIDE THROUGH THE DEPTH -----------------------------------------------------
 # E98 s4: *"the docks, the ball and the slide move THROUGH the depth"*. The two pages are `slide-mid`'s own, and the
 # two things added are `melt-depth`'s: a card that lands on the outgoing page and the one focus zoom tied to that
