@@ -1296,7 +1296,23 @@ async function mount(doc) {
   const SOLO_ACCENT = Object.freeze({
     FILL: "var(--lp-acc)",   /* the page's one accent (#F5B72E, the template's callout capsule `rect.cpill`); the pill's name keeps its charcoal KEY_INK */
     STASH: "data-solo-style",   /* an end badge's own style attribute, kept while it is lit ("" = it had none) */
+    TYPE: "#1E1F22",         /* P72 T46d (R26-396): the lit badge's type on its filled box - the key pill's own charcoal (LP_LONGFORM.KEY_INK) */
   });
+
+  /* P72 T46d (R26-396) - THE END BADGE'S BOX, measured off Bravos (BOOM 00:56, the lit legend label: a 183 x 40 box round
+     type 18 px tall, ~12 px of air each side and ~10.5 above and below - p71-t30's measure_capsule read; D40 04:16's
+     capsule corner ~2 px on 79). In the tag's own box height h (its getBBox: ascent + descent, ~1.2 em): */
+  const SOLO_BADGE = Object.freeze({
+    PAD_X: 0.38,   /* the air left and right of the type, in h (BOOM: 12 px on ~31 px of type box = 0.46 em) */
+    PAD_Y: 0.16,   /* ... above and below it (BOOM's 40 px box round a ~31 px type box: ~5 px) */
+    RX: 0.05,      /* the corner, in h (D40: ~2 px on a 45 px type) - a box, not a pill: Bravos's lit label is square-cornered */
+  });
+
+  /* the box round a tag's measured box [x, y, w, h] (chart units): {x, y, w, h, rx} */
+  const soloBadgeBox = (bb) => {
+    const px = SOLO_BADGE.PAD_X * bb[3], py = SOLO_BADGE.PAD_Y * bb[3];
+    return { x: bb[0] - px, y: bb[1] - py, w: bb[2] + 2 * px, h: bb[3] + 2 * py, rx: SOLO_BADGE.RX * bb[3] };
+  };
 
   const solo01 = (v) => Math.min(1, Math.max(0, v));
 
@@ -1305,11 +1321,22 @@ async function mount(doc) {
     : sp && Number.isInteger(sp.series) ? "s:" + sp.series : null);
 
   /* THE EVENTS in time order: `solos` name their key, `releases` ({at, dur}: an unsolo, a verb that replaces the page)
-     name none; at one instant a release sorts first, so the solo at that instant is the state that stands */
-  const soloEvents = (solos, releases) => [
-    ...(solos || []).map((sp) => ({ at: +sp.at, dur: Math.max(0.001, +sp.dur || SOLO.MIN_S), key: soloKeyOf(sp) })),
-    ...(releases || []).map((r) => ({ at: +r.at, dur: Math.max(0.001, +r.dur || SOLO.MIN_S), key: null })),
-  ].filter((e) => Number.isFinite(e.at)).sort((a, b) => a.at - b.at || (a.key === null ? 0 : 1) - (b.key === null ? 0 : 1));
+     name none; at one instant a release sorts first, so the solo at that instant is the state that stands.
+     P72 T46d (R26-395; Bravos D40 R30, 14:22-14:50 - "the second bar lights too"): each event also carries `keys`, the
+     marks LIT once it lands - its own key, and with `add: true` the marks the solo standing before it lit as well, so a
+     second pill's bar joins the first instead of taking its light. A release lights none (null). */
+  const soloEvents = (solos, releases) => {
+    const evs = [
+      ...(solos || []).map((sp) => ({ at: +sp.at, dur: Math.max(0.001, +sp.dur || SOLO.MIN_S), key: soloKeyOf(sp), add: !!(sp && sp.add === true) })),
+      ...(releases || []).map((r) => ({ at: +r.at, dur: Math.max(0.001, +r.dur || SOLO.MIN_S), key: null, add: false })),
+    ].filter((e) => Number.isFinite(e.at)).sort((a, b) => a.at - b.at || (a.key === null ? 0 : 1) - (b.key === null ? 0 : 1));
+    let lit = [];
+    return evs.map((e) => {
+      lit = e.key === null ? [] : e.add && lit.length && lit[0][0] === e.key[0] ? [...new Set([...lit, e.key])] : [e.key];
+      const { add, ...ev } = e;   /* the event carries what it lights, not the grammar's word */
+      return Object.assign(ev, { keys: e.key === null ? null : lit.slice() });
+    });
+  };
 
   /* THE LEVEL of the mark `key` at t: from `start`, each event eases it from where the previous one left it at the event's
      word toward its target - `named` for the mark it names, `other` for every other mark of the same kind, `release` on a
@@ -1320,7 +1347,8 @@ async function mount(doc) {
       const e = evs[k];
       if (t < e.at) break;
       const nx = evs[k + 1], end = nx && nx.at <= t ? nx.at : t;
-      const want = e.key === null || e.key[0] !== String(key)[0] ? release : e.key === key ? named : other;
+      const lit = e.keys || (e.key === null ? null : [e.key]);   /* R26-395: every mark the event lights (an `add` keeps the last solo's) */
+      const want = lit === null || e.key[0] !== String(key)[0] ? release : lit.indexOf(key) >= 0 ? named : other;
       const u = solo01((end - e.at) / e.dur);
       a = u >= 1 ? want : a + (want - a) * solo01(minJerk(u));   /* it LANDS exactly (1 + (0.45 - 1) is 0.44999999999999996) */
     }
@@ -1358,15 +1386,30 @@ async function mount(doc) {
     for (const [k, v] of props) el.style.setProperty(k, v);
   };
 
-  /* ... the END BADGE at lift `u`: its words (the value and its chip's) ease from their series' ink to the accent */
+  /* ... the END BADGE at lift `u`: its words (the value and its chip's) ease from their series' ink to the accent - or,
+     P72 T46d (R26-396), where the line builder drew the badge its BOX (`pp.badge`, buildLedgerLine's rect under the tag,
+     long form only), the box fills with the accent round the tag's measured box and the type eases to the key's charcoal
+     on it: Bravos's lit badge is a filled box, and a box drawn by the tag's own stroke read as letter-shaped blobs (T30's
+     frame read). At rest the box is 0 x 0 at opacity 0 and the tag is handed back, to the byte. */
   const soloBadge = (pp, u) => {
-    const nm = pp && pp.name, chip = nm && nm.querySelector ? nm.querySelector("tspan.tagchip") : null;
+    const nm = pp && pp.name, chip = nm && nm.querySelector ? nm.querySelector("tspan.tagchip") : null, bx = pp && pp.badge;
     if (!nm) return;
-    if (u <= SOLO.EPS) { soloStyle(nm, null); soloStyle(chip, null); return; }
-    const ink = (own) => (u >= 1 - SOLO.EPS ? SOLO_ACCENT.FILL
-      : "color-mix(in srgb, " + SOLO_ACCENT.FILL + " " + (100 * u).toFixed(1) + "%, " + (own || "currentColor") + ")");
+    if (u <= SOLO.EPS) {
+      soloStyle(nm, null); soloStyle(chip, null);
+      if (bx) { for (const k of ["x", "y", "width", "height", "rx"]) bx.setAttribute(k, 0); bx.setAttribute("opacity", 0); bx.removeAttribute("style"); }
+      return;
+    }
+    const to = bx ? SOLO_ACCENT.TYPE : SOLO_ACCENT.FILL;
+    const ink = (own) => (u >= 1 - SOLO.EPS ? to
+      : "color-mix(in srgb, " + to + " " + (100 * u).toFixed(1) + "%, " + (own || "currentColor") + ")");
     soloStyle(nm, [["fill", ink(nm.getAttribute("fill"))]]);
     soloStyle(chip, [["fill", ink(chip && chip.getAttribute("fill"))]]);
+    if (bx && nm.getBBox) {
+      const r = nm.getBBox(), q = soloBadgeBox([r.x, r.y, r.width, r.height]);
+      for (const [k, v] of [["x", q.x], ["y", q.y], ["width", q.w], ["height", q.h], ["rx", q.rx]]) bx.setAttribute(k, v.toFixed(2));
+      bx.setAttribute("style", "fill:" + SOLO_ACCENT.FILL);   /* the style, not the attribute: the chart's class rules outrank a presentation fill */
+      bx.setAttribute("opacity", Math.min(1, u).toFixed(3));
+    }
   };
 
   /* ... a KEY PILL at alpha `a` and lift `u`: the others fade with their series, the named one fills with the accent */
@@ -1588,6 +1631,23 @@ async function mount(doc) {
     return best;
   };
 
+  /* P72 T46d (R26-379; Bravos DOM 00:50.5 - the rule runs from the tip to the value axis and "4 %" stands there as a
+     filled pill over the tick column, the "4" tick it covers gone; measured at 1280 px: the pill 46 x 32 round type 17 px
+     tall where a tick is 12 - T9's axis pill law, AXTAG, handed in by the builder). `label_at: "axis"`: the pill POPS as
+     the rule reaches the axis - from the label's window, on springPop over the builder's `pop.s` - and a tick label it
+     covers is hidden while it stands. The pill's scale at t (0 before its instant): */
+  const levelPillScale = (sp, t, pop) => {
+    const dur = Math.max(0.001, +sp.dur || 1), d = t - (+sp.at + LEVEL.LABEL[0] * dur);
+    if (!(d >= 0) || !pop) return 0;
+    return springPop(lv01(d / Math.max(1e-6, +pop.s || 0.25)), +pop.mp || 0);
+  };
+
+  /* does the pill's rect ([x, y, w, h] at scale s about (cx, cy)) meet a tick's box [x, y, w, h]? */
+  const levelPillHides = (cx, cy, box, s, tick) => {
+    const w = s * box.w, h = s * box.h, x = cx - w / 2, y = cy - h / 2;
+    return !!tick && w > 0 && h > 0 && x < tick[0] + tick[2] && tick[0] < x + w && y < tick[1] + tick[3] && tick[1] < y + h;
+  };
+
   /* THE LEAVE: `lv` is the builder's {at, dur} of the undraw (or the replacing verb) that takes the line, or null (it stands) */
   const levelLeave = (lv, t) => (lv && Number.isFinite(+lv.at) ? minJerk(lv01((t - +lv.at) / Math.max(0.001, +lv.dur || 1))) : 0);
 
@@ -1600,7 +1660,9 @@ async function mount(doc) {
      recorders and no DOM; the builder's `sd.axisX(st)` is the active state's value-axis x (the axis form only). */
   const paintLevelJoin = (sd, t, st, ctx) => {
     const sp = sd.sp, pose = levelPose(sp, t), lv = levelLeave(sd.leave, t);
-    const hide = () => sd.g.setAttribute("opacity", 0);
+    const pill = sd.pill || null;
+    const unhide = () => { if (!pill) return; for (const q of pill.hid || []) q.style.visibility = ""; pill.hid = []; };
+    const hide = () => { sd.g.setAttribute("opacity", 0); if (pill) { pill.g.setAttribute("opacity", 0); unhide(); } };
     if (!pose.on || lv >= 1) { hide(); return; }
     const A = ctx.datumNow(st, sd.si, sp.from | 0);
     const B = sd.to.axis ? null : ctx.datumNow(st, sd.to.si, sd.to.i);
@@ -1619,12 +1681,19 @@ async function mount(doc) {
       }
     };
     ring(sd.ringA, A, pose.ringA);
-    ring(sd.ringB, E, pose.ringB);
+    ring(sd.ringB, E, pill ? 0 : pose.ringB);   /* R26-379: the axis pill stands where the far ring would */
     const at = levelLabelAt(sd.side, E, sd.frameOf ? Object.assign({}, sd.lg0, { frame: sd.frameOf(st) }) : sd.lg0);   /* the ACTIVE state's frame */
     sd.label.setAttribute("x", at.x.toFixed(1)); sd.label.setAttribute("y", at.y.toFixed(1));
     sd.label.setAttribute("text-anchor", at.anchor);
-    const ops = levelGlyphs(pose.label, sd.lg.length);
+    const ops = levelGlyphs(pill ? 0 : pose.label, sd.lg.length);   /* the pill says the figure: the hand writes nothing */
     sd.lg.forEach((ts, j) => ts.setAttribute("opacity", ops[j].toFixed(3)));
+    if (!pill) return;
+    const s = levelPillScale(sp, t, pill.pop), cx = pill.colX(st), cy = A[1];
+    unhide();
+    if (!(s > 0)) { pill.g.setAttribute("opacity", 0); return; }
+    pill.g.setAttribute("transform", "translate(" + cx.toFixed(1) + " " + cy.toFixed(1) + ") scale(" + s.toFixed(4) + ")");
+    pill.g.setAttribute("opacity", (1 - lv).toFixed(3));
+    for (const q of pill.ticksOf(st)) if (levelPillHides(cx, cy, pill.box, s, q.box)) { q.el.style.visibility = "hidden"; pill.hid.push(q.el); }
   };
 
   /* THE MODULE RULE, the page half of it: the last statement registers the painter, a plain guarded assignment. */
@@ -1736,13 +1805,28 @@ async function mount(doc) {
 
   const setAll = (el, o) => { for (const k of Object.keys(o)) el.setAttribute(k, typeof o[k] === "number" ? o[k].toFixed(2) : o[k]); };
 
+  /* P72 T46d (R26-387): a tag's copy made the original's twin THIS frame - every attribute (its x / y, its opacity, a
+     solo's fill-opacity, its style) written onto the copy and its tspans', and any the original has dropped removed, so
+     the copy over the glass is exactly the tag under it. Pure over the DOM: it reads the original, never the clock. */
+  const lensTagSync = (src, cp) => {
+    if (!src || !cp || !src.attributes) return;
+    const pair = [[src, cp]], a = src.querySelectorAll ? [...src.querySelectorAll("tspan")] : [], b = cp.querySelectorAll ? [...cp.querySelectorAll("tspan")] : [];
+    for (let j = 0; j < Math.min(a.length, b.length); j++) pair.push([a[j], b[j]]);
+    for (const [s0, c0] of pair) {
+      const keep = new Set();
+      for (const at of [...s0.attributes]) { if (at.name === "id") continue; keep.add(at.name); if (c0.getAttribute(at.name) !== at.value) c0.setAttribute(at.name, at.value); }
+      for (const at of [...c0.attributes]) if (!keep.has(at.name)) c0.removeAttribute(at.name);
+      if (s0.childNodes.length === 1 && s0.firstChild.nodeType === 3 && c0.textContent !== s0.textContent) c0.textContent = s0.textContent;
+    }
+  };
+
   /* THE PAINTER (P71 T32). `ld` is the perform layer's built lens (`g`, the `clip` and `disc` circles, the `ring`, the
      `neck` and `handle` rects, the magnified `lines` [{si, path}], the series `si`, the declaration `sp`, its `zoom` and
      its outer radius `r` in chart units); `st` the page state; `ctx` the PAGE species context (`pointsNow`), handed in by
      name, so `node --test` calls this with recorders and no DOM. */
   const paintLens = (ld, t, st, ctx) => {
     const pose = lensPose(ld.sp, t);
-    const hide = () => ld.g.setAttribute("opacity", 0);
+    const hide = () => { ld.g.setAttribute("opacity", 0); if (ld.tagLayer) ld.tagLayer.g.setAttribute("opacity", 0); };
     if (!pose.on || pose.a <= 0) { hide(); return; }
     const stand = lensStand(ctx.pointsNow(st, ld.si), ld.sp.from, ld.sp.to, pose.u);
     if (!stand) { hide(); return; }   /* R26-28: a datum the window dropped - the glass stands on nothing, so it is not up */
@@ -1759,6 +1843,15 @@ async function mount(doc) {
       ln.path.setAttribute("d", m ? litPathD(m) : "");
     }
     ld.g.setAttribute("opacity", pose.a.toFixed(3));
+    const TL = ld.tagLayer;   /* P72 T46d (R26-387): the end tags over the glass, clipped to its outline */
+    if (TL) {
+      setAll(TL.ring, { cx: c[0], cy: c[1], r: R });
+      setAll(TL.neck, { x: P.neck.x, y: P.neck.y, width: P.neck.w, height: P.neck.h });
+      setAll(TL.handle, { x: P.handle.x, y: P.handle.y, width: P.handle.w, height: P.handle.h, rx: P.handle.rx });
+      const k = (st && st.states && st.states.length > 1) ? (st.active | 0) : 0;
+      for (const q of TL.tags) { if (q.k === k) { lensTagSync(q.src, q.cp); q.cp.removeAttribute("display"); } else q.cp.setAttribute("display", "none"); }
+      TL.g.setAttribute("opacity", 1);
+    }
   };
 
   /* THE MODULE RULE, the page half of it: the last statement registers the painter, a plain guarded assignment. */
@@ -1918,6 +2011,26 @@ async function mount(doc) {
     if (!Array.isArray(d) || d.length !== 2) return null;
     const lo = +d[0], hi = +d[1];
     return d.every((v) => typeof v === "number") && Number.isFinite(lo) && Number.isFinite(hi) && hi > lo ? [lo, hi] : null;
+  };
+
+  /* P72 T46d (R26-370): A BAND'S DECLARED DOMAIN - its own `axes.domain` ([lo, hi], two finite numbers low to high), which
+     ledger_page.tier_domain already honours when it groups the bands; null when the band declares none (or a malformed
+     one - the compiler refuses that by name). Drawn VERBATIM, as a line page draws its `axes.domain`: the author named
+     the scale, so no pad is added to it. */
+  const tierDeclared = (tr) => {
+    const d = ((tr || {}).axes || {}).domain;
+    if (!Array.isArray(d) || d.length !== 2 || !d.every((v) => typeof v === "number")) return null;
+    const lo = +d[0], hi = +d[1];
+    return Number.isFinite(lo) && Number.isFinite(hi) && hi > lo ? [lo, hi] : null;
+  };
+
+  /* THE DOMAIN A BAND DRAWS ON (P72 T46d, R26-370): E79's shared scale when the page carries one for the band's unit (the
+     compiler writes it now, unless `independent`); else the band's declared `axes.domain`, verbatim; else its own
+     extent, as before. One call for the builder. */
+  const tierDomainOf = (pg, tr, vals) => {
+    const tax = (tr || {}).axes || {}, shared = tierShared(pg, tr);
+    if (shared) return tierDomain(vals, tax.from_zero !== false, shared);
+    return tierDeclared(tr) || tierDomain(vals, tax.from_zero !== false, null);
   };
 
   /* a value's y inside its band */
@@ -13910,6 +14023,10 @@ async function mount(doc) {
       const nameSt = (pg.surface_from ? "" : "fill:" + col + ";") + (PHONE ? "font-size:" + lpTypeU(st, "tag") + "px" : "");
       /* P71 T13: a line that reaches the plot's right edge has the right tick column beside its end - its tag stands past it */
       const y2dx = Y2 && mx(last[0]) >= W - R - 0.5 ? Y2.shift : 0;
+      /* P72 T46d (R26-396): a long form's END BADGE carries a BOX under its tag - 0 x 0 at opacity 0 until a solo lights
+         it (species/solo.mjs soloBadge sizes it round the tag's box and fills it with the accent). Built before the tag,
+         so the tag's type stands on it; a page with no solo never shows it, and a short's page has none. */
+      const badge = LFT && !P && !s.muted ? lpEl("rect", "lp-endbadge", st.chart, { x: 0, y: 0, width: 0, height: 0, rx: 0, opacity: 0 }) : null;
       const name = lpEl("text", "sname", st.chart, P ? { x: nameXEnd.toFixed(1), y: nameY.toFixed(1), "text-anchor": "end", fill: col, opacity: 0, ...(nameSt ? { style: nameSt } : {}) }
                                                      : { x: ((PJ ? PE[0] : mx(last[0])) + 12 + tipClr + y2dx).toFixed(1), y: ((PJ ? PE[1] : myS(last[1])) + 8).toFixed(1), fill: col, opacity: 0, ...(nameSt ? { style: nameSt } : {}) });
       st.linePts.push(PT.map((q) => [q[0], q[1]]));   /* the exact datum positions, for the species' targets */
@@ -13919,7 +14036,7 @@ async function mount(doc) {
       const ib = s.projection ? null : (st.inlineBadges || {})[s.color], chipT = s.projection ? "" : (ib && ib.tag) || s.card_name || "";   /* P71 T16: a projection's tag is its label alone - never its line's badge value (E77) */   /* a card's short name rides where a badge's tag would */
       if (chipT && !(LFT && LFT.form === "value")) { const tg = lpEl("tspan", "tagchip", name, { dx: LFT ? (LP_LONGFORM.CHIP_DX_PX / LFT.scale).toFixed(2) : 12, fill: col,
         ...(PHONE ? { style: "font-size:" + lpTypeU(st, "chip") + "px" } : {}) }); tg.textContent = chipT; }
-      const rec = { p, len, tip, name, stagger: i / Math.max(1, drawn.length), ny: P ? nameY : (PJ ? PE[1] : myS(last[1])) + 8,
+      const rec = { p, len, tip, name, ...(badge ? { badge } : {}), stagger: i / Math.max(1, drawn.length), ny: P ? nameY : (PJ ? PE[1] : myS(last[1])) + 8,
                      pts: PT.map((q) => [q[0], q[1]]), si: s.si | 0, k0: s.k0 | 0, muted: !!s.muted, hot: role.hot, context: role.context,
                      data: s.pts.map(([x, v]) => [+x, +v]), d0: d, len0: len };   /* P47 T2: the path knows its data, so a build_to can cap it at a datum; P48 T2: and its DATA, so a rescale re-projects it */
       if (ax.name_clear && !nameBelow) rec.ny = Math.min(rec.ny, clearY - (P ? 34 : 20));
@@ -15349,7 +15466,7 @@ async function mount(doc) {
       const band = bands[ti]; if (!band) return;
       const tax = tr.axes || {}, lines = (tr.series || []).filter((s) => s.pts && s.pts.length);
       const vals = tr.kind === "bars" ? (tr.values || []) : lines.flatMap((s) => (s.pts || []).map((q) => +q[1]));
-      const dom = tierDomain(vals, tax.from_zero !== false, tierShared(pg, tr));   /* R26-72: E79's one scale when the page carries it */
+      const dom = tierDomainOf(pg, tr, vals);   /* R26-72: E79's one scale when the page carries it; P72 T46d (R26-370): else the band's own axes.domain */
       const my = (v) => tierY(band, dom[0], dom[1], v);
       /* the band's own gridlines and its own unit: a band is a chart, and every chart says what it measures */
       for (const v of tierTicks(dom[0], dom[1])) {
@@ -17658,7 +17775,8 @@ async function mount(doc) {
   };
   const LPBRACE = Object.freeze({ GAP: 16, R: 10, R_EM: 0.42, CURL_K: 1.6, NOTCH_EM: 0.34, LABEL_EM: 0.4, NAME_EM: 0.55,
                                   NAME_S: 0.6, PART_GAP: 0.4, LINE_EM: 1.2, OVERLAP: 0.6, SUB_EM: 0.8, SAMPLES: 16,
-                                  ABOVE_EM: 0.3, HAND_DESC: 0.54 });   /* P72 T43 (R26-338): the air between the "above" label and the bar's
+                                  ABOVE_EM: 0.3, HAND_DESC: 0.54, LEAD_EM: 0.3, LEAD_GAP_EM: 0.15 });   /* P72 T46d (R26-375 (a)): the
+                                  leader from the brace's point to its lifted label - its stub out of the cusp and its air under the label, in the type's em */   /* P72 T43 (R26-338): the air between the "above" label and the bar's
                                   value, and the hand's box under its line [DERIVED: Kalam at 26 px boxes 42 px, 14 of them under the line -
                                   read off the served probe; a build-time getBBox can read the fallback face before the hand has loaded] */
   const lpBraceArea = (a, b) => Math.max(0, Math.min(a[0] + a[2], b[0] + b[2]) - Math.max(a[0], b[0]))
@@ -17763,7 +17881,22 @@ async function mount(doc) {
       const notches = bounds.map((yb) => { const xN = lpBraceXAt(L.P0.pts, yb);
         return { x: xN, y: yb, el: lpEl("path", "bk", grp, { d: "M" + xN.toFixed(1) + " " + yb.toFixed(1) + " l" + (-L.dir * nl).toFixed(1) + " 0", stroke,
                                                              "transform-origin": xN.toFixed(1) + "px " + yb.toFixed(1) + "px", transform: "scale(0 1)" }) }; });
-      return { g: grp, line, len, label: label.el, lg: label.gs, sub: subEl ? subEl.el : null, sg: subEl ? subEl.gs : [], notches };
+      /* P72 T46d (R26-375 (a)): with its label lifted ABOVE the bar the brace's point faced sideways, away from its words - a
+         LEADER now runs from the point (the cusp) out, up the brace's own outer side and under the label, so the brace
+         turns to what it names. Only under the "above" fallback: a label beside its cusp needs none (to the byte). */
+      let lead = null, leadLen = 0;
+      if (L.above) {
+        const xc = L.P0.xc, xL = xc + L.dir * LPBRACE.LEAD_EM * tfs;
+        const yb = (sub ? L.sy : L.ly) + LPBRACE.HAND_DESC * (sub ? tss : tfs) + LPBRACE.LEAD_GAP_EM * tfs;   /* under the hand's own box (its descent, T43's derived law) */
+        const x0 = L.lx - Math.max(lw, sw) / 2, x1 = L.lx + Math.max(lw, sw) / 2;
+        const xE = xL > x1 ? x1 : xL < x0 ? x0 : xL;
+        const d2 = "M" + xc.toFixed(1) + " " + ym.toFixed(1) + " L" + xL.toFixed(1) + " " + ym.toFixed(1) + " L" + xL.toFixed(1) + " " + yb.toFixed(1)
+          + (xE !== xL ? " L" + xE.toFixed(1) + " " + yb.toFixed(1) : "");
+        lead = lpEl("path", "bk lp-brace-lead", grp, { d: d2, stroke, fill: "none" });
+        leadLen = lead.getTotalLength ? lead.getTotalLength() : Math.abs(yb - ym) + Math.abs(xL - xc) + Math.abs(xE - xL);
+        lead.setAttribute("stroke-dasharray", leadLen); lead.setAttribute("stroke-dashoffset", leadLen);
+      }
+      return { g: grp, line, len, label: label.el, lg: label.gs, sub: subEl ? subEl.el : null, sg: subEl ? subEl.gs : [], notches, lead, leadLen };
     };
     const main = side(g, col, lab, sub);
     const gg = lpEl("g", "lp-bracket lp-brace glow", surf, { opacity: 0 });   /* the relight's sunflower twin: the brace and the whole, never the parts' inks */
@@ -17850,6 +17983,8 @@ async function mount(doc) {
     }
     const surf = st.surfaceMode ? surfaceLayerOf(st.performSvg || st.chart) : (st.performSvg || st.chart);
     const BRACKET_BAR_DESC = 0.4;   /* R26-272: a sub's descent below its baseline, in its own size - the room a stacked sub keeps over a bar's value */
+    const BRACKET_TAG_AIR = 3, BRACKET_TAG_MIN = 6, BRACKET_TAG_REACH = 2;   /* P72 T46d (R26-219): a span stepped out of the end tags' column stands this far
+       before the first tag's glyph (viewBox units), at least this far past its data, and its ticks stop this short of them */
     const brackets = pageSpecies(scene, "bracket").map((sp, bi) => {
       if (sp.form === "brace") return lpBraceBuild(st, sp, bi, surf, { P, fs, fss, pg });   /* P70 T5: ONE bar braced into its parts - its own geometry */
       if ((sp.from && typeof sp.from === "object") || (sp.to && typeof sp.to === "object")) return lpLagBuild(st, sp, bi, surf, { P, fs, fss, pg }, scene);   /* P71 T27: two series - the lag, its own geometry */
@@ -17878,15 +18013,30 @@ async function mount(doc) {
       /* the span stands to the RIGHT of the two data (the ticks point back at them); when the chart's room there is too
          narrow for the label, the label writes ABOVE the span. The geometry is a FUNCTION of the two anchors and the
          series' points, so it can be re-read every frame on a page whose chart changes state (R26-28) */
+      /* P72 T46d (R26-219's span): THE END TAGS' COLUMN. A span to the right of its data stood IN the column the line's end
+         tags are written in (the railway page: through "741 RAILWAY SHARE PRICES", its foot tick on the tag). Where the
+         span's x lands inside a tag it spans (the tag's box across [y0, y1]), the span steps back to the column's inner
+         edge - BRACKET_TAG_AIR clear of the first glyph, its ticks shortened to reach no further than its data - when that
+         leaves it BRACKET_TAG_MIN clear of its data; its label then stacks above, as with no room beside. The tags' boxes are
+         read once here (landscape: a portrait page's names stand above the line's end). No span in a tag moves. */
+      const tagBoxes = P || barSide ? [] : (st.paths || []).filter((pp) => pp && pp.name && !pp.muted && (pp.name.textContent || "").trim())
+        .map((pp) => lpLabelBox(pp.name)).filter(Boolean);
       const geomOf = (Ap, Bp, ptsNow) => {
         const xr = barSide ? Math.max(Ap[0], Bp[0]) + barSide + PS.BRACKET_GAP : Math.max(Ap[0], Bp[0]) + PS.BRACKET_GAP;   /* R26-272: beside a bar's SIDE */
-        const fits = xr + PS.BRACKET_ROOM <= G.W, inMargin = xr <= G.W;
-        const x = inMargin ? xr : (barSide ? Math.min(Ap[0], Bp[0]) - barSide - PS.BRACKET_GAP : Math.min(Ap[0], Bp[0]) - PS.BRACKET_GAP), dir = inMargin ? -1 : 1;
         const y0 = Math.min(Ap[1], Bp[1]), y1 = Math.max(Ap[1], Bp[1]), ym = (y0 + y1) / 2;
+        const inMargin = xr <= G.W;
+        let x = inMargin ? xr : (barSide ? Math.min(Ap[0], Bp[0]) - barSide - PS.BRACKET_GAP : Math.min(Ap[0], Bp[0]) - PS.BRACKET_GAP), tw = PS.BRACKET_TICK_W, stepped = false;
+        const dir = inMargin ? -1 : 1;
+        if (inMargin && tagBoxes.length) {
+          const dx = Math.max(Ap[0], Bp[0]), hit = tagBoxes.filter((b) => xr >= b[0] - 0.5 && xr <= b[0] + b[2] && b[1] < y1 + tw && y0 - tw < b[1] + b[3]);
+          const edge = hit.length ? Math.min(...hit.map((b) => b[0])) - BRACKET_TAG_AIR : Infinity;
+          if (hit.length && edge - dx >= BRACKET_TAG_MIN) { x = edge; tw = Math.min(tw, edge - dx - BRACKET_TAG_REACH); stepped = true; }
+        }
+        const fits = !stepped && xr + PS.BRACKET_ROOM <= G.W;   /* a stepped span's room beside is the tag column: its label stacks above */
         const yClear = barSide ? Math.min(y0, barInkTop, ...ptsNow.map((q) => q[1])) : Math.min(y0, ...ptsNow.map((q) => q[1]));   /* a stacked label clears the WHOLE series - a record before the span can stand higher than the span's top (R26-272: and every bar's value) */
         const half = sp.form === "bar" ? PS.BRACKET_BAR_W / 2 : 0;   /* P50 T9: a bar has width, and its label is written clear of it, not on it */
         const lx = fits ? x + 12 + half : x - 4 - half, ly = fits ? ym + fs * 0.35 : yClear - (sp.sub ? fss * 1.3 : 0) - 10;   /* beside, or stacked above the whole line */
-        return { x, dir, fits, anchor: fits ? "start" : "end", y0, y1, lx, ly, sy: fits ? ly + fss * 1.3 : yClear - 10 };
+        return { x, dir, fits, anchor: fits ? "start" : "end", y0, y1, lx, ly, sy: fits ? ly + fss * 1.3 : yClear - 10, tw, stepped };
       };
       const g0 = geomOf(A, B, pts);
       const base = st.paths.filter((pp) => (pp.si | 0) === (sp.series | 0) && !pp.muted).map((pp) => pp.p.getAttribute("stroke"))[0] || "var(--lp-chalk)";
@@ -17895,8 +18045,8 @@ async function mount(doc) {
         side.line.setAttribute("d", "M" + q.x.toFixed(1) + " " + q.y0.toFixed(1) + " L" + q.x.toFixed(1) + " " + q.y1.toFixed(1));
         side.len = side.line.getTotalLength ? side.line.getTotalLength() : (q.y1 - q.y0);
         side.line.setAttribute("stroke-dasharray", side.len);
-        side.t0.setAttribute("d", "M" + q.x.toFixed(1) + " " + q.y0.toFixed(1) + " l" + (q.dir * PS.BRACKET_TICK_W).toFixed(1) + " 0"); side.t0.setAttribute("transform-origin", q.x.toFixed(1) + "px " + q.y0.toFixed(1) + "px");
-        side.t1.setAttribute("d", "M" + q.x.toFixed(1) + " " + q.y1.toFixed(1) + " l" + (q.dir * PS.BRACKET_TICK_W).toFixed(1) + " 0"); side.t1.setAttribute("transform-origin", q.x.toFixed(1) + "px " + q.y1.toFixed(1) + "px");
+        side.t0.setAttribute("d", "M" + q.x.toFixed(1) + " " + q.y0.toFixed(1) + " l" + (q.dir * q.tw).toFixed(1) + " 0"); side.t0.setAttribute("transform-origin", q.x.toFixed(1) + "px " + q.y0.toFixed(1) + "px");
+        side.t1.setAttribute("d", "M" + q.x.toFixed(1) + " " + q.y1.toFixed(1) + " l" + (q.dir * q.tw).toFixed(1) + " 0"); side.t1.setAttribute("transform-origin", q.x.toFixed(1) + "px " + q.y1.toFixed(1) + "px");
         side.label.setAttribute("x", q.lx.toFixed(1)); side.label.setAttribute("y", q.ly.toFixed(1)); side.label.setAttribute("text-anchor", q.anchor);
         if (side.sub) { side.sub.setAttribute("x", q.lx.toFixed(1)); side.sub.setAttribute("y", q.sy.toFixed(1)); side.sub.setAttribute("text-anchor", q.anchor); }
       };
@@ -17906,7 +18056,7 @@ async function mount(doc) {
         if (sp.form === "bar") { line.style.strokeWidth = (P ? PS.BRACKET_BAR_W * 1.7 : PS.BRACKET_BAR_W) + "px"; line.style.strokeLinecap = "butt"; line.style.opacity = "0.92"; }
         const len = line.getTotalLength ? line.getTotalLength() : (g0.y1 - g0.y0);
         line.setAttribute("stroke-dasharray", len); line.setAttribute("stroke-dashoffset", len);
-        const tick = (y) => lpEl("path", "bk", g, { d: "M" + g0.x.toFixed(1) + " " + y.toFixed(1) + " l" + (g0.dir * PS.BRACKET_TICK_W).toFixed(1) + " 0", stroke, "transform-origin": g0.x.toFixed(1) + "px " + y.toFixed(1) + "px" });
+        const tick = (y) => lpEl("path", "bk", g, { d: "M" + g0.x.toFixed(1) + " " + y.toFixed(1) + " l" + (g0.dir * g0.tw).toFixed(1) + " 0", stroke, "transform-origin": g0.x.toFixed(1) + "px " + y.toFixed(1) + "px" });
         const t0 = tick(g0.y0), t1 = tick(g0.y1);
         const label = lpEl("text", "bklab", g, { x: g0.lx.toFixed(1), y: g0.ly.toFixed(1), "text-anchor": g0.anchor, style: "font-size:" + fs + "px;fill:" + stroke });   /* inline fill: the chart's class CSS outranks a fill attribute */
         const lg = [...String(sp.label || "")].map((ch) => { const ts = lpEl("tspan", "", label, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; });
@@ -18204,7 +18354,35 @@ async function mount(doc) {
       const takes = [...pageSpecies(scene, "undraw").filter((u) => { const us = u.series ?? (u.target || {}).series; return us == null || (us | 0) === si; }),
                      ...pageSpecies(scene, "chart_to").filter((c) => c.to === "recast" || c.to === "morph" || c.to === "remake")]
         .filter((v) => v.at >= sp.at).sort((a, b) => a.at - b.at);
-      return { sp, si, to: far, g, rule, ringA, ringB, label, lg, side, lg0, k, axisX, words, frameOf,
+      /* P72 T46d (R26-379; Bravos DOM 00:50.5 "4 %") - `label_at: "axis"`: the AXIS form's figure is the page's accent pill
+         ON the value axis at the rule's level (T9's axis pill - axtagPillBox / AXTAG, the callout capsule - stood on the y
+         tick column instead of the x row), covering the tick it lands on; the hand's label stays unwritten. The tick
+         column is read per state off its own `ylabel` marks (their measured boxes); null on every other join. */
+      let pill = null;
+      if (sp.label_at === "axis" && far.axis) {
+        const pfs = (parseFloat(getComputedStyle((((st.marks || []).find((m) => m.role === "ylabel") || {}).el) || st.chart).fontSize) || (P ? 40 : 24)) * AXTAG.TYPE_K;
+        const pg0 = lpEl("g", "lp-level-pill", surf, { opacity: 0 });
+        const rect = lpEl("rect", "cpill", pg0, {});
+        const tx = lpEl("text", "callout", pg0, { x: 0, y: (pfs * 0.35).toFixed(1), "text-anchor": "middle", style: "font-size:" + pfs.toFixed(1) + "px" });
+        tx.textContent = String(sp.label || "");
+        const box = axtagPillBox(lpInkW(tx), pfs);
+        rect.setAttribute("x", box.x.toFixed(1)); rect.setAttribute("y", box.y.toFixed(1));
+        rect.setAttribute("width", box.w.toFixed(1)); rect.setAttribute("height", box.h.toFixed(1)); rect.setAttribute("rx", box.r.toFixed(1));
+        const ticksOf = (S0) => { const S = (S0.states && S0.states[S0.active | 0]) || S0;
+          return (S.marks || []).filter((m) => m.role === "ylabel" && m.el).map((m) => ({ el: m.el, box: lpLabelBox(m.el) })).filter((q) => q.box); };
+        /* the pill's centre: its RIGHT edge on the tick column's (the ticks are set flush right against the plot, DOM's
+           flush left against its right axis) - a figure wider than a tick grows away from the plot, never into it */
+        /* the page's inner left edge in chart units, read at paint (the chart is laid out by then): a long figure never
+           leaves the page - it steps right, onto the plot's edge, rather than off the stage */
+        const edgeL = () => { try { const M = st.chart.getScreenCTM(), pr = st.page ? st.page.getBoundingClientRect() : null, sg = document.getElementById("stage");
+          const sr = sg ? sg.getBoundingClientRect() : null, left = Math.max(pr && pr.width > 0 ? pr.left : -Infinity, sr && sr.width > 0 ? sr.left : -Infinity);   /* a full-stage page overhangs the stage */
+          if (M && Number.isFinite(left)) return new DOMPoint(left, 0).matrixTransform(M.inverse()).x + AXTAG.PAD_X / (st.stagePx > 0 ? st.stagePx : 1); } catch (_) { /* not laid out */ }
+          return -Infinity; };
+        const colX = (S0) => { const q = ticksOf(S0); const cx = !q.length ? axisX(S0) - box.w / 2 : Math.max(...q.map((r) => r.box[0] + r.box[2])) - box.w / 2;
+          return Math.max(cx, edgeL() + box.w / 2); };
+        pill = { g: pg0, rect, text: tx, box, colX, ticksOf, pop: { s: AXTAG.POP_S, mp: AXTAG.POP_MP } };
+      }
+      return { sp, si, to: far, g, rule, ringA, ringB, label, lg, side, lg0, k, axisX, words, frameOf, pill,
                leave: takes.length ? { at: takes[0].at, dur: takes[0].dur || 1 } : null };
     });
     /* P71 T32 - THE LENS (the Bravos harvest v2's A57; was P69 T80). A magnifier glass rises onto the line on its word,
@@ -18241,7 +18419,21 @@ async function mount(doc) {
       const ring = lpEl("circle", "lp-lens-ring", g, { cx: 0, cy: 0, r: 0, fill: "none", stroke: LENS.RING_INK });
       const neck = lpEl("rect", "lp-lens-neck", g, { fill: LENS.RING_INK });
       const handle = lpEl("rect", "lp-lens-handle", g, { fill: LENS.HANDLE_INK });
-      return { sp, si: sp.series | 0, zoom: lensZoom(sp), r: LENS.R_PX / k, g, clip, disc, lines, ring, neck, handle };
+      /* P72 T46d (R26-387; STK 555.5-557.5: Bravos's glass never hides a label) - THE END TAGS STAND OVER THE GLASS. Each
+         state's end tags are copied once into a group ABOVE the glass, clipped to the glass's own outline (its outer
+         ring, neck and handle), and re-synced from their originals every frame (lensTagSync): where the glass passes a
+         tag, the tag is read over it; everywhere else the copy is clipped away and the page is the page it was. */
+      const tid = id + "-tags", tclip = lpEl("clipPath", "", lpEl("defs", "", surf, {}), { id: tid });
+      const tRing = lpEl("circle", "", tclip, { cx: 0, cy: 0, r: 0 }), tNeck = lpEl("rect", "", tclip, {}), tHandle = lpEl("rect", "", tclip, {});
+      const tg = lpEl("g", "lp-lens-tags", surf, { opacity: 0, "clip-path": "url(#" + tid + ")" });
+      const tags = [];
+      (st.states && st.states.length ? st.states : [st]).forEach((S2, sk) => {
+        for (const pp of S2.paths || []) if (pp && pp.name && !pp.muted && (pp.name.textContent || "").trim()) {
+          const cp = pp.name.cloneNode(true); cp.removeAttribute("id"); tg.appendChild(cp); tags.push({ src: pp.name, cp, k: sk });
+        }
+      });
+      return { sp, si: sp.series | 0, zoom: lensZoom(sp), r: LENS.R_PX / k, g, clip, disc, lines, ring, neck, handle,
+               tagLayer: { g: tg, ring: tRing, neck: tNeck, handle: tHandle, tags } };
     });
     return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads, spans, crosses, lits, solo, axisTags, levelJoins, lenses, datumBadges, glows };
   };
@@ -18418,6 +18610,7 @@ async function mount(doc) {
       side.line.setAttribute("stroke-dashoffset", (side.len * (1 - draw)).toFixed(1));
       const tk = (kin("analytic_spring") ? springPop : stagePop)(clamp01((u - PS.BRACKET_DRAW) / PS.BRACKET_TICK));
       for (const n of side.notches) n.el.setAttribute("transform", "scale(" + tk.toFixed(4) + " 1)");
+      if (side.lead) side.lead.setAttribute("stroke-dashoffset", (side.leadLen * (1 - segEase(clamp01((u - PS.BRACKET_DRAW) / PS.BRACKET_TICK)))).toFixed(1));   /* R26-375 (a): the leader draws out of the point as the notches open */
       const nl = Math.max(1, side.lg.length), perL = (1 - PS.BRACKET_LABEL) * 0.7 / nl, uL = u - PS.BRACKET_LABEL;
       side.lg.forEach((ts, j) => ts.setAttribute("opacity", clamp01((uL - j * perL) / (perL * 1.6)).toFixed(3)));
       const ns = Math.max(1, side.sg.length), perS = (1 - PS.BRACKET_LABEL) * 0.3 / ns, uS = u - PS.BRACKET_LABEL - (1 - PS.BRACKET_LABEL) * 0.7;
@@ -22321,7 +22514,35 @@ async function mount(doc) {
                             reach from the hub, in card sides, so every spoke has room to be seen (the one scale shrinks to keep it) */
     FAIL_RETRACT: 0.12,  /* [the plan's, P71 T17] each half of the failed edge retracts this share of its own length from the middle -
                             BOOM keeps its dashed edge whole and white under the disc (a finding for the parent) */
+    /* P72 T46d (R26-384): the failed link's disc sized by the STAGE, not the card - at our card size (CHIP.SIZE 168 x the
+       layout's k) FAIL_D made a 25-33 px dot where BOOM's badge is 46 px on its 1920 stage whatever its tiles */
+    FAIL_PX: 46,         /* [MEASURED: BOOM 04:41, the settled disc's bbox, 1920 x 1080 = stage px - p71-t17/logs/measure-boom-fail.json] */
+    /* P72 T46d (R26-384) - THE SEAL HUB (`look: "seal"` on a `layout: "hub"` flow), DOM 04:30 (PWMhM2_dj3s, measured at 1280
+       x 720 off p71-t17/frames/bravos-DOM-270.png, stage px = x 1.5): the hub is a SEAL - no card, its emblem larger than
+       the rim's tiles and glowing in its own ink - and the spokes are thin straight DASHES with no heads. */
+    SEAL_K: 1.43,        /* [MEASURED: the seal 134 px on tiles of 79-117 (mean ~94) - T17's read; this frame: 135 px] the hub's side over a card's */
+    SEAL_INK: "#0D7DF4", /* [MEASURED: the seal's own blue, mean of its 6038 px with b > 200: rgb(13, 125, 244)] the emblem and its glow */
+    SEAL_GLOW: 0.2,      /* [MEASURED: the blue excess falls from ~50 at the seal's edge (r 67 px) to ~13 by r 100-105: a halo ~35 px past a
+                            135 px seal] the glow's radius as a share of the hub's side */
+    SEAL_GLOW_A: 0.85,   /* its alpha - the halo reads as the seal's own light, not a shadow */
+    SPOKE_DASH: 18,      /* [MEASURED: the right spoke's runs 12 on / 11 off at 720 px -> 18 / 16.5 stage px] a spoke's dash ... */
+    SPOKE_GAP: 16,       /* ... and its gap, stage px (x the layout's k) */
+    SPOKE_W: 2,          /* [MEASURED: ~1.3 px at 720 -> 2 stage px] its width */
+    SPOKE_INK: "#F2F2F2",   /* [MEASURED: the dashes peak at 194 grey on the dark ground] the page chalk (--lp-chalk) */
   });
+  const FLOW_LOOKS = Object.freeze(["seal"]);   /* P72 T46d: the hub's looks (build_scene_timeline_f.FLOW_LOOKS mirrors it) */
+
+  /* THE SEAL'S SPOKE at draw fraction f: the straight spoke's polyline cut into SPOKE_DASH / SPOKE_GAP dashes (x k), each
+     dash drawn as far as the pen has reached - [[a, b], ...] stage points, empty before the pen starts. */
+  const flowSealDashes = (pts, f, k = 1) => {
+    const cum = flowArc(pts), L = cum[cum.length - 1], reach = flow01(f) * L, D = FLOW.SPOKE_DASH * k, G = FLOW.SPOKE_GAP * k, out = [];
+    if (!(L > 0) || !(reach > 0)) return out;
+    for (let s0 = 0; s0 < reach; s0 += D + G) {
+      const s1 = Math.min(s0 + D, reach, L), a = flowAlong(pts, cum, s0), b = flowAlong(pts, cum, s1);
+      if (s1 > s0) out.push([a, b]);
+    }
+    return out;
+  };
 
   const flow01 = (v) => Math.min(1, Math.max(0, v));
 
@@ -22821,7 +23042,7 @@ async function mount(doc) {
   /* the disc and its X at the failed edge's midpoint, OVER the world (after the cards): a neg-ink disc springing in about
      its centre, and the white X struck in two strokes */
   const paintFlowFail = (el, g, at, cut, lay, drawOn) => {
-    const r = FLOW.FAIL_D * CHIP.SIZE * lay.k / 2, a = FLOW.FAIL_X * r, f = (v) => v.toFixed(2);   /* a: each arm's x and y reach */
+    const r = FLOW.FAIL_PX / 2, a = FLOW.FAIL_X * r, f = (v) => v.toFixed(2);   /* a: each arm's x and y reach; R26-384: the stage's size, not the card's */
     const fg = el("g", "flowfail", g, { opacity: cut.fade.toFixed(3),
       transform: "translate(" + f(at.x) + " " + f(at.y) + ") scale(" + cut.scale.toFixed(4) + ")" });
     el("circle", "flowfaildisc", fg, { cx: 0, cy: 0, r: f(r), style: "fill:" + FLOW.FAIL_INK + ";stroke:none" });
@@ -22898,6 +23119,7 @@ async function mount(doc) {
     const operatorMode = !stateMode && Array.isArray(sp.operators) && sp.operators.length;
     /* P71 T17: the failed link, from its word (never beside edge_states / operators - the compiler refuses the pair) */
     const failCut = stateMode || operatorMode ? null : flowFailAt(sp, t);
+    const seal = !!lay.hub && sp.look === "seal" && !phone;   /* P72 T46d (R26-384): DOM's hub look - opt-in, a hub's only */
     let failMid = null;
     if (stateMode || operatorMode) {
       const state = flowEdgesAt(sp, t);
@@ -22938,6 +23160,11 @@ async function mount(doc) {
           paintFlowFailedEdge(el, g, pts, failCut, phone, drawOn);
           return;
         }
+        if (seal) {   /* R26-384: DOM's spoke - thin straight dashes, drawn out along the spoke, no head */
+          const style = "fill:none;stroke:" + FLOW.SPOKE_INK + ";stroke-width:" + (FLOW.SPOKE_W * lay.k).toFixed(2) + ";stroke-linecap:butt";
+          for (const [a, b] of flowSealDashes(pts, f, lay.k)) el("path", "flowspoke", g, { d: "M" + a.x.toFixed(2) + " " + a.y.toFixed(2) + " L" + b.x.toFixed(2) + " " + b.y.toFixed(2), style });
+          return;
+        }
         drawOn(el("path", "flowarrow", g, pathAttrs(clothoidPath(pts))), Math.min(1, f / FLOW.HEAD_F));
         if (f > FLOW.HEAD_F) drawOn(el("path", "flowarrow", g, pathAttrs(flowHead(pts))), (f - FLOW.HEAD_F) / (1 - FLOW.HEAD_F));
       });
@@ -22953,14 +23180,16 @@ async function mount(doc) {
       const s = pose.scale * ix.scale * lay.k;
       const ng = el("g", "", g, { opacity: (pose.fade * st.alpha).toFixed(3),
                                   transform: "translate(" + (c.x + ix.dx).toFixed(1) + " " + (c.y + (pose.dy + ix.dy) * lay.k).toFixed(1) + ") scale(" + s.toFixed(4) + ")" });
-      const h = CHIP.SIZE / 2;
+      const h = CHIP.SIZE / 2, sealHub = seal && i === 0;   /* R26-384: the seal hub stands with no card, its emblem larger and glowing */
       const cardAttrs = { x: (-h).toFixed(1), y: (-h).toFixed(1), width: CHIP.SIZE, height: CHIP.SIZE, rx: CHIP.RX };
       if (phone) cardAttrs.style = "fill:#F4E6C7;stroke:#25313C;stroke-width:3";
-      el("rect", "chipcard", ng, cardAttrs);
+      if (!sealHub) el("rect", "chipcard", ng, cardAttrs);
       const geo = chipGeometry(A ? A["icon:" + st.icon] : null);
       if (geo) {
-        const vb = geo.vb || [0, 0, 24, 24], gk = CHIP.GLYPH / Math.max(vb[2] || 1, vb[3] || 1);
-        const glyphAttrs = { transform: "translate(" + (-CHIP.GLYPH / 2).toFixed(1) + " " + (-CHIP.GLYPH / 2).toFixed(1) + ") scale(" + gk.toFixed(4) + ") translate(" + (-vb[0]) + " " + (-vb[1]) + ")" };
+        const vb = geo.vb || [0, 0, 24, 24], GL = sealHub ? CHIP.SIZE * FLOW.SEAL_K : CHIP.GLYPH, gk = GL / Math.max(vb[2] || 1, vb[3] || 1);
+        const glyphAttrs = { transform: "translate(" + (-GL / 2).toFixed(1) + " " + (-GL / 2).toFixed(1) + ") scale(" + gk.toFixed(4) + ") translate(" + (-vb[0]) + " " + (-vb[1]) + ")" };
+        if (sealHub) glyphAttrs.style = "fill:none;stroke:" + FLOW.SEAL_INK + ";stroke-width:" + (2 * Math.max(vb[2] || 1, vb[3] || 1) / 24).toFixed(2)
+          + ";stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 " + (FLOW.SEAL_GLOW * GL / gk).toFixed(2) + "px " + flowInkA(FLOW.SEAL_INK, FLOW.SEAL_GLOW_A) + ")";
         if (phone) glyphAttrs.style = "fill:none;stroke:#25313C;stroke-width:2;stroke-linecap:round;stroke-linejoin:round";
         const gg = el("g", "chipglyph", ng, glyphAttrs);
         geo.el.forEach((q) => el(q.t, "", gg, phone ? Object.assign({}, q.a, { style: "fill:none;stroke:#25313C;stroke-width:2;stroke-linecap:round;stroke-linejoin:round" }) : q.a));   /* the sourced geometry verbatim */
@@ -23038,6 +23267,15 @@ async function mount(doc) {
     PAD: 18,           /* ... plus this much air in MAP units around the focus set's own box, so a lit country is never cut by the margin */
     ZOOM_MAX: 4.2,     /* the most the fit may magnify the 1000 x 500 box: past it one country is a blob and the rest of the world is off screen */
     IDLE: "breath",    /* the world's idle when the row names none (the template's IDLE_CLASS.plate, named here so the species agree with it) */
+    /* P72 T46d (R26-383; CHN 02:21 frames the strait, ~50 px a degree at 1280, where our continent fit gave the routes ~9) -
+       `;fit=tight`: the focus set's own box with only this much air, and a ceiling high enough to reach a strait */
+    TIGHT_PAD: 4,        /* the air round a tight focus set, map units (PAD's 18 is ~6.5 degrees - a continent's margin) */
+    TIGHT_ZOOM_MAX: 16,  /* the tight fit's ceiling (ZOOM_MAX's 4.2 stops at a continent; CHN's Hormuz is ~14 x this box at 1920) */
+    /* P72 T46d (R26-382; R17 - CHN 02:20.8-02:30.5: the line page LEFT, the Gulf RIGHT, the map fading into the ground by the
+       chart) - a map beside a card: the world's `room` (the card's rectangle, fractions) and the map fitted into the stage's
+       largest strip beside it (vecmapRegion; build_scene_timeline_f.vecmap_free_region mirrors it) */
+    REGION_MIN: 0.3,     /* the thinnest strip, as a share of the stage in its direction, a map may be fitted into */
+    FADE: 0.07,          /* [DERIVED: CHN 02:21.4 - the map's ink fades out over ~90 of 1280 px toward the chart] the soft edge on the room's side, as a share of the stage */
   });
 
   const LIGHT = Object.freeze({
@@ -23083,6 +23321,13 @@ async function mount(doc) {
     R1: 69,            /* [DERIVED: CHN: 46 px at 720p; D40 45 px at 1080p] the radius it is gone at - about 2.5 x where it began */
     FADE_POW: 3,       /* [DERIVED: between the two witnesses - CHN holds its ink (0.91 of peak at u 0.5, 0.64 at 0.97, then gone), D40 fades throughout] alpha = 1 - u^3 */
     STROKE: 5,         /* the arc's own stroke width (template .vmarc), so the ping and the route are one hand */
+    /* P72 T46d (R26-383): THE PING'S GLOW - Bravos's ring BLOOMS where ours was a thin ring with the token's small halo.
+       [MEASURED: CHN 02:21.4 (bravos-CHN-0221.4.png, 1280 px), the red excess about the pin, median over the ring: the
+       ring peaks 167 at r 39-42 px, holds 90-120 INSIDE it (the pin's own glow) and falls 50 / 27 / 14 at 12 / 18 / 27 px
+       past it - a halo reaching ~28 px (42 stage px) either side of a ~9 px (13 stage px) ring] */
+    GLOW_PX: 18,       /* the halo's drop-shadow radius, stage px (the T10 / T49 form: one blur in the ring's own ink) */
+    GLOW_A: 0.9,       /* its alpha - the measured halo holds half the ring's ink 12 px out */
+    GLOW_W: 9,         /* the ring's stroke under its glow, stage px (the measured ring's half-height width ~13; the route's 5 read thin) */
   });
 
   /* "#RRGGBB" at alpha a -> "rgba(r,g,b,a)" (the halo's colour, as the flow token's is written) */
@@ -23126,12 +23371,39 @@ async function mount(doc) {
      the WIDTH. One rule, read off the geometry rather than off the aspect, exactly as the flow diagram picks
      its row or its column. ZOOM_MAX caps a focus set of one small country, which would otherwise magnify the
      world past reading. */
-  const mapFit = (box, bboxes, stageW, stageH, margin = VECMAP.MARGIN) => {
-    const m = margin * Math.min(stageW, stageH), f = focusBox(box, bboxes);
-    const k = Math.min(VECMAP.ZOOM_MAX, (stageW - 2 * m) / Math.max(1e-6, f.w), (stageH - 2 * m) / Math.max(1e-6, f.h));
+  const mapFit = (box, bboxes, stageW, stageH, margin = VECMAP.MARGIN, opts = null) => {
+    /* P72 T46d: `opts.region` ([x, y, w, h] stage fractions, R26-382) contains the fit in that strip instead of the whole
+       stage; `opts.tight` (R26-383) takes the focus set's box with TIGHT_PAD and the TIGHT_ZOOM_MAX ceiling. Absent opts:
+       the stage and the continent's fit, to the bit. */
+    const o = opts || {}, R = Array.isArray(o.region) && o.region.length === 4 ? o.region : null;
+    const rx = R ? R[0] * stageW : 0, ry = R ? R[1] * stageH : 0, rw = R ? R[2] * stageW : stageW, rh = R ? R[3] * stageH : stageH;
+    const m = margin * Math.min(stageW, stageH), f = focusBox(box, bboxes, o.tight ? VECMAP.TIGHT_PAD : VECMAP.PAD);
+    const k = Math.min(o.tight ? VECMAP.TIGHT_ZOOM_MAX : VECMAP.ZOOM_MAX, (rw - 2 * m) / Math.max(1e-6, f.w), (rh - 2 * m) / Math.max(1e-6, f.h));
     return { sx: k, sy: k,
-             tx: stageW / 2 - k * (f.x + f.w / 2),
-             ty: stageH / 2 - k * (f.y + f.h / 2), box: f };
+             tx: rx + rw / 2 - k * (f.x + f.w / 2),
+             ty: ry + rh / 2 - k * (f.y + f.h / 2), box: f };
+  };
+
+  /* P72 T46d (R26-382): the stage's largest strip beside a card's room ([x, y, w, h] fractions) - left, right, top or
+     bottom of it, the first of equal areas in that order - as [x, y, w, h] fractions; null when none is REGION_MIN of the
+     stage in its own direction (the compiler refuses that room by name) */
+  const vecmapRegion = (room) => {
+    if (!Array.isArray(room) || room.length !== 4) return null;
+    const [x, y, w, h] = room.map(Number);
+    const strips = [[x, [0, 0, x, 1]], [1 - (x + w), [x + w, 0, 1 - (x + w), 1]], [y, [0, 0, 1, y]], [1 - (y + h), [0, y + h, 1, 1 - (y + h)]]];
+    let best = strips[0];
+    for (const q of strips) if (q[1][2] * q[1][3] > best[1][2] * best[1][3]) best = q;
+    return best[0] >= VECMAP.REGION_MIN ? best[1] : null;
+  };
+
+  /* the soft edge on the room's side of a fitted map: a CSS mask the map's svg carries (null: no room, no mask) */
+  const vecmapMask = (region) => {
+    if (!region) return null;
+    const [x, y, w, h] = region, F = VECMAP.FADE * 100, pc = (v) => (100 * v).toFixed(2) + "%";
+    if (x > 0) return "linear-gradient(to right, transparent " + pc(x) + ", #000 " + (100 * x + F).toFixed(2) + "%)";
+    if (x + w < 1) return "linear-gradient(to left, transparent " + pc(1 - (x + w)) + ", #000 " + (100 * (1 - (x + w)) + F).toFixed(2) + "%)";
+    if (y > 0) return "linear-gradient(to bottom, transparent " + pc(y) + ", #000 " + (100 * y + F).toFixed(2) + "%)";
+    return "linear-gradient(to top, transparent " + pc(1 - (y + h)) + ", #000 " + (100 * (1 - (y + h)) + F).toFixed(2) + "%)";
   };
 
   /* a point in MAP units -> stage px, and back: the two are each other's inverse to the bit (the fit is one
@@ -23295,8 +23567,9 @@ async function mount(doc) {
   };
 
   /* the ring's look: the route's ink at the route's width, with the flow token's halo (lpBloom's form) */
-  const pingStyle = () => "fill:none;stroke:" + FLOW.TOKEN_INK + ";stroke-width:" + PING.STROKE
-    + ";filter:drop-shadow(0 0 " + FLOW.TOKEN_BLOOM_PX + "px " + vmInkA(FLOW.TOKEN_INK, FLOW.TOKEN_BLOOM_A) + ")";
+  const pingStyle = () => "fill:none;stroke:" + FLOW.TOKEN_INK + ";stroke-width:" + PING.GLOW_W
+    + ";filter:drop-shadow(0 0 " + PING.GLOW_PX + "px " + vmInkA(FLOW.TOKEN_INK, PING.GLOW_A) + ")"
+    + " drop-shadow(0 0 " + (PING.GLOW_PX / 3).toFixed(1) + "px " + vmInkA(FLOW.TOKEN_INK, PING.GLOW_A) + ")";   /* R26-383: the bloom - a wide halo and a hot inner one */
 
   /* THE STAMP at t: the badge spring's landing, its fade and the size its `size` field names. The page's own
      figure law (the hand writing at a datum) is NOT reachable from here - it is a mask wipe over .lp-ink spans
@@ -23341,7 +23614,9 @@ async function mount(doc) {
   const worldFit = (data, world, stageW, stageH) => {
     if (!data) return null;
     const ids = (world && world.focus) || [];
-    return mapFit(data.box, ids.map((id) => (data.countries[id] || {}).bbox).filter(Boolean), stageW, stageH);
+    const region = world && world.room ? vecmapRegion(world.room) : null, tight = !!(world && world.fit === "tight");
+    return mapFit(data.box, ids.map((id) => (data.countries[id] || {}).bbox).filter(Boolean), stageW, stageH, VECMAP.MARGIN,
+                  region || tight ? { region, tight } : null);   /* P72 T46d: absent both, the call it always was */
   };
 
   /* THE WORLD (the template's branch is: mount an svg, call this). Every country's paths drawn once in the
@@ -23353,6 +23628,8 @@ async function mount(doc) {
     root.replaceChildren();
     if (!data) return null;
     const fit = worldFit(data, world, STAGE_W, STAGE_H);
+    const mask = vecmapMask(world.room ? vecmapRegion(world.room) : null);   /* R26-382: the map fades into the ground by the card */
+    if (root.style) { if (mask) { root.style.maskImage = mask; root.style.webkitMaskImage = mask; } else { root.style.maskImage = ""; root.style.webkitMaskImage = ""; } }
     const ix = vmIdle(scene, world, t, idle, hash, idleOf);
     const g = el("g", "", root, { transform: vmGroupXf(null, ix, STAGE_W, STAGE_H) });
     const inner = el("g", "vmland", g, { transform: fitXf(fit) });

@@ -121,7 +121,35 @@ export const FLOW = Object.freeze({
                           reach from the hub, in card sides, so every spoke has room to be seen (the one scale shrinks to keep it) */
   FAIL_RETRACT: 0.12,  /* [the plan's, P71 T17] each half of the failed edge retracts this share of its own length from the middle -
                           BOOM keeps its dashed edge whole and white under the disc (a finding for the parent) */
+  /* P72 T46d (R26-384): the failed link's disc sized by the STAGE, not the card - at our card size (CHIP.SIZE 168 x the
+     layout's k) FAIL_D made a 25-33 px dot where BOOM's badge is 46 px on its 1920 stage whatever its tiles */
+  FAIL_PX: 46,         /* [MEASURED: BOOM 04:41, the settled disc's bbox, 1920 x 1080 = stage px - p71-t17/logs/measure-boom-fail.json] */
+  /* P72 T46d (R26-384) - THE SEAL HUB (`look: "seal"` on a `layout: "hub"` flow), DOM 04:30 (PWMhM2_dj3s, measured at 1280
+     x 720 off p71-t17/frames/bravos-DOM-270.png, stage px = x 1.5): the hub is a SEAL - no card, its emblem larger than
+     the rim's tiles and glowing in its own ink - and the spokes are thin straight DASHES with no heads. */
+  SEAL_K: 1.43,        /* [MEASURED: the seal 134 px on tiles of 79-117 (mean ~94) - T17's read; this frame: 135 px] the hub's side over a card's */
+  SEAL_INK: "#0D7DF4", /* [MEASURED: the seal's own blue, mean of its 6038 px with b > 200: rgb(13, 125, 244)] the emblem and its glow */
+  SEAL_GLOW: 0.2,      /* [MEASURED: the blue excess falls from ~50 at the seal's edge (r 67 px) to ~13 by r 100-105: a halo ~35 px past a
+                          135 px seal] the glow's radius as a share of the hub's side */
+  SEAL_GLOW_A: 0.85,   /* its alpha - the halo reads as the seal's own light, not a shadow */
+  SPOKE_DASH: 18,      /* [MEASURED: the right spoke's runs 12 on / 11 off at 720 px -> 18 / 16.5 stage px] a spoke's dash ... */
+  SPOKE_GAP: 16,       /* ... and its gap, stage px (x the layout's k) */
+  SPOKE_W: 2,          /* [MEASURED: ~1.3 px at 720 -> 2 stage px] its width */
+  SPOKE_INK: "#F2F2F2",   /* [MEASURED: the dashes peak at 194 grey on the dark ground] the page chalk (--lp-chalk) */
 });
+export const FLOW_LOOKS = Object.freeze(["seal"]);   /* P72 T46d: the hub's looks (build_scene_timeline_f.FLOW_LOOKS mirrors it) */
+
+/* THE SEAL'S SPOKE at draw fraction f: the straight spoke's polyline cut into SPOKE_DASH / SPOKE_GAP dashes (x k), each
+   dash drawn as far as the pen has reached - [[a, b], ...] stage points, empty before the pen starts. */
+export const flowSealDashes = (pts, f, k = 1) => {
+  const cum = flowArc(pts), L = cum[cum.length - 1], reach = flow01(f) * L, D = FLOW.SPOKE_DASH * k, G = FLOW.SPOKE_GAP * k, out = [];
+  if (!(L > 0) || !(reach > 0)) return out;
+  for (let s0 = 0; s0 < reach; s0 += D + G) {
+    const s1 = Math.min(s0 + D, reach, L), a = flowAlong(pts, cum, s0), b = flowAlong(pts, cum, s1);
+    if (s1 > s0) out.push([a, b]);
+  }
+  return out;
+};
 
 const flow01 = (v) => Math.min(1, Math.max(0, v));
 
@@ -621,7 +649,7 @@ const paintFlowFailedEdge = (el, g, pts, cut, phone, drawOn) => {
 /* the disc and its X at the failed edge's midpoint, OVER the world (after the cards): a neg-ink disc springing in about
    its centre, and the white X struck in two strokes */
 const paintFlowFail = (el, g, at, cut, lay, drawOn) => {
-  const r = FLOW.FAIL_D * CHIP.SIZE * lay.k / 2, a = FLOW.FAIL_X * r, f = (v) => v.toFixed(2);   /* a: each arm's x and y reach */
+  const r = FLOW.FAIL_PX / 2, a = FLOW.FAIL_X * r, f = (v) => v.toFixed(2);   /* a: each arm's x and y reach; R26-384: the stage's size, not the card's */
   const fg = el("g", "flowfail", g, { opacity: cut.fade.toFixed(3),
     transform: "translate(" + f(at.x) + " " + f(at.y) + ") scale(" + cut.scale.toFixed(4) + ")" });
   el("circle", "flowfaildisc", fg, { cx: 0, cy: 0, r: f(r), style: "fill:" + FLOW.FAIL_INK + ";stroke:none" });
@@ -698,6 +726,7 @@ export function paintFlow(ctx) {
   const operatorMode = !stateMode && Array.isArray(sp.operators) && sp.operators.length;
   /* P71 T17: the failed link, from its word (never beside edge_states / operators - the compiler refuses the pair) */
   const failCut = stateMode || operatorMode ? null : flowFailAt(sp, t);
+  const seal = !!lay.hub && sp.look === "seal" && !phone;   /* P72 T46d (R26-384): DOM's hub look - opt-in, a hub's only */
   let failMid = null;
   if (stateMode || operatorMode) {
     const state = flowEdgesAt(sp, t);
@@ -738,6 +767,11 @@ export function paintFlow(ctx) {
         paintFlowFailedEdge(el, g, pts, failCut, phone, drawOn);
         return;
       }
+      if (seal) {   /* R26-384: DOM's spoke - thin straight dashes, drawn out along the spoke, no head */
+        const style = "fill:none;stroke:" + FLOW.SPOKE_INK + ";stroke-width:" + (FLOW.SPOKE_W * lay.k).toFixed(2) + ";stroke-linecap:butt";
+        for (const [a, b] of flowSealDashes(pts, f, lay.k)) el("path", "flowspoke", g, { d: "M" + a.x.toFixed(2) + " " + a.y.toFixed(2) + " L" + b.x.toFixed(2) + " " + b.y.toFixed(2), style });
+        return;
+      }
       drawOn(el("path", "flowarrow", g, pathAttrs(clothoidPath(pts))), Math.min(1, f / FLOW.HEAD_F));
       if (f > FLOW.HEAD_F) drawOn(el("path", "flowarrow", g, pathAttrs(flowHead(pts))), (f - FLOW.HEAD_F) / (1 - FLOW.HEAD_F));
     });
@@ -753,14 +787,16 @@ export function paintFlow(ctx) {
     const s = pose.scale * ix.scale * lay.k;
     const ng = el("g", "", g, { opacity: (pose.fade * st.alpha).toFixed(3),
                                 transform: "translate(" + (c.x + ix.dx).toFixed(1) + " " + (c.y + (pose.dy + ix.dy) * lay.k).toFixed(1) + ") scale(" + s.toFixed(4) + ")" });
-    const h = CHIP.SIZE / 2;
+    const h = CHIP.SIZE / 2, sealHub = seal && i === 0;   /* R26-384: the seal hub stands with no card, its emblem larger and glowing */
     const cardAttrs = { x: (-h).toFixed(1), y: (-h).toFixed(1), width: CHIP.SIZE, height: CHIP.SIZE, rx: CHIP.RX };
     if (phone) cardAttrs.style = "fill:#F4E6C7;stroke:#25313C;stroke-width:3";
-    el("rect", "chipcard", ng, cardAttrs);
+    if (!sealHub) el("rect", "chipcard", ng, cardAttrs);
     const geo = chipGeometry(A ? A["icon:" + st.icon] : null);
     if (geo) {
-      const vb = geo.vb || [0, 0, 24, 24], gk = CHIP.GLYPH / Math.max(vb[2] || 1, vb[3] || 1);
-      const glyphAttrs = { transform: "translate(" + (-CHIP.GLYPH / 2).toFixed(1) + " " + (-CHIP.GLYPH / 2).toFixed(1) + ") scale(" + gk.toFixed(4) + ") translate(" + (-vb[0]) + " " + (-vb[1]) + ")" };
+      const vb = geo.vb || [0, 0, 24, 24], GL = sealHub ? CHIP.SIZE * FLOW.SEAL_K : CHIP.GLYPH, gk = GL / Math.max(vb[2] || 1, vb[3] || 1);
+      const glyphAttrs = { transform: "translate(" + (-GL / 2).toFixed(1) + " " + (-GL / 2).toFixed(1) + ") scale(" + gk.toFixed(4) + ") translate(" + (-vb[0]) + " " + (-vb[1]) + ")" };
+      if (sealHub) glyphAttrs.style = "fill:none;stroke:" + FLOW.SEAL_INK + ";stroke-width:" + (2 * Math.max(vb[2] || 1, vb[3] || 1) / 24).toFixed(2)
+        + ";stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 " + (FLOW.SEAL_GLOW * GL / gk).toFixed(2) + "px " + flowInkA(FLOW.SEAL_INK, FLOW.SEAL_GLOW_A) + ")";
       if (phone) glyphAttrs.style = "fill:none;stroke:#25313C;stroke-width:2;stroke-linecap:round;stroke-linejoin:round";
       const gg = el("g", "chipglyph", ng, glyphAttrs);
       geo.el.forEach((q) => el(q.t, "", gg, phone ? Object.assign({}, q.a, { style: "fill:none;stroke:#25313C;stroke-width:2;stroke-linecap:round;stroke-linejoin:round" }) : q.a));   /* the sourced geometry verbatim */

@@ -116,7 +116,7 @@ DOCK_INKS = ("own", "page")   # E99 s87, OPEN ON THE OPERATOR'S EYE: how a stamp
 MORPH_SHAPES = ("tab", "plate", "card")           # P47 T3: the named prop outline a morph page starts from (`;morph=<shape>`; tab is the default)
 PLATE_USES = ("landing", "bridge", "reset")   # E61: the three things a plate is - a landing surface, a bridge, a reset; `;use=<one>` names it on the row
 RACE_PATHS = ("eased", "clothoid")   # E91 s1 (R26-78): the path a racing mark takes BETWEEN two period knots - `eased` is the engine as it is (each coordinate on its own easing), `clothoid` is the fit through the SAME knots (P52 T17 arm B). The period clock, the knots and the ranks are identical in both: this names the SHAPE of the move and never its timing, and the operator chose it where the beat wants energy rather than smoothness
-PLATE_OPTS = ("idle", "drift", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path", "depth", "plane", "form", "field", "room", "domain", "build", "readability", "bar_style", "morph_series", "caption_room")   # R26-149 (P72 T17): morph_series=<n> - the series a morph-ENTERING line page becomes (default 0), refused by name out of range   # P69 T10b: bar_style=soft - a BARS page's bars take rounded shoulders (the two corners away from zero) and the prop's own cross-hatched shadow from the one stage light (the operator, 2026-09-22); refused by name off the bars builder and beside form=extruded_bar   # P69 T8 (E99 s97): readability=longform[:bravos|middle|phone]|landscape-phone - the PAGE PROFILE a ledger page is drawn in, and a long form's type preset, the row's word (it wins over the series file's own field); legal on the builders ledger_page.READABILITY_BUILDERS names, refused by name elsewhere   # R26-226 (E99 s82): build=lines[:<s>] - a MULTI-LINE page's series draw one at a time, each whole, its end tag and inline badge landing as it lands (the operator: "draw the first line completely, label it, badge it, draw the 2nd line completely, badge it"); `lines:<s>` names ONE series' seconds, so the page's whole build is N x s   # R26-221 (E99 s81): room=<x>,<y>,<w>,<h> - the rectangle of a PICTURE PLATE a card may stand in, fractions of the stage; a plate's answer to a page's quiet_zone, and what lets `read` then `park` work on a plate   # R26-223 (E99 s81): domain=<ymin>,<ymax> - the y scale a LEDGER PAGE is BORN on, so a hook opens on the two lines' own scale instead of standing four seconds on the object's and rescaling; the object's own domain stays the default   # E99 s55 + s63: drift=<px> - the AMPLITUDE of the plate idle's walk, per scene (20 long form, 30-40 shorts; PLATE_DRIFT_FLOOR 2.0 is the floor, PLATE_DRIFT_MAX 90 the geometric ceiling), refused beside an idle that has no dx/dy   # E99 s35: field=soak|plates|scribble - which GROUND the page's charcoal arrives on, chosen by the sentence's JOB: the two-plate cross-fade for continuity (connecting ideas, speaking across plates), the soak for a new idea or a separator, the scribble as the opt-in back-up   # P58 T5 / E98 s3: form=extruded_bar | tilted_line[:<deg>] - the two 2.5D CHART FORMS, how the page's marks are drawn (a prism per bar; the line on a tilted plane). Opt-in, refused by name when the page's builder cannot draw it, and refused beside plane= (one plane per page)   # P58 T4 / E98 s3: depth=<k> - the page is a card at a DEPTH, taking that share of the camera's move (kinetics/camera.mjs PARALLAX); plane=tilt:<deg>[,<axis>]|quad:<8 numbers> - the surface it is drawn on, projected by the embed grammar's own homography. Both opt-in; the flat page is the reading form   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
+PLATE_OPTS = ("idle", "drift", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path", "depth", "plane", "form", "field", "room", "domain", "build", "readability", "bar_style", "morph_series", "caption_room", "fit")   # P72 T46d (R26-383): fit=tight - a vector map frames its focus set tight (VECMAP_FITS), refused by name on any other world   # R26-149 (P72 T17): morph_series=<n> - the series a morph-ENTERING line page becomes (default 0), refused by name out of range   # P69 T10b: bar_style=soft - a BARS page's bars take rounded shoulders (the two corners away from zero) and the prop's own cross-hatched shadow from the one stage light (the operator, 2026-09-22); refused by name off the bars builder and beside form=extruded_bar   # P69 T8 (E99 s97): readability=longform[:bravos|middle|phone]|landscape-phone - the PAGE PROFILE a ledger page is drawn in, and a long form's type preset, the row's word (it wins over the series file's own field); legal on the builders ledger_page.READABILITY_BUILDERS names, refused by name elsewhere   # R26-226 (E99 s82): build=lines[:<s>] - a MULTI-LINE page's series draw one at a time, each whole, its end tag and inline badge landing as it lands (the operator: "draw the first line completely, label it, badge it, draw the 2nd line completely, badge it"); `lines:<s>` names ONE series' seconds, so the page's whole build is N x s   # R26-221 (E99 s81): room=<x>,<y>,<w>,<h> - the rectangle of a PICTURE PLATE a card may stand in, fractions of the stage; a plate's answer to a page's quiet_zone, and what lets `read` then `park` work on a plate   # R26-223 (E99 s81): domain=<ymin>,<ymax> - the y scale a LEDGER PAGE is BORN on, so a hook opens on the two lines' own scale instead of standing four seconds on the object's and rescaling; the object's own domain stays the default   # E99 s55 + s63: drift=<px> - the AMPLITUDE of the plate idle's walk, per scene (20 long form, 30-40 shorts; PLATE_DRIFT_FLOOR 2.0 is the floor, PLATE_DRIFT_MAX 90 the geometric ceiling), refused beside an idle that has no dx/dy   # E99 s35: field=soak|plates|scribble - which GROUND the page's charcoal arrives on, chosen by the sentence's JOB: the two-plate cross-fade for continuity (connecting ideas, speaking across plates), the soak for a new idea or a separator, the scribble as the opt-in back-up   # P58 T5 / E98 s3: form=extruded_bar | tilted_line[:<deg>] - the two 2.5D CHART FORMS, how the page's marks are drawn (a prism per bar; the line on a tilted plane). Opt-in, refused by name when the page's builder cannot draw it, and refused beside plane= (one plane per page)   # P58 T4 / E98 s3: depth=<k> - the page is a card at a DEPTH, taking that share of the camera's move (kinetics/camera.mjs PARALLAX); plane=tilt:<deg>[,<axis>]|quad:<8 numbers> - the surface it is drawn on, projected by the embed grammar's own homography. Both opt-in; the flat page is the reading form   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
 # P48 T4: `;then=<series>:<variant>[:<emphasize>]` names ANOTHER chart the same page can become - a second full
 # ledger_page.v1 spec on `world.page_states`, built at load and hidden until a `chart_to` reaches it. Repeat the
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
@@ -239,6 +239,7 @@ WORLD_MAP = "world-110m"                          # the one map on disk; the id 
 MAP_PREFIX = "map:"                               # ... and its key in the asset map: `map:world-110m`, written once however many scenes use it
 MAPS_DIR = REPO / "content/video_engine/assets/maps"
 VECMAP_FOCUS_MAX = 6                              # a focus set of seven countries is the whole world: drop the list (E59: a composition frames its places)
+VECMAP_FITS = ("tight",)                          # P72 T46d (R26-383): `;fit=tight` - species/vecmap.mjs VECMAP.TIGHT_PAD / TIGHT_ZOOM_MAX (CHN 02:21 frames Hormuz, not the continent)
 SPECIES_CLIP = "clip"              # world.kind for a clip; the player seeks a <video> to the scene clock
 # VIDEO DOCK (ruling E44 / backlog R26-7, operator 2026-09-06: "use the chart plate/ledger AND THEN DOCK
 # the animation videos"): a dock asset may be a clip. It embeds raw like a clip world and the player seeks
@@ -972,7 +973,7 @@ SPECIES_WHEN[SPECIES_SOLO] = ("COMPARES / RANKS, at the turn: the sentence narro
 SPECIES_WHEN[SPECIES_UNSOLO] = ("the sentence widens back out after a solo - the comparison is the claim again ('against the "
                                 "index', 'all of them') - and every muted series or bar restores its ink on the word; never "
                                 "without a solo before it (it restores nothing)")
-SOLO_KEYS = ("kind", "at", "dur", "series", "bar")
+SOLO_KEYS = ("kind", "at", "dur", "series", "bar", "add")   # P72 T46d (R26-395): `add: true` - the named mark JOINS the lit set of the solo standing before it (Bravos D40 R30: the second bar lights too)
 UNSOLO_KEYS = ("kind", "at", "dur")
 SOLO_DUR_S = (0.2, 1.5)   # species/solo.mjs SOLO.MIN_S / MAX_S, mirrored: shorter is a flicker, longer a fade the word has left
 SOLO_BUILDERS = {"dense-line": "series", "story": "bar"}   # the two pages whose marks it re-inks: a line's series, a bars page's bars
@@ -1046,9 +1047,11 @@ PAGE_BOUND_SPECIES += (SPECIES_LEVEL_JOIN,)  # R26-219: a figure written on the 
 SPECIES_WHEN[SPECIES_LEVEL_JOIN] = ("the sentence SPANS TWO numbers on one series ('higher than at the depth of 2008', "
                                     "'twenty-eight, the most it has ever been' against the dot-com 23) at the proof - a "
                                     "dashed level joins the two data and the gap is written beside it; never on the rule")
-LEVEL_JOIN_KEYS = ("kind", "at", "dur", "from", "to", "label", "series", "color", "side", "dy", "panel", "keep",
+LEVEL_JOIN_KEYS = ("kind", "at", "dur", "from", "to", "label", "series", "color", "side", "dy", "panel", "keep", "label_at",
                    *ROW_PATH_KEYS, "leave_at", "leave_s", "leave_clamped")   # the last three: stamp_page_leave's own record
 LEVEL_JOIN_SIDES = ("right", "left", "above", "below")   # species/level_join.mjs LEVEL.SIDES
+LEVEL_JOIN_LABEL_AT = ("axis",)   # P72 T46d (R26-379; Bravos DOM 00:50.5 "4 %"): the AXIS form's figure as the page's accent pill ON the value
+                                  # axis, at the rule's level, in place of the tick it covers (T9's axis pill, for y); absent = the hand beside the far ring
 LEVEL_JOIN_DY_MAX = 4.0                                  # an authored `dy` moves the figure by lines of its own size, this far
 LEVEL_JOIN_BUILDERS = {"dense-line": "series", "story": "bar"}   # the pages whose marks are data with a level: a line, bars
 # THE PLACEMENT ESTIMATE's dials, MIRRORED from species/level_join.mjs LEVEL (the engine's label law, pinned equal by
@@ -2482,6 +2485,59 @@ def dock_datum_errors(row_species, docks: list[dict], evidence: dict, where: str
             err = _dock_datum_error(e, list(docks or []), evidence or {}, where)
             if err:
                 out.append(err)
+    return out
+
+
+DOCK_CHART_DRAW = {"CARD_IN": 0.75, "LEAD": 0.6, "DUR_MIN": 2.5, "DUR_MAX": 6.0, "DUR_K": 0.38, "STAGGER": 0.35, "LEN": 0.65}
+# ^ P72 T46d (R26-373 (b)): the dock chart's draw clock, mirrored from the engine's drawChart (CARD_IN, `DUR = min(6, max(2.5,
+#   0.38 x the hold))`, a series' share `((tRel - delay) / DUR - 0.35 x stagger) / 0.65`, eased expoOut) - pinned by
+#   test_wave3_page_marks against the engine source
+
+
+def dock_datum_drawn_at(d: dict, chart: dict, si: int, i: int) -> float | None:
+    """P72 T46d (R26-373 (b)): ~ when a docked chart's line has drawn as far as datum `i` of series `si` - the drawChart
+    clock, the datum's share of the line taken as its share of the indices (an ESTIMATE: the path's own length is the
+    player's; a WARN's number, never a place). None for a series the painter fades in whole (a dashed reference)."""
+    C = DOCK_CHART_DRAW
+    series = [s for s in (chart.get("series") or []) if isinstance(s, dict)]
+    if not (0 <= si < len(series)):
+        return None
+    sr = series[si]
+    if sr.get("dash"):
+        return None   # the painter fades a dashed series in whole on its delay (`data-fadein`) - no pen to wait for
+    n_pts = len(sr.get("pts") or [])
+    enter, exitt = float(d["enter"]), float(d["exit"])
+    dur = min(C["DUR_MAX"], max(C["DUR_MIN"], (exitt - enter) * C["DUR_K"]))
+    share = i / max(1, n_pts - 1)
+    p = 1.0 if share >= 1 else (-math.log2(1 - share) / 10 if share > 0 else 0.0)   # expoOut's inverse: 1 - 2^(-10 p) = share
+    lp = min(1.0, p)
+    stagger = (len(series) - 1 - si) / max(1, len(series))   # the painter draws the series in REVERSE order (the last first, series 0 on top)
+    return enter + C["CARD_IN"] * C["LEAD"] + float(sr.get("delay") or 0.0) + (lp * C["LEN"] + stagger * C["STAGGER"]) * dur
+
+
+def dock_datum_draw_notes(row_species, docks: list[dict], evidence: dict, where: str) -> list[str]:
+    """P72 T46d (R26-373 (b)): a mark on a DOCKED chart's datum whose `at` falls before the card's line has drawn that
+    far rings empty air - a WARN by name with the estimate (s106: the author decides; the mark may be meant to wait for
+    the pen). Only for a target `dock_datum_errors` already resolved; [] else."""
+    out = []
+    for e in row_species or []:
+        tg = e.get("target") if isinstance(e, dict) else None
+        if not (isinstance(tg, dict) and tg.get("kind") == "datum" and DATUM_DOCK_KEY in tg and isinstance(tg.get("index"), int)):
+            continue
+        if _dock_datum_error(e, list(docks or []), evidence or {}, where):
+            continue
+        ref = tg[DATUM_DOCK_KEY]
+        d = next((x for x in docks if x.get("slide") == ref), None) if isinstance(ref, str) else docks[ref]
+        chart = (evidence.get(d.get("slide")) or {}).get("chart") or {}
+        if chart.get("panels"):
+            continue   # a panels card's clock is its own; not estimated
+        si, i, at = int(tg.get("series") or 0), int(tg["index"]), float(e.get("at") or 0.0)
+        drawn = dock_datum_drawn_at(d, chart, si, i)
+        if drawn is not None and at < drawn - 1e-9:
+            out.append(f"{where}: {e.get('kind')} at {at:g}s rings datum {i} of series {si} on dock {ref!r} before the card's "
+                       f"line has drawn it (~{drawn:.2f}s: the draw starts at {float(d['enter']) + DOCK_CHART_DRAW['CARD_IN'] * DOCK_CHART_DRAW['LEAD']:.2f}s) "
+                       "- the mark rings empty air until the pen arrives; move it to the datum's draw, or let it wait "
+                       "(R26-373 (b)). REPORTED (E99 s106)")
     return out
 
 
@@ -3936,6 +3992,23 @@ def _validate_flow(entry: dict) -> list[str]:
     return errs
 
 
+FLOW_LOOKS = ("seal",)   # P72 T46d (R26-384): species/flow.mjs FLOW_LOOKS - DOM 04:30's hub: a glowing seal, dashed headless spokes
+
+
+def _validate_flow_look(entry: dict) -> list[str]:
+    """P72 T46d (R26-384): `look: "seal"` - the HUB drawn as DOM's (the centre a larger glowing emblem with no card, the
+    spokes thin dashes with no heads). A hub's look only; a key the slice adds is refused BY NAME."""
+    if "look" not in entry:
+        return []
+    if entry["look"] not in FLOW_LOOKS:
+        return [f"flow: look {entry['look']!r} is not one of {'|'.join(FLOW_LOOKS)} - absent is the flow's own card-and-arrow look"]
+    if entry.get("layout") != "hub":
+        return [f"flow: look {entry['look']!r} is a HUB's look (a centre seal and its spokes) - it takes layout 'hub'"]
+    if entry.get("readability") == "landscape-phone":
+        return ["flow: look 'seal' is drawn on the dark page; the landscape-phone flow keeps its cream cards"]
+    return []
+
+
 def _validate_flow_extensions(entry: dict, ids: list[str]) -> list[str]:
     """Opt-in formula/connectivity clocks; absent fields retain legacy behavior.
 
@@ -3957,6 +4030,7 @@ def _validate_flow_extensions(entry: dict, ids: list[str]) -> list[str]:
         if "edge_states" in entry:
             errs.append("flow: operators and edge_states are mutually exclusive")
     errs += _validate_flow_layout(entry, ids)
+    errs += _validate_flow_look(entry)
     errs += _validate_flow_tokens(entry)
     errs += _validate_flow_node_words(entry, ids)
     errs += _validate_flow_fail(entry)
@@ -4235,6 +4309,22 @@ def world_map_json(name: str = WORLD_MAP) -> str:
     """The map as the asset map carries it: the file's own bytes as text, under ``map:<name>``. The player
     parses it once (species/vecmap.mjs memoises by the string), so the whole world costs one asset."""
     return json.dumps(world_map(name), separators=(",", ":"))
+
+
+VECMAP_REGION_MIN = 0.3   # species/vecmap.mjs VECMAP.REGION_MIN: the thinnest strip beside a card's room the map may be fitted into
+
+
+def vecmap_free_region(room) -> list[float] | None:
+    """P72 T46d (R26-382): species/vecmap.mjs `vecmapRegion`, mirrored (test_wave3_page_marks pins the two): the
+    stage's largest strip beside a card's room - left, right, top or bottom of it, as [x, y, w, h] fractions - that the
+    map's focus set is fitted into; None when no strip is VECMAP_REGION_MIN of the stage in its own direction."""
+    if not (isinstance(room, (list, tuple)) and len(room) == 4):
+        return None
+    x, y, w, h = (float(v) for v in room)
+    strips = [(x, [0.0, 0.0, x, 1.0]), (1.0 - (x + w), [x + w, 0.0, 1.0 - (x + w), 1.0]),
+              (y, [0.0, 0.0, 1.0, y]), (1.0 - (y + h), [0.0, y + h, 1.0, 1.0 - (y + h)])]
+    best = max(strips, key=lambda q: q[1][2] * q[1][3])   # the first of equal areas wins: left, right, top, bottom
+    return best[1] if best[0] >= VECMAP_REGION_MIN else None
 
 
 def parse_vecmap_id(plate_id: str) -> list[str]:
@@ -4657,6 +4747,9 @@ def _validate_solo(entry: dict) -> list[str]:
     for f in has:
         if not _is_index(entry[f]):
             errs.append(f"solo: {f} must be a non-negative integer {'series' if f == 'series' else 'bar'} index")
+    if "add" in entry and entry["add"] is not True:   # P72 T46d (R26-395): a key the slice adds is refused BY NAME
+        errs.append(f"solo: add {entry['add']!r} must be true - a solo that ADDS its mark to the lit set of the solo standing "
+                    "before it (omit it for a solo that takes the light)")
     extra = sorted(k for k in entry if k not in SOLO_KEYS + ROW_PATH_KEYS)
     if extra:
         errs.append(f"solo: {', '.join(map(repr, extra))} - a solo writes nothing and takes only "
@@ -4797,6 +4890,15 @@ def check_solo(world: dict, row_species: list) -> None:
             raise ValueError(f"{where}: a panels page moves its focus between charts with panel_focus (a panel recedes, "
                              "dimmed); a solo re-inks the series or bars of ONE chart - build it on that chart's own page")
         field = "bar" if "bar" in sp else "series"
+        if sp.get("add") is True:   # P72 T46d (R26-395): it joins a standing solo's light - one must stand before it, on the same kind of mark
+            before = [q for q in sps if q is not sp and _num(q.get("at")) and _num(sp.get("at")) and float(q["at"]) < float(sp["at"])]
+            last = max(before, key=lambda q: float(q["at"]), default=None)
+            if last is None or last["kind"] != SPECIES_SOLO:
+                raise ValueError(f"{where}: add - no solo stands before it (an unsolo released the light, or none was lit): "
+                                 "a solo that adds its mark joins a lit set, so the first solo takes the light without `add`")
+            if ("bar" in last) != (field == "bar"):
+                raise ValueError(f"{where}: add - the solo standing before it lights a {'bar' if 'bar' in last else 'series'}; "
+                                 f"a solo adds a mark of the same kind (a {field} never joins a lit {'bar' if 'bar' in last else 'series'})")
         drawn = [b for b in builders if b in SOLO_BUILDERS]
         if not drawn:
             raise ValueError(f"{where}: {builders[0] if builders else '?'} is not a page solo draws on - it re-inks a "
@@ -5042,6 +5144,17 @@ def _validate_level_join(entry: dict) -> list[str]:
     if "side" in entry and entry["side"] not in LEVEL_JOIN_SIDES:
         errs.append(f"level_join: side must be one of {'|'.join(LEVEL_JOIN_SIDES)} - the side of the far ring the figure "
                     "is written on (absent = the engine's first clear side, off the rule)")
+    if "label_at" in entry:   # P72 T46d (R26-379): a key the slice adds is refused BY NAME
+        if entry["label_at"] not in LEVEL_JOIN_LABEL_AT:
+            errs.append(f"level_join: label_at {entry['label_at']!r} must be one of {'|'.join(LEVEL_JOIN_LABEL_AT)} - the "
+                        "figure as the accent pill on the value axis (absent = written beside the far ring)")
+        elif not (isinstance(to, dict) and set(to) == {"y"}):
+            errs.append("level_join: label_at 'axis' pills the figure ON the value axis at the rule's level - it takes the "
+                        "axis form (`to: {y}`, the rule running to the axis); a join between two data has no axis end")
+        for k in ("side", "dy"):
+            if k in entry and entry["label_at"] in LEVEL_JOIN_LABEL_AT:
+                errs.append(f"level_join: {k} places the figure beside the far ring - a label_at 'axis' figure stands on the "
+                            "axis, so name one or the other")
     dy = entry.get("dy")
     if "dy" in entry and (isinstance(dy, bool) or not isinstance(dy, (int, float)) or abs(dy) > LEVEL_JOIN_DY_MAX):
         errs.append(f"level_join: dy must be a number of lines of the figure's own size, within +-{LEVEL_JOIN_DY_MAX:g}")
@@ -5476,7 +5589,9 @@ def _lag_level_skew(page: dict, ends: tuple, vs: list) -> float | None:
 #                    2026-09-25: "Cash from operations" 0.48 em a glyph, "Cash capex" 0.51, "Left over" 0.46, "-64%" 0.67]:
 #                    wide (a figure, a capital, % $), narrow (a space, a stop, i l t '), every other glyph
 BRACKET_ROOM_ASPECT = "16:9"
-BRACKET_ROOM_U = {"GAP": 34, "ROOM": 200, "ANCHOR": 4, "OVER": 10, "FS": 26, "FSS": 20, "SUB_LEAD": 1.3}
+BRACKET_ROOM_U = {"GAP": 34, "ROOM": 200, "ANCHOR": 4, "OVER": 10, "FS": 26, "FSS": 20, "SUB_LEAD": 1.3,
+                  "TAG_AIR": 3, "TAG_MIN": 6,                              # P72 T46d (R26-219): BRACKET_TAG_AIR / BRACKET_TAG_MIN
+                  "LINE_T": 40, "LINE_B": 470, "LINE_B_PHONE": 458, "LINE_PAD": 0.06}   # R26-375 (b): buildLedgerLine's T, B and pad
 BRACE_ROOM_U = {"GAP": 16, "R": 10, "R_EM": 0.42, "LABEL_EM": 0.4, "NAME_EM": 0.55, "ABOVE_EM": 0.3, "HAND_DESC": 0.54,
                 "SUB_EM": 0.8}
 BARS_ROOM_U = {"GUTTER": 60, "X1": 980, "GAP": 0.34, "W_PX": 196, "PITCH_RATIO": 0.44, "TICK_DX": 26, "TOP": 90,
@@ -5537,23 +5652,53 @@ def _span_room_note(page: dict, boxes: dict, sp: dict) -> str | None:
         return None
     where = f"bracket at {sp.get('at')} (from {sp.get('from')} to {sp.get('to')}, label {label!a})"
     parts = [f"the span stands at x ~{x_px:.0f} px"]
+    x_at = xr   # P72 T46d (R26-219): where the engine stands it - stepped back to the tag column's inner edge when there is room
     if in_tags:
         parts[0] += f", inside the end-tag column (x {tags['x']:.0f}..{tags['x'] + tags['w']:.0f} px)"
         s = series[si]
         if right == len(pts) - 1 and not s.get("muted"):
             tag = " ".join(str(v) for v in (s.get("label"), s.get("name")) if v)
             parts.append(f"its datum {right} is series {si}'s last, where series {si}'s end tag {tag!a} is written: the "
-                         "span's tick stands on the tag")
+                         "span's tick would stand on the tag")
+        if right == len(pts) - 1 and not s.get("muted"):   # the tag at the span's own end: the engine's tag stands 12 units past
+            # the last datum (buildLedgerLine), so the column's inner edge always leaves TAG_MIN - it steps (geomOf)
+            x_at = (tags["x"] - ox) / k - U["TAG_AIR"]
+            parts.append(f"so the engine steps the span back to the column's inner edge, x ~{ox + x_at * k:.0f} px "
+                         f"({U['TAG_AIR'] * k:.0f} px before the first tag, its ticks shortened to its data)")
     room = (vw - xr) * k
     parts.append(f"the room beside the span is ~{max(0.0, room):.0f} px for a label ~{lw * k:.0f} px wide (the engine "
                  f"keeps {U['ROOM'] * k:.0f} px beside it)")
-    if not fits:
-        top = (LPG.LAND_PLOT["T"] * LPG.LAND_VIEWBOX[1] - U["OVER"] - (U["SUB_LEAD"] * U["FSS"] if sub else 0.0)
-               - BRACKET_TYPE_ASC * U["FS"])   # geomOf's stack over the series' top (the data box's top, the estimate)
+    if not fits or x_at != xr:
+        top = (_span_series_top(page, series) - U["OVER"] - (U["SUB_LEAD"] * U["FSS"] if sub else 0.0)
+               - BRACKET_TYPE_ASC * U["FS"])   # geomOf's stack over the series' own top (R26-375 (b): the drawn top, not the plot's)
         parts.append("so the engine writes the label ABOVE the span, its box ~"
-                     + _px_box(k, ox, oy, xr - U["ANCHOR"] - lw, top, lw, lh))
+                     + _px_box(k, ox, oy, x_at - U["ANCHOR"] - lw, top, lw, lh))
     return (f"{BRACKET_ROOM_TAG} (R26-219): {where}: " + "; ".join(parts) + " - end the span inside the plot, or write "
             "the measure as a figure at its datum. REPORTED (E99 s106)")
+
+
+def _span_series_top(page: dict, series: list) -> float:
+    """P72 T46d (R26-375 (b)): the y (viewBox units) of the highest drawn datum of a landscape LINE page - buildLedgerLine's
+    own scale, mirrored: the data's extent padded LINE_PAD of itself each way, a declared zero or `axes.domain` taking
+    its end, mapped onto [LINE_T, B] (B the flat page's 470, 458 on a phone-type or long-form page). The bracket label's
+    stack stands over it (geomOf's yClear); the estimate used the plot's own top, 23 units high on the railway page."""
+    U, axes = BRACKET_ROOM_U, page.get("axes") or {}
+    ys = [float(p[1]) for s in series if isinstance(s, dict) for p in s.get("pts") or []]
+    ys += [float(h["y"]) for h in (axes.get("hlines") or ([axes["hline"]] if axes.get("hline") else []))
+           if isinstance(h, dict) and isinstance(h.get("y"), (int, float))]
+    if not ys:
+        return LPG.LAND_PLOT["T"] * LPG.LAND_VIEWBOX[1]
+    lo, hi = min(ys), max(ys)
+    pad = (hi - lo) * U["LINE_PAD"] or 1.0
+    y0, y1 = lo - pad, hi + pad
+    if axes.get("from_zero") and not axes.get("log"):
+        y0 = 0.0
+    dom = axes.get("domain")
+    if isinstance(dom, (list, tuple)) and len(dom) == 2:
+        y0 = float(dom[0]) if isinstance(dom[0], (int, float)) else y0
+        y1 = float(dom[1]) if isinstance(dom[1], (int, float)) else y1
+    b = U["LINE_B_PHONE"] if axes.get("readability") in (LPG.LONGFORM, LPG.LANDSCAPE_PHONE) else U["LINE_B"]
+    return U["LINE_T"] + (1 - (hi - y0) / ((y1 - y0) or 1.0)) * (b - U["LINE_T"])
 
 
 def _bars_layout(page: dict, k: float) -> dict:
@@ -7989,7 +8134,7 @@ def check_level_join(world: dict, row_species: list) -> list[str]:
                                  "joins two data on ONE scale; two units are E79's panels, never one rule")
             far = ("datum", t_i, tsi)
         notes += _lj_truth(sp, where, a, b, level, unit)
-        if field and page is (world.get("page") or {}) and page.get("builder") != LPG.PANELS:
+        if field and page is (world.get("page") or {}) and page.get("builder") != LPG.PANELS and "label_at" not in sp:   # an axis pill is not beside the ring
             notes += _lj_place_warn(chart, field, sp, si, a_i, far, where)
             notes += _lj_frame_warn(chart, sp, where)
     return notes
@@ -9038,7 +9183,7 @@ def _check_opt(key: str, value, where: str) -> None:
         page_build_spec(value, None, None, where)   # and to its SERIES COUNT needs the page, and is checked where the
         return                                      # page is read (world_for_plate), as domain='s is
     allowed = {"idle": IDLE_KINDS, "arrive": ARRIVALS, "mass": MASSES, "morph": MORPH_SHAPES,
-               "card": ("yes", "no"), "use": PLATE_USES, "path": RACE_PATHS}[key]
+               "card": ("yes", "no"), "use": PLATE_USES, "path": RACE_PATHS, "fit": VECMAP_FITS}[key]
     if value not in allowed:
         raise ValueError(f"{where}: {key} {value!r} is not one of {'|'.join(allowed)}")
 
@@ -11072,11 +11217,27 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
         # Kept as FRACTIONS on the world (the compiler turns them into stage px for the aspect it is building),
         # and written only when the row names one.
         kind = world.get("kind")
-        if kind in (SPECIES_LEDGER, VECMAP_KIND, SPECIES_CLIP):
+        if kind in (SPECIES_LEDGER, SPECIES_CLIP):   # P72 T46d (R26-382): a VECTOR MAP takes one - the card's half; the map fits the rest
             raise ValueError(f"{plate_id!r}: room= is a PICTURE PLATE option - it declares the rectangle a card may "
                              f"stand in (R26-221). A {kind} world computes its own room from its own ink "
                              "(page_place / E65), so declaring one here would be two truths about one space")
         world["room"] = plate_room_spec(room, repr(plate_id))
+        if kind == VECMAP_KIND:   # R26-382 (R17, CHN 02:20.8-02:30.5: a line page left, the Gulf right): the map is DRAWN, so the
+            # room it gives a card is taken out of its own frame - species/vecmap.mjs fits the focus set into the stage's
+            # largest strip beside the room (vecmapRegion) and the card is fitted into the room (plate_dock_place)
+            _free = vecmap_free_region(world["room"])
+            if _free is None:
+                raise ValueError(f"{plate_id!r}: room={room} leaves the map no strip of the stage beside it at least "
+                                 f"{VECMAP_REGION_MIN:g} of the stage wide or tall - a card beside a map takes one side of it")
+    fit = opts.pop("fit", None)
+    if fit is not None:   # P72 T46d (R26-383): the map frames its focus set tight - a vector map's option, refused by name elsewhere
+        if world.get("kind") != VECMAP_KIND:
+            raise ValueError(f"{plate_id!r}: fit={fit} is a VECTOR MAP option (its focus set framed tight) - a "
+                             f"{world.get('kind') or 'picture'} world has no focus set to frame")
+        if not world.get("focus"):
+            raise ValueError(f"{plate_id!r}: fit={fit} frames the FOCUS SET tight - name the places "
+                             "(`vecmap:<A3 list>;fit=tight`); the whole world has nothing to frame tighter")
+        world["fit"] = fit
     caption_room = opts.pop(CAPTION_ROOM_OPT, None)
     if caption_room is not None:
         # P72 T14 (R26-268): the rectangle of this PICTURE PLATE its STAGE caption sits in - the caption's answer to
@@ -15865,7 +16026,20 @@ def apply_overrides(rows, overrides, words=None, aspect=None) -> list[tuple]:
     return out
 
 
+def _console_safe(stream=None) -> None:
+    """P72 T46d (R26-375 (c)): a compile's report never dies on a label it echoes. A `[WARN]` that quotes an authored
+    label or name (the minus in "-64%", U+2212) raised UnicodeEncodeError when the build's output was redirected on a
+    cp1252 console - T43's own WARNs escape with `!a`, the other ~50 prints do not. One guard for all of them: the
+    stream keeps its ENCODING (a log that encodes today is the same bytes) and only a character it cannot encode is
+    written as its backslash escape instead of killing the build. Called first thing in `main` (the CLI and the
+    authoring kit's in-process compile both enter there); a stream without `reconfigure` (a test's capture) is left."""
+    s = sys.stdout if stream is None else stream
+    if hasattr(s, "reconfigure") and str(getattr(s, "errors", "") or "") == "strict":
+        s.reconfigure(errors="backslashreplace")
+
+
 def main() -> int:
+    _console_safe()   # P72 T46d (R26-375 (c)): a label's non-cp1252 glyph in a WARN never kills a redirected build
     tl = json.loads((BUILD / "timeline.json").read_text(encoding="utf-8"))
     # THE AUTHORED SHOT TABLE is the source. Not an allocator.
     import importlib.util
@@ -16463,6 +16637,8 @@ def main() -> int:
             print(f"  ring on a dock: row {i + 1}: {_note}")
         if _dd_errs := dock_datum_errors(row_species, docks, evidence, f"shot row {i + 1} ({a}-{b}s)"):   # P72 T48: a datum on a docked chart resolves, or the row is refused
             raise SystemExit("FAIL: " + "; ".join(_dd_errs))
+        for _w in dock_datum_draw_notes(row_species, docks, evidence, f"shot row {i + 1} ({a}-{b}s)"):   # P72 T46d (R26-373 (b))
+            print(f"  [WARN] P72 T46d: {_w}")
         pm_entries = []
         if _pm["morphs"] or _pm["enter_morph"]:   # P69 T26e: the state each prop morph is on, its mark, and its invariants (a WARN when they fail)
             try:

@@ -268,7 +268,9 @@ def test_the_bracket_draws_beside_the_two_data_and_writes_its_label_by_glyph():
         y0, y1 = min(done["A"][1], done["B"][1]), max(done["A"][1], done["B"][1])
         assert done["y0"] == y0 and done["y1"] == y1, "the span is exactly the two data's y"
         ax, bx = done["A"][0], done["B"][0]
-        assert done["x"] >= max(ax, bx) + 10, f"the span stands to the RIGHT of both data: x {done['x']:.1f} vs data {max(ax, bx):.1f}"
+        # P72 T46d (R26-219): a span that ends at the line's last datum steps out of the end tags' column to its inner
+        # edge (BRACKET_TAG_MIN 6 past its data, 3 before the tag's first glyph) - still to the RIGHT of both data
+        assert done["x"] >= max(ax, bx) + 6, f"the span stands to the RIGHT of both data: x {done['x']:.1f} vs data {max(ax, bx):.1f}"
         if done["fits"]:
             assert x >= max(ax, bx) + 10, "room beside: the whole bracket, label included, sits right of the data"
         else:

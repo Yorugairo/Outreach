@@ -2741,13 +2741,61 @@ def _validate_tiers(series: dict) -> list[str]:
                 errors.append(f"{where} bars[{j}] value {bar.get('value')!r} is not numeric")
             if not _text(bar.get("label")):
                 errors.append(f"{where} bars[{j}] has no label (one label per datum)")
+        dom_err = _tier_domain_error(tier, where)   # P72 T46d (R26-370): a band's own `domain` is drawn now - refused when malformed
+        if dom_err:
+            errors.append(dom_err)
         sig = _tier_x(tier)
         sigs.append(sig)
         if sig and sigs[0] and not _x_same(sigs[0], sig):
             errors.append(f"{where} spans x {_x_text(sig)} while tiers[0] spans {_x_text(sigs[0])} - N tiers share ONE x "
                           "(that is what makes them small multiples, and the only thing the page claims across bands); "
                           "window the file to one x, or draw two pages")
-    return errors
+    return errors + shared_domains_errors(series)
+
+
+def _tier_domain_error(tier: dict, where: str) -> str | None:
+    """P72 T46d (R26-370): a band's declared `domain` (species/tiers.mjs `tierDeclared` draws it verbatim) must be two
+    numbers low to high - anything else is refused BY NAME rather than dropped (s106: a silent drop is neither advice
+    nor refusal)."""
+    if "domain" not in tier:
+        return None
+    dom = tier.get("domain")
+    ok = (isinstance(dom, (list, tuple)) and len(dom) == 2 and all(isinstance(v, (int, float)) and not isinstance(v, bool)
+                                                                   for v in dom) and float(dom[1]) > float(dom[0]))
+    return None if ok else (f"{where} domain {dom!r} must be [low, high] - two numbers, low first: the band is drawn on "
+                            "exactly that scale")
+
+
+SHARED_TIER_KEY = "shared_tier_domains"   # P72 T46d (R26-370): E79's one scale per unit, the page key the engine reads
+
+
+def shared_domains_errors(series: dict) -> list[str]:
+    """P72 T46d (R26-370): an AUTHORED `shared_tier_domains` - {unit: [low, high]} for units the page's bands carry -
+    refused by name when malformed (the compiler writes the key itself otherwise, `shared_domains_key`)."""
+    if SHARED_TIER_KEY not in series:
+        return []
+    val, units = series.get(SHARED_TIER_KEY), {str(t.get("unit")) for t in _tier_entries(series) if isinstance(t, dict)}
+    if not isinstance(val, dict) or not val:
+        return [f"{SHARED_TIER_KEY} {val!r} must be an object {{unit: [low, high]}} naming the bands' units (E79)"]
+    errs = []
+    for unit, dom in val.items():
+        if unit not in units:
+            errs.append(f"{SHARED_TIER_KEY}: unit {unit!r} is not a unit of this page's bands ({sorted(units)})")
+        elif not (isinstance(dom, (list, tuple)) and len(dom) == 2
+                  and all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in dom) and float(dom[1]) > float(dom[0])):
+            errs.append(f"{SHARED_TIER_KEY}[{unit!r}] {dom!r} must be [low, high] - two numbers, low first")
+    return errs
+
+
+def shared_domains_key(series: dict) -> dict:
+    """P72 T46d (R26-370): E79's shared scale as the COMPILER'S DEFAULT - the page key `shared_tier_domains`
+    ({unit: [low, high]}, before the engine's pad) for every same-unit group of two or more bands, written unless the
+    page declares `independent` (a band that does leaves its group: `_same_unit_groups`). An authored key (validated
+    above) is taken as written. {} when nothing is shared - the page is then drawn exactly as before."""
+    if isinstance(series.get(SHARED_TIER_KEY), dict):
+        return {SHARED_TIER_KEY: {str(u): [float(d[0]), float(d[1])] for u, d in series[SHARED_TIER_KEY].items()}}
+    shared = shared_tier_domains(series)
+    return {SHARED_TIER_KEY: {u: [float(lo), float(hi)] for u, (lo, hi) in shared.items()}} if shared else {}
 
 
 def _tiers_block(series: dict) -> dict:
@@ -2779,7 +2827,7 @@ def _tiers_block(series: dict) -> dict:
             band["x_labels"] = list(sig[1])
         out.append(band)
     axes = {k: copy.deepcopy(series[k]) for k in AXES_KEYS if k in series}
-    return {"tiers": out, "labels": [b["name"] for b in out],
+    return {"tiers": out, "labels": [b["name"] for b in out], **shared_domains_key(series),
             # the page's OWN axes ride at the top level: the x is shared, so its ticks belong to the page
             # and not to any one band (a band that named the x would be claiming the page's only shared scale)
             **({"axes": axes} if axes else {}),

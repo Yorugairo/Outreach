@@ -82,6 +82,26 @@ export const tierShared = (pg, tr) => {
   return d.every((v) => typeof v === "number") && Number.isFinite(lo) && Number.isFinite(hi) && hi > lo ? [lo, hi] : null;
 };
 
+/* P72 T46d (R26-370): A BAND'S DECLARED DOMAIN - its own `axes.domain` ([lo, hi], two finite numbers low to high), which
+   ledger_page.tier_domain already honours when it groups the bands; null when the band declares none (or a malformed
+   one - the compiler refuses that by name). Drawn VERBATIM, as a line page draws its `axes.domain`: the author named
+   the scale, so no pad is added to it. */
+export const tierDeclared = (tr) => {
+  const d = ((tr || {}).axes || {}).domain;
+  if (!Array.isArray(d) || d.length !== 2 || !d.every((v) => typeof v === "number")) return null;
+  const lo = +d[0], hi = +d[1];
+  return Number.isFinite(lo) && Number.isFinite(hi) && hi > lo ? [lo, hi] : null;
+};
+
+/* THE DOMAIN A BAND DRAWS ON (P72 T46d, R26-370): E79's shared scale when the page carries one for the band's unit (the
+   compiler writes it now, unless `independent`); else the band's declared `axes.domain`, verbatim; else its own
+   extent, as before. One call for the builder. */
+export const tierDomainOf = (pg, tr, vals) => {
+  const tax = (tr || {}).axes || {}, shared = tierShared(pg, tr);
+  if (shared) return tierDomain(vals, tax.from_zero !== false, shared);
+  return tierDeclared(tr) || tierDomain(vals, tax.from_zero !== false, null);
+};
+
 /* a value's y inside its band */
 export const tierY = (band, lo, hi, v) => band.y1 - (Number(v) - lo) / ((hi - lo) || 1) * band.h;
 

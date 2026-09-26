@@ -73,7 +73,23 @@ export const SOLO = Object.freeze({
 export const SOLO_ACCENT = Object.freeze({
   FILL: "var(--lp-acc)",   /* the page's one accent (#F5B72E, the template's callout capsule `rect.cpill`); the pill's name keeps its charcoal KEY_INK */
   STASH: "data-solo-style",   /* an end badge's own style attribute, kept while it is lit ("" = it had none) */
+  TYPE: "#1E1F22",         /* P72 T46d (R26-396): the lit badge's type on its filled box - the key pill's own charcoal (LP_LONGFORM.KEY_INK) */
 });
+
+/* P72 T46d (R26-396) - THE END BADGE'S BOX, measured off Bravos (BOOM 00:56, the lit legend label: a 183 x 40 box round
+   type 18 px tall, ~12 px of air each side and ~10.5 above and below - p71-t30's measure_capsule read; D40 04:16's
+   capsule corner ~2 px on 79). In the tag's own box height h (its getBBox: ascent + descent, ~1.2 em): */
+export const SOLO_BADGE = Object.freeze({
+  PAD_X: 0.38,   /* the air left and right of the type, in h (BOOM: 12 px on ~31 px of type box = 0.46 em) */
+  PAD_Y: 0.16,   /* ... above and below it (BOOM's 40 px box round a ~31 px type box: ~5 px) */
+  RX: 0.05,      /* the corner, in h (D40: ~2 px on a 45 px type) - a box, not a pill: Bravos's lit label is square-cornered */
+});
+
+/* the box round a tag's measured box [x, y, w, h] (chart units): {x, y, w, h, rx} */
+export const soloBadgeBox = (bb) => {
+  const px = SOLO_BADGE.PAD_X * bb[3], py = SOLO_BADGE.PAD_Y * bb[3];
+  return { x: bb[0] - px, y: bb[1] - py, w: bb[2] + 2 * px, h: bb[3] + 2 * py, rx: SOLO_BADGE.RX * bb[3] };
+};
 
 const solo01 = (v) => Math.min(1, Math.max(0, v));
 
@@ -82,11 +98,22 @@ export const soloKeyOf = (sp) => (sp && Number.isInteger(sp.bar) ? "b:" + sp.bar
   : sp && Number.isInteger(sp.series) ? "s:" + sp.series : null);
 
 /* THE EVENTS in time order: `solos` name their key, `releases` ({at, dur}: an unsolo, a verb that replaces the page)
-   name none; at one instant a release sorts first, so the solo at that instant is the state that stands */
-export const soloEvents = (solos, releases) => [
-  ...(solos || []).map((sp) => ({ at: +sp.at, dur: Math.max(0.001, +sp.dur || SOLO.MIN_S), key: soloKeyOf(sp) })),
-  ...(releases || []).map((r) => ({ at: +r.at, dur: Math.max(0.001, +r.dur || SOLO.MIN_S), key: null })),
-].filter((e) => Number.isFinite(e.at)).sort((a, b) => a.at - b.at || (a.key === null ? 0 : 1) - (b.key === null ? 0 : 1));
+   name none; at one instant a release sorts first, so the solo at that instant is the state that stands.
+   P72 T46d (R26-395; Bravos D40 R30, 14:22-14:50 - "the second bar lights too"): each event also carries `keys`, the
+   marks LIT once it lands - its own key, and with `add: true` the marks the solo standing before it lit as well, so a
+   second pill's bar joins the first instead of taking its light. A release lights none (null). */
+export const soloEvents = (solos, releases) => {
+  const evs = [
+    ...(solos || []).map((sp) => ({ at: +sp.at, dur: Math.max(0.001, +sp.dur || SOLO.MIN_S), key: soloKeyOf(sp), add: !!(sp && sp.add === true) })),
+    ...(releases || []).map((r) => ({ at: +r.at, dur: Math.max(0.001, +r.dur || SOLO.MIN_S), key: null, add: false })),
+  ].filter((e) => Number.isFinite(e.at)).sort((a, b) => a.at - b.at || (a.key === null ? 0 : 1) - (b.key === null ? 0 : 1));
+  let lit = [];
+  return evs.map((e) => {
+    lit = e.key === null ? [] : e.add && lit.length && lit[0][0] === e.key[0] ? [...new Set([...lit, e.key])] : [e.key];
+    const { add, ...ev } = e;   /* the event carries what it lights, not the grammar's word */
+    return Object.assign(ev, { keys: e.key === null ? null : lit.slice() });
+  });
+};
 
 /* THE LEVEL of the mark `key` at t: from `start`, each event eases it from where the previous one left it at the event's
    word toward its target - `named` for the mark it names, `other` for every other mark of the same kind, `release` on a
@@ -97,7 +124,8 @@ export const soloLevel = (evs, key, t, { start, named, other, release }) => {
     const e = evs[k];
     if (t < e.at) break;
     const nx = evs[k + 1], end = nx && nx.at <= t ? nx.at : t;
-    const want = e.key === null || e.key[0] !== String(key)[0] ? release : e.key === key ? named : other;
+    const lit = e.keys || (e.key === null ? null : [e.key]);   /* R26-395: every mark the event lights (an `add` keeps the last solo's) */
+    const want = lit === null || e.key[0] !== String(key)[0] ? release : lit.indexOf(key) >= 0 ? named : other;
     const u = solo01((end - e.at) / e.dur);
     a = u >= 1 ? want : a + (want - a) * solo01(minJerk(u));   /* it LANDS exactly (1 + (0.45 - 1) is 0.44999999999999996) */
   }
@@ -135,15 +163,30 @@ export const soloStyle = (el, props) => {
   for (const [k, v] of props) el.style.setProperty(k, v);
 };
 
-/* ... the END BADGE at lift `u`: its words (the value and its chip's) ease from their series' ink to the accent */
+/* ... the END BADGE at lift `u`: its words (the value and its chip's) ease from their series' ink to the accent - or,
+   P72 T46d (R26-396), where the line builder drew the badge its BOX (`pp.badge`, buildLedgerLine's rect under the tag,
+   long form only), the box fills with the accent round the tag's measured box and the type eases to the key's charcoal
+   on it: Bravos's lit badge is a filled box, and a box drawn by the tag's own stroke read as letter-shaped blobs (T30's
+   frame read). At rest the box is 0 x 0 at opacity 0 and the tag is handed back, to the byte. */
 export const soloBadge = (pp, u) => {
-  const nm = pp && pp.name, chip = nm && nm.querySelector ? nm.querySelector("tspan.tagchip") : null;
+  const nm = pp && pp.name, chip = nm && nm.querySelector ? nm.querySelector("tspan.tagchip") : null, bx = pp && pp.badge;
   if (!nm) return;
-  if (u <= SOLO.EPS) { soloStyle(nm, null); soloStyle(chip, null); return; }
-  const ink = (own) => (u >= 1 - SOLO.EPS ? SOLO_ACCENT.FILL
-    : "color-mix(in srgb, " + SOLO_ACCENT.FILL + " " + (100 * u).toFixed(1) + "%, " + (own || "currentColor") + ")");
+  if (u <= SOLO.EPS) {
+    soloStyle(nm, null); soloStyle(chip, null);
+    if (bx) { for (const k of ["x", "y", "width", "height", "rx"]) bx.setAttribute(k, 0); bx.setAttribute("opacity", 0); bx.removeAttribute("style"); }
+    return;
+  }
+  const to = bx ? SOLO_ACCENT.TYPE : SOLO_ACCENT.FILL;
+  const ink = (own) => (u >= 1 - SOLO.EPS ? to
+    : "color-mix(in srgb, " + to + " " + (100 * u).toFixed(1) + "%, " + (own || "currentColor") + ")");
   soloStyle(nm, [["fill", ink(nm.getAttribute("fill"))]]);
   soloStyle(chip, [["fill", ink(chip && chip.getAttribute("fill"))]]);
+  if (bx && nm.getBBox) {
+    const r = nm.getBBox(), q = soloBadgeBox([r.x, r.y, r.width, r.height]);
+    for (const [k, v] of [["x", q.x], ["y", q.y], ["width", q.w], ["height", q.h], ["rx", q.rx]]) bx.setAttribute(k, v.toFixed(2));
+    bx.setAttribute("style", "fill:" + SOLO_ACCENT.FILL);   /* the style, not the attribute: the chart's class rules outrank a presentation fill */
+    bx.setAttribute("opacity", Math.min(1, u).toFixed(3));
+  }
 };
 
 /* ... a KEY PILL at alpha `a` and lift `u`: the others fade with their series, the named one fills with the accent */

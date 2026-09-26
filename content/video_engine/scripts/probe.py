@@ -508,6 +508,7 @@ READ_DOM = r"""
       }
       for (const el of chart.querySelectorAll('text')) {
         if (eff(el) <= 0.05) continue;
+        if (el.closest && el.closest('.lp-lens-tags')) continue;   /* P72 T46d (R26-387): the end tags' twins over a lens - the tags themselves are read */
         const r = el.getBoundingClientRect(); if (r.width < 2 || r.height < 2) continue;
         const cls = (el.getAttribute('class') || 'text').split(' ')[0];
         /* P72 T46e (R26-349): a SCHEMATIC's phase names and its tag are `lab` runs by their first class, but no axis -
@@ -1020,8 +1021,9 @@ def reach_marks_at(tl: dict, t: float) -> tuple[list[dict], dict]:
         e = ev.get(d.get("slide"))
         if isinstance(e, dict) and isinstance(e.get("chart"), dict) and not e.get("record"):
             docks[d["slide"]] = _series_counts(e["chart"])
-    return marks, {"page": _series_counts(page) if page and page.get("series") else [], "docks": docks,
-                   "scene": sc.get("scene_id")}
+    bars = page and not page.get("series") and page.get("builder") == "story" and page.get("values")   # P72 T46d (R26-373 (a)): a BARS page
+    return marks, {"page": _series_counts(page) if page and page.get("series") else ([len(page["values"])] if bars else []),
+                   "docks": docks, "scene": sc.get("scene_id"), **({"bars": True} if bars else {})}
 
 
 READ_MARK_REACH = r"""
@@ -1066,6 +1068,20 @@ READ_MARK_REACH = r"""
         if (eff(el) > 0.05) lines.push({ si: own.get(el), pts: drawn(el) });
       }
     }
+    /* P72 T46d (R26-373 (a)): a BARS page has no line - its marks are its bars. A point mark over one is read against each
+       bar's TOP (its drawn edge, sampled across its width) and its printed VALUE (the label's centre): the datum it
+       evidently meant is the bar it came closest to (`bar`). */
+    if (arg.bars && !lines.length) {
+      const SA = states[S.active | 0] || S;
+      (SA.bars || []).forEach((rec, bi) => {
+        if (!rec || !rec.bar || eff(rec.bar) <= 0.05) return;
+        const b = R(rec.bar); if (!(b[2] > 0 && b[3] > 0)) return;
+        plot = unite(plot, b);
+        const pts = []; for (let k = 0; k <= 8; k++) pts.push([b[0] + b[2] * k / 8, b[1]]);
+        if (rec.val && eff(rec.val) > 0.05) { const v = R(rec.val); if (v[2] > 0) { pts.push([v[0] + v[2] / 2, v[1] + v[3] / 2]); plot = unite(plot, v); } }
+        lines.push({ si: 0, bar: Number.isInteger(rec.i) ? rec.i : bi, pts });
+      });
+    }
     if (plot) charts.push({ name: 'page', plot, lines, counts: arg.page,
                             datum: (si, i) => at({ kind: 'datum', series: si, index: i }) });
   }
@@ -1093,14 +1109,16 @@ READ_MARK_REACH = r"""
     let best = null;
     for (const ln of ch.lines) for (const p of ln.pts) {
       const dx = p[0] - c[0], dy = p[1] - c[1], nm = Math.hypot(dx / rx, dy / ry);
-      if (!best || nm < best.nm) best = { nm, px: Math.hypot(dx, dy), si: ln.si, p };
+      if (!best || nm < best.nm) best = { nm, px: Math.hypot(dx, dy), si: ln.si, p, bar: ln.bar };
     }
     let datum = null;
-    if (best) { let bd = Infinity; const n = ch.counts[best.si] | 0;
+    if (best && best.bar != null) datum = best.bar;   /* R26-373 (a): a bar is its own datum */
+    else if (best) { let bd = Infinity; const n = ch.counts[best.si] | 0;
       for (let i = 0; i < n; i++) { const q = ch.datum(best.si, i); if (!q) continue;
         const dd = Math.hypot(q[0] - best.p[0], q[1] - best.p[1]); if (dd < bd) { bd = dd; datum = i; } } }
     out.push({ kind: mk.kind, at: mk.at, chart: ch.name, centre: c, reach: mk.reach,
-               dist_px: best ? best.px : null, norm: best ? best.nm : null, series: best ? best.si : null, datum });
+               dist_px: best ? best.px : null, norm: best ? best.nm : null, series: best ? best.si : null, datum,
+               on: best && best.bar != null ? 'bar' : 'line' });
   }
   return out;
 }
@@ -1114,12 +1132,13 @@ def mark_reach_read(page, t: float, tl: dict) -> list[dict]:
     marks, counts = reach_marks_at(tl, t)
     if not marks:
         return []
-    raw = page.evaluate(READ_MARK_REACH, {"t": t, "marks": marks, "page": counts["page"], "docks": counts["docks"]})
+    raw = page.evaluate(READ_MARK_REACH, {"t": t, "marks": marks, "page": counts["page"], "docks": counts["docks"],
+                                          "bars": bool(counts.get("bars"))})
     return [{"kind": r["kind"], "scene": counts.get("scene"), "at": r["at"], "t": round(float(t), 3), "chart": r["chart"],
              "centre": [round(v, 1) for v in r["centre"]], "reach": r["reach"],
              "dist_px": None if r["dist_px"] is None else round(float(r["dist_px"]), 1),
              "norm": None if r["norm"] is None else round(float(r["norm"]), 3),
-             "series": r["series"], "datum": r["datum"]} for r in raw or []]
+             "series": r["series"], "datum": r["datum"], **({"on": "bar"} if r.get("on") == "bar" else {})} for r in raw or []]
 
 
 # ---- the probe session -------------------------------------------------------------------------------------------

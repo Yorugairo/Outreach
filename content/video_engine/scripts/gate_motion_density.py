@@ -391,7 +391,7 @@ SPECIES_EVENTS = {"punch": ("at",), "callout": ("at",), "focus_zoom": ("at", "en
                   "undraw": ("at", "end"), "figure": ("at", "end"), "note": ("at", "end"), "spread": ("at", "end"),
                   "peel": ("at", "end"),
                   "chart_to": ("at", "end")}   # P48: the chart leaving and the next one arriving are both motion, and the arrival is a landing (E51)   # P48 T4: the piece leaving is motion at both ends, and its landing is a push's tie (E51)   # E50 (P47 T6): the line unwinds; the figure writes; a note is handwriting
-SPECIES_EVENTS["flow"] = ("at", "swap.at", "tokens.from_at", "fail.at")   # P50 T4: the diagram DRAWS on its word (the box, the chips, the arrows - one
+SPECIES_EVENTS["flow"] = ("at", "swap.at", "tokens.from_at", "fail.at", "nodes")   # P50 T4: the diagram DRAWS on its word (the box, the chips, the arrows - one
                                             # P71 T11: ... and its TOKENS start travelling the arrows at tokens.from_at - motion, counted once there (s99)
                                             # P71 T17: ... and a failed LINK is struck at fail.at - the X drawn, the edge severing (s99)
                                             # build) and ONE node SWAPS on a later one. "swap.at" is a DOTTED path: the edge
@@ -1044,6 +1044,14 @@ def _species_events(scenes: list[dict]) -> list[float]:
                     for s in sp.get("swap") or []:
                         w = s.get("at") if isinstance(s, dict) else None
                         if isinstance(w, (int, float)) and not isinstance(w, bool) and at <= float(w) <= at + dur:
+                            out.append(round(float(w), 2))
+                    continue
+                if edge == "nodes":      # P72 T46d (R26-384): a flow's node that lands on its OWN word (a hub's rim node, `at`)
+                    # is a landing of its own - one event per node that names its `at`; a node with none lands with the
+                    # diagram's first (the `at` edge), as before
+                    for node in (sp.get("nodes") or [])[1:]:
+                        w = node.get("at") if isinstance(node, dict) else None
+                        if isinstance(w, (int, float)) and not isinstance(w, bool) and float(w) > at and keep(float(w)):
                             out.append(round(float(w), 2))
                     continue
                 if edge == "rows":       # P52 T8: ... and the agenda's rows are revealed one per word, each on its own `at`
@@ -3581,8 +3589,9 @@ def _mark_reach_gate(doc: dict | str | None) -> Gate | None:
         return Gate("M49", "PASS", f"{len(best)} point-target mark(s) over a chart, each within its reach of a drawn line",
                     SRC_M49)
     rows = [f"{r['kind']} at {float(r['at']):g}s ({r.get('scene')}) over the {r['chart']} chart: {float(r['dist_px']):.0f} px "
-            f"from the nearest drawn line (series {r['series']}, datum {r['datum']}), its reach "
-            f"{float(r['reach'][0]):.0f}x{float(r['reach'][1]):.0f} px" for r in sorted(miss, key=lambda x: float(x["at"]))]
+            + (f"from the nearest bar (bar {r['datum']}: its top and its value), its reach " if r.get("on") == "bar" else   # P72 T46d (R26-373 (a))
+               f"from the nearest drawn line (series {r['series']}, datum {r['datum']}), its reach ")
+            + f"{float(r['reach'][0]):.0f}x{float(r['reach'][1]):.0f} px" for r in sorted(miss, key=lambda x: float(x["at"]))]
     return Gate("M49", "WARN", f"{len(miss)} of {len(best)} point-target mark(s) over a chart ring no line: " + "; ".join(rows[:4])
                 + (" ..." if len(rows) > 4 else "") + " - bind it to the datum it means ({'kind': 'datum', "
                 "'series', 'index'}, and 'dock' on a docked chart)", SRC_M49)

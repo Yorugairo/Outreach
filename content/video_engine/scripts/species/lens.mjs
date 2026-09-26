@@ -106,13 +106,28 @@ export const lensParts = (c, R) => {
 
 const setAll = (el, o) => { for (const k of Object.keys(o)) el.setAttribute(k, typeof o[k] === "number" ? o[k].toFixed(2) : o[k]); };
 
+/* P72 T46d (R26-387): a tag's copy made the original's twin THIS frame - every attribute (its x / y, its opacity, a
+   solo's fill-opacity, its style) written onto the copy and its tspans', and any the original has dropped removed, so
+   the copy over the glass is exactly the tag under it. Pure over the DOM: it reads the original, never the clock. */
+export const lensTagSync = (src, cp) => {
+  if (!src || !cp || !src.attributes) return;
+  const pair = [[src, cp]], a = src.querySelectorAll ? [...src.querySelectorAll("tspan")] : [], b = cp.querySelectorAll ? [...cp.querySelectorAll("tspan")] : [];
+  for (let j = 0; j < Math.min(a.length, b.length); j++) pair.push([a[j], b[j]]);
+  for (const [s0, c0] of pair) {
+    const keep = new Set();
+    for (const at of [...s0.attributes]) { if (at.name === "id") continue; keep.add(at.name); if (c0.getAttribute(at.name) !== at.value) c0.setAttribute(at.name, at.value); }
+    for (const at of [...c0.attributes]) if (!keep.has(at.name)) c0.removeAttribute(at.name);
+    if (s0.childNodes.length === 1 && s0.firstChild.nodeType === 3 && c0.textContent !== s0.textContent) c0.textContent = s0.textContent;
+  }
+};
+
 /* THE PAINTER (P71 T32). `ld` is the perform layer's built lens (`g`, the `clip` and `disc` circles, the `ring`, the
    `neck` and `handle` rects, the magnified `lines` [{si, path}], the series `si`, the declaration `sp`, its `zoom` and
    its outer radius `r` in chart units); `st` the page state; `ctx` the PAGE species context (`pointsNow`), handed in by
    name, so `node --test` calls this with recorders and no DOM. */
 export const paintLens = (ld, t, st, ctx) => {
   const pose = lensPose(ld.sp, t);
-  const hide = () => ld.g.setAttribute("opacity", 0);
+  const hide = () => { ld.g.setAttribute("opacity", 0); if (ld.tagLayer) ld.tagLayer.g.setAttribute("opacity", 0); };
   if (!pose.on || pose.a <= 0) { hide(); return; }
   const stand = lensStand(ctx.pointsNow(st, ld.si), ld.sp.from, ld.sp.to, pose.u);
   if (!stand) { hide(); return; }   /* R26-28: a datum the window dropped - the glass stands on nothing, so it is not up */
@@ -129,6 +144,15 @@ export const paintLens = (ld, t, st, ctx) => {
     ln.path.setAttribute("d", m ? litPathD(m) : "");
   }
   ld.g.setAttribute("opacity", pose.a.toFixed(3));
+  const TL = ld.tagLayer;   /* P72 T46d (R26-387): the end tags over the glass, clipped to its outline */
+  if (TL) {
+    setAll(TL.ring, { cx: c[0], cy: c[1], r: R });
+    setAll(TL.neck, { x: P.neck.x, y: P.neck.y, width: P.neck.w, height: P.neck.h });
+    setAll(TL.handle, { x: P.handle.x, y: P.handle.y, width: P.handle.w, height: P.handle.h, rx: P.handle.rx });
+    const k = (st && st.states && st.states.length > 1) ? (st.active | 0) : 0;
+    for (const q of TL.tags) { if (q.k === k) { lensTagSync(q.src, q.cp); q.cp.removeAttribute("display"); } else q.cp.setAttribute("display", "none"); }
+    TL.g.setAttribute("opacity", 1);
+  }
 };
 
 /* THE MODULE RULE, the page half of it: the last statement registers the painter, a plain guarded assignment. */

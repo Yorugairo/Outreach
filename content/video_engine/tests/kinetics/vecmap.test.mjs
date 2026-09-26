@@ -333,7 +333,8 @@ test("T22: a token fades in off the tail and out into the head, and leaves as th
 });
 
 test("T22: the ping's dials are the reference's (CHN 02:21.1, D40 13:56.5), never ours", () => {
-  assert.deepEqual({ ...PING }, { LAG_S: 0.35, EXPAND_S: 0.67, R0: 27, R1: 69, FADE_POW: 3, STROKE: 5 });
+  assert.deepEqual({ ...PING }, { LAG_S: 0.35, EXPAND_S: 0.67, R0: 27, R1: 69, FADE_POW: 3, STROKE: 5,
+                                  GLOW_PX: 18, GLOW_A: 0.9, GLOW_W: 9 });   /* P72 T46d (R26-383): the glow, CHN 02:21.4 */
   assert.equal(PING.STROKE, 5, "the route's own width: the ping and the route are one hand");
 });
 
@@ -349,7 +350,7 @@ test("T22: ONE pulse - it leaves the place as it lands, eases out, and is gone; 
   assert.equal(pingPose(sp, pingAt(sp) + PING.EXPAND_S + 1e-6), null, "gone at its end");
   assert.equal(pingPose(sp, pingAt(sp) + 5), null, "and it does not come back - no repeating sonar (step 0 withdrew it)");
   for (const v of [undefined, false, "yes", 1, {}]) assert.equal(pingPose({ ...sp, ping: v }, pingAt(sp) + 0.1), null, String(v));
-  assert.match(pingStyle(), /^fill:none;stroke:#F5B72E;stroke-width:5;filter:drop-shadow\(0 0 10px rgba\(245,183,46,0.55\)\)$/);
+  assert.match(pingStyle(), /^fill:none;stroke:#F5B72E;stroke-width:9;filter:drop-shadow\(0 0 18px rgba\(245,183,46,0.9\)\) drop-shadow\(0 0 6.0px rgba\(245,183,46,0.9\)\)$/);   /* P72 T46d: the bloom */
 });
 
 // the painters, on a recorder: what each emits with the new keys ABSENT is what it emitted before them

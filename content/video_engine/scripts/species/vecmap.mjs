@@ -45,6 +45,15 @@ export const VECMAP = Object.freeze({
   PAD: 18,           /* ... plus this much air in MAP units around the focus set's own box, so a lit country is never cut by the margin */
   ZOOM_MAX: 4.2,     /* the most the fit may magnify the 1000 x 500 box: past it one country is a blob and the rest of the world is off screen */
   IDLE: "breath",    /* the world's idle when the row names none (the template's IDLE_CLASS.plate, named here so the species agree with it) */
+  /* P72 T46d (R26-383; CHN 02:21 frames the strait, ~50 px a degree at 1280, where our continent fit gave the routes ~9) -
+     `;fit=tight`: the focus set's own box with only this much air, and a ceiling high enough to reach a strait */
+  TIGHT_PAD: 4,        /* the air round a tight focus set, map units (PAD's 18 is ~6.5 degrees - a continent's margin) */
+  TIGHT_ZOOM_MAX: 16,  /* the tight fit's ceiling (ZOOM_MAX's 4.2 stops at a continent; CHN's Hormuz is ~14 x this box at 1920) */
+  /* P72 T46d (R26-382; R17 - CHN 02:20.8-02:30.5: the line page LEFT, the Gulf RIGHT, the map fading into the ground by the
+     chart) - a map beside a card: the world's `room` (the card's rectangle, fractions) and the map fitted into the stage's
+     largest strip beside it (vecmapRegion; build_scene_timeline_f.vecmap_free_region mirrors it) */
+  REGION_MIN: 0.3,     /* the thinnest strip, as a share of the stage in its direction, a map may be fitted into */
+  FADE: 0.07,          /* [DERIVED: CHN 02:21.4 - the map's ink fades out over ~90 of 1280 px toward the chart] the soft edge on the room's side, as a share of the stage */
 });
 
 export const LIGHT = Object.freeze({
@@ -90,6 +99,13 @@ export const PING = Object.freeze({
   R1: 69,            /* [DERIVED: CHN: 46 px at 720p; D40 45 px at 1080p] the radius it is gone at - about 2.5 x where it began */
   FADE_POW: 3,       /* [DERIVED: between the two witnesses - CHN holds its ink (0.91 of peak at u 0.5, 0.64 at 0.97, then gone), D40 fades throughout] alpha = 1 - u^3 */
   STROKE: 5,         /* the arc's own stroke width (template .vmarc), so the ping and the route are one hand */
+  /* P72 T46d (R26-383): THE PING'S GLOW - Bravos's ring BLOOMS where ours was a thin ring with the token's small halo.
+     [MEASURED: CHN 02:21.4 (bravos-CHN-0221.4.png, 1280 px), the red excess about the pin, median over the ring: the
+     ring peaks 167 at r 39-42 px, holds 90-120 INSIDE it (the pin's own glow) and falls 50 / 27 / 14 at 12 / 18 / 27 px
+     past it - a halo reaching ~28 px (42 stage px) either side of a ~9 px (13 stage px) ring] */
+  GLOW_PX: 18,       /* the halo's drop-shadow radius, stage px (the T10 / T49 form: one blur in the ring's own ink) */
+  GLOW_A: 0.9,       /* its alpha - the measured halo holds half the ring's ink 12 px out */
+  GLOW_W: 9,         /* the ring's stroke under its glow, stage px (the measured ring's half-height width ~13; the route's 5 read thin) */
 });
 
 /* "#RRGGBB" at alpha a -> "rgba(r,g,b,a)" (the halo's colour, as the flow token's is written) */
@@ -133,12 +149,39 @@ export const focusBox = (box, bboxes, pad = VECMAP.PAD) => {
    the WIDTH. One rule, read off the geometry rather than off the aspect, exactly as the flow diagram picks
    its row or its column. ZOOM_MAX caps a focus set of one small country, which would otherwise magnify the
    world past reading. */
-export const mapFit = (box, bboxes, stageW, stageH, margin = VECMAP.MARGIN) => {
-  const m = margin * Math.min(stageW, stageH), f = focusBox(box, bboxes);
-  const k = Math.min(VECMAP.ZOOM_MAX, (stageW - 2 * m) / Math.max(1e-6, f.w), (stageH - 2 * m) / Math.max(1e-6, f.h));
+export const mapFit = (box, bboxes, stageW, stageH, margin = VECMAP.MARGIN, opts = null) => {
+  /* P72 T46d: `opts.region` ([x, y, w, h] stage fractions, R26-382) contains the fit in that strip instead of the whole
+     stage; `opts.tight` (R26-383) takes the focus set's box with TIGHT_PAD and the TIGHT_ZOOM_MAX ceiling. Absent opts:
+     the stage and the continent's fit, to the bit. */
+  const o = opts || {}, R = Array.isArray(o.region) && o.region.length === 4 ? o.region : null;
+  const rx = R ? R[0] * stageW : 0, ry = R ? R[1] * stageH : 0, rw = R ? R[2] * stageW : stageW, rh = R ? R[3] * stageH : stageH;
+  const m = margin * Math.min(stageW, stageH), f = focusBox(box, bboxes, o.tight ? VECMAP.TIGHT_PAD : VECMAP.PAD);
+  const k = Math.min(o.tight ? VECMAP.TIGHT_ZOOM_MAX : VECMAP.ZOOM_MAX, (rw - 2 * m) / Math.max(1e-6, f.w), (rh - 2 * m) / Math.max(1e-6, f.h));
   return { sx: k, sy: k,
-           tx: stageW / 2 - k * (f.x + f.w / 2),
-           ty: stageH / 2 - k * (f.y + f.h / 2), box: f };
+           tx: rx + rw / 2 - k * (f.x + f.w / 2),
+           ty: ry + rh / 2 - k * (f.y + f.h / 2), box: f };
+};
+
+/* P72 T46d (R26-382): the stage's largest strip beside a card's room ([x, y, w, h] fractions) - left, right, top or
+   bottom of it, the first of equal areas in that order - as [x, y, w, h] fractions; null when none is REGION_MIN of the
+   stage in its own direction (the compiler refuses that room by name) */
+export const vecmapRegion = (room) => {
+  if (!Array.isArray(room) || room.length !== 4) return null;
+  const [x, y, w, h] = room.map(Number);
+  const strips = [[x, [0, 0, x, 1]], [1 - (x + w), [x + w, 0, 1 - (x + w), 1]], [y, [0, 0, 1, y]], [1 - (y + h), [0, y + h, 1, 1 - (y + h)]]];
+  let best = strips[0];
+  for (const q of strips) if (q[1][2] * q[1][3] > best[1][2] * best[1][3]) best = q;
+  return best[0] >= VECMAP.REGION_MIN ? best[1] : null;
+};
+
+/* the soft edge on the room's side of a fitted map: a CSS mask the map's svg carries (null: no room, no mask) */
+export const vecmapMask = (region) => {
+  if (!region) return null;
+  const [x, y, w, h] = region, F = VECMAP.FADE * 100, pc = (v) => (100 * v).toFixed(2) + "%";
+  if (x > 0) return "linear-gradient(to right, transparent " + pc(x) + ", #000 " + (100 * x + F).toFixed(2) + "%)";
+  if (x + w < 1) return "linear-gradient(to left, transparent " + pc(1 - (x + w)) + ", #000 " + (100 * (1 - (x + w)) + F).toFixed(2) + "%)";
+  if (y > 0) return "linear-gradient(to bottom, transparent " + pc(y) + ", #000 " + (100 * y + F).toFixed(2) + "%)";
+  return "linear-gradient(to top, transparent " + pc(1 - (y + h)) + ", #000 " + (100 * (1 - (y + h)) + F).toFixed(2) + "%)";
 };
 
 /* a point in MAP units -> stage px, and back: the two are each other's inverse to the bit (the fit is one
@@ -302,8 +345,9 @@ export const pingPose = (sp, t) => {
 };
 
 /* the ring's look: the route's ink at the route's width, with the flow token's halo (lpBloom's form) */
-export const pingStyle = () => "fill:none;stroke:" + FLOW.TOKEN_INK + ";stroke-width:" + PING.STROKE
-  + ";filter:drop-shadow(0 0 " + FLOW.TOKEN_BLOOM_PX + "px " + vmInkA(FLOW.TOKEN_INK, FLOW.TOKEN_BLOOM_A) + ")";
+export const pingStyle = () => "fill:none;stroke:" + FLOW.TOKEN_INK + ";stroke-width:" + PING.GLOW_W
+  + ";filter:drop-shadow(0 0 " + PING.GLOW_PX + "px " + vmInkA(FLOW.TOKEN_INK, PING.GLOW_A) + ")"
+  + " drop-shadow(0 0 " + (PING.GLOW_PX / 3).toFixed(1) + "px " + vmInkA(FLOW.TOKEN_INK, PING.GLOW_A) + ")";   /* R26-383: the bloom - a wide halo and a hot inner one */
 
 /* THE STAMP at t: the badge spring's landing, its fade and the size its `size` field names. The page's own
    figure law (the hand writing at a datum) is NOT reachable from here - it is a mask wipe over .lp-ink spans
@@ -348,7 +392,9 @@ export const stampClamp = (q, text, px, stageW, stageH) => {
 export const worldFit = (data, world, stageW, stageH) => {
   if (!data) return null;
   const ids = (world && world.focus) || [];
-  return mapFit(data.box, ids.map((id) => (data.countries[id] || {}).bbox).filter(Boolean), stageW, stageH);
+  const region = world && world.room ? vecmapRegion(world.room) : null, tight = !!(world && world.fit === "tight");
+  return mapFit(data.box, ids.map((id) => (data.countries[id] || {}).bbox).filter(Boolean), stageW, stageH, VECMAP.MARGIN,
+                region || tight ? { region, tight } : null);   /* P72 T46d: absent both, the call it always was */
 };
 
 /* THE WORLD (the template's branch is: mount an svg, call this). Every country's paths drawn once in the
@@ -360,6 +406,8 @@ export function paintVecmapWorld(ctx) {
   root.replaceChildren();
   if (!data) return null;
   const fit = worldFit(data, world, STAGE_W, STAGE_H);
+  const mask = vecmapMask(world.room ? vecmapRegion(world.room) : null);   /* R26-382: the map fades into the ground by the card */
+  if (root.style) { if (mask) { root.style.maskImage = mask; root.style.webkitMaskImage = mask; } else { root.style.maskImage = ""; root.style.webkitMaskImage = ""; } }
   const ix = vmIdle(scene, world, t, idle, hash, idleOf);
   const g = el("g", "", root, { transform: vmGroupXf(null, ix, STAGE_W, STAGE_H) });
   const inner = el("g", "vmland", g, { transform: fitXf(fit) });

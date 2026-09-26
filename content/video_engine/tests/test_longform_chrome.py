@@ -49,6 +49,7 @@ MODULE = ROOT / "content/video_engine/scripts/species/solo.mjs"
 DIM = float(re.search(r"DIM: ([0-9.]+),", MODULE.read_text(encoding="utf-8")).group(1))
 ACCENT = "rgb(245, 183, 46)"      # `--lp-acc` (#F5B72E), the page's one accent (template :61)
 CHAR = "rgb(37, 49, 60)"          # `--lp-char` (#25313C), the callout capsule's charcoal type
+BADGE_INK = "rgb(30, 31, 34)"     # P72 T46d (R26-396): the lit badge's type on its accent box - the key pill's charcoal (KEY_INK #1E1F22)
 T_REST = 14.0                     # every page has built, its key has sprung, and it holds
 SOLO_AT, SOLO_DUR, SOLO_SERIES = 15.0, 0.6, 1
 UNSOLO_AT, UNSOLO_DUR = 17.0, 0.5
@@ -329,10 +330,10 @@ def test_the_solo_lights_its_key_pill_and_its_end_badge_and_the_others_mute(pain
     for si in keyed:
         if si != SOLO_SERIES:
             assert abs(pill(lit, si)["opacity"] - DIM) < 2e-3 and pill(lit, si)["shadow"] == "none", pill(lit, si)
-    named = _tag(lit, SOLO_SERIES)
-    assert named["fill"] == ACCENT and named["stroke"] == "none" and named["fop"] is None, named
+    named = _tag(lit, SOLO_SERIES)   # P72 T46d (R26-396): its box fills with the accent (test_wave3_page_marks), its type turns charcoal on it
+    assert named["fill"] == BADGE_INK and named["stroke"] == "none" and named["fop"] is None, named
     if named["chip"]:
-        assert named["chip"]["fill"] == ACCENT, named["chip"]
+        assert named["chip"]["fill"] == BADGE_INK, named["chip"]
     for t in lit["tags"]:
         if t["si"] != SOLO_SERIES:
             assert t["stroke"] == "none" and abs(float(t["fop"]) - DIM) < 2e-3, t

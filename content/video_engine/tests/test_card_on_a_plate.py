@@ -115,8 +115,11 @@ def test_the_room_is_a_picture_plates_word_and_is_refused_on_a_world_that_comput
             B.world_for_plate("ledger:ev-lines-v1:line;room=" + ROOM, (0, 0, 0), ep)
     finally:
         td.cleanup()
-    with pytest.raises(ValueError, match="room= is a PICTURE PLATE option"):
-        B.world_for_plate("vecmap;room=" + ROOM, (0, 0, 0), Path("."))
+    # P72 T46d (R26-382): a VECTOR MAP now takes a room - the card's half; the map fits the strip beside it
+    # (test_wave3_page_marks) - and a room that leaves the map no strip is refused by name
+    assert B.world_for_plate("vecmap:IRN;room=0.03,0.12,0.5,0.72", (0, 0, 0), Path("."))["room"] == [0.03, 0.12, 0.5, 0.72]
+    with pytest.raises(ValueError, match="leaves the map no strip"):
+        B.world_for_plate("vecmap;room=0.05,0.05,0.9,0.9", (0, 0, 0), Path("."))
 
 
 def test_a_plate_that_declares_a_room_carries_it_as_fractions_and_nothing_else_moves(tmp_path):

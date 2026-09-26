@@ -126,7 +126,8 @@ def test_the_route_token_rides_t11s_dials_and_look():
                     " TOKEN_SPEED: FLOW.TOKEN_SPEED}));")
     assert got["fast"] == pytest.approx(got["floor"]), "no route crossed faster than Bravos DOM's 0.49 s"
     assert got["slow"] == 80 and got["dflt"] == got["TOKEN_SPEED"]
-    assert got["ping"] == {"LAG_S": 0.35, "EXPAND_S": 0.67, "R0": 27, "R1": 69, "FADE_POW": 3, "STROKE": 5}
+    assert got["ping"] == {"LAG_S": 0.35, "EXPAND_S": 0.67, "R0": 27, "R1": 69, "FADE_POW": 3, "STROKE": 5,
+                           "GLOW_PX": 18, "GLOW_A": 0.9, "GLOW_W": 9}   # P72 T46d (R26-383): the glow, measured off CHN 02:21.4
     assert "#F5B72E" in got["style"] and "#F5B72E" in got["tok"], "the ping and the token are in the route's ink"
 
 

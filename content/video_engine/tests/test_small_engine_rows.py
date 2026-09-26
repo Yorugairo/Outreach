@@ -171,6 +171,8 @@ def _tiers_bars_page(shared: bool) -> tuple[dict, dict]:
     page = LPG.build_spec(series, "tiers", None, "right")
     if shared:
         page["shared_tier_domains"] = {u: list(d) for u, d in LPG.shared_tier_domains(series).items()}
+    else:   # P72 T46d (R26-370): the compiler writes the key by default now - the ENGINE's no-key path is read without it
+        page.pop("shared_tier_domains", None)
     scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
                "exit": "cut", "span": [0.0, G.RUNTIME], "docks": [], "species": []}]
     return G._timeline("tiers on one scale", scenes, {}, None), G._base_uris()

@@ -41,6 +41,7 @@
    the data, and an end the window has dropped hides it rather than joining the wrong datum. The dials below are ours
    to tune (42 s42.5), not findings. */
 import { minJerk } from "../kinetics/ease.mjs";
+import { springPop } from "../kinetics/spring.mjs";
 
 export const LEVEL = Object.freeze({
   RING_A: [0.0, 0.3],    /* the share of the word in which the `from` ring draws, dash by dash */
@@ -173,6 +174,23 @@ export const levelSide = (g, authored) => {
   return best;
 };
 
+/* P72 T46d (R26-379; Bravos DOM 00:50.5 - the rule runs from the tip to the value axis and "4 %" stands there as a
+   filled pill over the tick column, the "4" tick it covers gone; measured at 1280 px: the pill 46 x 32 round type 17 px
+   tall where a tick is 12 - T9's axis pill law, AXTAG, handed in by the builder). `label_at: "axis"`: the pill POPS as
+   the rule reaches the axis - from the label's window, on springPop over the builder's `pop.s` - and a tick label it
+   covers is hidden while it stands. The pill's scale at t (0 before its instant): */
+export const levelPillScale = (sp, t, pop) => {
+  const dur = Math.max(0.001, +sp.dur || 1), d = t - (+sp.at + LEVEL.LABEL[0] * dur);
+  if (!(d >= 0) || !pop) return 0;
+  return springPop(lv01(d / Math.max(1e-6, +pop.s || 0.25)), +pop.mp || 0);
+};
+
+/* does the pill's rect ([x, y, w, h] at scale s about (cx, cy)) meet a tick's box [x, y, w, h]? */
+export const levelPillHides = (cx, cy, box, s, tick) => {
+  const w = s * box.w, h = s * box.h, x = cx - w / 2, y = cy - h / 2;
+  return !!tick && w > 0 && h > 0 && x < tick[0] + tick[2] && tick[0] < x + w && y < tick[1] + tick[3] && tick[1] < y + h;
+};
+
 /* THE LEAVE: `lv` is the builder's {at, dur} of the undraw (or the replacing verb) that takes the line, or null (it stands) */
 export const levelLeave = (lv, t) => (lv && Number.isFinite(+lv.at) ? minJerk(lv01((t - +lv.at) / Math.max(0.001, +lv.dur || 1))) : 0);
 
@@ -185,7 +203,9 @@ export const levelLeave = (lv, t) => (lv && Number.isFinite(+lv.at) ? minJerk(lv
    recorders and no DOM; the builder's `sd.axisX(st)` is the active state's value-axis x (the axis form only). */
 export const paintLevelJoin = (sd, t, st, ctx) => {
   const sp = sd.sp, pose = levelPose(sp, t), lv = levelLeave(sd.leave, t);
-  const hide = () => sd.g.setAttribute("opacity", 0);
+  const pill = sd.pill || null;
+  const unhide = () => { if (!pill) return; for (const q of pill.hid || []) q.style.visibility = ""; pill.hid = []; };
+  const hide = () => { sd.g.setAttribute("opacity", 0); if (pill) { pill.g.setAttribute("opacity", 0); unhide(); } };
   if (!pose.on || lv >= 1) { hide(); return; }
   const A = ctx.datumNow(st, sd.si, sp.from | 0);
   const B = sd.to.axis ? null : ctx.datumNow(st, sd.to.si, sd.to.i);
@@ -204,12 +224,19 @@ export const paintLevelJoin = (sd, t, st, ctx) => {
     }
   };
   ring(sd.ringA, A, pose.ringA);
-  ring(sd.ringB, E, pose.ringB);
+  ring(sd.ringB, E, pill ? 0 : pose.ringB);   /* R26-379: the axis pill stands where the far ring would */
   const at = levelLabelAt(sd.side, E, sd.frameOf ? Object.assign({}, sd.lg0, { frame: sd.frameOf(st) }) : sd.lg0);   /* the ACTIVE state's frame */
   sd.label.setAttribute("x", at.x.toFixed(1)); sd.label.setAttribute("y", at.y.toFixed(1));
   sd.label.setAttribute("text-anchor", at.anchor);
-  const ops = levelGlyphs(pose.label, sd.lg.length);
+  const ops = levelGlyphs(pill ? 0 : pose.label, sd.lg.length);   /* the pill says the figure: the hand writes nothing */
   sd.lg.forEach((ts, j) => ts.setAttribute("opacity", ops[j].toFixed(3)));
+  if (!pill) return;
+  const s = levelPillScale(sp, t, pill.pop), cx = pill.colX(st), cy = A[1];
+  unhide();
+  if (!(s > 0)) { pill.g.setAttribute("opacity", 0); return; }
+  pill.g.setAttribute("transform", "translate(" + cx.toFixed(1) + " " + cy.toFixed(1) + ") scale(" + s.toFixed(4) + ")");
+  pill.g.setAttribute("opacity", (1 - lv).toFixed(3));
+  for (const q of pill.ticksOf(st)) if (levelPillHides(cx, cy, pill.box, s, q.box)) { q.el.style.visibility = "hidden"; pill.hid.push(q.el); }
 };
 
 /* THE MODULE RULE, the page half of it: the last statement registers the painter, a plain guarded assignment. */
