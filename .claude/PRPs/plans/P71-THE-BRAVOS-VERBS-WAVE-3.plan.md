@@ -1791,7 +1791,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T21: Fills to a level - below zero at a signed dip, the negative spike's glowing trough, and the underwater fill below a prior peak (was P69 T73)
-- Status: pending
+- Status: done - lane B `c67651a`: `side: below|above` on a `to_rule` spread (D40 12:54's last dip below zero) and `peak: true`, the underwater fill to the regain (BOOM 02:49) with a computed `{years}` label; T49's glow rings the clipped fill; recipe `the-glowing-trough` (candidate), goldens `fill-below-zero`, `fill-underwater`. At HG1: over a large region our underwater fill is a heavy block of page red where BOOM's is light pink with a white edge (and D40's dip gold); our peak rule runs full width, BOOM's only peak to regain
 - Owner: junior_developer (LANE B)
 - Depends on: T10 (a level from a datum, C14)
 - Harvest:
