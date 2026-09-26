@@ -329,6 +329,9 @@ an unresolved source anomaly; this pass does not synthesize a task from it.
 | R26-146 | The ball cannot blend the page's inks. Closed by P72 T23. | lane B `151636d`: `body=blend` (Kubelka-Munk, each series ink one arm); its green on the golden is P72-HG1 (3). |
 | R26-139 | The gather swings the axis hairlines as straight sticks. Closed by P72 T23. | lane B `151636d`: they curl into the spiral (`MELT.G_LINE_CURL`, on; P72-HG1 (12)). |
 | R26-389 | The two-ink hand goes muddy. Closed by P72 T23. | lane B `151636d`: a sweep hands the ink over, chroma 200 -> 57 with no dip (`MELT.HAND_INK_ON`, on; P72-HG1 (12)). |
+| R26-361 | The seal's name keyline and gold ignore the ground. Closed by P72 T46b. | lane B `976fcc4`: the keyline reads the latched ground (1.57:1 -> 6.85:1 on the mid photo); the compiler's gold twin WARNs when no gold holds 3:1; one `worldPoseAt`. |
+| R26-362 | The choreography mirror snaps a stamp and a prop to the boundary. Closed by P72 T46b. | lane B `976fcc4`: a stamp or prop owns its exit; a WARN names an owned exit running past its page's end; (c) a spring cutout keeps the card's rule by decision. |
+| R26-391 | The verdict tile earns no gate credit; the seal's verdict refusal is unclear. Closed by P72 T46b. | lane B `976fcc4`: the motion gate credits the tile's landing on its word; the refusal points to the chart card's `verdict` tile. |
 | R26-284 | A figure double-prints its bar's value. Closed by P72 T18. | lane B `4b07424`: the figure hands over in place; a restating figure WARNs (s106). |
 | R26-288 | A ring on a bar has no value target. Closed by P72 T18. | lane B `4b07424`: `part: value` rings the printed value as drawn. |
 | R26-255 | A bar figure drifts on a page with states. Closed by P72 T18. | lane B `4b07424`: it rides its bar through a rescale. |
