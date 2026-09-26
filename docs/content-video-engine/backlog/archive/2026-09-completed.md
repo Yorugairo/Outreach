@@ -340,6 +340,21 @@ an unresolved source anomaly; this pass does not synthesize a task from it.
 | R26-352 | The ingester does not re-apply the operator's hand scrub. Closed in code by P72 T46e. | lane B `7f5ead9`: reads `scrub-terms.txt` from the operator's folder (outside git); docket 12 re-scrubs once the operator writes it. |
 | R26-358 | The strength screens read a take that is not the script's. Closed by P72 T46e. | lane B `7f5ead9`: `screens_take` refuses a foreign take by name (0.95), as the opening gate does. |
 | R26-359 | The audit crashes on a kokoro words file. Closed by P72 T46e. | lane B `7f5ead9`: `take_groups` reads numbered scenes as one take and a named words file as its own. |
+| R26-393 | The probe misreads a hover; the blur veil hides the park's join. Closed by P72 T46c. | lane B `16ecb98`: the probe mirrors DOCK_HOVER; a parking blurred card clears its veil over the park. |
+| R26-394 | M26 cannot read a bar's re-counted figure. Closed by P72 T46c. | lane B `16ecb98`: `vs: fig` when the figure speaks for its bar (`__barMorphs`). |
+| R26-344 | A callout ring on a parked page stays stage size. Closed by P72 T46c (with R26-404). | lane B `16ecb98`: ring, stroke and label scale about the datum with the park (ctx `parkScale`). |
+| R26-404 | The ring under a park (R26-344's twin). Closed by P72 T46c. | lane B `16ecb98`: as R26-344. |
+| R26-398 | A depth dock's badge rail falls off the stage. Closed by P72 T46c. | lane B `16ecb98`: the whole card stays 24 px inside the stage; `dock-depth` re-pinned. |
+| R26-369 | The agenda at 9:16 crowds its words. Closed by P72 T46c (the icon size at P72-HG1 (16)). | lane B `16ecb98`: narrow rows shrink icon and medallion (floor 0.4); the title fits its rule. |
+| R26-219 | A span stands inside the end-tag column. Closed by P72 T46d. | lane B `095c3ad`: it steps back to the column's inner edge; T43's WARN names the move. |
+| R26-375 | The brace's lifted label has no leader; copied constants drift; a WARN crashes cp1252. Closed by P72 T46d. | lane B `095c3ad`: a leader from the point; a pin test; `_console_safe`. |
+| R26-379 | The level's figure cannot sit on the axis. Closed by P72 T46d (an option). | lane B `095c3ad`: `label_at: "axis"`. |
+| R26-382 | No chart beside the map. Closed by P72 T46d (the map side). | lane B `095c3ad`: `;room=` - the map fits the strip beside the card's room. |
+| R26-383 | The map's framing is loose and its ping does not glow. Closed by P72 T46d. | lane B `095c3ad`: `;fit=tight`; the ping blooms (measured off CHN 02:21.4); `vecmap-route-tokens` re-pinned. |
+| R26-384 | The hub's failed-link badge is too small. Closed by P72 T46d. | lane B `095c3ad`: 46 stage px; `look: "seal"`; `hub-spoke-fail` re-pinned. |
+| R26-395 | A solo cannot light two bars. Closed by P72 T46d. | lane B `095c3ad`: `add: true`. |
+| R26-396 | The lit end badge has no box. Closed by P72 T46d. | lane B `095c3ad`: a filled accent box, charcoal type. |
+| R26-370 | Same-unit tiers do not share a scale by default. Closed by P72 T46d. | lane B `095c3ad`: `shared_tier_domains` written unless `independent`. |
 | R26-284 | A figure double-prints its bar's value. Closed by P72 T18. | lane B `4b07424`: the figure hands over in place; a restating figure WARNs (s106). |
 | R26-288 | A ring on a bar has no value target. Closed by P72 T18. | lane B `4b07424`: `part: value` rings the printed value as drawn. |
 | R26-255 | A bar figure drifts on a page with states. Closed by P72 T18. | lane B `4b07424`: it rides its bar through a rescale. |
