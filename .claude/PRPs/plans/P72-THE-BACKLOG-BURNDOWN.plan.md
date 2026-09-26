@@ -948,7 +948,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T32: The strobe's sharpness on real motion - a measurement
-- Status: pending
+- Status: done - lane B 514b465: `measure_strobe_sharpness.py` + its `--check`; the finding (step rate, not sharpness) in R26-368 and the record `docs/research/runs/p72-t32/` (main checkout); no threshold set
 - Owner: implementation_luna (a measurement, no threshold change)
 - Depends on: T9
 - Items: R26-85 ("keep 154 px/s as the cited cinema-parity reference; measure the remaining sharpness/space question on real motion before promoting a 250/300 threshold") - H now carries real motion in the 100-300 px/s band
