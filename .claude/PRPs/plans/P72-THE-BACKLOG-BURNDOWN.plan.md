@@ -644,7 +644,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T13: A bars page writes its units and keeps its labels clear
-- Status: pending
+- Status: done - lane B `6c349b0`: R26-274 (a word unit spaced; the tick column keeps 12 px), R26-287 (`unit_suffix` writes "$480B"), R26-250 (a rule label slides / wraps / shrinks, never over a bar; `st.ruleFit`), R26-217 (treemap floors per stage); R26-170 already fixed at 2b7b6a4 (M28 PASS); golden balance-level re-pinned
 - Owner: implementation_luna (LANE B)
 - Depends on: T0; lands before P71 T25 / T31 (they rebase) or after both
 - Items: R26-274 (a word unit takes a space, a symbol unit none; the tick column never leaves the stage), R26-287 (a unit with a prefix AND a suffix - `$` + `B` - on the value, the ticks and the figure, in the page and the card profile), R26-250 (a rule label shrinks, wraps or takes a leader into free ground, never over a bar), R26-170 (a signed page's category labels sit above zero when the bars point down, E28), R26-217 (the treemap / tiers legibility constants resolved from the stage they render on)

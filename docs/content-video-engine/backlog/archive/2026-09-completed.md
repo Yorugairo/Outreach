@@ -305,6 +305,10 @@ an unresolved source anomaly; this pass does not synthesize a task from it.
 | R26-253 | The E65 room lands on the page's words. Closed by P72 T15. | lane B `400cf89`: `page_boxes` carries the basis and the bar names; the room is cut round them (the card was fixed by `3d6e8e5`). |
 | R26-270 | A wrapped bar name is not measured. Closed by P72 T15. | lane B `400cf89`: bar names measured; one into the source or caption band WARNs (the 9:16 room is R26-380). |
 | R26-274 | Pages without measured boxes. Closed (both halves). | the fixture half by d11e919 / 54bd650 (P72 T15's step 0); the units half by P72 T13 `6c349b0`. |
+| R26-287 | A unit with a prefix and a suffix (`$` + `B`) cannot be written. Closed by P72 T13. | lane B `6c349b0`: `unit_suffix` beside `unit: "$"` writes "$480B" on values, ticks, pill and card; refused by name when malformed or off a bars page. |
+| R26-250 | A comparator rule's label covers a bar. Closed by P72 T13. | lane B `6c349b0`: the label slides, wraps, shrinks (>= 0.7) or goes past the rule's end; `st.ruleFit` reports. |
+| R26-170 | A signed page's category labels sit under the bars that point down. Closed by P72 T13. | already fixed at `2b7b6a4` (M28 PASS); T13 confirmed it, not rebuilt. |
+| R26-217 | The treemap / tiers legibility constants ignore the stage. Closed by P72 T13. | lane B `6c349b0`: treemap floors per stage; the tiers ceiling states its measure. |
 | R26-284 | A figure double-prints its bar's value. Closed by P72 T18. | lane B `4b07424`: the figure hands over in place; a restating figure WARNs (s106). |
 | R26-288 | A ring on a bar has no value target. Closed by P72 T18. | lane B `4b07424`: `part: value` rings the printed value as drawn. |
 | R26-255 | A bar figure drifts on a page with states. Closed by P72 T18. | lane B `4b07424`: it rides its bar through a rescale. |
