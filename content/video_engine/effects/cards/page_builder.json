@@ -91,6 +91,21 @@
           "token": "members",
           "means": "a bar's `members: [{name, logo?, short?}]` (2-8, the page's `member_noun`): EQUAL tiles naming who is in its ONE value, the total written; a member with a value is refused (E99 s101)",
           "source_set": "MEMBERS_KEY"
+        },
+        {
+          "token": "claim",
+          "means": "a bar's `claim: {by, said, evidence, src, standing?, quote?}` (P73 T1): SOMEONE'S figure - outlined in its ink, quoted, the speaker credited over it; no computed label reads it unmarked",
+          "source_set": "CLAIM_KEY"
+        },
+        {
+          "token": "claim_form",
+          "means": "the claim's body: `outline` (default - measured furthest from a filled bar) or `hatch` (P73-HG)",
+          "source_set": "CLAIM_FORM_KEY"
+        },
+        {
+          "token": "claim_audit",
+          "means": "true adds \"no evidence attached\" under a claim with evidence \"none\" and on the source line; off by default (the label credits the speaker)",
+          "source_set": "CLAIM_AUDIT_KEY"
         }
       ],
       "dials": null,

@@ -292,6 +292,9 @@ PROOF_FRAMES = {
     "remake-bars-to-line@proof-025": ("remake-bars-to-line", {}, 12.6),   # u 0.25: every bar's ink collapsed into the single point at the apex (the highest bar's top), nothing drawn yet
     "remake-bars-to-line@proof-050": ("remake-bars-to-line", {}, 13.2),   # u 0.50: THE RULING'S FRAME - the point standing on the arriving line's own apex datum, and the stroke part way back to the root behind its nib
     "remake-bars-to-line@proof-075": ("remake-bars-to-line", {}, 13.8),   # u 0.75: three quarters of the line drawn back from the apex, the arriving labels writing under it
+    # P73 T1: A CLAIMED FIGURE AT ITS WORD - the solo on Patel's "$1k" (12.0 + 0.6) landed: his figure and his name lit,
+    # every other bar muted. No flag: the solo is authored on the row.
+    "claim-bar@proof-word": ("claim-bar", {}, 12.8),
 }
 # P52 T18 / R26-55, HUMAN GATE 7: THE FACE OF A PULLED PHRASE. The phrase is live type now, so it has a face, and
 # the face is the OPERATOR's to choose - never ours. The `press_face` DIAL names one of the three candidates

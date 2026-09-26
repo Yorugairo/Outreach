@@ -505,7 +505,8 @@ SEGMENT_BUILDERS = ("story", "combo")
 # silently dropped). `value_string` stays legal: 27 bars on disk carry it (the record's own token, read by no builder);
 # `x` is P47 T9's combo bar on the lines' time axis (buildLedgerCombo reads a bar's own x)
 PROJECTED_KEY = "projected"   # P71 T25: a bar whose height is a sourced PROJECTION (E77) - `projected: {value, label, tier, src}`
-BAR_FIELDS = ("label", "value", "color", "note", "value_string", "x", MEMBERS_KEY, SEGMENTS_KEY, PROJECTED_KEY)
+CLAIM_KEY = "claim"           # P73 T1: a bar whose figure is SOMEONE'S CLAIM - `claim: {by, said, evidence, src, standing?}`
+BAR_FIELDS = ("label", "value", "color", "note", "value_string", "x", MEMBERS_KEY, SEGMENTS_KEY, PROJECTED_KEY, CLAIM_KEY)
 # the figure's box in the ENGINE's units (LPSEG, `lpSegBuild`): the value type, a line of it, the padding inside a segment
 SEGMENT_FIG = {"story": 26.0, "story_p": 44.0, "combo": 24.0, "combo_p": 30.0, "line": 1.25, "pad": 6.0,
                "min": 0.8}   # a figure a little too wide for its part shrinks to fit it, never under 0.8 of its size (LPSEG.FIG_MIN)
@@ -2067,6 +2068,255 @@ def bars_out_warnings(series: dict) -> list[str]:
     return out
 
 
+# ---- P73 T1: A CLAIMED FIGURE ON A CHART --------------------------------------------------------------------------------
+# A bars page may carry a figure that is SOMEONE'S CLAIM, not a sourced value: the datum is written as usual (a value, or
+# a RANGE `[lo, hi]`) and names `claim: {by, said, evidence, src, standing?}`. What is CONFIRMED is that the speaker SAID
+# it (the claim's own `src` - where), so the page draws the statement, attributed (E99 s93: an unsourced figure never
+# draws - a quoted one is sourced as a quote). The operator (2026-09-26): the label CREDITS the speaker - who, and their
+# standing ("Dylan Patel, SemiAnalysis") - it does not disparage the figure; "no evidence attached" is a dial
+# (`claim_audit`, off by default) for a page whose job is the audit. The drawing never passes a claim off as a sourced
+# value: its body is an OUTLINE in its series ink (or a hatch: `claim_form`, the human gate's alternative), never the
+# filled body a sourced bar has and never the dash a projection has (S3 / E77); its figure is QUOTED and its speaker is
+# written over it; the page's source line names the speaker. A claim never feeds a computed label unless that label is
+# marked as the claim's (it says "claim", or names the speaker) - the compiler's `check_claims` and
+# `equation_claim_errors` hold that, `claim_label_marked` is the one reading of "marked".
+CLAIM_FIELDS = ("by", "standing", "said", "evidence", "src", "quote")
+CLAIM_REQUIRED = ("by", "said", "evidence", "src")
+CLAIM_EVIDENCE_NONE = "none"
+CLAIM_FORM_KEY = "claim_form"
+CLAIM_FORMS = ("outline", "hatch")   # outline: the default (measured, P73 T1 NOTES); hatch: the human gate's alternative
+CLAIM_AUDIT_KEY = "claim_audit"
+CLAIM_AUDIT_TEXT = "no evidence attached"
+CLAIM_DATE_RE = re.compile(r"^\d{4}-(0[1-9]|1[0-2])(-(0[1-9]|[12]\d|3[01]))?$")
+CLAIM_URL_RE = re.compile(r"^https?://\S+$")
+# `quote`: the figure AS THE SPEAKER WROTE IT ("$1k", "$4-5k") - checked against the bar's value (a range quote on a range
+# bar, each end), and written on the page in its place: a quoted figure is his words, never our re-typing of them
+CLAIM_QUOTE_RE = re.compile(r"^(?P<s>[-\u2212])?(?P<u>\$)?(?P<lo>\d+(?:\.\d+)?)(?:\s*[-\u2013]\s*\$?(?P<hi>\d+(?:\.\d+)?))?(?P<m>[kMB])?$")
+CLAIM_QUOTE_MULT = {"": 1.0, "k": 1e3, "M": 1e6, "B": 1e9}
+CLAIM_MARK_RE = re.compile(r"\bclaim", re.IGNORECASE)   # "claim", "claimed", "claims" - the page saying whose figure it is
+CLAIM_REFUSED_BESIDE = ((PROJECTED_KEY, "a projected bar (a projection is an estimate, drawn dashed - a claim is a quote)"),
+                        (MEMBERS_KEY, "a membership bar (its tiles name who is in it, not who said it)"),
+                        (SEGMENTS_KEY, "a stacked bar (its parts are values; a claim is one figure)"))
+
+
+def claim_indices(series: dict) -> list[int]:
+    """The page's own bars that carry a `claim` (any shape - the validator judges it). Pure."""
+    return [i for i, b in enumerate(_own_bars_raw(series)) if CLAIM_KEY in b]
+
+
+def _claim_field_errors(where: str, claim: Any) -> list[str]:
+    if not isinstance(claim, dict):
+        return [f"{where}: a claim is an object {{by, said, evidence, src, standing?}} - who said the figure, when, what "
+                "they attached, and where they said it (P73 T1)"]
+    errs = [f"{where}: `{k}` is not a claim's key ({'|'.join(CLAIM_FIELDS)})" for k in sorted(claim, key=str)
+            if k not in CLAIM_FIELDS]
+    errs += [f"{where}: no `{k}` - a claim names who said it, when, what they attached and where (P73 T1)"
+             for k in CLAIM_REQUIRED if k not in claim]
+    by = claim.get("by")
+    if "by" in claim and (not _text(by) or re.search(r"\d", str(by))):
+        errs.append(f"{where}: `by` {by!r} must be the speaker's name - a name, never a figure")
+    if "standing" in claim and (not _text(claim["standing"]) or re.search(r"\d", str(claim["standing"]))):
+        errs.append(f"{where}: `standing` {claim['standing']!r} must be who the speaker is (a firm, a title) - words")
+    if "said" in claim and not (isinstance(claim["said"], str) and CLAIM_DATE_RE.match(claim["said"])):
+        errs.append(f"{where}: `said` {claim.get('said')!r} must be the date it was said, YYYY-MM-DD (or YYYY-MM)")
+    ev = claim.get("evidence")
+    if "evidence" in claim and not (ev == CLAIM_EVIDENCE_NONE or (isinstance(ev, str) and CLAIM_URL_RE.match(ev))):
+        errs.append(f"{where}: `evidence` {ev!r} must be {CLAIM_EVIDENCE_NONE!r} or the URL of what the speaker attached")
+    if "src" in claim and not _text(claim.get("src")):
+        errs.append(f"{where}: `src` must say where it was said (\"his post on X\") - that it was said is the fact drawn")
+    return errs
+
+
+def _quote_reads(token: str, sign: float, mult: float, value: float | None) -> bool:
+    """Does one quoted number (its digits, signed, times its magnitude) read `value` at the precision it is written to?"""
+    if value is None:
+        return False
+    d = len(token.split(".")[1]) if "." in token else 0
+    return abs(sign * float(token) * mult - value) <= 0.5 * 10 ** -d * mult + 1e-9 * max(1.0, abs(value))
+
+
+def claim_quote_error(where: str, quote: Any, bar: dict, unit: str, suffix: str = "") -> str | None:
+    """A claim's `quote` is the figure as said - digits, an optional k / M / B, a range as lo-hi - and it READS the bar's
+    own value (a range quote a range bar, end by end); a "$" only on a page in dollars; on a page written in a magnitude
+    (`unit_suffix`, "$...k") the quote carries that magnitude and its digits are the value's. None when it reads. Pure."""
+    m = CLAIM_QUOTE_RE.match(quote.strip()) if isinstance(quote, str) else None
+    if not m:
+        return (f"{where}: `quote` {quote!r} must be the figure as said - digits with an optional k, M or B, a range as "
+                "lo-hi (\"$1k\", \"$4-5k\")")
+    if m["u"] and str(unit).strip() != "$":
+        return f"{where}: `quote` {quote!r} writes a dollar sign on a page in {unit!r}"
+    if suffix and (m["m"] or "") != suffix:
+        return f"{where}: `quote` {quote!r} is not in the page's magnitude ({suffix!r}, unit_suffix) - quote it as the page writes it"
+    mult, rng = (1.0 if suffix else CLAIM_QUOTE_MULT[m["m"] or ""]), bar_range(bar)
+    if (m["hi"] is not None) != (rng is not None):
+        return (f"{where}: `quote` {quote!r} is {'a range' if m['hi'] else 'one figure'} and the bar is "
+                f"{'a range' if rng else 'one value'} - the quote states what the bar draws")
+    sign = -1.0 if m["s"] else 1.0   # a claimed fall: the sign is both ends', and a signed range reads in order
+    toks = sorted((m["lo"], m["hi"]), key=lambda t: sign * float(t)) if rng else [m["lo"]]
+    ends = list(zip(toks, rng)) if rng else [(m["lo"], to_number(bar.get("value")))]
+    if not all(_quote_reads(tok, sign, mult, v) for tok, v in ends):
+        return f"{where}: `quote` {quote!r} does not read the bar's value {bar.get('value')!r} - the quote and the height are one figure"
+    return None
+
+
+def claim_quote_string(quote: str, suffix: str = "") -> str:
+    """The quote as the page's value string: the page's unit (and its magnitude, `unit_suffix`) come back through
+    lpWithUnit, a range takes the en dash."""
+    m = CLAIM_QUOTE_RE.match(quote.strip())
+    return ("-" if m["s"] else "") + m["lo"] + (RANGE_DASH + m["hi"] if m["hi"] is not None else "") + ("" if suffix else (m["m"] or ""))
+
+
+def _claim_page_errors(series: dict, variant: str, hits: list[int]) -> list[str]:
+    """The page a claim stands on: a STORY bars page, no form, no breakthrough; the page dials well formed."""
+    errs: list[str] = []
+    builder = pick_builder(with_projected_values(series), variant)
+    if hits and builder != "story":
+        errs.append(f"bars{hits}: a claim stands on a STORY bars page's own bars; this page draws as {builder!r} (P73 T1)")
+    if hits and series.get("form") is not None:
+        errs.append(f"bars{hits}: a claim is not drawn under a form ({series['form']!r}) - the prism's faces and the "
+                    "gauge's fill are a sourced bar's body; draw the page flat (P73 T1)")
+    if hits and series.get("overflow") is not None:
+        errs.append(f"bars{hits}: a claim is not drawn on a breakthrough page (`overflow`) - the breakthrough rewrites "
+                    "the scale and re-counts the figure by its own law (P73 T1)")
+    for key, ok, what in ((CLAIM_FORM_KEY, lambda v: v in CLAIM_FORMS, f"one of {'|'.join(CLAIM_FORMS)}"),
+                          (CLAIM_AUDIT_KEY, lambda v: isinstance(v, bool), "true or false")):
+        if key not in series:
+            continue
+        if not hits:
+            errs.append(f"{key}: the page names no claim - the dial draws a claim's form, and there is none (P73 T1)")
+        elif not ok(series[key]):
+            errs.append(f"{key}: {series[key]!r} must be {what} (P73 T1)")
+    return errs
+
+
+def _validate_claims(series: dict, variant: str) -> list[str]:
+    """P73 T1: every `claim` whole, on a page that can draw it, or refused BY NAME. [] when nothing names one."""
+    errs = [f"{w}bars[{j}]: a claim stands on a story page's own bars - not a panel's or a tier's (P73 T1: not built)"
+            for w, bars in _bar_lists(series) if w for j, b in enumerate(bars) if isinstance(b, dict) and CLAIM_KEY in b]
+    errs += [f"series[{k}]: a claim stands on a bars page's own bars - a line datum's claim is not built (P73 T1); "
+             "draw the claimed figure as a bar beside the sourced ones" for k, s in enumerate(series.get("series") or [])
+             if isinstance(s, dict) and CLAIM_KEY in s]
+    own, hits = _own_bars_raw(series), claim_indices(series)
+    for i in hits:
+        errs += _claim_field_errors(f"bars[{i}] claim", own[i][CLAIM_KEY])
+        q = own[i][CLAIM_KEY].get("quote") if isinstance(own[i][CLAIM_KEY], dict) else None
+        suf = series.get(UNIT_SUFFIX_KEY) if isinstance(series.get(UNIT_SUFFIX_KEY), str) else ""
+        qerr = claim_quote_error(f"bars[{i}] claim", q, own[i], str(series.get("unit") or ""), suf) if q is not None else None
+        if qerr:
+            errs.append(qerr)
+        errs += [f"bars[{i}]: a claim is not {what} (P73 T1)" for key, what in CLAIM_REFUSED_BESIDE if key in own[i]]
+    return errs + _claim_page_errors(series, variant, hits)
+
+
+def claim_text(claim: dict) -> str:
+    """The attribution the page writes over a claimed figure: who, and their standing ("Dylan Patel, SemiAnalysis")."""
+    by = str(claim.get("by") or "").strip()
+    return by + (f", {str(claim['standing']).strip()}" if _text(claim.get("standing")) else "")
+
+
+def claims_block(series: dict, value_strings: list | None = None) -> dict:
+    """The spec's `claims` (one per bar: None, or the claim as the engine draws it) and `claim_form` - and, when a claim
+    names its `quote`, the page's `value_strings` with the quote in that bar's place; {} when no bar names a claim, so
+    every other page is the page it was, to the byte. Pure."""
+    own, hits = _own_bars_raw(series), set(claim_indices(series))
+    if not hits:
+        return {}
+    audit = series.get(CLAIM_AUDIT_KEY) is True
+    claims: list[dict | None] = []
+    for i, b in enumerate(own):
+        c = b.get(CLAIM_KEY) if i in hits else None
+        if not isinstance(c, dict):
+            claims.append(None)
+            continue
+        out = {"by": str(c["by"]), **({"standing": str(c["standing"])} if _text(c.get("standing")) else {}),
+               "said": str(c["said"]), "evidence": str(c["evidence"]), "text": claim_text(c)}
+        if audit and c.get("evidence") == CLAIM_EVIDENCE_NONE:
+            out["audit"] = CLAIM_AUDIT_TEXT
+        claims.append(out)
+    out_block: dict[str, Any] = {"claims": claims, CLAIM_FORM_KEY: series.get(CLAIM_FORM_KEY) or CLAIM_FORMS[0]}
+    quotes = {i: own[i][CLAIM_KEY]["quote"] for i in hits if isinstance(own[i].get(CLAIM_KEY), dict)
+              and isinstance(own[i][CLAIM_KEY].get("quote"), str)}
+    if quotes and isinstance(value_strings, list):
+        suf = series.get(UNIT_SUFFIX_KEY) if isinstance(series.get(UNIT_SUFFIX_KEY), str) else ""
+        out_block["value_strings"] = [claim_quote_string(quotes[i], suf) if i in quotes else s for i, s in enumerate(value_strings)]
+    return out_block
+
+
+def claims_source(series: dict, line: str | None) -> str | None:
+    """The page's source line with each speaker's claims named: "<line> · US volume, China quote: Dylan Patel,
+    SemiAnalysis, his post on X, 2026-09-19" (+ " - no evidence attached" under the audit dial). None when no bar
+    names a claim."""
+    own, hits = _own_bars_raw(series), claim_indices(series)
+    if not hits or not isinstance(line, str):
+        return None
+    audit = series.get(CLAIM_AUDIT_KEY) is True
+    groups: dict[tuple, list[str]] = {}
+    for i in hits:
+        c = own[i][CLAIM_KEY]
+        key = (claim_text(c), str(c.get("src") or "").strip(), str(c.get("said") or ""),
+               audit and c.get("evidence") == CLAIM_EVIDENCE_NONE)
+        groups.setdefault(key, []).append(str(own[i].get("label") or f"bar {i + 1}"))
+    out = line
+    for (who, where, said, bare), labels in groups.items():
+        out += f" · {', '.join(labels)}: {who}, {where}, {said}" + (f" - {CLAIM_AUDIT_TEXT}" if bare else "")
+    return out
+
+
+def claim_label_marked(label: Any, claims: list) -> bool:
+    """Is a computed label MARKED as a claim's - does it say "claim", or name the speaker (their surname)? The one
+    reading of "marked" (P73 T1): "claimed vs listed", "36x on Patel's figure". Pure."""
+    if not _text(label):
+        return False
+    if CLAIM_MARK_RE.search(label):
+        return True
+    names = {str(c.get("by") or "").split()[-1].lower() for c in claims if isinstance(c, dict) and _text(c.get("by"))}
+    return any(re.search(rf"\b{re.escape(n)}\b", label, re.IGNORECASE) for n in names if n)
+
+
+def claim_emphasis_error(spec: dict) -> str | None:
+    """The counting pill writes a sourced figure in the accent: a plate emphasis on a claim bar is refused (P73 T1) -
+    light the claim with a `solo` on its word, its speaker stays written."""
+    k, claims = spec.get("emphasize"), spec.get("claims")
+    if not isinstance(claims, list) or not isinstance(k, int) or not 0 <= k < len(claims) or claims[k] is None:
+        return None
+    return (f"emphasize {k}: bar {k} is a claim ({claims[k]['text']}) - the counting pill writes a SOURCED figure in "
+            "the accent; emphasize a sourced bar, and light the claim with `solo` on its word (P73 T1)")
+
+
+CLAIM_MAGNITUDES = {"k": 1e3, "K": 1e3, "M": 1e6, "B": 1e9, "bn": 1e9, "T": 1e12, "trillion": 1e12}   # a unit_suffix's size
+
+
+def claim_portrait_error(spec: dict) -> str | None:
+    """At 9:16 the source line keeps its FIRST clause (`first_clause`, the engine's lpFirstClause cuts at ';'): a claim
+    whose speaker is cut off it would stand on the page unattributed - refused by the compiler at 9:16 (P73 T1, the
+    projection's rule mirrored). None when every speaker survives the cut, or the page has no claim."""
+    claims = [c for c in spec.get("claims") or [] if isinstance(c, dict)]
+    kept = first_clause(spec.get("source"), False)
+    lost = sorted({c["by"] for c in claims if c.get("by") and c["by"] not in kept})
+    if not lost:
+        return None
+    return (f"the source line names {', '.join(lost)} after a ';', and at 9:16 it keeps only its first clause "
+            f"({kept!r}) - the claim would stand unattributed; write the page's src without a ';' (P73 T1)")
+
+
+def claim_values(series: dict) -> list[tuple[float, dict]]:
+    """Every number a claim on the page states (a range's two ends), with its claim - what a computed label may not
+    read unmarked - in the page's own units and, on a page written in a known magnitude ("$...k"), in base units
+    too (an equation term writes "$1,000", the page 1 in thousands). Pure."""
+    out: list[tuple[float, dict]] = []
+    own = _own_bars_raw(series)
+    mult = CLAIM_MAGNITUDES.get(str(series.get(UNIT_SUFFIX_KEY) or ""), 1.0)
+    for i in claim_indices(series):
+        c = own[i][CLAIM_KEY]
+        if not isinstance(c, dict):
+            continue
+        rng = bar_range(own[i])
+        for v in (rng if rng else (to_number(own[i].get("value")),)):
+            if v is not None:
+                out += [(float(v), c)] + ([(float(v) * mult, c)] if mult != 1.0 else [])
+    return out
+
+
 def _source_lines_ok(value: Any) -> bool:
     """Is `value` the two-line source's shape - exactly two non-empty strings? Pure."""
     return (isinstance(value, list) and len(value) == SOURCE_LINES_N
@@ -2247,6 +2497,7 @@ def validate(series: dict, variant: str) -> list[str]:
     errors += _validate_break(series, variant)   # P69 T66: [] unless the object names a `break`
     errors += _validate_members(series, variant)   # P69 T45: a membership is a bars page's, and a tile carries no value
     errors += _validate_bar_fields(series)          # P69 T64 / R26-307: a bar key the form does not know is refused by name
+    errors += _validate_claims(series, variant)     # P73 T1: a claimed figure is attributed, on a page that can draw it
     errors += _validate_segments(series, variant)   # P69 T64: a stack of values is true to its total, one key per page
     errors += _validate_unit_suffix(series, variant)   # P72 T13 / R26-287: a prefix AND a suffix ($...B), refused by name when malformed
     errors += _validate_y2(series, variant)         # P71 T13 / R26-307: a second axis draws (a line page) or is refused by name
@@ -3896,6 +4147,9 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
                 spec["source"] = projected_source(out_series)
             if bars_out_warnings(out_series):
                 spec["warnings"] = list(spec.get("warnings") or []) + bars_out_warnings(out_series)
+        if builder == "story" and claim_indices(out_series):   # P73 T1: each claim, and its speaker on the source line (absent: not one key)
+            spec.update(claims_block(out_series, spec["value_strings"]))
+            spec["source"] = claims_source(out_series, spec["source"])
     if builder == "combo":
         spec.update({k: v for k, v in _dense_block(series).items() if k != "labels"})
         if spec.get(SEGMENTS_KEY) and _text(series.get(LINE_LABEL_KEY)):   # P69 T64: the stacked combo's right axis, named (s102 (b))

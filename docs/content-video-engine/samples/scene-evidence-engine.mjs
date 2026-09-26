@@ -12929,6 +12929,101 @@ async function mount(doc) {
     if (st.bars.some((b) => b.segs)) lpSegBuild(st, pg, { base, top, x0, xr: x1 + 20, toPage: true, unit, floorU: PH ? LP_CARD.TYPE_PX / (st.stagePx > 0 ? st.stagePx : 1) : 0, below: bottom + XLAB + (P ? 40 : LF ? LF.tick : 26) * 0.6, fs: LF ? LF.value : P ? 44 : 26, fs0: LF ? LF.tick : P ? 40 : 22,
       bars: st.bars.map((b) => ({ i: b.i, bar: b.bar, x: b.bx, bw: b.bw, end: b.end, val: b.val, lab: b.lab, segs: b.segs || null })) });   /* P69 T64: each part's figure, and the key */
     if (OUT) lpBarsOutBuild(st, OUT, { top, bottom, x0, x1, P, LF, G });   /* P71 T25: the clip of a page born alone, the rank pill, the projection's tag and its bracket to #1 */
+    if (Array.isArray(pg.claims)) lpBarClaims(st, pg, { P, slot });   /* P73 T1: a claimed figure - its outline, its quotes, its speaker (absent: the page to the byte) */
+  };
+  /* P73 T1 - A CLAIMED FIGURE ON A CHART. A bar the page's object marks `claim` (ledger_page `claims_block`: per bar
+     null or {by, standing?, said, evidence, text, audit?}) is SOMEONE'S figure. The page draws it so no viewer takes it
+     for a sourced value, and so it reads as the speaker's figure, with the speaker's name on it (the operator,
+     2026-09-26: the label credits who said it, and who they are):
+       the body   - an OUTLINE in its series ink, the fill left open (`claim_form: "hatch"`: a hatch in the ink inside the
+                    outline - the human gate's alternative); never the filled body a sourced bar has, never the dash a
+                    projection has (S3 / E77). A range claim's band keeps its own dashed law (P69 T8d).
+       the figure - QUOTED (U+201C / U+201D), and the speaker written over it in the bar's ink at LPCLAIM.BY_EM of the
+                    figure's size - one line when it fits the bar's slot, else broken after the comma, else shrunk to fit
+                    (never under LPCLAIM.BY_MIN of the figure); `audit` adds its own line. The lines are TSPANS of the
+                    figure's own text, so every painter that fades, moves or solos the figure (paintSolo's fill-opacity,
+                    the value's y) carries the speaker with it, and no painter learns a new element.
+     Built LAST, once the row's values are fitted and the pill placed, so a page naming no claim never reaches it. */
+  const LPCLAIM = Object.freeze({
+    STROKE_PX: 4,      /* the outline, stage px - the projection's own weight (LPBAR_OUT.STROKE_PX), solid */
+    HATCH_PX: 12,      /* the hatch's pitch, stage px (the `hatch` form) */
+    HATCH_W_PX: 3,     /* ... and its line */
+    BY_EM: 0.62,       /* the speaker's size, of the figure's */
+    BY_MIN: 0.45,      /* the least it shrinks to before it overruns its slot */
+    ROOM: 0.94,        /* the share of the bar's slot a speaker line may take */
+    LINE: 1.12,        /* a speaker line's height, of its own size */
+    RISE: 1.08,        /* the speaker's last baseline over the figure's, of the figure's size (the quote marks' height + air) */
+    Q_L: "\u201c", Q_R: "\u201d",   /* the quote marks, as escapes */
+  });
+  let lpClaimN = 0;
+  const lpBarClaimHatch = (st, ink) => {   /* a 45-degree hatch in the claim's ink, in the chart's own units */
+    const s = lpBarOutPx(st, LPCLAIM.HATCH_PX), id = "lp-claim-hatch-" + (st.seed | 0) + "-" + (++lpClaimN);
+    const pt = lpEl("pattern", "", lpEl("defs", "", st.chart), { id, patternUnits: "userSpaceOnUse", width: s.toFixed(3),
+      height: s.toFixed(3), patternTransform: "rotate(45)" });
+    lpEl("line", "", pt, { x1: 0, y1: 0, x2: 0, y2: s.toFixed(3), stroke: ink, "stroke-width": lpBarOutPx(st, LPCLAIM.HATCH_W_PX).toFixed(3) });
+    return "url(#" + id + ")";
+  };
+  const lpClaimLines = (st, c, size, room) => {   /* the speaker's lines and their size - the first rung of the ladder that fits */
+    const probe = lpEl("text", "val", st.chart, { x: 0, y: 0, opacity: 0 });
+    const w = (s, fs) => { probe.style.fontSize = fs.toFixed(2) + "px"; probe.textContent = s; return lpInkW(probe); };
+    const text = String(c.text || c.by || ""), by = String(c.by || text).trim(), cut = text.indexOf(", ");
+    const words = by.split(/\s+/), sur = words[words.length - 1];
+    const ladder = [[text]];   /* the full credit; then at the comma; then the name; the name on two lines; the surname */
+    if (cut > 0) ladder.push([text.slice(0, cut + 1), text.slice(cut + 2)]);
+    if (by !== text) ladder.push([by]);
+    if (words.length > 1) ladder.push([words.slice(0, -1).join(" "), sur]);
+    ladder.push([sur]);
+    const A = c.audit ? String(c.audit) : "", sp = A.lastIndexOf(" ", Math.floor(A.length / 2) + 1);
+    const audit = (fs) => !A ? [] : (w(A, fs) <= room || sp < 0) ? [A] : [A.slice(0, sp), A.slice(sp + 1)];   /* the audit breaks at its middle space when it must */
+    const widest = (ls, fs) => Math.max(...ls.concat(audit(fs)).map((s) => w(s, fs)));
+    let pick = null;
+    for (const ls of ladder) {   /* its own size first, then shrunk as far as the floor */
+      const fs = Math.max(size.lo, Math.min(size.hi, size.hi * room / widest(ls, size.hi)));
+      if (widest(ls, fs) <= room + 0.5) { pick = { ls, fs }; break; }
+    }
+    const last = ladder[ladder.length - 1];
+    if (!pick) pick = { ls: last, fs: Math.max(1, size.hi * room / widest(last, size.hi)) };   /* no rung fits: the surname, to its slot */
+    probe.remove();
+    return { lines: pick.ls.concat(audit(pick.fs)), fs: pick.fs, fit: pick.fs >= size.lo - 1e-6, rung: ladder.indexOf(pick.ls) };
+  };
+  const lpBarClaims = (st, pg, g) => {
+    const form = pg.claim_form === "hatch" ? "hatch" : "outline";
+    st.claims = [];
+    for (const b of st.bars) {
+      const c = (pg.claims || [])[b.i];
+      if (!c || !b.bar || !b.val) continue;
+      const ink = lpVarHex(lpFillOf(b.bar) || (b.neg ? "var(--lp-neg)" : "var(--lp-pos)"));
+      b.bar.classList.add("lp-bar-claim");
+      b.bar.style.fill = form === "hatch" ? lpBarClaimHatch(st, ink) : "none";
+      b.bar.style.stroke = ink; b.bar.style.strokeWidth = lpBarOutPx(st, LPCLAIM.STROKE_PX).toFixed(2);
+      if (b.foot) b.foot.style.display = "none";   /* P69 T10b's square foot is a filled body's */
+      if (b.band) {   /* a range claim: the band from the body's top to the far end - no tuck under an open body, no fill */
+        const by = +b.band.getAttribute("y"), bh = +b.band.getAttribute("height"), ry = +b.bar.getAttribute("y"), rh = +b.bar.getAttribute("height");
+        const y0 = b.neg ? ry + rh : by, y1 = b.neg ? by + bh : ry;
+        b.band.setAttribute("y", y0.toFixed(1)); b.band.setAttribute("height", Math.max(0, y1 - y0).toFixed(1)); b.band.style.fillOpacity = "0";
+      }
+      if (b.thin) { b.val.style.display = ""; b.thin = false; }   /* R26-191's thin keeps a sourced row's extremes; it never drops a claim's figure, which carries its speaker */
+      const val = b.val, fig = val.textContent || "", x = val.getAttribute("x");
+      const fs0 = parseFloat(val.style.fontSize) || parseFloat(getComputedStyle(val).fontSize) || (g.P ? 59 : 26);
+      const L = lpClaimLines(st, c, { hi: fs0 * LPCLAIM.BY_EM, lo: fs0 * LPCLAIM.BY_MIN }, g.slot * LPCLAIM.ROOM);
+      const lh = L.fs * LPCLAIM.LINE, rise = fs0 * LPCLAIM.RISE, n = L.lines.length;
+      val.textContent = "";
+      const by = (s, dy) => { const t = lpEl("tspan", "lp-claim-by", val, { x, dy: dy.toFixed(2) });
+        t.style.fontSize = L.fs.toFixed(2) + "px"; t.style.fill = ink; t.style.fontWeight = "600"; t.textContent = s; return t; };
+      const figT = (dy) => { const t = lpEl("tspan", "lp-claim-fig", val, dy == null ? { x } : { x, dy: dy.toFixed(2) });
+        t.textContent = LPCLAIM.Q_L + fig + LPCLAIM.Q_R;
+        const fw = lpInkW(t), room = g.slot * LPCLAIM.ROOM;   /* the quoted figure keeps to its slot too, so a claim never reaches a neighbour */
+        if (fw > room) t.style.fontSize = (fs0 * room / fw).toFixed(2) + "px";
+        return t; };
+      if (b.neg) {   /* under a drop the figure hangs below the bar: the speaker hangs below the figure (E28: the side is the sign) */
+        figT(null);
+        L.lines.forEach((s, j) => by(s, j ? lh : rise));
+      } else {       /* over a rise: the speaker stands over the figure, the figure on its own baseline */
+        L.lines.forEach((s, j) => by(s, j ? lh : -(rise + (n - 1) * lh)));
+        figT(rise);
+      }
+      st.claims.push({ i: b.i, form, lines: L.lines, fs: +L.fs.toFixed(2), fit: L.fit });
+    }
   };
   /* P71 T25 (was P69 T74; the Bravos harvest v2 A50 / A51 / R31) - THE SCALE-OUT AND THE PROJECTED OVERTAKE. D40, measured
      at 30 fps (P71 T25 step (0)): ONE bar stands alone on its own 0-150 scale, centred at a fifth of the plot's width; on

@@ -6055,6 +6055,68 @@ SURFACES.update({"flow-supply-route": flow_supply_route})
 FRAME_T.update({"flow-supply-route": 9.8})   # the arrows drawn (7.845), the part on them, the failure 1.0 s old - disc settled, X struck
 
 
+# ---- P73 T1: A CLAIMED FIGURE ON A CHART - the AMD RFSoC episode's price page -------------------------------------------
+# Every figure off the P73 research pack (`amd-rfsoc/research/RESEARCH.md` s3), never typed from memory: DigiKey's qty-1
+# prices for the part Patel linked ($35,979.02, sources/03) and the part on Puzhi's board ($31,354.40, sources/06), the
+# board itself on Crowd Supply ($8,749, sources/02) and AMD's own academic RFSoC board ($2,499, sources/08) - all
+# CONFIRMED - and Dylan Patel's two figures from his post of 2026-09-19 (sources/01: CONFIRMED that he said them; no
+# evidence attached): "$4-5k to US companies at volume" (a RANGE) and "getting quoted $1k in China". On a LINEAR axis the
+# $1k is a sliver - the honest picture. The base frame is the page at rest (every bar built, both claims drawn as his:
+# outlined in their ink, quoted, "Dylan Patel, SemiAnalysis" over each); the proof instant is the claim's word, a solo
+# on the $1k (the rest muted, his name lit with his figure).
+CLAIM_PATEL = {"by": "Dylan Patel", "standing": "SemiAnalysis", "said": "2026-09-19", "evidence": "none",
+               "src": "his post on X"}
+
+
+def claim_price_object() -> dict:
+    """The price page's object - test_claim_figure proves this same page. In THOUSANDS (`unit_suffix: "k"`, three
+    significant figures on the bars) so every figure is written at the page's width, and Patel's quotes are his own
+    words ("$4-5k", "$1k"); the exact DigiKey / Crowd Supply / Real Digital prices are on the source line."""
+    return {"title": "One chip, six prices",
+            "sub": "Thousands of US dollars - AMD's XCZU47DR RFSoC, and two boards built on an RFSoC",
+            "src": "DigiKey qty 1 $35,979.02 (XCZU47DR-2FSVG1517I) and $31,354.40 (-2FFVE1156I), Crowd Supply $8,749 "
+                   "(PZSDR P047), Real Digital $2,499 (RFSoC 4x2, academic), all 2026-09-26",
+            "unit": "$", "unit_suffix": "k", "readability": "longform",
+            "bars": [{"label": "DigiKey list", "value": 36.0, "color": "crimson"},
+                     {"label": "The board's chip", "value": 31.4, "color": "crimson"},
+                     {"label": "Puzhi's board", "value": 8.75, "color": "cobalt"},
+                     {"label": "AMD's own board", "value": 2.5, "color": "cobalt"},
+                     {"label": "US volume", "value": [4, 5], "color": "amber", "claim": dict(CLAIM_PATEL, quote="$4-5k")},
+                     {"label": "China quote", "value": 1, "color": "amber", "claim": dict(CLAIM_PATEL, quote="$1k")}]}
+
+
+CLAIM_WORD_AT = 12.0   # "...getting quoted a thousand dollars in China" - the solo on the $1k
+
+
+def claim_bar() -> tuple[dict, dict]:
+    """P73 T1: the claims at rest (the base frame) and at the claim's word (the proof instant)."""
+    import tempfile
+    import build_scene_timeline_f as BST
+    plate = "ledger:fx-rfsoc-prices:bars"
+    species = [{"kind": "solo", "at": CLAIM_WORD_AT, "dur": 0.6, "bar": 5}]
+    assert not BST.validate_species(species, (0, 0, 0), plate), BST.validate_species(species, (0, 0, 0), plate)
+    with tempfile.TemporaryDirectory() as td:
+        ep = Path(td)
+        (ep / "evidence/objects").mkdir(parents=True)
+        (ep / "evidence/objects/fx-rfsoc-prices.series.json").write_text(json.dumps(claim_price_object()), encoding="utf-8")
+        saved = BST.ASPECT
+        BST.ASPECT = "16:9"
+        try:
+            world = BST.world_for_plate(plate, (0, 0, 0), ep)
+            BST.stamp_full_stage(world["page"])
+            BST.derive_rescale_states(world, species, plate, ep)
+        finally:
+            BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    tl = _timeline("Golden: a claimed figure on a chart (the AMD RFSoC price page)", scenes, {}, "16:9")
+    return tl, dict(_base_uris(), **BST.longform_assets(tl))   # the long form's page: its Inter faces
+
+
+SURFACES.update({"claim-bar": claim_bar})
+FRAME_T.update({"claim-bar": 8.0})   # at rest: every bar built and written, both claims his; the solo waits for 12.0
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

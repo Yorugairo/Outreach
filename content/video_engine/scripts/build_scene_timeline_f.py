@@ -6173,6 +6173,33 @@ def equation_missing_sources(entry: dict, dirs) -> list[str]:
     return out
 
 
+def equation_claim_errors(entry: dict, dirs) -> list[str]:
+    """P73 T1: an equation term read off a CLAIM - its `src` a page object on disk that carries a claim stating the
+    term's value - makes the result the claim's arithmetic, so the result's `label` is marked as the claim's
+    (`LPG.claim_label_marked`). [] when no term reads a claim."""
+    terms = [t for t in entry.get("terms") or [] if isinstance(t, dict)]
+    hits: list[tuple[int, dict]] = []
+    for i, tm in enumerate(terms):
+        src = tm.get("src")
+        if not (isinstance(src, str) and _num(tm.get("value"))):
+            continue
+        for d in dirs:
+            p = Path(d) / f"{src}.series.json"
+            if not p.is_file():
+                continue
+            v = float(tm["value"])
+            hits += [(i, c) for cv, c in LPG.claim_values(LPG.load_series(p))
+                     if abs(cv - v) <= 0.5 * 10 ** -_lj_decimals(repr(v)) + 1e-9 * max(1.0, abs(v))]
+            break
+    result = entry.get("result") if isinstance(entry.get("result"), dict) else {}
+    if not hits or LPG.claim_label_marked(result.get("label"), [c for _, c in hits]):
+        return []
+    i, c = hits[0]
+    return [f"equation: term {i + 1} reads a claim ({LPG.claim_text(c)}, {terms[i].get('src')}) and the result's label "
+            f"{result.get('label')!r} does not say so - arithmetic on a claim is the claim's (\"on Patel's figure\") "
+            "(P73 T1)"]
+
+
 def equation_row_checks(row_species, where: str, ep_dir, build_dir) -> None:
     """main()'s ONE call for the equation (P70 T6): a src that names nothing on disk FAILS the build, and the WARNs
     are printed. Only an `equation` entry is read; a row without one is untouched."""
@@ -6180,6 +6207,7 @@ def equation_row_checks(row_species, where: str, ep_dir, build_dir) -> None:
         if not (isinstance(e, dict) and e.get("kind") == SPECIES_EQUATION):
             continue
         missing = equation_missing_sources(e, (Path(ep_dir) / "evidence/objects", Path(build_dir) / "objects"))
+        missing += equation_claim_errors(e, (Path(ep_dir) / "evidence/objects", Path(build_dir) / "objects"))   # P73 T1
         if missing:
             raise SystemExit(f"FAIL: {where}: " + "; ".join(missing))
         for w in equation_advice(e, (1080, 1920) if ASPECT == "9:16" else (1920, 1080)):
@@ -8669,6 +8697,68 @@ def bars_extend_state(world: dict, sp: dict, plate_id: str, ep_dir: Path, states
     return spec
 
 
+# ---- P73 T1: A CLAIM NEVER FEEDS A COMPUTED LABEL UNMARKED ---------------------------------------------------------------
+# A bars page may carry a claimed figure (ledger_page `claim`). The page draws it as the speaker's, never as a sourced
+# value; a label the page COMPUTES from the page's data must say so too, or it passes the claim off as arithmetic on
+# sourced numbers: a bracket or a level join with an end on a claim bar ("36x"), and a `chart_to compare` whose figure
+# stands on a claim bar or whose comparator IS a claim's number, each need a label marked as the claim's
+# (`LPG.claim_label_marked`: it says "claim", or names the speaker) - "claimed vs listed", "36x on Patel's figure".
+CLAIM_LABELLED = ("bracket", SPECIES_LEVEL_JOIN)
+
+
+def _claim_ends(sp: dict) -> list[int]:
+    """The bar indices a bracket or a level join reads (a level join's `to` may be an index, {series, index} or {y})."""
+    ends = [sp.get("from")]
+    to = sp.get("to")
+    ends.append(to.get("index") if isinstance(to, dict) else to)
+    return [int(e) for e in ends if isinstance(e, int) and not isinstance(e, bool)]
+
+
+def _claim_compare_error(sp: dict, figures: list, claims: list, values: list) -> str | None:
+    """A compare reading a claim - its figure on a claim bar, or its comparator / old value a claim's number - and
+    no label of it marked as the claim's."""
+    met = sp.get("metric") if isinstance(sp.get("metric"), dict) else {}
+    other = sp.get("from") if isinstance(sp.get("from"), dict) else sp.get("comparator") if isinstance(sp.get("comparator"), dict) else {}
+    quoted = str(met.get("text") or "").strip()
+    bars = [((f.get("target") or {}).get("index")) for f in figures if str(f.get("text") or "").strip() == quoted]
+    on = [claims[k] for k in bars if isinstance(k, int) and 0 <= k < len(claims) and claims[k]]
+    cv = other.get("value")
+    hit = on + [c for v, c in values if _num(cv) and abs(float(cv) - v) <= COMPARE_TOL * max(abs(v), 1e-12)]
+    if not hit:
+        return None
+    if any(LPG.claim_label_marked(d.get("label"), hit) for d in (met, other)):
+        return None
+    return (f"chart_to compare at {sp.get('at')}: it reads a claim ({hit[0].get('text')}) and no label says so - a "
+            "compare from a claim to a sourced value reads as \"claimed vs listed\": mark the claim's side "
+            "(metric.label or comparator/from.label says \"claim\" or names the speaker) (P73 T1)")
+
+
+def check_claims(world: dict, row_species: list) -> None:
+    """P73 T1: on a page carrying a claim, a label computed from a claim is marked as the claim's - a bracket or a level
+    join with an end on a claim bar, a compare reading one. ValueError names it (a truth rule, s106); a page with no
+    claim is untouched."""
+    page = world.get("page") if isinstance(world, dict) and world.get("kind") == SPECIES_LEDGER else None
+    claims = (page or {}).get("claims")
+    if not isinstance(claims, list) or not any(claims):
+        return
+    values = [(float(v), c) for v, c in zip(page.get("values") or [], claims) if c and _num(v)]
+    values += [(float(e), c) for r, c in zip(page.get("ranges") or [], claims) if c and isinstance(r, list) for e in r]
+    figures = [f for f in row_species or [] if isinstance(f, dict) and f.get("kind") == "figure"]
+    for sp in row_species or []:
+        if not isinstance(sp, dict):
+            continue
+        if sp.get("kind") in CLAIM_LABELLED:
+            hit = [claims[k] for k in _claim_ends(sp) if 0 <= k < len(claims) and claims[k]]
+            if hit and not LPG.claim_label_marked(sp.get("label"), hit):
+                raise ValueError(f"{sp['kind']} at {sp.get('at')}: an end stands on a claim ({hit[0]['text']}) and the "
+                                 f"label {sp.get('label')!r} does not say so - a figure computed from a claim is marked "
+                                 "as the claim's (\"36x on Patel's figure\", \"claimed\") (P73 T1)")
+        elif sp.get("kind") == "chart_to" and sp.get("to") == "compare":
+            err = _claim_compare_error(sp, figures, claims, values)
+            if err:
+                raise ValueError(err)
+
+
 def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir: Path, sid: str | None = None) -> None:
     """Append one derived page state per `chart_to rescale` / `extend` on the row, in time order, and point each species
     at its state. An extend grows the CURRENT window (the page's whole series, or the last rescale's window) to
@@ -8699,6 +8789,7 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     for _gl_note in check_glow(world, row_species):   # P71 T29: an edge on a mark the page has; one a row; never before its region
         print(f"  [WARN] {_gl_note}" + (f" [scene {sid}]" if sid else ""))
     check_schematic(world, row_species)       # P70 T2: a schematic writes no figure it cannot source (E99 s109 (1))
+    check_claims(world, row_species)          # P73 T1: a label computed from a claim is marked as the claim's
     for sp in (row_species or []):   # P48 T5: a morph moves the area under a line into another - both sides are line pages, or the refusal names the verb to use
         if isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") == "morph":
             if world.get("kind") != SPECIES_LEDGER:
@@ -8946,6 +9037,10 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
     if errors:
         raise ValueError(f"{plate_id!r}: {path.name} is not a page ({variant}): " + "; ".join(errors))
     page = LPG.build_spec(series, variant, emphasize, quiet_zone)
+    if LPG.claim_emphasis_error(page):   # P73 T1: the counting pill never stands on a claim
+        raise ValueError(f"{plate_id!r}: {LPG.claim_emphasis_error(page)}")
+    if ASPECT == "9:16" and LPG.claim_portrait_error(page):   # P73 T1: the portrait source line keeps the speaker
+        raise ValueError(f"{plate_id!r}: {LPG.claim_portrait_error(page)}")
     void = LPG.era_void_warning(series, series_id, variant)   # P69 T66: two eras on one continuous x (E53 s3 / E99 s111)
     if void:
         print(f"  [WARN] {void}")
