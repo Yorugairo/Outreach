@@ -1691,7 +1691,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T19: Verdict tiles with a check state, two verdict panels, and the BUY tab on a tile (was P69 T60)
-- Status: pending
+- Status: done - lane B `586f38b`: `verdict: {state: tick|cross|buy|sell, at}` on a chart-card dock, centred over the tile's top edge at BUB 18:45's measured place, T12's chip-state laws; refused off a sourced chart and on a seal; card `dock_option:verdict` (draft), recipe `two-verdict-panels` (candidate), golden `verdict-tiles-three-questions` (two tiles - no sourced series for the third); left-overs R26-391
 - Owner: implementation_luna (LANE B)
 - Depends on: T12 (the tick and the tabs); P70 T8 (the dock branch and `dock_opts`); P70 T13 (the dock-option
   validation); T15 (its hover lines in the same dock loop); done: P69 T10c (the card profile) and T8b (panels)

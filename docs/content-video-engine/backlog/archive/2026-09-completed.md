@@ -309,6 +309,8 @@ an unresolved source anomaly; this pass does not synthesize a task from it.
 | R26-250 | A comparator rule's label covers a bar. Closed by P72 T13. | lane B `6c349b0`: the label slides, wraps, shrinks (>= 0.7) or goes past the rule's end; `st.ruleFit` reports. |
 | R26-170 | A signed page's category labels sit under the bars that point down. Closed by P72 T13. | already fixed at `2b7b6a4` (M28 PASS); T13 confirmed it, not rebuilt. |
 | R26-217 | The treemap / tiers legibility constants ignore the stage. Closed by P72 T13. | lane B `6c349b0`: treemap floors per stage; the tiers ceiling states its measure. |
+| R26-164 | A layered plate's drift ignores the camera. Closed by P72 T25. | lane B `2b37127`: the walk projected onto the camera's move, on its side; off with a WARN when the camera gives none; a flat plate keeps its free drift (s65). |
+| R26-165 | A ken has no window - a lean cannot start on a word. Closed by P72 T25. | lane B `2b37127`: `(scale, x, y, t0, t1)`; holds, leans, holds; a freeze pauses the lean; the clash check's window is R26-392. |
 | R26-284 | A figure double-prints its bar's value. Closed by P72 T18. | lane B `4b07424`: the figure hands over in place; a restating figure WARNs (s106). |
 | R26-288 | A ring on a bar has no value target. Closed by P72 T18. | lane B `4b07424`: `part: value` rings the printed value as drawn. |
 | R26-255 | A bar figure drifts on a page with states. Closed by P72 T18. | lane B `4b07424`: it rides its bar through a rescale. |
