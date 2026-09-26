@@ -217,8 +217,8 @@ def test_the_capabilities_list_prints_the_page_lines_filtered_by_state_and_secti
 
     # Assert
     assert everything[:4] == ["## Rendering",
-                              "- Widget engine - LIVE - draws the widget on its word. (CAPABILITIES.md:12)",
-                              "## Gates", "- Wired thing - WIRED (CAPABILITIES.md:40)"]
+                              "- Widget engine - LIVE - draws the widget on its word. (:12)",
+                              "## Gates", "- Wired thing - WIRED (:40)"]
     assert everything[-1].startswith("2 of 2 capabilities; open a row: sed -n <line>p ")
     assert live[:2] == everything[:2] and live[-1].startswith("1 of 2 capabilities (state live)")
     assert gates[:2] == everything[2:4]

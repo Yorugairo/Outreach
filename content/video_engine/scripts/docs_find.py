@@ -606,9 +606,10 @@ def use_utf8(*streams) -> None:
 
 
 def capability_line(record: dict) -> str:
-    """The `docs/CAPABILITIES-INDEX.md` line of one record (build_capabilities_index.md_line)."""
-    what = f" - {record.get('what')}" if record.get("what") else ""
-    return f"- {record.get('name')} - {record.get('state')}{what} (CAPABILITIES.md:{record.get('line')})"
+    """The `docs/CAPABILITIES-INDEX.md` line of one record: build_capabilities_index.md_line itself, so
+    the list and the page cannot drift (P72 T50 changed the line's pointer to `(:line)`)."""
+    from build_capabilities_index import md_line
+    return md_line(record)
 
 
 def list_capabilities(repo: Path, state: str | None, section: str | None) -> list[str]:

@@ -39,10 +39,17 @@ MD_REL = "docs/CAPABILITIES-INDEX.md"
 WHAT_MAX = 100          # characters in `what`, the ellipsis included; cut at a word. 2026-09-25: 120 -> 110 (P72 T1) -> 100 (P72 T2, lane B's 245 records: 44,439 bytes at 110, 42,583 at 100 - room for the lanes' merge) -
                         # P72 T1 fits the page under MD_MAX_BYTES by compacting each line, never by raising
                         # the cap: at 120 the 237-record page was 44,695 bytes; at 110 it is 42,774 (every
-                        # word stays searchable - `terms` carries the whole row)
+                        # word stays searchable - `terms` carries the whole row); P72 T50 stopped the trimming - see MD_MAX_BYTES
 STATE_NOTE_MAX = 60     # characters in the state cell's first clause
 SLUG_MAX = 60
-MD_MAX_BYTES = 44_000   # the start-of-session page; raise only with a stated reason. 2026-09-23: 40_000 -> 44_000 - P69's catch-up adds 16 capability rows (~1.9 KB of one-line entries) to a page already at 39,288 bytes
+MD_MAX_BYTES = 50_000   # the start-of-session page; raise only with a stated reason. 2026-09-23: 40_000 -> 44_000 - P69's catch-up adds 16 capability rows (~1.9 KB of one-line entries) to a page already at 39,288 bytes
+                        # 2026-09-25: 44_000 -> 50_000 - P70/P71/P72 landed 41 capability rows since P72 T1 (237 -> 278;
+                        # the page was 49,575 bytes). P72 T50 measured the bloat first: 0 duplicate and 0 near-duplicate
+                        # lines, no phrase in the names or summaries repeated past 6 times, 4 names restating their
+                        # state (~28 bytes, each carrying a qualifier, kept). The one pure boilerplate - `CAPABILITIES.md:`
+                        # in every line's pointer, 4,448 bytes - is cut to `(:line)` with the doc named once in the header
+                        # (45,432 bytes). The rest is real capabilities (operator: expand unless verifiable bloat can be
+                        # cut); headroom is ~25 rows at the ~160-byte mean line
 ELLIPSIS = "…"
 ROW_PREFIX = "| **"
 
@@ -290,9 +297,10 @@ def parse(text: str) -> Parsed:
 # --------------------------------------------------------------------------- rendering
 
 def md_line(record: dict) -> str:
-    """`- name - STATE - what (CAPABILITIES.md:line)`; docs_find.py --capabilities prints the same."""
+    """`- name - STATE - what (:line)`, `line` in CAPABILITIES.md (the page header names the doc once);
+    docs_find.py --capabilities prints this same line."""
     what = f" - {record['what']}" if record["what"] else ""
-    return f"- {record['name']} - {record['state']}{what} (CAPABILITIES.md:{record['line']})"
+    return f"- {record['name']} - {record['state']}{what} (:{record['line']})"
 
 
 def render_md(parsed: Parsed) -> str:
@@ -304,9 +312,9 @@ def render_md(parsed: Parsed) -> str:
         "# Capabilities index - one line per capability",
         "",
         f"Generated from `{CAP_REL}` by `content/video_engine/scripts/build_capabilities_index.py`",
-        "`--write`; never edit by hand. Each line: `name - STATE - what (CAPABILITIES.md:line)`; read the",
-        "full row with `sed -n <line>p`. Search: `docs_find.py \"<term>\"` (capabilities first); list:",
-        "`docs_find.py --capabilities [--state LIVE] [--section <text>]`.",
+        "`--write`; never edit by hand. Each line: `name - STATE - what (:line)`; read the full row with",
+        f"`sed -n <line>p {CAP_REL}`. Search: `docs_find.py \"<term>\"` (capabilities first);",
+        "list: `docs_find.py --capabilities [--state LIVE] [--section <text>]`.",
         "",
         f"**{len(parsed.records)} capabilities: {states}.**",
     ]

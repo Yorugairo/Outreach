@@ -204,3 +204,18 @@ def test_the_card_axes_cover_every_axis_in_the_effects_catalogue():
 
     # Assert
     assert axes <= set(B.CARD_AXES)
+
+
+def test_the_page_names_the_doc_once_and_each_line_points_by_line_number(tmp_path):
+    # Arrange
+    parsed = B.build(repo_with(tmp_path, DOC))
+
+    # Act
+    page = B.render_md(parsed)
+    body = page.split("\n## Rows the doc should fix", 1)[0]
+    rows = [line for line in body.splitlines() if line.startswith("- ")]
+
+    # Assert: `CAPABILITIES.md:` was 16 bytes of boilerplate on every line (P72 T50); the header carries it
+    assert rows[0] == "- Widget engine - LIVE - draws the widget on its word. (:7)"
+    assert all(re.search(r" \(:\d+\)$", line) and "CAPABILITIES.md" not in line for line in rows)
+    assert f"sed -n <line>p {B.CAP_REL}" in page
