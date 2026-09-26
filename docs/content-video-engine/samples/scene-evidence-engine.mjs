@@ -7966,6 +7966,9 @@ async function mount(doc) {
           const path = mk("path", { d, fill: "none", stroke: col,
             "stroke-width": sr.dash ? 2.5 : (si === 0 ? 5 : 3.5),
             "stroke-linecap": "round", "stroke-linejoin": "round" });
+          /* P72 T48 / R26-367: the line NAMES its series and panel, so a mark can ring one of its data (resolveTarget's
+             datum on a dock) and the probe can read whose line it is - its data are the path's own vertices, in order */
+          path.dataset.si = si; path.dataset.pn = pn.i;
           /* a DASHED series (reference/trigger lines) cannot use the
              dashoffset draw trick - it fades in on its delay instead */
           const len = path.getTotalLength();
@@ -7999,7 +8002,8 @@ async function mount(doc) {
                 "stroke-width": 2 }));
           }
           st.paths.push({ path, len, stagger: oi / Math.max(1, order.length),
-                          delay: sr.delay || 0, tip, dots });
+                          delay: sr.delay || 0, tip, dots,
+                          si, pn: pn.i, pts: sr.pts.map(([x, v]) => [+mx(x).toFixed(1), +my(v).toFixed(1)]) });   /* P72 T48: the d's own vertices */
           st.labels.push(lbl);
         });
         /* EVENT BARS (doc 29 s9.22 combo convention): the print series
@@ -18301,8 +18305,25 @@ async function mount(doc) {
     const q = L.prop && Array.isArray(L.paint) && L.paint.length === 4 ? L.paint : null;
     return q ? { x: b.x + q[0] * b.w, y: b.y + q[1] * b.h, w: (q[2] - q[0]) * b.w, h: (q[3] - q[1]) * b.h } : b;
   };
+  /* P72 T48 / R26-367: a DATUM ON A DOCKED CHART - `dock` is the row's dock index or its evidence id. The card's own
+     drawn line (chartState, the chartbox painter's record): the datum is that path's vertex, carried to STAGE px
+     through the path's screen CTM, so the dock's own transform at t (its arrival, its park) moves the mark with it.
+     Only a dock on the stage THIS frame (DOCK_LIVE, written by the dock loop before the species paint) resolves. */
+  let spScene = null;   /* the scene paintSpecies is painting: a dock INDEX is an index into its docks */
+  const dockDatumBox = (tg) => {
+    const aid = typeof tg.dock === "string" ? tg.dock : (((spScene && spScene.docks) || [])[tg.dock | 0] || {}).slide;
+    const slot = aid && DOCK_LIVE[aid] ? shown.indexOf(aid) : -1;
+    const st = slot >= 0 ? chartState[slot] : null;
+    const rec = st && st.paths.find((p) => p.si === (tg.series | 0) && (p.pn | 0) === (tg.panel | 0));
+    const m = rec && rec.pts.length && rec.path.getScreenCTM();
+    if (!m) return null;
+    const v = rec.pts[Math.max(0, Math.min(tg.index | 0, rec.pts.length - 1))];
+    const q = new DOMPoint(v[0], v[1]).matrixTransform(m), sb = $("stage").getBoundingClientRect(), k = STAGE_W / Math.max(1, sb.width);
+    return { x: (q.x - sb.left) * k, y: (q.y - sb.top) * k, w: 0, h: 0 };
+  };
   const resolveTarget = (tg) => {
     if (!tg) return null;
+    if (tg.kind === "datum" && tg.dock != null) return dockDatumBox(tg);
     if (tg.kind === "point") return { x: tg.x * STAGE_W, y: tg.y * STAGE_H, w: 0, h: 0 };
     if (tg.kind === "region") return { x: tg.x0 * STAGE_W, y: tg.y0 * STAGE_H, w: (tg.x1 - tg.x0) * STAGE_W, h: (tg.y1 - tg.y0) * STAGE_H };
     if (tg.kind === "datum") {   /* the ledger page's bar, or a point on its dense line */
@@ -22951,6 +22972,7 @@ async function mount(doc) {
               target: f.target || { kind: "datum", index: Number.isInteger(pg.emphasize) ? pg.emphasize : 0 }, target2: f.target2 }];
   };
   const paintSpecies = (sc, t) => {
+    spScene = sc;   /* P72 T48: a datum on a dock names the dock by this scene's index */
     spTop.replaceChildren(); spUnder.replaceChildren(); plife.replaceChildren();
     const hasDocks = (sc.docks || []).length > 0;
     plife.style.transformOrigin = (STAGE_W / 2) + "px " + (STAGE_H / 2) + "px"; plife.style.transform = camCss(camNow(sc, t));   /* plate life lives in the world: the camera carries it */
@@ -22961,7 +22983,7 @@ async function mount(doc) {
          the page's chart and paints beneath any card parked or thrown over it; a species on a point / region / span annotates whatever
          is there - the card itself, in the chart-callout golden - and paints above. Time is not the test: on the tariff parts page the
          ring began after the card arrived and still belonged to the bar beneath it. */
-      spSvg = hasDocks && sp.target && sp.target.kind === "datum" ? spUnder : spTop;
+      spSvg = hasDocks && sp.target && sp.target.kind === "datum" && sp.target.dock == null ? spUnder : spTop;   /* P72 T48: a datum on a DOCK's chart annotates the card itself - above it */
       const seed = 0x51EC1E5 ^ ((sc.scene_id || "").length * 131 + si);
       /* the module rule: a registered painter OWNS its kind - it gets the declaration, the clock, the layer already
          chosen above and the shared helpers by name, and nothing in the chain below runs for it */

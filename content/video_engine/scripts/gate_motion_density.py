@@ -106,6 +106,11 @@ event every PAGE_LIFE_STEP_S inside its own span. The PULSE ROWS ONLY read that 
        a mark over its own target's text WARNs                        spotlight) and a mark's text off its
                                                                         ellipse; INFO until
                                                                         probe.py <build> --gate writes the ledger)
+  M49  a mark over a chart reaches a line (P72 T48 /        WARN   (R26-367, E56: a ring on a chart circles a
+       R26-367): a POINT-target callout / ring / spotlight /           number or a point ON the chart; s106: advice,
+       squiggle / punch over a page's or a docked chart's              never a refusal - bind it to its datum; no
+       plot whose centre is farther from every drawn line              row until probe.py <build> --gate has read
+       than its own reach. Names the distance and the datum            such a mark)
   M43  punch crops text (the operator 2026-09-03): a camera     FAIL   (ledger 16d1b9558a10; the frustum M24
        landing - a punch, a focus zoom or an authored key                  computes from the row's own camera against
        over zoom 1 - whose frame cuts one of the page's text               probe.py's boxes; INFO until probe.py
@@ -1786,6 +1791,8 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
     g.append(_labels_gate(layout))                                        # M28 (R26-53: text on text among the page's own labels)
     if (cl := _collision_gate(layout)) is not None:
         g.append(cl)                                                      # M34 (K9: the collision ledger - marks and lines against every text box)
+    if (mr := _mark_reach_gate(layout)) is not None:
+        g.append(mr)                                                      # M49 (P72 T48 / R26-367: a point-target mark over a chart reaches a line)
     if (cp := _crop_gate(layout, tl.get("scenes", []), str(tl.get("aspect") or "16:9"))) is not None:
         g.append(cp)                                                      # M43 (punch-crops-text: a camera landing that cuts a text box partway)
     if (pl := _plate_length_gate(tl.get("scenes", []))) is not None:
@@ -3351,6 +3358,42 @@ def _collision_gate(doc: dict | str | None) -> Gate | None:
                     + (" ..." if len(warns) > 4 else ""), SRC_M34)
     return Gate("M34", "PASS", f"no mark over a text box and no text box on a line it does not name over {span} "
                 f"({checked:,} pair(s) checked)", SRC_M34)
+
+
+# ---- M49 (P72 T48 / R26-367): a mark over a chart reaches a line ------------------------------------------------
+SRC_M49 = ("R26-367 (the operator, 2026-09-25, on the chart-callout golden: \"why is the ring completely missing the "
+           "line?\") and E56 (a ring on a chart circles a number or a point ON the chart): a point target is a hand-typed "
+           "stage fraction that nothing ties to the data; probe.py --gate reads each point-target mark over a chart's "
+           "plot against every drawn line (layout-probe.json `mreach`). s106: the engine advises - a WARN, never a FAIL")
+M49_REACH_NORM = 1.0   # the mark's own reach (probe.MARK_REACH): a line inside its ellipse is the line it rings
+
+
+def _mark_reach_gate(doc: dict | str | None) -> Gate | None:
+    """M49 (P72 T48): None until the probe has read a point-target mark over a chart (a stale or missing probe is
+    M25's to name). One reading per instant the mark was up; a mark that reaches a drawn line at ANY of them passes
+    (the line it rings may still be drawing at its onset). Each miss is named with its closest approach."""
+    if doc is None or doc == "stale" or not isinstance(doc, dict):
+        return None
+    best: dict[tuple, dict] = {}
+    for inst in doc.get("instants") or []:
+        for r in inst.get("mreach") or []:
+            key = (r.get("scene"), r.get("kind"), r.get("at"), r.get("chart"))
+            if r.get("norm") is None:
+                continue
+            if key not in best or float(r["norm"]) < float(best[key]["norm"]):
+                best[key] = r
+    if not best:
+        return None
+    miss = [r for r in best.values() if float(r["norm"]) > M49_REACH_NORM]
+    if not miss:
+        return Gate("M49", "PASS", f"{len(best)} point-target mark(s) over a chart, each within its reach of a drawn line",
+                    SRC_M49)
+    rows = [f"{r['kind']} at {float(r['at']):g}s ({r.get('scene')}) over the {r['chart']} chart: {float(r['dist_px']):.0f} px "
+            f"from the nearest drawn line (series {r['series']}, datum {r['datum']}), its reach "
+            f"{float(r['reach'][0]):.0f}x{float(r['reach'][1]):.0f} px" for r in sorted(miss, key=lambda x: float(x["at"]))]
+    return Gate("M49", "WARN", f"{len(miss)} of {len(best)} point-target mark(s) over a chart ring no line: " + "; ".join(rows[:4])
+                + (" ..." if len(rows) > 4 else "") + " - bind it to the datum it means ({'kind': 'datum', "
+                "'series', 'index'}, and 'dock' on a docked chart)", SRC_M49)
 
 
 # ---- M43 (punch-crops-text, the operator 2026-09-03, ledger 16d1b9558a10) -----------------------------------------

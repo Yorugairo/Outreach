@@ -898,6 +898,177 @@ def derive(dom: dict, t: float, why: str, camera: dict, aspect: str, entries: di
     return out
 
 
+# ---- M49 (P72 T48 / R26-367): a mark over a chart reaches a line --------------------------------------------------
+# The operator, 2026-09-25, on the chart-callout golden: "why is the ring completely missing the line?" - a POINT target
+# is a hand-typed stage fraction, so nothing ties it to the data under it. A callout / ring / spotlight / squiggle /
+# punch whose point lands over a chart's plot (a ledger page's, or a docked chart's) is read against every DRAWN line
+# on that chart: its centre farther from all of them than its own reach is M49's WARN (s106), naming the distance and
+# the datum it evidently meant. A datum target is on its datum by construction and is not read.
+REACH_MARK_KINDS = ("callout", "ring", "spotlight", "squiggle", "punch")
+# the reach each painter gives a POINT (w = h = 0), mirrored from its module (test_ring_on_its_datum's twin check):
+MARK_REACH = {
+    "callout": (22.0, 18.0),      # species/callout.mjs CALLOUT.RX_PAD / RY_PAD: the ellipse's half-axes
+    "ring": (54.0, 40.0),         # species/ring.mjs max(MIN_RX, RX_PAD) / max(MIN_RY, RY_PAD) (ringEllipse: a point takes the minimum)
+    "spotlight": (180.0, 180.0),  # species/spotlight.mjs W_MIN / 2 + PAD: the hole's clear radius
+    "squiggle": (22.0, 18.0),     # no ellipse of its own: judged at the ring's reach (a stroke under a point)
+    "punch": (22.0, 18.0),        # a camera move paints nothing: the thing it pushes on is judged at the ring's reach
+}
+RING_PADS = (22.0, 18.0)   # species/ring.mjs RX_PAD / RY_PAD: what a pad is added to before the minimum is taken
+RING_PAD_Y_K = 0.4   # species/ring.mjs: a pad lifts the dashed ring's half-height by this much of itself
+
+
+def mark_reach(sp: dict) -> tuple[float, float]:
+    """The half-axes a mark rings a POINT at, its authored `pad` included (callout: + pad both ways; ring: its pads +
+    pad and + 0.4 pad, never under its minimum; the others take none)."""
+    kind = str(sp.get("kind"))
+    rx, ry = MARK_REACH[kind]
+    pad = sp.get("pad")
+    pad = float(pad) if isinstance(pad, (int, float)) and not isinstance(pad, bool) else 0.0
+    if kind == "callout":
+        return rx + pad, ry + pad
+    if kind == "ring":
+        return max(rx, RING_PADS[0] + pad), max(ry, RING_PADS[1] + RING_PAD_Y_K * pad)
+    return rx, ry
+
+
+def _scene_at(tl: dict, t: float) -> dict | None:
+    return next((s for s in tl.get("scenes") or [] if float(s["span"][0]) <= t < float(s["span"][1])), None)
+
+
+def _series_counts(chart: dict | None) -> list[int]:
+    """Datums per series of a chart as its builder draws it (panel 0 of a panels chart)."""
+    chart = chart or {}
+    series = ((chart.get("panels") or [{}])[0] or {}).get("series") if chart.get("panels") else chart.get("series")
+    return [len((s or {}).get("pts") or []) for s in series or []]
+
+
+def reach_marks_at(tl: dict, t: float) -> tuple[list[dict], dict]:
+    """The point-target marks on stage at t, and what the charts under them draw: (marks, counts) - counts carries
+    "page" (datums per series of the scene's ledger page), "docks" ({evidence id: datums per series} for each chart
+    dock on the row) and "scene"."""
+    sc = _scene_at(tl, t)
+    if sc is None:
+        return [], {}
+    marks = []
+    for n, sp in enumerate(sc.get("species") or []):
+        tg = sp.get("target") if isinstance(sp, dict) else None
+        if not (isinstance(tg, dict) and tg.get("kind") == "point" and sp.get("kind") in REACH_MARK_KINDS):
+            continue
+        at = float(sp.get("at") or 0.0)
+        if at <= t <= at + float(sp.get("dur") or 1.0):
+            marks.append({"n": n, "kind": sp["kind"], "at": at, "target": tg, "reach": list(mark_reach(sp))})
+    if not marks:
+        return [], {}
+    w = sc.get("world") or {}
+    page = w.get("page") if w.get("kind") == "ledger" and isinstance(w.get("page"), dict) else None
+    ev = tl.get("evidence") or {}
+    docks = {}
+    for d in sc.get("docks") or []:
+        e = ev.get(d.get("slide"))
+        if isinstance(e, dict) and isinstance(e.get("chart"), dict) and not e.get("record"):
+            docks[d["slide"]] = _series_counts(e["chart"])
+    return marks, {"page": _series_counts(page) if page and page.get("series") else [], "docks": docks,
+                   "scene": sc.get("scene_id")}
+
+
+READ_MARK_REACH = r"""
+(arg) => {
+  const stg = document.getElementById('stage').getBoundingClientRect();
+  const eff = (el) => { let o = 1, e = el;
+    while (e && e !== document.documentElement) { const cs = getComputedStyle(e);
+      if (cs.display === 'none' || cs.visibility === 'hidden') return 0;
+      o *= parseFloat(cs.opacity); if (!(o > 0)) return 0; e = e.parentElement; }
+    return o; };
+  const R = (el) => { const r = el.getBoundingClientRect(); return [r.x - stg.x, r.y - stg.y, r.width, r.height]; };
+  const unite = (a, b) => (a ? [Math.min(a[0], b[0]), Math.min(a[1], b[1]), Math.max(a[0] + a[2], b[0] + b[2]) - Math.min(a[0], b[0]),
+    Math.max(a[1] + a[3], b[1] + b[3]) - Math.min(a[1], b[1])] : b.slice());
+  /* a line's DRAWN part as stage points (the dash-offset draw; a dashed series fades in whole) */
+  const drawn = (el) => {
+    const len = el.getTotalLength ? el.getTotalLength() : 0; if (!(len > 0)) return [];
+    const off = parseFloat(el.getAttribute('stroke-dashoffset') || '0');
+    const da = el.dataset.fadein ? 0 : parseFloat((el.getAttribute('stroke-dasharray') || '0').split(/[ ,]/)[0]) || 0;
+    const L = da > 0 ? Math.max(0, Math.min(len, len - off)) : len, m = el.getScreenCTM(); if (!(L > 0) || !m) return [];
+    const n = Math.max(2, Math.min(480, Math.ceil(L / 3))), pts = [];
+    for (let i = 0; i <= n; i++) { const q = el.getPointAtLength(L * i / n);
+      pts.push([m.a * q.x + m.c * q.y + m.e - stg.x, m.b * q.x + m.d * q.y + m.f - stg.y]); }
+    return pts;
+  };
+  /* a target as the ENGINE resolves it (window.__camera's resolveTarget), its box's centre in stage px */
+  const at = (tg) => { const c = window.__camera ? window.__camera(arg.t, tg) : null; const b = c && c.target && c.target.box;
+    return b ? [b.x + b.w / 2, b.y + b.h / 2] : null; };
+  const charts = [], cards = [];
+  for (const d of document.querySelectorAll('.dock')) if (eff(d) > 0.05) { const b = R(d); if (b[2] > 1 && b[3] > 1) cards.push(b); }
+  const inside = (c, b) => c[0] >= b[0] && c[0] <= b[0] + b[2] && c[1] >= b[1] && c[1] <= b[1] + b[3];
+  /* the PAGE on screen - the probe's own rule: wB, a ledger world, visible; its lines by their owner (st.paths) */
+  const wB = document.getElementById('wB');
+  if (wB && wB.__lp && wB.classList.contains('ledger') && eff(wB) > 0.05 && arg.page.length) {
+    const S = wB.__lp, states = S.states && S.states.length ? S.states : [S], lines = []; let plot = null;
+    for (const chart of wB.querySelectorAll('.lp-chart')) {
+      if (eff(chart) <= 0.05) continue;
+      const st = states.find((x) => x.chart === chart), own = new Map();
+      for (const pp of ((st && st.paths) || [])) if (pp && pp.p && !pp.muted) own.set(pp.p, pp.si | 0);
+      for (const el of chart.querySelectorAll('path.ser')) {
+        if (!own.has(el)) continue;
+        plot = unite(plot, R(el));
+        if (eff(el) > 0.05) lines.push({ si: own.get(el), pts: drawn(el) });
+      }
+    }
+    if (plot) charts.push({ name: 'page', plot, lines, counts: arg.page,
+                            datum: (si, i) => at({ kind: 'datum', series: si, index: i }) });
+  }
+  /* each DOCKED chart on screen - the card's own drawn lines, named by the painter (data-si, data-pn) */
+  for (const d of document.querySelectorAll('.dock')) {
+    const aid = d.dataset.slide, svg = d.querySelector('svg.chartbox');
+    if (!aid || !svg || !(aid in arg.docks) || eff(d) <= 0.05) continue;
+    const lines = []; let plot = null;
+    for (const el of svg.querySelectorAll('path[data-si]')) {
+      if ((+el.dataset.pn | 0) !== 0) continue;
+      plot = unite(plot, R(el));
+      if (eff(el) > 0.05) lines.push({ si: +el.dataset.si, pts: drawn(el) });
+    }
+    for (const el of svg.querySelectorAll('line')) if (plot) plot = unite(plot, R(el));   /* the grid spans the plot */
+    if (plot) charts.unshift({ name: 'dock ' + aid, plot, lines, counts: arg.docks[aid], dock: true,
+                            datum: (si, i) => at({ kind: 'datum', dock: aid, series: si, index: i }) });
+  }
+  const out = [];
+  for (const mk of arg.marks) {
+    const c = at(mk.target); if (!c) continue;
+    /* a docked chart stands over the page: its plot first; a mark on any OTHER card annotates that card, not the page */
+    const ch = charts.find((q) => inside(c, q.plot) && (q.dock || !cards.some((b) => inside(c, b))));
+    if (!ch) continue;   /* over no chart's plot (or on a card over it): not this row's business */
+    const [rx, ry] = mk.reach;
+    let best = null;
+    for (const ln of ch.lines) for (const p of ln.pts) {
+      const dx = p[0] - c[0], dy = p[1] - c[1], nm = Math.hypot(dx / rx, dy / ry);
+      if (!best || nm < best.nm) best = { nm, px: Math.hypot(dx, dy), si: ln.si, p };
+    }
+    let datum = null;
+    if (best) { let bd = Infinity; const n = ch.counts[best.si] | 0;
+      for (let i = 0; i < n; i++) { const q = ch.datum(best.si, i); if (!q) continue;
+        const dd = Math.hypot(q[0] - best.p[0], q[1] - best.p[1]); if (dd < bd) { bd = dd; datum = i; } } }
+    out.push({ kind: mk.kind, at: mk.at, chart: ch.name, centre: c, reach: mk.reach,
+               dist_px: best ? best.px : null, norm: best ? best.nm : null, series: best ? best.si : null, datum });
+  }
+  return out;
+}
+"""
+
+
+def mark_reach_read(page, t: float, tl: dict) -> list[dict]:
+    """M49's reading at t on a player already sought there: each point-target mark on stage over a chart's plot, with
+    its distance to the nearest DRAWN line (px, and in its own reach: `norm` > 1 is off every line), that line's series
+    and the datum nearest the point it came closest to. [] when no such mark is up. Rounded for the probe file."""
+    marks, counts = reach_marks_at(tl, t)
+    if not marks:
+        return []
+    raw = page.evaluate(READ_MARK_REACH, {"t": t, "marks": marks, "page": counts["page"], "docks": counts["docks"]})
+    return [{"kind": r["kind"], "scene": counts.get("scene"), "at": r["at"], "t": round(float(t), 3), "chart": r["chart"],
+             "centre": [round(v, 1) for v in r["centre"]], "reach": r["reach"],
+             "dist_px": None if r["dist_px"] is None else round(float(r["dist_px"]), 1),
+             "norm": None if r["norm"] is None else round(float(r["norm"]), 3),
+             "series": r["series"], "datum": r["datum"]} for r in raw or []]
+
+
 # ---- the probe session -------------------------------------------------------------------------------------------
 
 class Probe:
@@ -935,10 +1106,12 @@ class Probe:
         self.seek(t)
         dom = self.page.evaluate(READ_DOM)
         cam = self.page.evaluate("t => window.__camera ? window.__camera(t, null) : {}", t)
+        reach = mark_reach_read(self.page, t, self.tl)   # M49 (P72 T48): a point-target mark over a chart reaches a line
         self.seek(t + REST_DT)                      # is each card still moving, or is this its composition?
         nxt = self.page.evaluate(READ_DOCKS)
         self.seek(t)                                # leave the page at t: --sheet grabs the frame next
-        return derive(dom, t, why, cam or {}, self.aspect, self.entries, nxt)
+        inst = derive(dom, t, why, cam or {}, self.aspect, self.entries, nxt)
+        return dict(inst, mreach=reach) if reach else inst   # no such mark: the instant is written as it always was
 
     def png(self, t: float) -> bytes:
         return RB.frame_png(self.page, t, (self.w, self.h))

@@ -4240,9 +4240,10 @@
      "dur": 6.0,
      "kind": "callout",
      "target": {
-      "kind": "point",
-      "x": 0.72,
-      "y": 0.42
+      "dock": 0,
+      "index": 152,
+      "kind": "datum",
+      "series": 1
      }
     }
    ],

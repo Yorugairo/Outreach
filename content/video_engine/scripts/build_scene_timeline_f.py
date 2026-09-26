@@ -1953,6 +1953,91 @@ TARGET_FIELDS = {"datum": ("index",), "point": ("x", "y"),
 FRACTION_FIELDS = ("x", "y", "x0", "y0", "x1", "y1")   # plate coordinates as fractions of the frame, 0..1
 
 
+DATUM_DOCK_KEY = "dock"   # P72 T48 / R26-367: a DATUM on a DOCKED chart - {"kind": "datum", "dock": <the row's dock index |
+                          # its evidence id>, "series", "index"[, "panel"]}; the engine resolves it against that card's own
+                          # drawn line at t and paints it ABOVE the card (the mark annotates the card - E49's layer rule)
+DATUM_ON_DOCK_KINDS = ("callout", SPECIES_RING, "spotlight", "squiggle")   # ... the PAINTED marks alone: a camera move
+                          # (punch, focus_zoom, pull_back, a camera key) resolves its target before the frame's docks are
+                          # laid out (engine render(): camNow before the dock loop), so it would aim at last frame's card
+R26_367 = "R26-367"
+
+
+def _datum_dock_shape_errors(kind: str, dock) -> list[str]:
+    """P72 T48: a datum's `dock` - who may name one, and what it may be (a key the slice adds is refused BY NAME)."""
+    if kind not in DATUM_ON_DOCK_KINDS:
+        return [f"{kind}: target datum 'dock' names a datum on a docked chart, which only a painted mark "
+                f"({'|'.join(DATUM_ON_DOCK_KINDS)}) may ring - a {kind} resolves before the frame's docks are laid out "
+                f"({R26_367})"]
+    ok = (isinstance(dock, int) and not isinstance(dock, bool) and dock >= 0) or (isinstance(dock, str) and dock.strip())
+    return [] if ok else [f"{kind}: target datum 'dock' must be the row's dock index (a non-negative integer) or the "
+                          f"dock's evidence id, not {dock!r} ({R26_367})"]
+
+
+def _dock_chart_counts(chart: dict, panel: int | None) -> tuple[list[int] | None, str | None]:
+    """The datum count of each series the docked chart DRAWS on `panel` (the engine's chartbox painter: `panels`, else
+    one panel of `series`), or (None, why)."""
+    panels = chart.get("panels")
+    if isinstance(panels, list) and panels:
+        p = 0 if panel is None else panel
+        if p >= len(panels):
+            return None, f"panel {p} is not on it (0..{len(panels) - 1})"
+        series = (panels[p] or {}).get("series") or []
+    else:
+        if panel not in (None, 0):
+            return None, f"panel {panel} is not on it (the chart has one panel)"
+        series = chart.get("series") or []
+    return [len((s or {}).get("pts") or []) for s in series], None
+
+
+def _dock_datum_error(entry: dict, docks: list[dict], evidence: dict, where: str) -> str | None:
+    """Why one mark's datum on a dock resolves to nothing on this row, or None (P72 T48: a truth rule, refused)."""
+    tgt, at, kind = entry["target"], float(entry.get("at") or 0.0), entry.get("kind")
+    ref = tgt[DATUM_DOCK_KEY]
+    if _datum_dock_shape_errors(str(kind), ref) or not isinstance(tgt.get("index"), int):
+        return None   # a malformed target is _validate_target's refusal, already named - never a crash here
+    tag = f"{where}: {kind} at {at:g}s on a datum of dock {ref!r}"
+    if isinstance(ref, str):
+        d = next((x for x in docks if x.get("slide") == ref), None)
+    else:
+        d = docks[ref] if ref < len(docks) else None
+    if d is None:
+        named = ", ".join(f"{n} {x.get('slide')!r}" for n, x in enumerate(docks)) or "none"
+        return f"{tag}, which is not on this row (the row's docks: {named}) ({R26_367})"
+    if at < float(d["enter"]) - 1e-9:
+        return f"{tag}: the dock has not arrived (it enters at {float(d['enter']):g}s) - the datum is not on the stage"
+    if at >= float(d["exit"]) - 1e-9:
+        return f"{tag}: the dock has LEFT (at {float(d['exit']):g}s) - the datum is not on the stage"
+    ev = evidence.get(d.get("slide")) or {}
+    chart = ev.get("chart")
+    if not isinstance(chart, dict) or ev.get("record"):
+        return (f"{tag}: {d.get('slide')!r} carries no drawn chart (a `chart` payload the card draws its lines from) - "
+                f"a still or a card has no datum to ring; ring the card itself ({{'kind': 'dock'}}) ({R26_367})")
+    counts, why = _dock_chart_counts(chart, tgt.get("panel"))
+    if counts is None:
+        return f"{tag}: {why} ({R26_367})"
+    si, i = int(tgt.get("series") or 0), int(tgt["index"])
+    if si >= len(counts):
+        return f"{tag}: series {si} is not on its chart (0..{len(counts) - 1}) ({R26_367})"
+    if i >= counts[si]:
+        return f"{tag}: index {i} is not a datum of series {si} (0..{counts[si] - 1}) ({R26_367})"
+    return None
+
+
+def dock_datum_errors(row_species, docks: list[dict], evidence: dict, where: str) -> list[str]:
+    """P72 T48 / R26-367: every mark's datum on a DOCKED chart checked against the row's COMPILED docks and their
+    evidence - the dock on the row and on the stage at the mark's `at`, a drawn chart on it, the series (and panel) and
+    the index on that chart. A target that resolves to nothing is refused by name (a truth rule, never advice). Pure; a
+    row with no such target says nothing."""
+    out = []
+    for e in row_species or []:
+        tg = e.get("target") if isinstance(e, dict) else None
+        if isinstance(tg, dict) and tg.get("kind") == "datum" and DATUM_DOCK_KEY in tg:
+            err = _dock_datum_error(e, list(docks or []), evidence or {}, where)
+            if err:
+                out.append(err)
+    return out
+
+
 def _follow_set(v) -> bool:
     """R26-233: is `follow` authored? `0` is a series index, so never `v not in (None, False)` - in Python `0 in
     (None, False)` is True and that form silently dropped the commonest target (the R26-232 lane's finding)."""
@@ -1986,6 +2071,8 @@ def _validate_target(kind: str, target, allowed: tuple) -> list[str]:
     if tk == "datum" and "panel" in target and (isinstance(target["panel"], bool)
                                                 or not isinstance(target["panel"], int) or target["panel"] < 0):
         errs.append(f"{kind}: target datum 'panel' must be a non-negative integer panel index (P69 T8b)")
+    if tk == "datum" and DATUM_DOCK_KEY in target:
+        errs += _datum_dock_shape_errors(kind, target[DATUM_DOCK_KEY])
     if tk == "span" and not errs and target["from_word"] > target["to_word"]:
         errs.append(f"{kind}: target span from_word > to_word")
     return errs
@@ -13175,6 +13262,8 @@ def main() -> int:
             raise SystemExit(f"FAIL: {exc}") from exc
         for _note in _dr_notes:
             print(f"  ring on a dock: row {i + 1}: {_note}")
+        if _dd_errs := dock_datum_errors(row_species, docks, evidence, f"shot row {i + 1} ({a}-{b}s)"):   # P72 T48: a datum on a docked chart resolves, or the row is refused
+            raise SystemExit("FAIL: " + "; ".join(_dd_errs))
         pm_entries = []
         if _pm["morphs"] or _pm["enter_morph"]:   # P69 T26e: the state each prop morph is on, its mark, and its invariants (a WARN when they fail)
             try:

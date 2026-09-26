@@ -1245,7 +1245,10 @@ def chart_callout() -> tuple[dict, dict]:
     scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0.0, "x": 0, "y": 0}},
                "exit": "cut", "span": [0.0, RUNTIME],
                "docks": [_dock("ev-golden-chart", 0, 2.0, RUNTIME, 4)],
-               "species": [{"kind": "callout", "at": 10.0, "dur": 6.0, "target": {"kind": "point", "x": 0.72, "y": 0.42}}]}]
+               # P72 T48 / R26-367 ("why is the ring completely missing the line?"): the ring names the datum it means - the
+               # semiconductor line's (series 1) datum 152, its April '26 climb - on the DOCKED chart, never a hand-typed
+               # stage point (0.72, 0.42 sat 40 px above the line)
+               "species": [{"kind": "callout", "at": 10.0, "dur": 6.0, "target": {"kind": "datum", "dock": 0, "series": 1, "index": 152}}]}]
     uris = _base_uris(); uris["ev-golden-chart"] = uri("image/png", png_solid(64, 36, (22, 24, 28)))
     return _timeline("Golden: chart with a callout", scenes, ev, None), uris
 
