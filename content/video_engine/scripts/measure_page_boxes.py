@@ -134,6 +134,10 @@ SCHEMATIC_SURFACE = "schematic-hype-trough"
 # and its words (the ticks and the axis's name) are measured as their own box. The golden's own page (`dual-axis-inverted`).
 DUAL_LINE = "dense-line" + LPG.REPRESENTATIVE_SEP + LPG.Y2_KEY
 DUAL_SURFACE = "dual-axis-inverted"
+# P71 T25: the story builder's THIRD representative - a page carrying a PROJECTED bar (its source line names the
+# projection, s93, so its ink is its own). The golden's own page (`projected-overtake`, H row 16's capex), as DECLARED.
+STORY_PROJECTED = "story" + LPG.REPRESENTATIVE_SEP + LPG.PROJECTED_KEY
+PROJECTED_SURFACE = "projected-overtake"
 
 
 def _panels_bars_series() -> dict:
@@ -427,6 +431,13 @@ def representative(builder: str) -> dict:
         if page.get("caption") == "anchor":
             page.pop("caption")
         return page
+    if builder == STORY_PROJECTED:   # P71 T25: the golden's own page with its projected bar, as DECLARED (stamp stripped)
+        tl = json.loads((RB.SOURCES / f"{PROJECTED_SURFACE}.timeline.json").read_text(encoding="utf-8"))
+        page = _strip(next(s["world"]["page"] for s in tl["scenes"] if (s.get("world") or {}).get("page")))
+        page.pop("full_stage", None)
+        if page.get("caption") == "anchor":
+            page.pop("caption")
+        return page
     if builder == SCHEMATIC_LINE:   # P70 T2: the golden's own schematic page, as DECLARED - the golden carries the
         tl = json.loads((RB.SOURCES / f"{SCHEMATIC_SURFACE}.timeline.json").read_text(encoding="utf-8"))   # compiler's
         page = _strip(next(s["world"]["page"] for s in tl["scenes"] if (s.get("world") or {}).get("page")))  # full-stage
@@ -443,7 +454,7 @@ def representative(builder: str) -> dict:
     return _strip(page)
 
 
-BUILDERS = tuple(sorted(set(GOLDEN_PAGES) | {"share", LPG.PANELS, PANELS_BARS, STORY_GAUGE, SCHEMATIC_LINE, DUAL_LINE}))
+BUILDERS = tuple(sorted(set(GOLDEN_PAGES) | {"share", LPG.PANELS, PANELS_BARS, STORY_GAUGE, SCHEMATIC_LINE, DUAL_LINE, STORY_PROJECTED}))
 PROFILED = tuple(b for b in BUILDERS if b in LPG.READABILITY_BUILDERS[LPG.LONGFORM])   # N3: dense-line and story
 
 

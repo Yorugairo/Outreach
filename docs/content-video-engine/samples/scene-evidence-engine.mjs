@@ -12047,10 +12047,12 @@ async function mount(doc) {
     const GA = formOf(pg, "gauge");   /* P70 T3: opt-in (`;form=gauge`, a progress page); null is today's page, to the byte */
     if (GA && GA.dir === "h") return lpBuildGaugeH(st, pg, GA);   /* P72 T6 (R26-319): the capsule on its side */
     const SOFT = st.barStyle === "soft" ? LPBAR_SOFT.SHOULDER_PX / (st.stagePx > 0 ? st.stagePx : 1) : 0;   /* P69 T10b: the shoulder, in this chart's units (0: the page as it was) */
-    const n = Math.max(1, st.vals.length);
+    const OUT = GA ? null : lpBarsOut(st, pg);   /* P71 T25: a page born on ONE bar, or carrying a projected bar - null on every other page, which builds to the byte */
+    const LAID = OUT ? OUT.laid : st.vals;       /* ... the values this state lays out: the subject alone, or the field without the projection it has not drawn yet */
+    const n = Math.max(1, LAID.length);
     const RNG = Array.isArray(pg.ranges) ? pg.ranges : null;   /* P69 T8d: [lo, hi] per bar (null: a single value) */
     const ends = RNG ? RNG.flatMap((r) => (Array.isArray(r) ? r.map(Number) : [])) : [];
-    const lo0 = Math.min(0, ...st.vals, ...ends), hi0 = Math.max(0, ...st.vals, ...ends);
+    const lo0 = Math.min(0, ...LAID, ...ends), hi0 = Math.max(0, ...LAID, ...ends);
     /* THE BREAKTHROUGH (2026-09-10): a bars page may STATE its scale (`axes.domain`) that one value cannot fit. That bar builds
        to the COMPARATOR's level (the tallest honest bar) with the others, holds, then runs by one of two mechanics (LPX.BT_*):
          burst (Bravos 8:02): it shoots to its true height WHILE the scale rewrites to the nice ceiling above it - the honest
@@ -12094,6 +12096,7 @@ async function mount(doc) {
     const lead = capped ? x0 + ((x1 - x0) - n * pitch) / 2 : x0;   /* ... and the group stands centred in the plot */
     const bw = capped ? capU : pitch * (1 - gap);
     const air = capped ? 1 - bw / pitch : gap;   /* the pitch's share left as air, half each side of its bar */
+    const outX = OUT ? lpBarsOutX(OUT, { lead, pitch, air, bw, x0, x1 }) : null;   /* P71 T25: each bar's left edge in this state (null: the page's own law below) */
     const GS = GA ? (() => { const k = st.stagePx > 0 ? st.stagePx : 1, ov = LPGAUGE.OVER_PX * (st.cardK || 1) / k;   /* P70 T3: the capsules' span, the rule's overhang either side */
       const caps = Array.from({ length: n }, (_, i) => { const cx = lead + pitch * (i + air / 2); return [cx, cx + bw]; });
       return { k, ov, caps, x0: caps[0][0] - ov, x1: caps[n - 1][1] + ov }; })() : null;
@@ -12107,7 +12110,8 @@ async function mount(doc) {
     /* the comparator: the tallest bar the stated scale holds - the breaking bar first stands at ITS level, a bar like the others */
     const honest = st.vals.filter((v) => !(brk && v > hi)), comp = honest.length ? Math.max(...honest) : hi;
     st.vals.forEach((v, i) => {
-      const over = brk && v > hi, x = lead + pitch * (i + air / 2), yv = my(over ? comp : v), neg = v < 0;
+      if (OUT && i === OUT.hid) return;   /* P71 T25: a projection is not drawn until its word (chart_to extend {bar}) */
+      const over = brk && v > hi, x = outX ? outX(i) : lead + pitch * (i + air / 2), yv = my(over ? comp : v), neg = v < 0;
       const h = Math.max(3, Math.abs(yv - base)), y = neg ? base : base - h;
       /* P50 T10: the placeholder's TRACK is laid in BEFORE the bar, so the bar grows in front of it. It is exactly
          the height the bar builds to - the comparator's level - because it is furniture, not data (E28: no frame of
@@ -12134,6 +12138,7 @@ async function mount(doc) {
          presentation attribute, so the declared fill goes through style. */
       const dcol = LP_PAL[(pg.colors || [])[i]];
       if (dcol) bar.style.fill = dcol;
+      if (OUT && i === OUT.proj) lpBarProjInk(st, bar, dcol || (neg ? "var(--lp-neg)" : "var(--lp-pos)"));   /* P71 T25: an estimate is drawn DASHED (S3; E77) */
       if (dcol && ex) ex.tint(dcol);   /* P58 T5: the prism's faces are the bar's OWN ink at a ratio - a declared colour rules them too */
       if (gz) { bar.setAttribute("rx", 0); gz.fill.appendChild(bar); }   /* P70 T3: the fill is square, cut to its capsule */
       bar.style.transformOrigin = "0 " + base.toFixed(1) + "px"; bar.style.transform = "scaleY(0)";
@@ -12216,7 +12221,7 @@ async function mount(doc) {
     });
     if (!GA) lpRuleLabelsClear(st, base, x0, x1);   /* P72 T13 (R26-250): a rule's label clears the bars and their values - before the values clear the rules */
     if (!GA) lpValsClearRules(st);   /* P70 T3: a gauge's figure stands beside its capsule, off every rule. P69 T6: a value is never struck through by a comparator rule - BEFORE the pill reads the values' boxes */
-    const e = GA ? null : st.bars[Math.min(st.emph, st.bars.length - 1)];   /* P70 T3: no counting pill on a gauge - the figure is the fill's */
+    const e = GA ? null : OUT ? (st.bars.find((b) => b.i === st.emph) || null) : st.bars[Math.min(st.emph, st.bars.length - 1)];   /* P70 T3: no counting pill on a gauge - the figure is the fill's. P71 T25: a state that skips a bar finds its emphasis by the page's index */
     if (e) {
       const cg = lpEl("g", "", st.chart, { opacity: 0 });
       let CP = P ? { w: 160, h: 84, ty: 61, up: 128, dn: 40, rx: 14 } : { w: 128, h: 42, ty: 30, up: 66, dn: 24, rx: 8 };   /* portrait pill: 59px type, narrower than a bar pitch so the neighbours' values stay clear */
@@ -12315,6 +12320,170 @@ async function mount(doc) {
     if (Array.isArray(pg.members)) lpMemberBuild(st, pg, { base, P, LF, x0, x1 });   /* P69 T45: the membership tiles, in their bars */
     if (st.bars.some((b) => b.segs)) lpSegBuild(st, pg, { base, top, x0, xr: x1 + 20, toPage: true, unit, floorU: PH ? LP_CARD.TYPE_PX / (st.stagePx > 0 ? st.stagePx : 1) : 0, below: bottom + XLAB + (P ? 40 : LF ? LF.tick : 26) * 0.6, fs: LF ? LF.value : P ? 44 : 26, fs0: LF ? LF.tick : P ? 40 : 22,
       bars: st.bars.map((b) => ({ i: b.i, bar: b.bar, x: b.bx, bw: b.bw, end: b.end, val: b.val, lab: b.lab, segs: b.segs || null })) });   /* P69 T64: each part's figure, and the key */
+    if (OUT) lpBarsOutBuild(st, OUT, { top, bottom, x0, x1, P, LF, G });   /* P71 T25: the clip of a page born alone, the rank pill, the projection's tag and its bracket to #1 */
+  };
+  /* P71 T25 (was P69 T74; the Bravos harvest v2 A50 / A51 / R31) - THE SCALE-OUT AND THE PROJECTED OVERTAKE. D40, measured
+     at 30 fps (P71 T25 step (0)): ONE bar stands alone on its own 0-150 scale, centred at a fifth of the plot's width; on
+     the word the view widens to the whole field in 0.9 s (906.23-907.13, in-out) - the neighbours ENTER AT THE PLOT'S
+     EDGES, where they stood all along on the same scale, the y scale runs out to the field's, the bar narrows into its
+     slot - and a pill names its place, "18th Largest Holder". Later a NEW bar surges past the field's leader (0.63 s
+     to 97 %, expo-out) and a bracket names the margin. Ours, from the object (ledger_page computes every number):
+       `pg.opens_on {index, rank, of, text?}` - a state that has not `opened` lays out the subject ALONE (the one-bar
+          page's own width and scale) and every other bar just past the plot's edges on that scale, clipped to the plot;
+          the opened state (the field) writes the rank pill over the subject.
+       `pg.projected [...]` + `pg.projected_to {index, lead, gap, text}` - a state that has not `projected_shown` leaves
+          the projected bar out; the state that shows it draws it DASHED in its own ink over a faint fill (S3: a dashed
+          mark is a projection; E77: never a datum's solid), writes the projection's label over its value, and brackets
+          it to #1 with the computed gap.
+     Every mark keeps its key (`b:<page index>`), so `chart_to extend` (lpPaintExtendBars) is the rescale's own lerp
+     followed by the arrival. A page that names neither key never calls any of this. */
+  const LPBAR_OUT = Object.freeze({
+    OPEN_S: 0.9,      /* [DERIVED: D40 906.23-907.13] the scale-out: the lone view widens to the field */
+    SHIFT_S: 0.3,     /* the field makes room for the projection [DERIVED: D40 <= 0.1 s (916.07-916.10); eased so the move reads] */
+    SURGE_S: 0.63,    /* [DERIVED: D40 916.10-916.73, 97 % of the height] the projected bar rises, expo-out */
+    WRITE_S: 0.4,     /* the field's names and values, the rank pill, the projection's label: each fades in over this */
+    BRACKET_S: 0.8,   /* the bracket to #1: the level across, then the drop */
+    EDGE_AIR: 0.03,   /* past the clip: the share of the plot's width a neighbour stands outside it in the lone view */
+    FILL_A: 0.22,     /* the projected bar's fill, its ink at this alpha - the dash is the mark, the fill only holds its shape */
+    DASH_PX: 12, GAP_PX: 8, STROKE_PX: 4,   /* the projected bar's outline and the bracket's dash, stage px */
+    DOT_PX: 7,        /* the rank pill's dot at the bar's top, stage px (D40 908.3) */
+    PAD_U: 10,        /* the air between the pill, the value, the tag and the bracket, chart units */
+  });
+  /* what this state draws of the two keys - null when the page names neither */
+  const lpBarsOut = (st, pg) => {
+    const oo = pg.opens_on && Number.isInteger(pg.opens_on.index) ? pg.opens_on : null;
+    const pt = pg.projected_to && Number.isInteger(pg.projected_to.index) ? pg.projected_to : null;
+    if (!oo && !pt) return null;
+    const alone = oo && !pg.opened ? oo.index : null, hid = pt && !pg.projected_shown ? pt.index : null;
+    if (alone != null) st.emph = -1;   /* the lone view names nothing but its bar: no counting pill, no glow on a bar outside the plot */
+    const laid = alone != null ? [st.vals[alone]] : st.vals.filter((_, i) => i !== hid);
+    const plabel = pt && Array.isArray(pg.projected) && pg.projected[pt.index] ? String(pg.projected[pt.index].label || "") : "";
+    return { oo, pt, alone, hid, proj: pt && pg.projected_shown ? pt.index : null, rank: oo && pg.opened && !pg.projected_shown && oo.text ? oo : null, laid, plabel };
+  };
+  /* each bar's left edge: the field's slots, skipping a bar this state does not draw; alone, the subject in the one-bar
+     slot and every other bar a lone pitch away per place - that pitch puts both neighbours just past the clip's edges */
+  const lpBarsOutX = (O, g) => {
+    const slot = (i) => (O.hid != null && i > O.hid ? i - 1 : i);
+    if (O.alone == null) return (i) => g.lead + g.pitch * (slot(i) + g.air / 2);
+    const xs = g.lead + g.pitch * (g.air / 2), cl0 = g.x0 - 20, cl1 = g.x1 + 20;
+    const pA = Math.max(cl1 - xs, xs + g.bw - cl0) + LPBAR_OUT.EDGE_AIR * (g.x1 - g.x0);
+    return (i) => xs + (slot(i) - slot(O.alone)) * pA;
+  };
+  const lpBarOutPx = (st, px) => px / (st.stagePx > 0 ? st.stagePx : 1);
+  const lpBarProjInk = (st, bar, ink) => {   /* the estimate's look: its ink as a dashed outline over a faint fill */
+    const hex = lpVarHex(ink);
+    bar.classList.add("lp-bar-proj");
+    bar.style.fill = lpInkA(hex, LPBAR_OUT.FILL_A);
+    bar.style.stroke = hex; bar.style.strokeWidth = lpBarOutPx(st, LPBAR_OUT.STROKE_PX).toFixed(2);
+    bar.style.strokeDasharray = lpBarOutPx(st, LPBAR_OUT.DASH_PX).toFixed(2) + " " + lpBarOutPx(st, LPBAR_OUT.GAP_PX).toFixed(2);
+  };
+  const lpBarsOutBuild = (st, O, g) => {
+    st.out = { O };
+    if (O.alone != null) {   /* the lone view: every bar is clipped to the plot's x span (the value and the name of a bar outside it are not written) */
+      const defs = lpEl("defs", "", st.chart), cid = "barsout-" + (st.seed | 0) + "-" + (++lpClipN);
+      const cp = lpEl("clipPath", "", defs, { id: cid, clipPathUnits: "userSpaceOnUse" });
+      lpEl("rect", "", cp, { x: (g.x0 - 20).toFixed(1), y: (g.top - 2).toFixed(1), width: (g.x1 - g.x0 + 40).toFixed(1), height: ((g.G.H || 560) + 400).toFixed(1) });
+      for (const b of st.bars) {
+        for (const el of [b.bar, b.foot]) if (el) el.setAttribute("clip-path", "url(#" + cid + ")");
+        if (b.i !== O.alone) for (const el of [b.val, b.lab]) if (el) el.style.display = "none";
+      }
+    }
+    const rb = O.rank ? st.bars.find((b) => b.i === O.rank.index) : null;
+    if (rb) st.out.rank = lpBarsRankPill(st, rb, O.rank.text, g);
+    const pb = O.proj != null ? st.bars.find((b) => b.i === O.proj) : null, lb = pb ? st.bars.find((b) => b.i === O.pt.lead) : null;
+    if (pb) st.out.proj = lpBarsProjMarks(st, pb, lb, O, g);
+    st.paint = lpBarsOutPaint;   /* the builder's own build step: a standing state shows what it has built */
+  };
+  /* the pill a rank is written in: the page's own counting pill (cpill + callout), a dot at the bar's top and a dotted leader;
+     above the bar's value when the plot has the room, else beside the bar's top */
+  const lpBarsRankPill = (st, b, text, g) => {
+    const grp = lpEl("g", "lp-bar-rank", st.chart, { opacity: 0 });
+    const pr = lpEl("rect", "cpill", grp, { x: 0, y: 0, width: 10, height: 10 });
+    const ct = lpEl("text", "callout", grp, { x: 0, y: 0, "text-anchor": "middle" }); ct.textContent = text;
+    const fs = parseFloat(getComputedStyle(ct).fontSize) || (g.P ? 59 : 30), pad = LPBAR_OUT.PAD_U;
+    const w = lpInkW(ct) + fs * 0.9, h = fs * 1.45, cx = b.x;
+    const vb = b.val && b.val.style.display !== "none" && (b.val.textContent || "").length ? lpLabelBox(b.val) : null;
+    const cp = st.callout && b.i === st.emph ? st.callout.getBBox() : null;   /* the subject's own counting pill, when it is the page's emphasis */
+    const above = Math.min(b.end, vb ? vb[1] : b.end, cp && cp.height ? cp.y : b.end) - pad;
+    let px, py, lx2, ly2;
+    if (above - h >= g.top - fs * 1.2) { px = Math.max(g.x0, Math.min(g.x1 - w, cx - w / 2)); py = above - h; lx2 = px + w / 2; ly2 = py + h; }
+    else { const right = b.bx + b.bw + pad * 2 + w <= g.x1 + 20; px = right ? b.bx + b.bw + pad * 2 : b.bx - pad * 2 - w; py = b.end - h / 2; lx2 = right ? px : px + w; ly2 = py + h / 2; }
+    pr.setAttribute("x", px.toFixed(1)); pr.setAttribute("y", py.toFixed(1)); pr.setAttribute("width", w.toFixed(1)); pr.setAttribute("height", h.toFixed(1)); pr.setAttribute("rx", (h * 0.22).toFixed(1));
+    ct.setAttribute("x", (px + w / 2).toFixed(1)); ct.setAttribute("y", (py + h * 0.71).toFixed(1));
+    const r = lpBarOutPx(st, LPBAR_OUT.DOT_PX);
+    const dot = lpEl("circle", "", grp, { cx: cx.toFixed(1), cy: b.end.toFixed(1), r: r.toFixed(2), fill: "var(--lp-acc)" });
+    const ly1 = above - h >= g.top - fs * 1.2 ? Math.min(b.end - r, vb ? vb[1] - 2 : b.end - r, cp && cp.height ? cp.y - 2 : b.end - r) : b.end;   /* over the value (and a counting pill), never through it */
+    const lead = lpEl("line", "blead", grp, { x1: cx.toFixed(1), y1: ly1.toFixed(1), x2: lx2.toFixed(1), y2: ly2.toFixed(1),
+      stroke: "var(--lp-acc)", "stroke-width": BREAK.CAP_LEAD_W, "stroke-linecap": "round", "stroke-dasharray": BREAK.CAP_LEAD_DASH });
+    if (Math.hypot(lx2 - cx, ly2 - ly1) < 2 * r) lead.setAttribute("opacity", 0);
+    grp.insertBefore(lead, pr); grp.insertBefore(dot, pr);
+    return { g: grp, box: [px, py, w, h], dot };
+  };
+  /* the projection's own marks: its label written over its value, in its ink; the bracket to #1 - a dashed level from its
+     top across to #1's near edge, a drop down that edge to #1's top (the gap's true span, beside #1's centred value, never
+     through it - D40 921-925 drops to its bar's top), and the computed gap written between the two bars */
+  const lpBarsProjMarks = (st, pb, lb, O, g) => {
+    const ink = lpVarHex(pb.bar.style.stroke || "var(--lp-pos)"), pad = LPBAR_OUT.PAD_U;
+    const vb = pb.val && (pb.val.textContent || "").length ? lpLabelBox(pb.val) : null;
+    const tag = lpText(st.chart, "sname lp-proj-tag", pb.x, (vb ? vb[1] : pb.end) - pad * 0.6, "middle", O.plabel,
+      { opacity: 0, style: LP_HALO + "fill:" + ink });
+    const out = { tag, lvl: null, drop: null, gapT: null };
+    if (!lb) return out;
+    const dash = lpBarOutPx(st, LPBAR_OUT.DASH_PX).toFixed(2) + " " + lpBarOutPx(st, LPBAR_OUT.GAP_PX).toFixed(2), sw = lpBarOutPx(st, 3).toFixed(2);
+    const right = lb.x > pb.x, y = pb.end, xa = right ? pb.bx + pb.bw : pb.bx, xb = right ? lb.bx : lb.bx + lb.bw;
+    const yEnd = Math.max(y, lb.end);
+    out.lvl = lpEl("line", "lp-proj-bracket", st.chart, { x1: xa.toFixed(1), y1: y.toFixed(1), x2: xa.toFixed(1), y2: y.toFixed(1), stroke: ink, "stroke-width": sw, "stroke-dasharray": dash, opacity: 0 });
+    out.drop = lpEl("line", "lp-proj-bracket", st.chart, { x1: xb.toFixed(1), y1: y.toFixed(1), x2: xb.toFixed(1), y2: y.toFixed(1), stroke: ink, "stroke-width": sw, "stroke-dasharray": dash, opacity: 0 });
+    out.geom = { xa, xb, y, yEnd };
+    const gt = O.pt.text;
+    if (gt) out.gapT = lpText(st.chart, "sname lp-proj-gap", xb + (right ? -pad : pad), (y + yEnd) / 2 + 8, right ? "end" : "start", gt, { opacity: 0, style: LP_HALO + "fill:" + ink });   /* between the two bars */
+    return out;
+  };
+  /* one arrival's paint at `k` in [0, 1] of each of its own clocks - the lpPaintChart hook at a standing state (1 when built),
+     and lpPaintExtendBars' second phase */
+  const lpBarsProjPaint = (O, surge, write, br) => {
+    if (!O) return;
+    if (O.tag) O.tag.setAttribute("opacity", clamp01(write).toFixed(3));
+    if (O.lvl) { const G = O.geom, a = clamp01(br / 0.6), d = clamp01((br - 0.6) / 0.4);
+      O.lvl.setAttribute("x2", (G.xa + (G.xb - G.xa) * a).toFixed(1)); O.lvl.setAttribute("opacity", br > 0 ? 1 : 0);
+      O.drop.setAttribute("y2", (G.y + (G.yEnd - G.y) * d).toFixed(1)); O.drop.setAttribute("opacity", d > 0 ? 1 : 0);
+      if (O.gapT) O.gapT.setAttribute("opacity", clamp01((br - 0.8) / 0.2).toFixed(3)); }
+  };
+  const lpBarsOutPaint = (cs, c) => {
+    const on = c >= 1 ? 1 : 0, S = cs.out || {};
+    if (S.rank) S.rank.g.setAttribute("opacity", on);
+    lpBarsProjPaint(S.proj, on, on, on);
+  };
+  /* P71 T25 - THE BARS EXTEND. Two phases on the verb's own clock: the shared marks move by the rescale's own lerp (their
+     keys are the page's indices in every state) - the lone view widening to the field (OPEN_S, in-out) or the field making
+     room (SHIFT_S) - then the target stands and what it adds ARRIVES: the field's names and values and the rank pill, or
+     the projected bar surging with its label and its bracket. A dur shorter than the phases scales them all to fit it. */
+  const lpPaintExtendBars = (states, xf, t3, scene, t) => {
+    const A = states[xf.from], Bs = states[xf.to], sp = xf.sp || {}, d = Math.max(0.001, sp.dur || 1), field = sp.field != null;
+    const L = LPBAR_OUT, total = field ? L.OPEN_S + 2 * L.WRITE_S : L.SHIFT_S + L.SURGE_S + L.WRITE_S + L.BRACKET_S;
+    const q = Math.min(1, d / total), s = xf.u * d, p1 = (field ? L.OPEN_S : L.SHIFT_S) * q;
+    if (s < p1) {
+      lpPaintRescale(states, { from: xf.from, to: xf.to, u: minJerk(s / p1) }, t3, scene, t);   /* in-out, as D40's scale-out measured (906.23-907.13) */
+      const ar = (A.out || {}).rank; if (ar) ar.g.setAttribute("opacity", (1 - clamp01(s / p1)).toFixed(3));   /* a standing rank pill leaves as the field makes room */
+      return;
+    }
+    for (const S of states) { lpRestoreState(S); S.extendCap = null; }
+    for (let i = 0; i < states.length; i++) lpPaintChart(states[i], i === xf.to ? 1 : 0, t3, scene, t);
+    const s2 = s - p1, W = L.WRITE_S * q, O = (Bs.out || {}).O;
+    if (field) {   /* the field's names, values and counting pill write in; then the rank pill */
+      const k = clamp01(s2 / W);
+      for (const b of Bs.bars) if (!O || b.i !== O.oo.index) for (const el of [b.val, b.lab]) if (el && +el.getAttribute("opacity") > 0) el.setAttribute("opacity", (+el.getAttribute("opacity") * k).toFixed(3));
+      if (Bs.callout) Bs.callout.setAttribute("opacity", (+Bs.callout.getAttribute("opacity") * k).toFixed(3));
+      if ((Bs.out || {}).rank) Bs.out.rank.g.setAttribute("opacity", clamp01((s2 - W) / W).toFixed(3));
+      return;
+    }
+    const pb = O ? Bs.bars.find((b) => b.i === O.proj) : null, SU = L.SURGE_S * q;
+    if (pb) {
+      const k = expoOut(clamp01(s2 / SU)), w = clamp01((s2 - SU) / W);
+      pb.bar.style.transform = "scaleY(" + k.toFixed(4) + ")";
+      for (const el of [pb.val, pb.lab]) if (el) el.setAttribute("opacity", w.toFixed(3));
+      lpBarsProjPaint((Bs.out || {}).proj, k, w, clamp01((s2 - SU - W) / (L.BRACKET_S * q)));
+    }
   };
   /* THE FIELD'S INK (E67, operator 2026-09-12): "we need to use bolder primary, high-contrast line colors for our default
      the chart instead of gray. that way our charts can become our thumbnails, i think this is part of why bravos uses
@@ -18587,6 +18756,7 @@ async function mount(doc) {
      re-projected geometry IS the target's, so the hand-over is invisible. Bravos 29-30: production first, consumption on its word. */
   const XF_EXTEND = Object.freeze({ RESCALE: 0.45 });   /* the share of an extend's clock spent retargeting the axes before the pen moves [DERIVED: the axis settles before the eye follows the nib] */
   const lpPaintExtend = (states, xf, t3, scene, t) => {
+    if (((states[xf.from] || {}).scale || {}).kind === "bars" && xf.sp && (xf.sp.field != null || xf.sp.bar != null)) return lpPaintExtendBars(states, xf, t3, scene, t);   /* P71 T25: the field, or a projected bar */
     const A = states[xf.from], Bs = states[xf.to], R = XF_EXTEND.RESCALE;
     if (xf.u < R) { lpPaintRescale(states, { from: xf.from, to: xf.to, u: segEase(xf.u / R) }, t3, scene, t); Bs.extendCap = null; return; }
     for (const S of states) lpRestoreState(S);

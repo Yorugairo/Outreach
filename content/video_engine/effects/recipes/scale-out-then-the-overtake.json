@@ -1,0 +1,64 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:scale-out-then-the-overtake",
+  "title": "Scale-out, then the projected overtake",
+  "aliases": [
+    {
+      "name": "R31 Scale-out, then the projected overtake",
+      "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:863"
+    }
+  ],
+  "acts": [
+    "BREAKS"
+  ],
+  "members": [
+    {
+      "card": "page_builder:bars",
+      "offset_s": 0.0,
+      "role": "the page is BORN on one bar alone (`opens_on` on its object): its own scale, the one-bar width, its value read on its own (D40 901-905)"
+    },
+    {
+      "card": "chart_to:extend",
+      "offset_s": [
+        3.0,
+        6.0
+      ],
+      "options": {
+        "field": true,
+        "dur": 2.0
+      },
+      "role": "the field arrives on its word: the view widens to every bar in 0.9 s, the neighbours entering at the plot's edges, then the pill writes the COMPUTED rank (D40 906.2-909)"
+    },
+    {
+      "card": "chart_to:extend",
+      "offset_s": [
+        8.0,
+        15.0
+      ],
+      "options": {
+        "bar": "the projected bar's index",
+        "dur": 2.5
+      },
+      "role": "the projected bar surges DASHED past the leader (0.63 s), its label written, then the bracket to #1 with the computed gap (D40 916-925)"
+    }
+  ],
+  "window_s": 18.0,
+  "does": "One value is read alone on its own scale, the view widens to the whole field and a pill writes its computed rank, then a sourced projection surges dashed past the field's leader and a bracket names the margin.",
+  "use_when": {
+    "act": "BREAKS - one number read alone, then its place in the field, then its projection passing the leader (BRAVOS-USE-WHEN R31)",
+    "moment": "close",
+    "shape": "one number -> a ranking of sourced values, plus ONE sourced projection",
+    "use": "one value alone, then its rank in the field, then the projection passing the leader (BRAVOS-USE-WHEN.md:865; D40 15:02-15:30, '18th Largest Holder' then '$1.2 Trillion vs $1.1 Trillion')",
+    "dont": "the projection is unsourced or unlabelled (E77, C15 - refused); the rank is not the claim (A50's don't); a bar of the field is unsourced"
+  },
+  "doctrine": [
+    "E77",
+    "E28",
+    "E99 s106",
+    "P71 T16",
+    "P71 T25"
+  ],
+  "status": "candidate",
+  "source": "P71 T25 (harvest v2 R31 = A50 + A51): D40 (u70oUWgVoYU) 15:01-15:30 read off the video on disk - the scale-out 906.23-907.13, the rank pill 908.3-909, the surge 916.10-916.73, the bracket 921-925; proved as private test-bed beats by projects/_proofs/p71-recipes/proof_t25.py on H row 16's capex (ev-capex-consensus-v1) and the golden projected-overtake - no approved cut carries it",
+  "count": 0
+}

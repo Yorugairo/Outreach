@@ -3439,6 +3439,8 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
             if "state" in entry:
                 errs.append("chart_to park: 'state' is not named - the active chart parks")
             return errs
+        if entry.get("to") == "extend" and any(k in entry for k in BARS_EXTEND_KEYS):
+            return errs + _validate_bars_extend(entry)   # P71 T25: a BARS page extends by its field or a projected bar
         if entry.get("to") == "extend":
             # P48 T3: the target carries points the standing chart did not - `to_index` (the page's series-0 index the window
             # grows to) or `series` (a `later: true` series in the file that draws on from its first point); the state is derived
@@ -8229,12 +8231,125 @@ def _phase_ink_errors(page: dict, row_species: list) -> list[str]:
     return out
 
 
+# ---- P71 T25 (was P69 T74; harvest v2 A50 / A51 / R31, Bravos D40 15:02-15:30): THE BARS EXTEND ------------------
+# `chart_to extend` was the LINE's verb (more of the window, or a later series - T16 made it the projection's), and on a
+# bars page it was refused only by the line's own rule ("the page has no series to extend"). A bars page now extends two
+# ways, each on its word and each a derived state the engine reaches by the rescale's own lerp (every bar keeps its key):
+#   `field: true` - a page BORN on one bar (`opens_on` on its object) widens to its whole field; the rank pill writes;
+#   `bar: k`      - bar k, whose object names `projected`, SURGES dashed with its label and its bracket to #1.
+# The field comes first on a page that opens on one bar, each arrives once, and the page's scale follows the bars it
+# draws - so a `chart_to rescale` on such a page is refused by name, as is any mark that would read the projection as a
+# datum (E77) and a plate emphasis on it (the counting pill would count an estimate).
+BARS_EXTEND_KEYS = ("field", "bar")
+BARS_OUT_RULING = "P71 T25 / E77"
+
+
+def _validate_bars_extend(entry: dict) -> list[str]:
+    """The bars extend's grammar, whole or refused BY NAME (before this slice `bar` was refused only by the line's rule)."""
+    errs = []
+    named = [k for k in BARS_EXTEND_KEYS if k in entry]
+    if len(named) != 1:
+        errs.append("chart_to extend: name ONE of field: true (the page that opened on one bar widens to its field) or "
+                    f"bar: <index> (a projected bar surges) - not both ({BARS_OUT_RULING})")
+    if "field" in entry and entry["field"] is not True:
+        errs.append(f"chart_to extend: field is true or absent - it names the field's arrival, not a value ({entry['field']!r})")
+    if "bar" in entry and not _is_index(entry["bar"]):
+        errs.append(f"chart_to extend: bar {entry['bar']!r} is the index (>= 0) of the page's projected bar")
+    for k in ("to_index", "series"):
+        if k in entry:
+            errs.append(f"chart_to extend: {k} is the LINE's extend - a bars page extends by field or bar ({BARS_OUT_RULING})")
+    if "state" in entry:
+        errs.append("chart_to extend: 'state' is derived, not named")
+    return errs
+
+
+def _datum_index(sp: dict):
+    tgt = sp.get("target") if isinstance(sp.get("target"), dict) else {}
+    return tgt.get("index") if tgt.get("kind") == "datum" and _is_index(tgt.get("index")) else None
+
+
+def check_bars_out(world: dict, row_species: list, sid: str | None = None) -> None:
+    """P71 T25: a page that opens on one bar or carries a projected bar - its extends name what it has, a rescale (the
+    page's scale follows the bars it draws) and a form are refused, and nothing reads the projection as a datum."""
+    if (world or {}).get("kind") != SPECIES_LEDGER:
+        return
+    page = world.get("page") or {}
+    pt, oo = page.get("projected_to"), page.get("opens_on")
+    sps = [sp for sp in (row_species or []) if isinstance(sp, dict)]
+    bx = [sp for sp in sps if sp.get("kind") == "chart_to" and sp.get("to") == "extend" and any(k in sp for k in BARS_EXTEND_KEYS)]
+    if not (pt or oo):
+        if bx:
+            raise ValueError(f"chart_to extend at {bx[0].get('at')}: field / bar extend a bars page whose object names "
+                             f"`opens_on` or a `projected` bar - this page names neither ({BARS_OUT_RULING})")
+        return
+    for sp in sps:
+        if sp.get("kind") == "chart_to" and sp.get("to") == "rescale":
+            raise ValueError(f"chart_to rescale at {sp.get('at')}: a page that opens on one bar or carries a projected bar "
+                             "moves by `extend` (field, then bar) - its scale follows the bars it draws, so a rescale would "
+                             f"hand it a scale its next state takes back ({BARS_OUT_RULING})")
+    if page.get("form"):
+        raise ValueError(f"the page's form {page.get('form')!r}: a page that opens on one bar or carries a projected bar is "
+                         f"drawn flat - the lone view and the dashed estimate are laid out by the bars' own law ({BARS_OUT_RULING})")
+    if pt:
+        k = pt["index"]
+        if page.get("emphasize") == k:
+            raise ValueError(f"the plate's emphasis is bar {k}, the projection - the counting pill would count an estimate "
+                             f"as data; emphasise an actual bar ({BARS_OUT_RULING})")
+        for sp in sps:
+            if sp.get("kind") == "chart_to":
+                continue
+            if _datum_index(sp) == k:
+                raise ValueError(f"{sp.get('kind')} at {sp.get('at')}: datum {k} is the projection - an estimate is never "
+                                 f"data: no mark reads it as a real point; say the estimate in words ({BARS_OUT_RULING})")
+        if not any(sp.get("bar") == k for sp in bx):
+            print(f"  [WARN] the page carries a projected bar ({k}) and no `chart_to extend {{bar: {k}}}` draws it - the "
+                  "estimate never stands on this row" + (f" [scene {sid}]" if sid else ""))
+
+
+def bars_extend_state(world: dict, sp: dict, plate_id: str, ep_dir: Path, states: list) -> dict:
+    """The state a bars extend derives - the page's own series again (`rescale_state`, no window, no domain: the engine
+    lays the bars out by what the state shows), flagged `opened` (the field stands) and `projected_shown`."""
+    page = world.get("page") or {}
+    if page.get("builder") != "story":
+        raise ValueError(f"chart_to extend at {sp.get('at')}: field / bar extend a STORY bars page; this page draws as "
+                         f"{page.get('builder')!r} ({BARS_OUT_RULING})")
+    last = next((st for st in reversed(states) if st.get("derived") == "extend" and "projected_shown" in st), None)
+    opened = last.get("opened", True) if last else "opens_on" not in page
+    shown = last["projected_shown"] if last else False
+    if "field" in sp:
+        if "opens_on" not in page:
+            raise ValueError(f"chart_to extend at {sp.get('at')}: field - this page does not open on one bar (`opens_on` "
+                             f"on its object); it stands as its field already ({BARS_OUT_RULING})")
+        if opened:
+            raise ValueError(f"chart_to extend at {sp.get('at')}: field - the field already stands; a page widens once")
+        opened = True
+    else:
+        k, proj = sp["bar"], page.get("projected") or []
+        if not (0 <= k < len(proj)) or not proj[k]:
+            have = [j for j, x in enumerate(proj) if x]
+            raise ValueError(f"chart_to extend at {sp.get('at')}: bar {k} is not a projected bar of this page ({have or 'none'}) "
+                             f"- a bar extend draws the bar whose object names `projected` ({BARS_OUT_RULING})")
+        if not opened:
+            raise ValueError(f"chart_to extend at {sp.get('at')}: bar {k} - the page still stands on its one bar; the field "
+                             "(`field: true`) arrives first, then the projection passes it (R31)")
+        if shown:
+            raise ValueError(f"chart_to extend at {sp.get('at')}: bar {k} is drawn already; a projection arrives once")
+        shown = True
+    spec = rescale_state(plate_id, ep_dir, {})
+    spec["derived"] = "extend"
+    if "opens_on" in page:
+        spec["opened"] = opened
+    spec["projected_shown"] = shown
+    return spec
+
+
 def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir: Path, sid: str | None = None) -> None:
     """Append one derived page state per `chart_to rescale` / `extend` on the row, in time order, and point each species
     at its state. An extend grows the CURRENT window (the page's whole series, or the last rescale's window) to
     `to_index`, or reveals a `later: true` series; the species carries `from_index` (the last shared datum) so the
     player caps the draw there."""
     check_projection(world, row_species, plate_id, ep_dir)   # P71 T16 / E77: nothing reads a projection as a datum
+    check_bars_out(world, row_species, sid)   # P71 T25: a page born on one bar or carrying a projected bar - its extends, no rescale, no datum on the estimate
     check_target_series(world, row_species)   # R26-218: a series the page does not have, refused before it draws nothing
     check_panels(world, row_species)          # P69 T8b: a panel's address, and the focus states, on the page they name
     check_broken_axis(world, row_species)     # P69 T66: a broken axis holds its page (no chart state, no form)
@@ -8406,6 +8521,8 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
             states.append(rescale_state(plate_id, ep_dir, sp))
             if sp.get("window") is not None:
                 cur_window = [float(sp["window"][0]), float(sp["window"][1])]
+        elif any(k in sp for k in BARS_EXTEND_KEYS):   # P71 T25: the field, or a projected bar
+            states.append(bars_extend_state(world, sp, plate_id, ep_dir, states))
         else:
             first = (world["page"].get("series") or [{}])[0].get("pts") or []
             if not first:

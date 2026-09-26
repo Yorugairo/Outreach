@@ -251,6 +251,14 @@
         {
           "name": "T23 projection chart: actual, then a labelled forecast",
           "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:409"
+        },
+        {
+          "name": "A50 Scale-out reveal",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:1065"
+        },
+        {
+          "name": "A51 Projected overtake",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:851"
         }
       ],
       "does": "New points or a later series draw on at the pen after the axes retarget.",
@@ -275,6 +283,27 @@
           "name": "pen draws on",
           "does": "the new points draw on at the pen",
           "trigger": "RESCALE share of `dur`"
+        },
+        {
+          "name": "the field arrives (bars)",
+          "does": "`field: true` on a page born on one bar (`opens_on`): the lone view widens to the whole field - the neighbours enter at the plot's edges, the scale runs out - then the names, values and the computed rank pill write",
+          "trigger": "the chart_to's `at` (OPEN_S), then WRITE_S twice",
+          "dials": {
+            "LPBAR_OUT.OPEN_S": "0.9",
+            "LPBAR_OUT.WRITE_S": "0.4",
+            "LPBAR_OUT.EDGE_AIR": "0.03"
+          }
+        },
+        {
+          "name": "the projected bar surges (bars)",
+          "does": "`bar: k` on a bar whose object names `projected`: the field makes room, the bar surges dashed over a faint fill, its label writes over its value, then the bracket to #1 with the computed gap",
+          "trigger": "the chart_to's `at` (SHIFT_S), then SURGE_S, WRITE_S, BRACKET_S",
+          "dials": {
+            "LPBAR_OUT.SHIFT_S": "0.3",
+            "LPBAR_OUT.SURGE_S": "0.63",
+            "LPBAR_OUT.BRACKET_S": "0.8",
+            "LPBAR_OUT.FILL_A": "0.22"
+          }
         }
       ],
       "blends": [],
@@ -282,6 +311,16 @@
         {
           "token": "projection",
           "means": "`series: k` on a later series carrying `projection: {label, tier, src}`: an estimate drawn DASHED from the last actual, unbloomed, its tag its label, sourced on the page (E77).",
+          "source_set": null
+        },
+        {
+          "token": "field",
+          "means": "`field: true` on a bars page whose object names `opens_on: {bar, rank?}`: born on that bar alone, it widens to its field; the pill writes the COMPUTED ordinal and the phrase.",
+          "source_set": null
+        },
+        {
+          "token": "bar",
+          "means": "`bar: k`: bar k is `{label, projected: {value, label, tier, src}}`, no value of its own - it surges dashed and labelled, bracketed to #1 with the computed gap (E77).",
           "source_set": null
         }
       ],
@@ -293,15 +332,20 @@
         "form": "inline",
         "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
         "symbol": "lpPaintStates",
-        "note": "lpPaintStates / \"extend\" + kinetics/chartxf.mjs"
+        "note": "lpPaintStates / \"extend\" + kinetics/chartxf.mjs",
+        "also": [
+          "lpPaintExtendBars",
+          "buildLedgerBars"
+        ]
       },
       "doctrine": [
-        "E58"
+        "E58",
+        "P71 T25"
       ],
       "status": "wired",
       "proof": {
         "golden": "ledger-extend",
-        "test": null,
+        "test": "content/video_engine/tests/test_scale_out_overtake.py",
         "first_use": null
       },
       "callable": {

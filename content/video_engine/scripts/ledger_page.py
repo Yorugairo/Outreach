@@ -504,7 +504,8 @@ SEGMENT_BUILDERS = ("story", "combo")
 # every key a bar datum may carry; anything else is refused BY NAME (R26-307: `segments` - and any misspelt key - was
 # silently dropped). `value_string` stays legal: 27 bars on disk carry it (the record's own token, read by no builder);
 # `x` is P47 T9's combo bar on the lines' time axis (buildLedgerCombo reads a bar's own x)
-BAR_FIELDS = ("label", "value", "color", "note", "value_string", "x", MEMBERS_KEY, SEGMENTS_KEY)
+PROJECTED_KEY = "projected"   # P71 T25: a bar whose height is a sourced PROJECTION (E77) - `projected: {value, label, tier, src}`
+BAR_FIELDS = ("label", "value", "color", "note", "value_string", "x", MEMBERS_KEY, SEGMENTS_KEY, PROJECTED_KEY)
 # the figure's box in the ENGINE's units (LPSEG, `lpSegBuild`): the value type, a line of it, the padding inside a segment
 SEGMENT_FIG = {"story": 26.0, "story_p": 44.0, "combo": 24.0, "combo_p": 30.0, "line": 1.25, "pad": 6.0,
                "min": 0.8}   # a figure a little too wide for its part shrinks to fit it, never under 0.8 of its size (LPSEG.FIG_MIN)
@@ -1783,6 +1784,237 @@ def projection_source(series: dict) -> str | None:
     return out
 
 
+# ---- P71 T25 (was P69 T74; harvest v2 A50 / A51 / R31, Bravos D40 15:02-15:30): THE SCALE-OUT AND THE OVERTAKE --------
+# D40, measured (P71 T25 step (0)): ONE bar ("Stablecoin Issuers (Today)", $120B) stands alone on its own 0-150 scale; on
+# the word the view widens to the WHOLE FIELD of holders (the neighbours enter at the plot's edges, the scale runs to
+# 1,200) and a pill names its place, "18th Largest Holder" - a rank COMPUTED from the field; later a NEW bar, "(2030)",
+# surges past the field's leader and a bracket names the margin. Two object keys carry it, on a STORY bars page:
+#   `opens_on: {bar: <label>, rank?: <phrase>}` - the page is BORN on that bar alone; `chart_to extend` (no key) brings
+#       the field, and the pill writes "<ordinal> <phrase>" - the ordinal is computed here, never typed (a digit in the
+#       phrase is refused; so is a word that ranks the other way, "smallest").
+#   a bar `{label, projected: {value, label, tier, src}}` - a bar whose height IS a sourced projection: it carries no
+#       `value` (an estimate is never a datum, E77), it is not drawn until `chart_to extend {bar: k}` names it, and it
+#       stands DASHED with its label written (S3; C15). #1 is the tallest ACTUAL bar; the bracket's gap is computed.
+# The refusals are TRUTH rules (s106): an unlabelled, untiered or unsourced projection, a label that is a bare figure, a
+# `value` beside it, and a rank phrase that would contradict the computed ordinal. A projection that does not pass #1,
+# a label with no estimate word and a tie at the subject's value are advice (WARN).
+PROJECTED_FIELDS = ("value", "label", "tier", "src", "value_string")
+PROJECTED_RULING = "E77 / C15 (P71 T25)"
+OPENS_ON_KEY = "opens_on"
+OPENS_ON_FIELDS = ("bar", "rank")
+# a phrase that ranks the other way would print the wrong ordinal beside the right one: the rank is by value, largest first
+RANK_OPPOSITE_RE = re.compile(r"\b(smallest|lowest|least|fewest|bottom|worst|last|minimum|min)\b", re.IGNORECASE)
+RANK_DIGIT_RE = re.compile(r"\d")
+# the page shapes neither key is drawn on: a bar with two ends, a stack, a membership, a breakthrough or a comparator
+# rule each lay the field out by their own law, and a projection or a one-bar view on top of that is two laws at once
+OUT_REFUSED_BESIDE = (("ranges", "a bar written as a range"), ("segments", "a stacked bar"), ("members", "a membership bar"))
+
+
+def _own_bars_raw(series: dict) -> list:
+    return [b for b in (series.get("bars") or []) if isinstance(b, dict)]
+
+
+def with_projected_values(series: dict) -> dict:
+    """The series with each projected bar's `value` its projection's (its HEIGHT is the projection); the input when
+    no bar is projected - one object, not a copy, so every other page reads exactly as it did. Pure."""
+    bars = series.get("bars")
+    if not isinstance(bars, list) or not any(isinstance(b, dict) and isinstance(b.get(PROJECTED_KEY), dict) for b in bars):
+        return series
+    out = []
+    for b in bars:
+        if isinstance(b, dict) and isinstance(b.get(PROJECTED_KEY), dict) and "value" not in b:
+            pj = b[PROJECTED_KEY]
+            b = dict(b, value=pj.get("value_string", pj.get("value")))
+        out.append(b)
+    return dict(series, bars=out)
+
+
+def _projected_index(series: dict) -> int | None:
+    hits = [i for i, b in enumerate(_own_bars_raw(series)) if PROJECTED_KEY in b]
+    return hits[0] if len(hits) == 1 else None
+
+
+def _out_shape_errors(series: dict, where: str) -> list[str]:
+    errs = []
+    bars = _own_bars_raw(series)
+    for key, what in OUT_REFUSED_BESIDE:
+        hit = [j for j, b in enumerate(bars) if (bar_range(b) if key == "ranges" else b.get(key))]
+        if hit:
+            errs.append(f"{where}: not on a page with {what} (bars{hit}) - its field is laid out by its own law (P71 T25)")
+    if series.get("overflow") is not None:
+        errs.append(f"{where}: not on a breakthrough page (`overflow`) - the breakthrough rewrites the scale by its own "
+                    "law (P71 T25)")
+    return errs
+
+
+def _validate_projected_bars(series: dict, variant: str) -> list[str]:
+    """P71 T25: a `projected` bar, whole and truthful, or refused BY NAME (a bar key the form did not know was refused
+    as unknown before this slice). [] when no bar names it."""
+    nested = [(w, j) for w, bars in _bar_lists(series) if w for j, b in enumerate(bars)
+              if isinstance(b, dict) and PROJECTED_KEY in b]
+    errs = [f"{w}bars[{j}]: a projected bar stands in a page's OWN field - not a panel's or a tier's (P71 T25)"
+            for w, j in nested]
+    own = _own_bars_raw(series)
+    hits = [i for i, b in enumerate(own) if PROJECTED_KEY in b]
+    if not hits:
+        return errs
+    builder = pick_builder(with_projected_values(series), variant)
+    if builder != "story":
+        return errs + [f"bars[{i}]: a projected bar is drawn on a STORY bars page; this page draws as {builder!r} "
+                       "(P71 T25)" for i in hits]
+    if len(hits) > 1:
+        errs.append(f"bars{hits}: ONE projected bar per page - the overtake is one estimate passing the field "
+                    f"({PROJECTED_RULING})")
+    for i in hits:
+        where, pj = f"bars[{i}] projected", own[i][PROJECTED_KEY]
+        if not isinstance(pj, dict):
+            errs.append(f"{where}: a projection is an object {{value, label, tier, src}} ({PROJECTED_RULING})")
+            continue
+        errs += [f"{where}: `{k}` is not a projected bar's key ({'|'.join(PROJECTED_FIELDS)})" for k in pj
+                 if k not in PROJECTED_FIELDS]
+        if "value" in own[i]:
+            errs.append(f"bars[{i}]: a projected bar's height IS its projection - `projected.value`, and no `value` "
+                        f"beside it (an estimate is never a datum, {PROJECTED_RULING})")
+        v = to_number(pj.get("value"))
+        if v is None or not math.isfinite(v):
+            errs.append(f"{where}: `value` {pj.get('value')!r} is not a number - the height the estimate is drawn to")
+        elif v <= 0:
+            errs.append(f"{where}: `value` {pj.get('value')!r} - a projected bar surges UP from the zero line past the "
+                        "field; an estimate at or under zero is a page of its own")
+        errs += _projection_field_errors(where, {k: pj[k] for k in PROJECTION_FIELDS if k in pj})
+        if not any(j != i and to_number(b.get("value")) is not None for j, b in enumerate(own)):
+            errs.append(f"bars[{i}]: a projected bar needs a FIELD of actual bars beside it - there is no #1 to "
+                        "overtake (P71 T25)")
+        errs += _out_shape_errors(series, where)
+    return errs
+
+
+def _validate_opens_on(series: dict, variant: str) -> list[str]:
+    """P71 T25: `opens_on` names the ONE actual bar the page is born on, and the phrase its rank is written in - or it
+    is refused BY NAME (the key was accepted and ignored before this slice). [] when absent."""
+    if OPENS_ON_KEY not in series:
+        return []
+    oo, where = series[OPENS_ON_KEY], OPENS_ON_KEY
+    if not isinstance(oo, dict):
+        return [f"{where}: an object {{bar: <label>, rank?: <phrase>}} - the bar the page opens on, alone (P71 T25)"]
+    errs = [f"{where}: `{k}` is not an opens_on key ({'|'.join(OPENS_ON_FIELDS)})" for k in oo if k not in OPENS_ON_FIELDS]
+    builder = pick_builder(with_projected_values(series), variant)
+    if builder != "story":
+        errs.append(f"{where}: a page opens on one bar of a STORY bars page; this page draws as {builder!r} (P71 T25)")
+    own = _own_bars_raw(series)
+    labels = [b.get("label") for b in own]
+    if not _text(oo.get("bar")) or oo.get("bar") not in labels:
+        errs.append(f"{where}: bar {oo.get('bar')!r} is not a bar on this page ({labels}) - it names a bar by its label")
+    elif PROJECTED_KEY in own[labels.index(oo["bar"])]:
+        errs.append(f"{where}: bar {oo['bar']!r} is the projection - a page opens on an ACTUAL bar ({PROJECTED_RULING})")
+    if len([b for b in own if PROJECTED_KEY not in b]) < 2:
+        errs.append(f"{where}: a page of one actual bar has no field to open onto (P71 T25)")
+    if "rank" in oo:
+        r = oo["rank"]
+        if not _text(r):
+            errs.append(f"{where}: rank is the phrase the computed ordinal is written with ('largest holder') - a "
+                        "non-empty string")
+        elif RANK_DIGIT_RE.search(r):
+            errs.append(f"{where}: rank {r!r} carries a figure - the ordinal is COMPUTED from the field and written "
+                        "before the phrase, never typed (P71 T25)")
+        elif RANK_OPPOSITE_RE.search(r):
+            errs.append(f"{where}: rank {r!r} ranks the other way - the ordinal is by value, LARGEST first, so the "
+                        "phrase would contradict its own number (P71 T25)")
+    if series.get("hlines") or series.get("hline"):
+        errs.append(f"{where}: not on a page with a comparator rule - the rule is a later beat, on the field (P71 T25)")
+    errs += _out_shape_errors(series, where)
+    return errs
+
+
+def _ordinal(n: int) -> str:
+    return f"{n}{'th' if 10 <= n % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
+
+
+def _decimal(token: Any):
+    import decimal
+    try:
+        return decimal.Decimal(str(token))
+    except (decimal.InvalidOperation, ValueError):
+        return None
+
+
+def _decimal_text(d) -> str:
+    t = format(d.normalize(), "f")
+    return t[:-2] if t.endswith(".0") else t
+
+
+def bars_out_block(series: dict) -> dict:
+    """The spec keys a STORY page's `opens_on` / projected bar compile to - {} when it names neither (every other page
+    is the bytes it was). `opens_on: {index, rank, of, text?}` - rank = 1 + the ACTUAL bars strictly taller; `projected`
+    per bar (None, or {label, tier, src}); `projected_to: {index, lead, gap, text}` - #1 the tallest actual bar, the gap
+    the projection less #1 in the page's own unit, signed. Pure."""
+    own = _own_bars_raw(series)
+    k = _projected_index(series)
+    out: dict[str, Any] = {}
+    actual = [(j, to_number(b.get("value"))) for j, b in enumerate(own) if PROJECTED_KEY not in b]
+    actual = [(j, v) for j, v in actual if v is not None]
+    if isinstance(series.get(OPENS_ON_KEY), dict):
+        oo = series[OPENS_ON_KEY]
+        idx = next(j for j, b in enumerate(own) if b.get("label") == oo.get("bar"))
+        v = to_number(own[idx].get("value"))
+        rank = 1 + sum(1 for j, w in actual if j != idx and w > v)
+        out[OPENS_ON_KEY] = {"index": idx, "rank": rank, "of": len(actual),
+                             **({"text": f"{_ordinal(rank)} {oo['rank'].strip()}"} if _text(oo.get("rank")) else {})}
+    if k is not None:
+        pj = own[k][PROJECTED_KEY]
+        out[PROJECTED_KEY] = [({"label": str(pj.get("label")), "tier": pj.get("tier"), "src": pj.get("src")}
+                               if j == k else None) for j in range(len(own))]
+        lead = max(actual, key=lambda jv: (jv[1], -jv[0]))[0]   # the tallest actual bar; a tie goes to the first
+        dp, dl = _decimal(pj.get("value_string", pj.get("value"))), _decimal(own[lead].get("value_string", own[lead].get("value")))
+        gap = (dp - dl) if dp is not None and dl is not None else None
+        unit, suffix = str(series.get("unit") or ""), series.get(UNIT_SUFFIX_KEY) if isinstance(series.get(UNIT_SUFFIX_KEY), str) else ""
+        text = None
+        if gap is not None:
+            body = with_unit(_decimal_text(abs(gap)), unit, suffix or "")
+            text = ("+" if gap > 0 else "-" if gap < 0 else "") + body
+        out["projected_to"] = {"index": k, "lead": lead, "gap": float(gap) if gap is not None else None, "text": text}
+    return out
+
+
+def projected_source(series: dict) -> str | None:
+    """The page's source line with its projected bar named and sourced (s93, T16's form) - None when no bar is
+    projected, or its source is already on the line."""
+    k, src = _projected_index(series), series.get("src")
+    if k is None or not isinstance(src, str):
+        return None
+    pj = _own_bars_raw(series)[k].get(PROJECTED_KEY)
+    if not isinstance(pj, dict) or not _text(pj.get("src")) or pj["src"] in src:
+        return None
+    return src + f" · {pj.get('label')}: {pj['src']}"
+
+
+def bars_out_warnings(series: dict) -> list[str]:
+    """s106 advice on the scale-out and the overtake: a projection that does not pass #1, a projection label with no
+    estimate word, and a tie at the subject's value (two bars share its ordinal)."""
+    out, own = [], _own_bars_raw(series)
+    blk = bars_out_block(series)
+    pt = blk.get("projected_to")
+    if pt and pt.get("gap") is not None and pt["gap"] <= 0:
+        out.append(f"{FORM_WARN} bars[{pt['index']}] projected: {pt['text']} against #1 ({own[pt['lead']].get('label')!r}) - "
+                   "the projection does not pass the leader; the bracket writes the gap, and the sentence must not say "
+                   "it overtakes")
+    k = _projected_index(series)
+    if k is not None:
+        lab = (own[k].get(PROJECTED_KEY) or {}).get("label")
+        if _text(lab) and not PROJECTION_WORDS_RE.search(lab):
+            out.append(f"{FORM_WARN} bars[{k}] projected: the label {lab!r} carries no estimate word - it may read as a "
+                       "name, not an estimate ('2030E', 'consensus', 'forecast')")
+    oo = blk.get(OPENS_ON_KEY)
+    if oo:
+        v = to_number(own[oo["index"]].get("value"))
+        ties = [b.get("label") for j, b in enumerate(own) if j != oo["index"] and PROJECTED_KEY not in b
+                and to_number(b.get("value")) == v]
+        if ties:
+            out.append(f"{FORM_WARN} opens_on: {own[oo['index']].get('label')!r} ties {ties} at {v:g} - the "
+                       f"{_ordinal(oo['rank'])} is shared")
+    return out
+
+
 def _source_lines_ok(value: Any) -> bool:
     """Is `value` the two-line source's shape - exactly two non-empty strings? Pure."""
     return (isinstance(value, list) and len(value) == SOURCE_LINES_N
@@ -1840,6 +2072,9 @@ def validate(series: dict, variant: str) -> list[str]:
             return errs
         series = with_schematic(series)
     errors: list[str] = []
+    errors += _validate_projected_bars(series, variant)   # P71 T25 / E77: a projected bar is labelled, tiered, sourced, and has a field to pass
+    errors += _validate_opens_on(series, variant)         # P71 T25: the bar the page opens on, and its rank's phrase (the ordinal is computed)
+    series = with_projected_values(series)                # ... and then its height is its projection's (the same object when none)
     errors += _validate_readability(series, variant)
     errors += _validate_break(series, variant)   # P69 T66: [] unless the object names a `break`
     errors += _validate_members(series, variant)   # P69 T45: a membership is a bars page's, and a tile carries no value
@@ -3353,6 +3588,8 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
     if quiet_zone not in QUIET_ZONES:
         raise ValueError(f"quiet_zone must be one of {'|'.join(QUIET_ZONES)}")
     series = with_schematic(series)   # P70 T2: a schematic object draws the series it generates (itself when it names none)
+    out_series = series                        # P71 T25: the object as written - `projected` read before it stands in as a value
+    series = with_projected_values(series)     # P71 T25: a projected bar's height is its projection (the same object when none)
     builder = builder or pick_builder(series, variant)
     spec: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION, "surface": "page", "builder": builder,
@@ -3435,6 +3672,12 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
                 spec["warnings"] = list(spec.get("warnings") or []) + projection_warnings(series)
     else:
         spec.update(_story_block(series))
+        if builder == "story" and (OPENS_ON_KEY in out_series or _projected_index(out_series) is not None):   # P71 T25 (absent: not one key)
+            spec.update(bars_out_block(out_series))
+            if projected_source(out_series) is not None:
+                spec["source"] = projected_source(out_series)
+            if bars_out_warnings(out_series):
+                spec["warnings"] = list(spec.get("warnings") or []) + bars_out_warnings(out_series)
     if builder == "combo":
         spec.update({k: v for k, v in _dense_block(series).items() if k != "labels"})
         if spec.get(SEGMENTS_KEY) and _text(series.get(LINE_LABEL_KEY)):   # P69 T64: the stacked combo's right axis, named (s102 (b))

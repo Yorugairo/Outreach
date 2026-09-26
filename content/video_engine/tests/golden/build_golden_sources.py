@@ -5806,6 +5806,62 @@ SURFACES.update({"lead-lag-bracket": lead_lag_bracket})
 FRAME_T.update({"lead-lag-bracket": round(LAG_AT + LAG_DUR + 0.4, 2)})   # landed and held: the elbow, its heads and "6 weeks"
 
 
+# ---- P71 T25 (was P69 T74; the Bravos harvest v2 A51, D40 15:16-15:30): THE PROJECTED OVERTAKE -----------------------
+# Steel and Paper H row 16's capex consensus: the $480B the year opened on, the $690B consensus now, and the 2027
+# consensus ($870B) as a PROJECTED bar - a bar whose height IS a sourced estimate (E77: no `value` of its own), drawn on
+# `chart_to extend {bar: 2}` at 11.0 over 2.5 s: the field makes room, the bar surges DASHED, "2027E consensus" is
+# written over its value, and the bracket runs from its top to #1's column (the tallest ACTUAL bar, the $690B) with the
+# computed gap, "+$180B". Every figure is READ off the committed series file (`ev-capex-consensus-v1`), never re-typed;
+# the colours are the file's. Read at rest after the bracket has landed.
+OVERTAKE_SERIES = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/objects/ev-capex-consensus-v1.series.json"
+OVERTAKE_SRC = "PIMCO, Figures 2-3 via the evidence dossier (B1) - the 2027 consensus"
+
+
+def overtake_capex(opens_on: bool = False) -> dict:
+    """The capex field with its 2027 bar a PROJECTION (P71 T25) - the values and colours off the series file; with
+    `opens_on`, the page is born on the year's opening estimate alone and its rank is written in the field."""
+    cap = json.loads(OVERTAKE_SERIES.read_text(encoding="utf-8"))
+    by = {b["label"]: b for b in cap["bars"]}
+    nxt = by["2027 consensus"]
+    obj = {"title": cap["title"],
+           "sub": "The five largest hyperscalers' capital spending, US$ billions - consensus estimates, 2027 projected",
+           "src": cap["src"], "unit": "$", "unit_suffix": "B",
+           "bars": [{"label": k, "value": by[k]["value"], "color": by[k]["color"]} for k in ("Start of year", "2026 consensus")]
+                   + [{"label": "2027 consensus", "color": nxt["color"],
+                       "projected": {"value": nxt["value"], "label": "2027E consensus", "tier": "PLAUSIBLE", "src": OVERTAKE_SRC}}]}
+    if opens_on:
+        obj["opens_on"] = {"bar": "Start of year", "rank": "largest estimate"}
+    return obj
+
+
+def projected_overtake() -> tuple[dict, dict]:
+    """P71 T25: the projected overtake AT REST - the dashed 2027E bar past the $690B leader, its bracket and its gap."""
+    import tempfile
+    import build_scene_timeline_f as BST
+    plate = "ledger:fx-capex-overtake:bars"
+    species = [{"kind": "chart_to", "to": "extend", "at": 11.0, "dur": 2.5, "bar": 2}]
+    assert not BST.validate_species(species, (0, 0, 0), plate), BST.validate_species(species, (0, 0, 0), plate)
+    with tempfile.TemporaryDirectory() as td:
+        ep = Path(td)
+        (ep / "evidence/objects").mkdir(parents=True)
+        (ep / "evidence/objects/fx-capex-overtake.series.json").write_text(json.dumps(overtake_capex()), encoding="utf-8")
+        saved = BST.ASPECT
+        BST.ASPECT = "16:9"
+        try:
+            world = BST.world_for_plate(plate, (0, 0, 0), ep)
+            BST.stamp_full_stage(world["page"])
+            BST.derive_rescale_states(world, species, plate, ep)
+        finally:
+            BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: the projected overtake (H row 16's capex, the 2027 consensus)", scenes, {}, "16:9"), _base_uris()
+
+
+SURFACES.update({"projected-overtake": projected_overtake})
+FRAME_T.update({"projected-overtake": 14.2})   # at rest: the extend ends at 13.5 (11.0 + 2.5), the bracket and its gap landed
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:
