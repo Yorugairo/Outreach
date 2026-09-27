@@ -962,7 +962,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T33: The railway research and the as-of date, under the claims gate
-- Status: pending
+- Status: done - lane B (the T33 commit): our verifier on the reply PASS (137 CONFIRMED / 132 PLAUSIBLE capped - FRED tarpits the verifier's UA, R26-421 (a) / 1 UNSOURCED); all 9 sources re-fetched byte-identical -> the promoted run `--trusted-run` PASS 272 CONFIRMED / 1 UNSOURCED, `--require-pass` exit 0 (claims 50e4bc87); record `docs/research/markets/r26-311-railway-us-and-modern-comparator-VERIFY-2026-09-27.md`; REJECTED: the report's section-3 table (24/26 rows), the 4.902% trough, the 1.767% average; R26-29: as of 30 Jun 2026 set on the object and its source
 - Owner: parent (the order and the promotion) + the Gemini research lane; explorer runs the verifier reads
 - Depends on: T0
 - Items: R26-311 (the reply to packet `cbf13c74...` re-verified with OUR verifier, `verify_research_claims.py <run dir> --require-pass`; the lane-saved CSVs capped at PLAUSIBLE unless OUR fetch matches; each claim tiered CONFIRMED / PLAUSIBLE / UNSOURCED-editorial / REJECTED; only what earns its tier is promoted into `docs/research/markets/` or an evidence object), R26-29 (the iShares fact-sheet quarter-end read in a browser and written to `ev-bonds-vs-chips-10y-v1`'s `src` / `fetched`)
@@ -976,7 +976,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T34: The six dockets re-ingested under the gate
-- Status: pending
+- Status: blocked - the six .docx (11, 17, 26, 28, 29, 32) are themselves Drive search listings: the T31 ingester FAILs each by name (141/141/141/141/103/141 records), the stop condition; nothing re-ingested; `scrub-terms.txt` (R26-352) is absent, so a re-run would undo docket 12's hand scrub; waits on the operator re-exporting the six documents (R26-421 (e); candidates for 11 and 29 named there); the Validate line's path argument is invalid (R26-421 (b))
 - Owner: parent + the research lane
 - Depends on: T31 (the ingester fixed)
 - Items: R26-254 (2): dockets 11, 17, 26, 28, 29, 32 re-ingested from their `.docx` in the operator's folder, the scrub kept, each claim that a script will use verified by the claims gate before use

@@ -1,8 +1,8 @@
 {
  "title": "Ten years, a year at a time",
  "sub": "Average annual total return over the last ten years, %",
- "src": "iShares AGG, SOXX (NAV, quarter-end) · fetched Sep 2026",
- "src_full": "iShares.com product pages, standardized average annual total returns (NAV), fetched 2026-09-10 - evidence/sources/ishares-soxx-agg-returns-2026-09-10.txt",
+ "src": "iShares AGG, SOXX (NAV) · as of 30 Jun 2026",
+ "src_full": "iShares fund fact sheets, \"Fact Sheet as of June 30, 2026\": annualized performance, NAV, 10y - AGG 1.52 %, SOXX 36.59 % (read 2026-09-27: ishares.com/us/literature/fact-sheet/agg-ishares-core-u-s-aggregate-bond-etf-fund-fact-sheet-en-us.pdf and soxx-ishares-semiconductor-etf-fund-fact-sheet-en-us.pdf); the same figures as the iShares.com product pages fetched 2026-09-10 - evidence/sources/ishares-soxx-agg-returns-2026-09-10.txt (R26-29, P72 T33)",
  "src_style": "compact",
  "unit": "%",
  "bars": [
@@ -20,6 +20,7 @@
  "emphasize": 1,
  "status": "REAL",
  "fetched": "2026-09-10",
+ "as_of": "2026-06-30",
  "facts": {
   "agg_10y_avg_pct": 1.52,
   "soxx_10y_avg_pct": 36.59,
