@@ -4,7 +4,7 @@
   {
    "slot": "page enter 1 (axes)",
    "at": 0.0,
-   "gain": 0.12,
+   "gain": 0.0708,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-roll-464302.mp3"
@@ -13,29 +13,29 @@
   {
    "slot": "landing 1 (throw, paper)",
    "at": 9.62,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 9.66s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 9.66s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "landing 3 (throw, paper)",
    "at": 56.04,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 56.08s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 56.08s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "dip 3",
    "at": 49.1,
-   "gain": 0.12,
+   "gain": 0.0912,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-whoosh-3-648729.mp3"
@@ -44,7 +44,7 @@
   {
    "slot": "page enter 4 (camera)",
    "at": 56.62,
-   "gain": 0.12,
+   "gain": 0.0708,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-roll-464302.mp3"
@@ -53,7 +53,7 @@
   {
    "slot": "page enter 5 (axes)",
    "at": 63.8,
-   "gain": 0.12,
+   "gain": 0.0708,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-roll-464302.mp3"
@@ -62,62 +62,77 @@
   {
    "slot": "landing 5 (throw, paper)",
    "at": 90.03,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 90.07s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 90.07s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "landing 6 (throw, paper)",
    "at": 107.51,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 107.55s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 107.55s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "landing 6 (land, paper)",
-   "at": 114.49,
-   "gain": 0.12,
+   "at": 114.96,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 114.53s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 114.53s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)",
+   "retimed": {
+    "from": 114.49,
+    "to": 114.96,
+    "why": "E99 s116: the compiled land lands at 114.96s - the plan names the sound, the landing its instant"
+   }
   },
   {
    "slot": "landing 6 (land, paper)",
-   "at": 120.93,
-   "gain": 0.12,
+   "at": 121.38,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 120.97s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 120.97s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)",
+   "retimed": {
+    "from": 120.93,
+    "to": 121.38,
+    "why": "E99 s116: the compiled land lands at 121.38s - the plan names the sound, the landing its instant"
+   }
   },
   {
    "slot": "landing 6 (land, paper)",
-   "at": 133.28,
-   "gain": 0.12,
+   "at": 133.75,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 133.32s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 133.32s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)",
+   "retimed": {
+    "from": 133.28,
+    "to": 133.75,
+    "why": "E99 s116: the compiled land lands at 133.75s - the plan names the sound, the landing its instant"
+   }
   },
   {
    "slot": "dip 7",
    "at": 147.47,
-   "gain": 0.12,
+   "gain": 0.0912,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-whoosh-3-648729.mp3"
@@ -126,7 +141,7 @@
   {
    "slot": "page enter 8 (axes)",
    "at": 162.6,
-   "gain": 0.12,
+   "gain": 0.0708,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-roll-464302.mp3"
@@ -135,7 +150,7 @@
   {
    "slot": "dip 8",
    "at": 162.25,
-   "gain": 0.12,
+   "gain": 0.0912,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-whoosh-3-648729.mp3"
@@ -144,7 +159,7 @@
   {
    "slot": "page enter 9 (axes)",
    "at": 195.82,
-   "gain": 0.12,
+   "gain": 0.0708,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-roll-464302.mp3"
@@ -153,18 +168,18 @@
   {
    "slot": "landing 9 (stamp, ink)",
    "at": 217.79,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 217.83s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 217.83s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "page enter 10 (axes)",
    "at": 242.38,
-   "gain": 0.12,
+   "gain": 0.0708,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-roll-464302.mp3"
@@ -173,29 +188,29 @@
   {
    "slot": "landing 10 (stamp, ink)",
    "at": 290.27,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 290.31s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 290.31s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "landing 11 (throw, paper)",
    "at": 305.01,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 305.05s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 305.05s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "page enter 12 (axes)",
    "at": 324.62,
-   "gain": 0.12,
+   "gain": 0.0708,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-roll-464302.mp3"
@@ -204,7 +219,7 @@
   {
    "slot": "dip 12",
    "at": 324.27,
-   "gain": 0.12,
+   "gain": 0.0912,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-whoosh-3-648729.mp3"
@@ -213,40 +228,45 @@
   {
    "slot": "landing 13 (throw, paper)",
    "at": 338.86,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 338.90s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 338.90s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "landing 13 (land, paper)",
-   "at": 359.13,
-   "gain": 0.12,
+   "at": 359.58,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 359.17s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 359.17s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)",
+   "retimed": {
+    "from": 359.13,
+    "to": 359.58,
+    "why": "E99 s116: the compiled land lands at 359.58s - the plan names the sound, the landing its instant"
+   }
   },
   {
    "slot": "landing 14 (throw, paper)",
    "at": 373.26,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 373.30s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 373.30s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "dip 14",
    "at": 363.03,
-   "gain": 0.12,
+   "gain": 0.0912,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-whoosh-3-648729.mp3"
@@ -255,7 +275,7 @@
   {
    "slot": "page enter 15 (axes)",
    "at": 384.12,
-   "gain": 0.12,
+   "gain": 0.0708,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-roll-464302.mp3"
@@ -264,29 +284,29 @@
   {
    "slot": "landing 15 (stamp, ink)",
    "at": 387.96,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 388.00s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 388.00s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "landing 15 (land, paper)",
    "at": 394.51,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 394.55s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 394.55s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "dip 15",
    "at": 383.77,
-   "gain": 0.12,
+   "gain": 0.0912,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-whoosh-3-648729.mp3"
@@ -295,18 +315,18 @@
   {
    "slot": "landing 16 (throw, paper)",
    "at": 410.07,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 410.11s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 410.11s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "page enter 18 (axes)",
    "at": 431.01,
-   "gain": 0.12,
+   "gain": 0.0708,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-roll-464302.mp3"
@@ -315,40 +335,45 @@
   {
    "slot": "landing 18 (stamp, ink)",
    "at": 437.68,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 437.72s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 437.72s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "landing 19 (stamp, ink)",
    "at": 484.98,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 485.02s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 485.02s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "landing 19 (throw, paper)",
-   "at": 505.17,
-   "gain": 0.12,
+   "at": 505.5,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 505.21s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 505.21s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)",
+   "retimed": {
+    "from": 505.17,
+    "to": 505.5,
+    "why": "E99 s116: the compiled throw lands at 505.50s - the plan names the sound, the landing its instant"
+   }
   },
   {
    "slot": "dip 20",
    "at": 513.34,
-   "gain": 0.12,
+   "gain": 0.0912,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-whoosh-3-648729.mp3"
@@ -357,7 +382,7 @@
   {
    "slot": "page enter 21 (axes)",
    "at": 533.8,
-   "gain": 0.12,
+   "gain": 0.0708,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-roll-464302.mp3"
@@ -366,62 +391,62 @@
   {
    "slot": "landing 21 (stamp, ink)",
    "at": 540.17,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 540.21s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 540.21s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "landing 21 (stamp, ink)",
    "at": 559.71,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 559.75s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 559.75s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "landing 21 (stamp, ink)",
    "at": 586.71,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 586.75s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 586.75s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "landing 21 (throw, paper)",
    "at": 606.25,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 606.29s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 606.29s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "landing 21 (stamp, ink)",
    "at": 617.41,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 617.45s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 617.45s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "page enter 22 (axes)",
    "at": 622.89,
-   "gain": 0.12,
+   "gain": 0.0708,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-roll-464302.mp3"
@@ -430,84 +455,104 @@
   {
    "slot": "landing 22 (land, paper)",
    "at": 673.66,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 673.70s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 673.70s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "landing 23 (throw, paper)",
    "at": 680.06,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 680.10s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 680.10s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "landing 23 (land, paper)",
-   "at": 688.39,
-   "gain": 0.12,
+   "at": 688.83,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 688.43s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 688.43s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)",
+   "retimed": {
+    "from": 688.39,
+    "to": 688.83,
+    "why": "E99 s116: the compiled land lands at 688.83s - the plan names the sound, the landing its instant"
+   }
   },
   {
    "slot": "landing 23 (land, paper)",
-   "at": 695.97,
-   "gain": 0.12,
+   "at": 696.42,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 696.01s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 696.01s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)",
+   "retimed": {
+    "from": 695.97,
+    "to": 696.42,
+    "why": "E99 s116: the compiled land lands at 696.42s - the plan names the sound, the landing its instant"
+   }
   },
   {
    "slot": "landing 23 (land, paper)",
-   "at": 700.84,
-   "gain": 0.12,
+   "at": 701.29,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 700.88s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 700.88s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)",
+   "retimed": {
+    "from": 700.84,
+    "to": 701.29,
+    "why": "E99 s116: the compiled land lands at 701.29s - the plan names the sound, the landing its instant"
+   }
   },
   {
    "slot": "landing 23 (land, paper)",
-   "at": 705.08,
-   "gain": 0.12,
+   "at": 705.54,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 705.12s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 705.12s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)",
+   "retimed": {
+    "from": 705.08,
+    "to": 705.54,
+    "why": "E99 s116: the compiled land lands at 705.54s - the plan names the sound, the landing its instant"
+   }
   },
   {
    "slot": "landing 23 (stamp, ink)",
    "at": 711.63,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 711.67s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 711.67s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "dip 23",
    "at": 679.1,
-   "gain": 0.12,
+   "gain": 0.0912,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-whoosh-3-648729.mp3"
@@ -516,29 +561,29 @@
   {
    "slot": "landing 24 (stamp, ink)",
    "at": 721.74,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 721.78s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 721.78s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "landing 24 (throw, paper)",
    "at": 729.68,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 729.72s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 729.72s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "dip 24",
    "at": 716.44,
-   "gain": 0.12,
+   "gain": 0.0912,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-whoosh-3-648729.mp3"
@@ -547,29 +592,34 @@
   {
    "slot": "landing 25 (throw, paper)",
    "at": 750.54,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 750.58s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 750.58s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "landing 25 (land, paper)",
-   "at": 754.77,
-   "gain": 0.12,
+   "at": 755.21,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 754.81s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 754.81s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)",
+   "retimed": {
+    "from": 754.77,
+    "to": 755.21,
+    "why": "E99 s116: the compiled land lands at 755.21s - the plan names the sound, the landing its instant"
+   }
   },
   {
    "slot": "dip 25",
    "at": 742.69,
-   "gain": 0.12,
+   "gain": 0.0912,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-whoosh-3-648729.mp3"
@@ -578,55 +628,85 @@
   {
    "slot": "landing 26 (land, paper)",
    "at": 775.38,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 775.42s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 775.42s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "landing 26 (land, paper)",
-   "at": 780.64,
-   "gain": 0.12,
+   "at": 781.08,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 780.68s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 780.68s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)",
+   "retimed": {
+    "from": 780.64,
+    "to": 781.08,
+    "why": "E99 s116: the compiled land lands at 781.08s - the plan names the sound, the landing its instant"
+   }
   },
   {
    "slot": "landing 26 (land, paper)",
-   "at": 785.1,
-   "gain": 0.12,
+   "at": 785.58,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 785.14s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 785.14s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)",
+   "retimed": {
+    "from": 785.1,
+    "to": 785.58,
+    "why": "E99 s116: the compiled land lands at 785.58s - the plan names the sound, the landing its instant"
+   }
   },
   {
    "slot": "landing 26 (land, paper)",
    "at": 802.64,
-   "gain": 0.12,
+   "gain": 0.0741,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-page-stroke-447925.mp3",
     "B": "fs-page-roll-464302.mp3"
    },
-   "note": "contact at 802.68s, the cue one frame early (the weight report Q5)"
+   "note": "contact at 802.68s, the cue one frame early (the weight report Q5); E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-page-stroke-447925.mp3 at -14.4 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "dip 26",
    "at": 764.82,
-   "gain": 0.12,
+   "gain": 0.0912,
    "fade_in": 0.0,
    "variants": {
     "A": "fs-whoosh-3-648729.mp3"
    }
+  },
+  {
+   "slot": "suck 13",
+   "at": 338.44,
+   "gain": 0.0912,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-whoosh-3-648729.mp3"
+   },
+   "note": "the suck: the outgoing world spins into its point over SUCK_S 0.3 s from the row's start; E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-whoosh-3-648729.mp3 at -16.2 LUFS, measured (ffmpeg ebur128)"
+  },
+  {
+   "slot": "suck 19",
+   "at": 463.95,
+   "gain": 0.0912,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-whoosh-3-648729.mp3"
+   },
+   "note": "the suck: the outgoing world spins into its point over SUCK_S 0.3 s from the row's start; E81 start: 9.0 dB under the VO (-28.0 LUFS), fs-whoosh-3-648729.mp3 at -16.2 LUFS, measured (ffmpeg ebur128)"
   },
   {
    "slot": "hook bed",
