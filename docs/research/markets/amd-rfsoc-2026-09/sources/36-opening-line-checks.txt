@@ -1,0 +1,50 @@
+Snapshot 2026-09-26 - sources for the operator's draft opening
+
+== (1) AMD's most recent quarter: Q2 2026, reported 2026-08-04
+AMD 8-K release: https://www.sec.gov/Archives/edgar/data/0000002488/000000248826000121/q22026991.htm
+"Second quarter revenue was $11.5 billion, gross margin was 54%, operating income was $2.0 billion"
+"Data Center segment revenue was $6.7 billion, up 107% year-over-year"
+Q3 guide "approximately $13 billion, plus or minus $300 million" (~41% YoY at midpoint)
+"Q2'25 results included $800 million in inventory and related charges due to the U.S. Government's export control on AMD Instinct MI308" ; Q2'25 operating income "$(134)" million (a loss) vs Q2'26 $1,990M
+Investing.com, 2026-08-04: https://www.investing.com/news/company-news/amd-q2-2026-slides-data-center-revenue-doubles-stock-falls-after-hours-93CH-4836240
+Revenue $11.54B vs consensus $11.25B; non-GAAP EPS $1.66 vs $1.60; non-GAAP GM guide ~56%
+"Shares fell 8.94% to $472.20 after closing regular trading up 7% at $518.58" (after hours)
+Reasons offered by press: pace of AI ramp, margins, profit-taking; Helios "modest shipments in the third quarter, a step up in the fourth quarter"
+Search summaries (indmoney/ebc/tradingkey): capex $808M vs ~$299M modeled; FCF $1.56B vs $2.57B in Q1 (PLAUSIBLE, not captured)
+
+== SemiAnalysis on AMD in 2026 (closest thing to a "they told you X, reality Y" claim)
+Late Jan 2026 SemiAnalysis report (via Yahoo/Seeking Alpha/TipRanks summaries): "Engineering samples and low volume production of AMD's first rack scale MI455X UALoE72 system will be in H2 2026, while due to manufacturing delays, the mass production ramp and first production tokens will only be generated on an MI455X UALoE72 by Q2 2027" - AMD shares fell ~4%; Wells Fargo disputed. AMD said (Next Platform 2026-02-23) Helios/MI400 "On Track For 2H 2026".
+URLs: https://finance.yahoo.com/news/amd-stock-falls-mi450-series-161808447.html ; https://seekingalpha.com/news/4544916-amd-dips-on-report-that-mi450-faces-delays-but-wells-fargo-refutes ; https://www.nextplatform.com/compute/2026/02/23/amd-says-helios-racks-and-mi400-series-gpus-on-track-for-2h-2026/4092199
+Tier PLAUSIBLE (report paywalled; quote via secondary). No "cover-up" wording found.
+
+== "cover-up" in Patel/SemiAnalysis record: NOT FOUND (web search; X search unavailable). Closest verbatim (sources/28):
+"dumping US military chips for 1/4 of the cost in China"; "AMD needs to be investigated for treason."; "it's not just export violations, but it's literally selling military end use components to an adversary for less than your home country"; follow-up: "I am very concerned about the fact that pricing discrepancy is so large."
+
+== (2) Jensen Huang takes a call from the president on stage - All-In Summit, Los Angeles, 2026-09-14
+NBC News (Raquel Coronell Uribe, 2026-09-14): https://www.nbcnews.com/politics/donald-trump/nvidia-ceo-jensen-huang-ai-speakerphone-all-hands-meeting-rcna597761
+Trump called Huang; Huang put him on speakerphone during the summit. Trump: "The whole thing is a hoax." (on AI takeover fears); "Data centers are great, and they make people wealthy."
+TechCrunch (Connie Loizos, 2026-09-14): https://techcrunch.com/2026/09/14/jensen-huang-took-a-call-from-trump-and-showed-off-something-else-too/
+"Huang, dressed in his now-signature alligator leather jacket, was handed a foldable phone to answer it."
+Also: Axios 2026-09-14 https://www.axios.com/2026/09/14/trump-jensen-huang-nvidia-ai-all-in-summit ; CNBC 2026-09-14 (403)
+
+== (3) Trust / access framing
+ABC News (Australia), Echo Hui, 2026-09-26: https://www.abc.net.au/news/2026-09-26/jensen-huang-ai-boss-trusted-by-trump/107197212 (headline slug "ai-boss-trusted-by-trump")
+"Last year, Huang revealed to media that Trump often called him late at night." No mention of AMD/Su.
+CNBC 2026-09-20 "Nvidia CEO Jensen Huang emerges as Trump's top ally in AI safety debate" (403; title only): https://www.cnbc.com/2026/09/20/nvidia-ceo-jensen-huang-emerges-as-trumps-top-ally-in-ai-debate.html
+Kompas 2026-09-25 "Jensen Huang Grows Closer to Trump as Nvidia Targets Chinese Chip Market" (403; search summary: at least six joint appearances in Trump's second term; Bessent: the president "completely aligned" with Huang - NOT verified)
+No article found that frames Nvidia-vs-AMD as a government-trust gap.
+
+COUNTER-EVIDENCE - Lisa Su's access the same week:
+Fox Business (Kristen Altus), 2026-09-23: https://www.foxbusiness.com/politics/tech-giant-ceo-announces-attend-trump-xi-state-dinner
+Su at NYSE: "I'm honored to say that I will be at the dinner tomorrow night."; summit "very impactful, very important"
+Yahoo Finance (Ben Werschkul), 2026-09-25: https://finance.yahoo.com/markets/article/over-30-ceos-scored-an-invite-to-the-us-china-state-dinner--and-these-4-got-a-spot-at-the-head-table-134400923.html
+State dinner 2026-09-24; over 30 CEOs; head table business guests: Musk, Huang, Cook, Su. "perhaps most striking were the four CEOs whom Trump's team chose to sit at the head table with the two heads of state"
+Yahoo Finance 2026-09-25 "AMD CEO Lisa Su is having a September to remember": https://finance.yahoo.com/markets/article/amd-ceo-lisa-su-is-having-a-september-to-remember-135902902.html
+Su "only two seats away from President Trump"; Huang "across from the President"; 2026-09-23 NYSE opening bell with First Lady Melania Trump + fireside chat; AMD "up an impressive 193% year to date".
+May 2025: Su in Riyadh at the Saudi-US Investment Forum with Trump; AMD-Humain $10B AI infrastructure deal (search summary, CNN 2025-05-14) - PLAUSIBLE.
+
+== Critiques of SemiAnalysis (fairness; allegations only)
+Jon Stevens (CEO, Hot Aisle - an AMD-GPU cloud), 2025-12-02: https://jon4hotaisle.substack.com/p/influence-as-a-service-semianalysis
+Alleges a "pay-to-play" model; "I would be very, very surprised if AMD did not pay SemiAnalysis" - speculation, he concedes "the lack of transparency ... leaves the door open for all sorts of speculation". UNSOURCED-editorial.
+Wei Zhou v. SemiAnalysis, SF Superior Court (filed 2026-03-30 per search; case CGC-36-635374 per Wallstreetcn/Longbridge 2026-04-05): https://longbridge.com/en/news/281699561
+Allegation: fired for refusing to put MNPI into client models, linked to Patel's $50M vehicle (Fluidstack). SemiAnalysis "explicitly denied all of Zhou's allegations" and countersued. Allegations only.

@@ -1,0 +1,19 @@
+Snapshot 2026-09-26
+
+== Federal Register 2020-28101 (85 FR, 2020-12-23), BIS: https://www.govinfo.gov/content/pkg/FR-2020-12-23/html/2020-28101.htm
+Effective: "December 23, 2020"
+Implements "Executive Order 13936 of July 14, 2020"
+Prior action: on "June 30, 2020" BIS suspended licence exceptions for Hong Kong that differed from those for China
+Rationale (fetcher extract): China's actions "fundamentally undermine Hong Kong's autonomy"; risk that "sensitive U.S. technology and items will be diverted to unauthorized end uses"
+(fetcher also returned "can no longer distinguish between the export of controlled items to Hong Kong and the PRC" - attribution to the FR text vs search-summary not certain; treat as PLAUSIBLE wording)
+
+== BIS country guidance page: https://media.bis.gov/licensing/country-guidance/hong-kong-export-controls
+"exports, reexports and transfers (in-country) to Hong Kong will be treated under the Export Administration Regulations (EAR) as transactions destined for the People's Republic of China"
+"On December 23, 2020, pursuant to Executive Order 13936"
+"Hong Kong is frequently a transshipping point to locations around the globe. Sometimes, a US export is routed through Hong Kong to avoid US export regulations."
+Red flags listed: shipping to addresses other than buyer's, secretarial firms, logistics providers - "a risk of diversion contrary to the EAR."
+
+== The Next Web, 2026-07-04 (citing Bloomberg 2026-07-02 + HK Census & Statistics Dept): https://thenextweb.com/news/hong-kong-china-ai-chip-trade-hub
+HK re-exported $124 billion of chips to mainland China Jan-May 2026 = 52% of China's chip imports; about a third a decade ago.
+"AI-related electronics now account for 57% of the city's exports, up from 44% in 2024" (HKTDC); "Barclays puts the share as high as 70%" - NOTE: the 70% is AI-related share of HK EXPORTS, not of China's chip imports (a search summary conflated them).
+Bloomberg original (403 to fetcher): https://www.bloomberg.com/news/articles/2026-07-02/booming-ai-chip-trade-seals-hong-kong-s-role-as-gateway-to-china

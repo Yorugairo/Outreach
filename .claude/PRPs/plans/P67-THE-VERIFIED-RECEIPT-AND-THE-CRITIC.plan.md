@@ -1,13 +1,13 @@
 ---
 id: P67-THE-VERIFIED-RECEIPT-AND-THE-CRITIC
 title: The verified receipt and the critic - the build refuses without a per-stage Recall block whose every line is re-read and matched verbatim, and the reviewer reads the BUILT cut as a different reader and returns two scores, never one verdict
-status: running
+status: complete
 operation: feature
 risk: standard
 owner: parent
 branch: main
 created: 2026-09-16
-updated: 2026-09-16
+updated: 2026-09-25 (complete - P72 T0, 2026-09-25: T6 done; P67 HG1's question folded into P69-HG4)
 ---
 
 # The verified receipt and the critic
@@ -230,7 +230,7 @@ commits allowlisted paths; nothing is pushed without the operator's fresh word.
 - Evidence: `build_review_queue.py` `WHOLE_CUT_S = 30.0`, `CRITIC_REQUIRED = False` (T7 flips it), `CRITIC_REPORT_NAME`, `critic_owed` in `validate_record` (WARN now, the same text as a refusal), `check_critic_files` in the writer (the disk check), the WARNs printed by `main`; 7 new tests, 59 pass (the parent re-ran); `--check` exit 0 printing exactly two WARNs: `one-shot-3-fable-memory-calendar` and `p66-hg1-the-first-generated-base` both owe a critic report. T7 must give BOTH cards a critic (or a beat clip) in the commit that flips the constant.
 
 ### T6: THE RUNBOOK AND THE DOCS - step 0's grammar, step 9's critic, the capability row, the backlog
-- Status: running (HG1's answer owed; R26-181 closes on it)
+- Status: done (P72 T0, 2026-09-25: the runbook, RECALL-RECEIPT and CAPABILITIES edits are in the evidence line; HG1's card `one-shot-3-fable-memory-calendar` is RULED (E99 s71); the critic-scores question folds into P69-HG4, where the critic's read sits; R26-181 archived) - was: running (HG1's answer owed; R26-181 closes on it)
 - Owner: parent
 - Depends on: T1, T2, T3, T4, T5
 - Write set: `docs/runbooks/ONE-SHOT.md`, `docs/runbooks/RECALL-RECEIPT.md`, `docs/content-video-engine/CAPABILITIES.md`, `docs/content-video-engine/BACKLOG.md`, `.claude/PRPs/plans/P67-THE-VERIFIED-RECEIPT-AND-THE-CRITIC.plan.md`

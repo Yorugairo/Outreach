@@ -393,3 +393,54 @@ def test_a_wait_for_task_placeholder_is_working_not_a_reply():
     out = BW.gemini_reply(done)
     assert out["status"] == "done" and out["text"].startswith("POSITION: done")
     assert BW.gemini_reply([planner("POSITION: done")])["status"] == "done", "a real reply is still a reply"
+
+
+# --------------------------------------------------------------------------- R26-355: the astra lane reads the packet folder
+
+
+def _astra_packet(repo: Path, packet: str, reply: str, *, written_days_ago: float, created_days_ago: float) -> Path:
+    import os
+    folder = BE.packet_dir(repo, packet, "sent")
+    created = dt.datetime.now().astimezone() - dt.timedelta(days=created_days_ago)
+    BE.write_json(folder / "order.json", {"packetId": packet, "lane": "astra", "replyShape": "paths-written", "brief": "B",
+                                          "createdAt": created.isoformat(timespec="seconds")})
+    (folder / "reply.md").write_text(reply, encoding="utf-8")
+    written = (dt.datetime.now().astimezone() - dt.timedelta(days=written_days_ago)).timestamp()
+    os.utime(folder / "reply.md", (written, written))
+    return folder
+
+
+def test_the_astra_cli_proves_on_replay_lands_on_once_and_never_rewrites_the_reply(tmp_path):
+    reply = f"POSITION: done\nPATHS WRITTEN:\n{(tmp_path / 'docs/research/runs/bridge/queue/abcabcabcabc/reply.md').as_posix()}\n"
+    folder = _astra_packet(tmp_path, "abcabcabcabc", reply, written_days_ago=2, created_days_ago=3)
+
+    assert BW.main(["--lane", "astra", "--id", "-", "--packet", "abcabcabcabc", "--repo", str(tmp_path), "--replay"]) == 0
+    assert folder.is_dir() and not (folder / "watch.json").exists(), "a replay proves and moves nothing"
+
+    assert BW.main(["--lane", "astra", "--id", "-", "--packet", "abcabcabcabc", "--repo", str(tmp_path), "--once"]) == 0
+    replied = BE.packet_dir(tmp_path, "abcabcabcabc", "replied")
+    assert replied.is_dir() and (replied / "reply.md").read_text(encoding="utf-8") == reply
+    watch = json.loads((replied / "watch.json").read_text(encoding="utf-8"))
+    assert watch["positionLine"] == "POSITION: done" and watch["secondsToReply"] == pytest.approx(86400, abs=5)
+    assert [(r["event"], r["lane"], r["source"]) for r in _ledger_lines(tmp_path)] == [("replied", "astra", "reply.md")]
+
+
+def test_the_astra_cli_refuses_a_stale_reply_with_exit_four_and_moves_nothing(tmp_path, capsys):
+    reply = "POSITION: done\nPATHS WRITTEN:\nC:/x/abcabcabcab0/reply.md\n"
+    folder = _astra_packet(tmp_path, "abcabcabcab0", reply, written_days_ago=4, created_days_ago=3)
+
+    code = BW.main(["--lane", "astra", "--id", "-", "--packet", "abcabcabcab0", "--repo", str(tmp_path), "--once"])
+
+    assert code == 4 and folder.is_dir() and not (folder / "watch.json").exists()
+    assert "stale" in capsys.readouterr().out and not (tmp_path / BE.LEDGER).exists()
+
+
+def test_a_windows_path_into_another_packets_folder_is_seen_too(tmp_path):
+    reply = ("POSITION: done\nPATHS WRITTEN:\n"
+             "C:\\Users\\x\\docs\\research\\runs\\bridge\\queue\\abcabcabcab1\\reply.md\n"
+             "C:\\Users\\x\\docs\\research\\runs\\bridge\\sent\\0123456789ab\\EXECUTION.md\n")
+    folder = _astra_packet(tmp_path, "abcabcabcab1", reply, written_days_ago=2, created_days_ago=3)
+
+    proof = BW.file_reply(folder)
+
+    assert proof["status"] == "refused" and "0123456789ab" in proof["reason"]

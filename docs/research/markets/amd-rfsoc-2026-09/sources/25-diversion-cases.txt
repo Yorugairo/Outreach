@@ -1,0 +1,21 @@
+Snapshot 2026-09-26 (search snippets and secondary summaries; justice.gov bodies are empty to the fetcher)
+
+== Singapore server-fraud case (Dell / Supermicro servers, possibly with Nvidia chips, Singapore -> Malaysia)
+Malay Mail 2025-03-13: https://www.malaymail.com/news/singapore/2025/03/13/singapore-prosecutors-say-us-servers-fraud-case-involves-us390m-of-transactions/169451
+Search summary: three men charged (Li Ming, Chinese national, 51, bail S$1M; Alan Wei Zhaolun, 48; Aaron Woon Guo Jie, 40) with fraud against Dell and Supermicro by misrepresenting end users; transactions worth US$390M; alleged offences Nov 2023-Feb 2025; Commercial Affairs Department leads.
+Fourth person (Jenny Lim, CFO of Aperia International) charged 2026-04-02: https://theonlinecitizen.com/2026/04/02/fourth-individual-charged-in-singapore-over-fraud-conspiracy-linked-to-nvidia-chips ; https://www.malaymail.com/news/singapore/2026/04/02/singapore-charges-another-individual-in-ai-chip-fraud-tied-to-dell-servers/214819
+Charges are fraud (false end-user representations), not Singapore export-control offences; allegations, no conviction found.
+
+== Operation Gatekeeper (DOJ, 2025-12-08) via Arnold & Porter blog: https://www.arnoldporter.com/en/perspectives/blogs/enforcement-edge/2025/12/doj-shutdown-of-major-china-linked-ai-tech-smuggling-network
+"at least $160 million worth of restricted Nvidia AI chips" (H100/H200) to mainland China and Hong Kong
+Defendants "conspired with employees of a Hong Kong-based logistics company"
+Network "relabeled Nvidia chips with a nonexistent fake brand, and classified them as generic computer parts"
+Hao Global LLC "pleaded guilty to smuggling export-controlled Nvidia H100 and H200 GPUs"; others charged (allegations).
+DOJ original: https://www.justice.gov/opa/pr/us-authorities-shut-down-major-china-linked-ai-tech-smuggling-network
+
+== Yi-Chi Shih (C.D. Cal.) - MMICs to China (search snippets of DOJ/BIS releases)
+https://www.justice.gov/archives/opa/pr/electrical-engineer-convicted-conspiring-illegally-export-china-semiconductor-chips-missile
+Convicted 2019-06-26 on all 18 counts incl. IEEPA conspiracy; MMICs "used in missiles, missile guidance systems, fighter jets, electronic warfare, electronic warfare countermeasures and radar applications"; intended for AVIC 607 (state-owned); sentenced to more than five years (BIS release https://www.bis.gov/press-release/electrical-engineer-sentenced-more-five-years-prison-conspiring-illegally-export-china-semiconductor).
+
+== BIS Hong Kong high-diversion-risk addresses (secondary: Kharon brief https://www.kharon.com/brief/bis-chips-exports-china-enforcement)
+2024: licence requirement on shipments to specific Hong Kong addresses (and one in Turkey) at high risk of diversion (Russia); >1,400 entities registered at the 16 addresses (Kharon count); Oct 2025 extended to Iran-linked addresses. PLAUSIBLE - FR text not captured.

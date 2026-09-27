@@ -1,0 +1,38 @@
+{
+ "title": "THE WATCH - two tripwires, on the record",
+ "src": "Fed funds via FRED (DFF, 2026-08-27); memory monitor: Korean customs via SCML ledger",
+ "checklist": {
+  "profile": "phone",
+  "head": [
+   "Tripwire",
+   "Fires if",
+   "Now"
+  ],
+  "rows": [
+   {
+    "cells": [
+     "Bravos'",
+     "Fed > 5.5%",
+     "3.63%, not lit"
+    ],
+    "colors": [
+     "#f4f6f8",
+     "#dce3ea",
+     "#3bc9b0"
+    ]
+   },
+   {
+    "cells": [
+     "Mine",
+     "RAM cheaper",
+     "not lit"
+    ],
+    "colors": [
+     "#f4f6f8",
+     "#dce3ea",
+     "#3bc9b0"
+    ]
+   }
+  ]
+ }
+}

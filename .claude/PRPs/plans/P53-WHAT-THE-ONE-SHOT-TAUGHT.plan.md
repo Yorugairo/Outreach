@@ -1,13 +1,13 @@
 ---
 id: P53-WHAT-THE-ONE-SHOT-TAUGHT
 title: What the one-shot taught - the page's opening register, the hand-off that empties the stage, the two species defects its frames found, and the rows that stand between us and a better second one
-status: running
+status: complete
 operation: feature
 risk: standard
 owner: parent
 branch: main
 created: 2026-09-12
-updated: 2026-09-12 (running: T1-T10 landed and proved on frames; open = gate 1's re-render with a cutout head, and the four human gates)
+updated: 2026-09-25 (complete - P72 T0, 2026-09-25: T7's last item superseded; was: running: T1-T10 landed and proved on frames; open = gate 1's re-render with a cutout head, and the four human gates)
 ---
 
 # What the one-shot taught
@@ -235,7 +235,7 @@ by the parent in every case - a subagent's PASS is not evidence (E71).
   alone, a cut/dip/wipe stamping nothing, a non-page world left alone).
 
 ### T7: the cutout dock kind (R26-59)
-- Status: the cutout kind done; the two smaller halves open
+- Status: done (P72 T0, 2026-09-25: the one open item, gate 1's 16:9 frame re-rendered with a real head, is superseded - a golden cannot carry a generated head (E99 s31) and R26-59 is ruled (E99 s45)) - was: the cutout kind done; the two smaller halves open
 - Owner: parent
 - Depends on: none
 - Write set: `content/video_engine/scripts/build_scene_timeline_f.py`, `docs/content-video-engine/samples/scene-evidence-engine.mjs`, `content/video_engine/samples/scene-evidence-player.template.html`, the tests and goldens beside them

@@ -110,7 +110,7 @@
     "plate": {
       "$type": "fontFamily",
       "$value": [],
-      "$description": "NONE: readable text is banned on generated plates"
+      "$description": "NONE: no plate typeface; text on a generated plate only when the narrative needs it, named in the prompt, spelled exactly and verified on the frame read (E99 s113)"
     }
   },
   "fontWeight": {

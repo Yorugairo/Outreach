@@ -1,0 +1,16 @@
+Snapshot 2026-09-26 (law-firm / think-tank summaries; MOFCOM primary texts not captured)
+
+== Gallium/germanium: MOFCOM + GAC Announcement No. 23 [2023], issued 2023-07-03, effective 2023-08-01 (search summary of China Justice Observer / Mayer Brown / IEA)
+IEA page: https://www.iea.org/policies/17893-announcement-on-the-implementation-of-export-control-of-items-related-to-gallium-and-germanium
+Items incl. gallium metal, gallium nitride, gallium oxide, gallium arsenide ...; germanium metal, zone-melted germanium ingots, germanium tetrachloride. Export needs a MOFCOM licence.
+
+== Pillsbury, "China Suspends Export Controls on Certain Critical Minerals": https://www.pillsburylaw.com/en/news-and-insights/china-suspends-export-controls-certain-critical-minerals-related-items.html
+Dec 2024, MOFCOM Announcement No. 46: "export of all dual-use items to U.S. military users or for U.S. military end uses is prohibited"; plus gallium, germanium, antimony, superhard materials to the US.
+2025-11-09: China suspended Article 2 (Ga/Ge/Sb/superhard/graphite) until 2026-11-27; the military-user prohibition remains.
+2025-04-04, Announcement No. 18: seven medium/heavy rare earths - "samarium, gadolinium, terbium, dysprosium, lutetium, scandium and yttrium" + magnets; not suspended.
+2025-10-09: Announcements Nos. 55-58, 61-62 (rare-earth equipment, lithium-battery items, synthetic diamonds, and an extraterritorial rule, "the first time that China has sought to implement an extraterritorial export control rule"); suspended 2025-11-07 to 2026-11-10 after the Trump-Xi Busan meeting (2025-10-30, per search summary).
+
+== CSIS "Rare Earth Export Restrictions One Year Later", 2026-04-27: https://www.csis.org/analysis/rare-earth-export-restrictions-one-year-later
+"China announced its first round of export restrictions on heavy rare earth elements and permanent magnets" (2025-04-04)
+US imported rare earth materials from China at a 71% share in 2025 (fetcher summary)
+"The Trump administration has committed over $7.3 billion in capital" (supply-chain response)

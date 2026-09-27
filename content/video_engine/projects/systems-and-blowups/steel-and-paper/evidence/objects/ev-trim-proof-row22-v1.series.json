@@ -1,0 +1,80 @@
+{
+ "title": "“If you're so bullish, why trim?”",
+ "sub": "The paper's move in the HALF-MONTH after each weak customs print (m/m ≤ -3%) - the 8 weak prints in 25 months, Aug '24 - Aug '26; strong prints are already front-run",
+ "src": "Korean customs HS 8542.32 via SCML monitor; hynix + Micron basket, Yahoo Finance - 8 weak prints in 25 months",
+ "bars": [
+  {
+   "label": "Oct '24",
+   "value": -3.9,
+   "color": "crimson",
+   "note": "-4%"
+  },
+  {
+   "label": "Dec '24",
+   "value": -12.4,
+   "color": "crimson",
+   "note": "-12%"
+  },
+  {
+   "label": "Jan '25",
+   "value": -5.3,
+   "color": "crimson",
+   "note": "-5%"
+  },
+  {
+   "label": "Feb '25",
+   "value": -10.5,
+   "color": "crimson",
+   "note": "-10%"
+  },
+  {
+   "label": "Mar '25",
+   "value": -11.3,
+   "color": "crimson",
+   "note": "-11%"
+  },
+  {
+   "label": "Jun '25",
+   "value": 10.9,
+   "color": "teal",
+   "note": "+11%"
+  },
+  {
+   "label": "Jul '25",
+   "value": -8.7,
+   "color": "crimson",
+   "note": "-9%"
+  },
+  {
+   "label": "Jul '26",
+   "value": -13.8,
+   "color": "crimson",
+   "note": "-14%"
+  }
+ ],
+ "unit": "%",
+ "selection": "one bar per weak print (m/m ≤ -3%); months without a weak print are not on the axis",
+ "badges": [
+  {
+   "label": "AFTER A WEAK PRINT",
+   "value": "7 of 8",
+   "tag": "the paper fell",
+   "accent": "coral"
+  },
+  {
+   "label": "LATEST",
+   "value": "-14%",
+   "tag": "Jul '26",
+   "accent": "sunflower"
+  }
+ ],
+ "domain": [
+  -20,
+  20
+ ],
+ "derived_from": [
+  "ev-trim-proof-v1"
+ ],
+ "src_full": "ev-trim-proof-v1's title, sub, source, unit, selection rule, badges and all eight bars, copied verbatim. Added: a stated scale, `domain: [-20, 20]` (%), symmetric about zero - MEASURED on P69 T30's draft 3 (660.0 s): on the builder's own fitted scale the Jul '26 bar (-13.8%) ran to the plot's floor, its value was written into the category row and the 'Jul '26' label was not drawn. Nothing about a bar changes.",
+ "provenance_note": "P69 T30 (2026-09-24): row 22's second page state - derived, every bar copied from ev-trim-proof-v1; the only addition is the stated scale. The source file is unchanged."
+}

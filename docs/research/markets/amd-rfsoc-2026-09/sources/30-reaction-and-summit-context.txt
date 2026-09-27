@@ -1,0 +1,20 @@
+Snapshot 2026-09-26
+
+== House Select Committee on the CCP, press releases page (fetched 2026-09-26): https://chinaselectcommittee.house.gov/media/press-releases
+Releases 2026-09-03..25 listed; NONE mentions AMD, Xilinx, RFSoC, FPGA, Puzhi, chip diversion or Hong Kong.
+Related context items: 2026-09-16 "Chairman Moolenaar's Opening Statement: Protect American Supply Chains from China"; 2026-09-23 "Moolenaar: China Will Break Promises on AI" (/media/press-releases/moolenaar-china-will-break-promises-on-ai); 2026-09-25 "Xi's Visit to the National Archives Should Inspire Him to Let the Chinese People Live Freely".
+
+== Tom's Hardware AMD tag feed (fetched 2026-09-26): https://www.tomshardware.com/feeds/tag/amd
+Only one item on the Patel/RFSoC story (2026-09-24 13:00:44 UTC). No follow-up item; the article carries no statement from Crowd Supply, Mouser, BIS or Congress.
+Same feed: 2026-09-21 15:42:55 "AMD beats Intel to the trillion-dollar club as stock price soars"; 2026-09-21 "Huawei shelves global AI chip rollout as China's own demand outstrips supply".
+
+== Xi Jinping state visit to Washington (context)
+NBC News: https://www.nbcnews.com/world/asia/trump-xi-summit-meet-white-house-tensions-taiwan-trade-ai-rcna598073
+Xi arrived "Wednesday at Joint Base Andrews" (= 2026-09-23); "first U.S. state visit in more than a decade"; Beijing "has a near-monopoly on the rare-earth and critical minerals that are crucial for replenishing U.S. weapons stockpiles."
+Search summary (CFR/other) said Xi landed 2026-09-22 - dates differ by one day; NOT resolved.
+Jerusalem Post (Reuters), 2026-09-24: https://www.jpost.com/international/article-909508
+Treasury Secretary Bessent (Fox News "Special Report"): the agreement "would extend the truce through January 10" (2027), previously to expire 2026-11-10.
+NPR preview 2026-09-20: https://www.npr.org/2026/09/20/nx-s1-5971402/xi-jinping-is-coming-to-the-white-house-heres-what-to-expect (not fetched)
+CNBC 2026-09-24 "China's AI chip blitz arms Xi with a message for Trump: 'You can't choke us off'" (403; title only): https://www.cnbc.com/2026/09/24/trump-xi-china-summit-ai-export-control-nvidia-huawei-alibaba-.html
+
+Reading: Patel's post (2026-09-19) landed three to four days before Xi's first U.S. state visit in over a decade. No source links the post to the summit - timing only.

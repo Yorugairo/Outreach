@@ -1,0 +1,46 @@
+{
+ "title": "We checked. It's bigger.",
+ "src": "Bravos Research (attributed) - iShares Russell 3000 ETF holdings, 27 Aug 2026 (SCML ledger)",
+ "checklist": {
+  "profile": "phone",
+  "head": [
+   "Whose",
+   "Share of",
+   "Weight"
+  ],
+  "rows": [
+   {
+    "cells": [
+     "Bravos'",
+     "the S&P 500",
+     "20%"
+    ],
+    "colors": [
+     "#f4f6f8",
+     "#dce3ea",
+     "#5b8def"
+    ]
+   },
+   {
+    "cells": [
+     "Our check",
+     "whole US market",
+     "24.3%"
+    ],
+    "colors": [
+     "#f4f6f8",
+     "#dce3ea",
+     "#ff8a8c"
+    ]
+   }
+  ]
+ },
+ "research_tier": "PLAUSIBLE",
+ "derived_from": [
+  "evidence/objects/ev-weight-check-bars-v1.series.json"
+ ],
+ "basis": {
+  "20%": "Bravos Research's number for the S&P 500 (attributed, the object's bar 1)",
+  "24.3%": "the sum of seven holdings' weights in the iShares Russell 3000 holdings, 27 Aug 2026 (the object's bar 2 and its derivation)"
+ }
+}

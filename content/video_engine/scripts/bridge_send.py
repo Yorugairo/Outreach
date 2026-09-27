@@ -21,6 +21,7 @@ import argparse
 import datetime as dt
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -42,6 +43,9 @@ SHAPE_SKILLS = {"watch": ["watch"]}   # a shape's skill, named on every order of
 DEFAULT_DEADLINE_MIN = 60
 BRIEF_CAP_BYTES = 6 * 1024
 CLOCK_SLACK_S = 5.0
+CLAIMS_GATE = "content/video_engine/scripts/verify_research_claims.py"   # THE RESEARCH CLAIMS GATE (2026-09-24)
+RESEARCH_RUNS = "docs/research/runs"
+CLAIMS_CONTRACT = "docs/runbooks/RESEARCH-REPLY-CONTRACT.md"
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -58,6 +62,11 @@ def build_parser() -> argparse.ArgumentParser:
                         help="P46 T7: an absolute root the order sends the addressee to; a relative path in the reply resolves under it too (repeatable)")
     parser.add_argument("--verify", default=None,
                         help="P46 T7: OUR verification command, run from the repo root once the reply passes on form; exit 0 closes the packet, else tier 1")
+    parser.add_argument("--research-run", default=None,
+                        help="THE RESEARCH CLAIMS GATE: the run dir the reply writes claims.jsonl + sources/ into (repo-relative); "
+                             "on by default for --lane gemini --reply-shape report-landed, at docs/research/runs/<title slug>")
+    parser.add_argument("--no-claims-gate", action="store_true",
+                        help="a gemini report-landed order that is not research (say why in the brief); printed as a warning")
     parser.add_argument("--no-template", action="store_true", help="do not append the reply's fill-in grammar block to the brief")
     parser.add_argument("--skill", action="append", default=[], dest="skills", help="a skill the order must cite (`/watch`); repeatable; a watch order always cites /watch")
     parser.add_argument("--marker", default=None, help="paths-written: a string every written file must carry")
@@ -97,6 +106,7 @@ def build_order(args: argparse.Namespace, brief: str, packet_source: str | None 
         "createdAt": created.isoformat(timespec="seconds"),
         **({"roots": [str(Path(r).expanduser()) for r in args.roots]} if getattr(args, "roots", None) else {}),
         **({"verify": args.verify} if getattr(args, "verify", None) else {}),
+        **({"research_run": args.research_run} if getattr(args, "research_run", None) else {}),
         **({"skills": skills} if (skills := sorted(set([*getattr(args, "skills", []), *SHAPE_SKILLS.get(args.reply_shape, [])]))) else {}),
         **({"marker": args.marker} if getattr(args, "marker", None) else {}),
         **({"fetch_dir": str(Path(args.fetch_dir).expanduser())} if getattr(args, "fetch_dir", None) else {}),
@@ -116,16 +126,104 @@ def with_skills(brief: str, skills: list[str]) -> str:
     return brief if line.strip() in brief else line + brief
 
 
-def with_template(brief: str, shape: str) -> str:
+def main_checkout(repo: Path | str) -> Path:
+    """R26-340 F7: the MAIN checkout a repo path belongs to. A linked worktree's `.git` is a file naming
+    `<main>/.git/worktrees/<name>`; the main checkout's `.git` is a directory. Anything else is its own root."""
+    root = Path(repo)
+    marker = root / ".git"
+    if not marker.is_file():
+        return root
+    try:
+        line = marker.read_text(encoding="utf-8").strip()
+    except OSError:
+        return root
+    gitdir = Path(line.split(":", 1)[1].strip()) if line.lower().startswith("gitdir:") else None
+    if gitdir is None or gitdir.parent.name != "worktrees" or gitdir.parent.parent.name != ".git":
+        return root
+    return gitdir.parent.parent.parent
+
+
+def output_root_line(repo: Path | str) -> str:
+    """The one line every templated order carries: where the files land, as an absolute main-checkout path
+    (2026-09-25: two Gemini reviews were written into the Astra worktree instead)."""
+    root = main_checkout(repo)
+    return (f"Output root: write every file under `{root}` (the main checkout) and name each in the reply by its "
+            "absolute path there - never under another worktree or checkout; tier 0 fails a path outside it.\n")
+
+
+def with_template(brief: str, shape: str, repo: Path | str = REPO) -> str:
     """P46 T7: the reply's fill-in grammar block, appended to the brief - a block to copy beats prose about format. The
-    check CLI both sides can run is named beside it."""
+    check CLI both sides can run is named beside it, and the output root is stated as an absolute path (R26-340 F7)."""
     import bridge_handlers as handlers
     if "## Reply block" in brief or shape == "free":
         return brief
     return (brief.rstrip("\n") + "\n\n## Reply block (fill this in, verbatim, as the first thing in your reply)\n\n```\n"
             + handlers.template(shape) + "```\n"
             "Before replying, run `python content/video_engine/scripts/bridge_check.py --shape " + shape
-            + " --reply <the file holding your reply>` from the repo root and paste its PASS line under the block.\n")
+            + " --reply <the file holding your reply>` from the repo root and paste its PASS line under the block.\n"
+            + output_root_line(repo))
+
+
+def _slug(text: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")[:60] or "research"
+
+
+def claims_gate(args: argparse.Namespace) -> str | None:
+    """The research run dir (repo-relative, posix) when the order is research, else None. Research is any order naming
+    `--research-run`, and BY DEFAULT every gemini `report-landed` order - the research lane's shape - unless it opts out
+    with `--no-claims-gate`. Why a flag and not a new shape: report-landed's form checks stay as they are and the gate
+    rides the existing `verify` hook (P46 T7), so the handlers, the daemon and every older order are untouched."""
+    if getattr(args, "no_claims_gate", False):
+        return None
+    run = getattr(args, "research_run", None)
+    if not run and not (args.lane == "gemini" and args.reply_shape == "report-landed"):
+        return None
+    if not run:
+        return f"{RESEARCH_RUNS}/{_slug(args.title or args.brief_file.stem)}"
+    path = Path(run).expanduser()
+    if path.is_absolute():
+        try:
+            path = path.resolve().relative_to(Path(args.repo).resolve())
+        except ValueError:
+            pass
+    return path.as_posix()
+
+
+def gate_command(run: str) -> str:
+    return f"python {CLAIMS_GATE} {quote([run])}"
+
+
+def with_claims_contract(brief: str, run: str) -> str:
+    """THE RESEARCH CLAIMS GATE's rules, at the top of the brief (about 1.3 KB, inside the 6 KB packet cap)."""
+    return (
+        f"## THE RESEARCH CLAIMS GATE (binding: `{CLAIMS_CONTRACT}`)\n\n"
+        f"OUR script verifies your reply before it lands: `{gate_command(run)}`. It fetches every URL, resolves every DOI, "
+        "finds every quote on the page AND in your saved copy, finds every value inside its quote, recomputes every derived "
+        "figure and computes each claim's tier itself. A failing reply comes back to you as a revision order with the "
+        "failure table (two rounds, then the operator); nothing reaches docs/research/markets until it passes.\n"
+        f"- Write ONLY inside `{run}/`: `claims.jsonl` (one JSON object per figure: id, claim, value, unit, period, "
+        "source_title, publisher, url, doi, retrieved_at, quote, sources_file, sha256, tier_declared, derived_from, formula, "
+        "notes), `sources/` (every page you quote, saved, its sha256 in the claim), and the report `.md`.\n"
+        "- Every number in the report has a claim. No URL you did not fetch this session; no DOI you did not resolve. The "
+        "quote is copied verbatim (<= 300 chars), never paraphrased, and the value appears inside it.\n"
+        "- Declare the tier honestly: CONFIRMED = the page fetched or saved and the quote and value on it; a secondary "
+        "source = PLAUSIBLE; nothing retrievable = UNSOURCED (that passes). An overclaim fails the reply.\n"
+        f"- Before replying run `{gate_command(run)}` and paste its last line.\n\n" + brief)
+
+
+def apply_claims_gate(args: argparse.Namespace) -> str | None:
+    """Attach the gate to the args in place: OUR verify command, the run dir, the report shape. Refuses a second verify."""
+    run = claims_gate(args)
+    if run is None:
+        return None
+    command = gate_command(run)
+    if getattr(args, "verify", None) and args.verify != command:
+        raise SystemExit(f"a research order carries the claims gate ({command}); --verify would replace it - "
+                         "fold your check into the run, or pass --no-claims-gate and say why")
+    args.verify, args.research_run = command, run
+    if args.reply_shape == "free":
+        args.reply_shape = "report-landed"
+    return run
 
 
 def quote(argv: Sequence[str]) -> str:
@@ -193,13 +291,39 @@ def send_gemini(args: argparse.Namespace, order: dict[str, Any], folder: Path, l
         env_mod.write_json(folder / "send-error.json", {"returncode": proc.returncode, "stderr": stderr[:4000]})
         return result
 
-    conversation_id = env_mod.newest_conversation(after_ts=before, title=order["title"],
-                                          needle=next((ln.strip() for ln in order["brief"].splitlines() if ln.strip()), None))
+    # R26-340 F1: agentapi prints the id it created (`response.newConversation.conversationId`); the store scan by file
+    # time is only the fallback for a stdout that does not carry it - six packets sat `conversationId: null` on the guess
+    conversation_id, source = conversation_from_stdout(stdout), "stdout"
     if not conversation_id:
-        lines.append("conversation id not found where I looked (store mtime + title scan); sent anyway")
+        conversation_id, source = env_mod.newest_conversation(
+            after_ts=before, title=order["title"],
+            needle=next((ln.strip() for ln in order["brief"].splitlines() if ln.strip()), None)), "store-scan"
+    if not conversation_id:
+        source = None
+        lines.append("conversation id not found where I looked (agentapi stdout, then store mtime + title scan); sent anyway")
     result.update({"conversationId": conversation_id, "sentAt": sent_at})
-    result["packetDir"] = str(_record_gemini_send(args, order, folder, env, conversation_id, sent_at, stdout))
+    result["packetDir"] = str(_record_gemini_send(args, order, folder, env, conversation_id, sent_at, stdout, source))
     return result
+
+
+_STDOUT_ID = re.compile(r'(?<!\\)"conversationId"\s*:\s*"([0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12})"')
+STDOUT_HEAD, STDOUT_TAIL = 4000, 600
+
+
+def conversation_from_stdout(stdout: str | None) -> str | None:
+    """The id agentapi's `new-conversation` printed: the parsed `response.newConversation.conversationId`, else the
+    last unescaped `"conversationId": "<uuid>"` in the text (a stored stdout may be cut). A half id is no id."""
+    text = stdout or ""
+    try:
+        payload = json.loads(text)
+    except ValueError:
+        payload = None
+    if isinstance(payload, dict):
+        found = ((payload.get("response") or {}).get("newConversation") or {}).get("conversationId")
+        if isinstance(found, str) and found.strip():
+            return found.strip()
+    matches = _STDOUT_ID.findall(text)
+    return matches[-1] if matches else None
 
 
 def _record_gemini_send(
@@ -210,19 +334,23 @@ def _record_gemini_send(
     conversation_id: str | None,
     sent_at: str,
     stdout: str,
+    source: str | None = None,
 ) -> Path:
-    """The send's paper trail: the conversation record, the rename into `sent/`, one ledger line."""
+    """The send's paper trail: the conversation record, the rename into `sent/`, one ledger line. The stdout is kept
+    head AND tail: agentapi prints the id after the echoed prompt, so a head alone loses it (R26-340 F1)."""
 
     env_mod.write_json(
         folder / "conversation.json",
         {
             "packetId": order["packetId"],
             "conversationId": conversation_id,
+            "conversationIdSource": source,
             "sentAt": sent_at,
             "lsAddress": env.get("ANTIGRAVITY_LS_ADDRESS"),
             "model": args.model,
             "profile": args.profile,
-            "stdout": stdout[:4000],
+            "stdout": stdout[:STDOUT_HEAD],
+            **({"stdoutTail": stdout[-STDOUT_TAIL:]} if len(stdout) > STDOUT_HEAD else {}),
         },
     )
     moved = env_mod.move_packet(order["packetId"], "queue", "sent", repo=args.repo)
@@ -331,10 +459,16 @@ def main(argv: Sequence[str] | None = None) -> int:
             stream.reconfigure(encoding="utf-8", errors="replace")
     args = build_parser().parse_args(argv)
     raw = read_brief(args.brief_file)
-    brief = raw if getattr(args, "no_template", False) else with_template(raw, args.reply_shape)   # P46 T7: the fill-in block rides every order
+    run = apply_claims_gate(args)   # THE RESEARCH CLAIMS GATE: research orders carry OUR verifier by default
+    brief = raw if getattr(args, "no_template", False) else with_template(raw, args.reply_shape, args.repo)   # P46 T7: the fill-in block rides every order
+    brief = with_claims_contract(brief, run) if run else brief
     brief = with_skills(brief, sorted(set([*args.skills, *SHAPE_SKILLS.get(args.reply_shape, [])])))   # P46 T8: the skill line
     order = build_order(args, brief, packet_source=raw)
     lines: list[str] = [f"packetId {order['packetId'][:12]} lane {order['lane']} shape {order['replyShape']}"]
+    if run:
+        lines.append(f"claims gate: {order['verify']}")
+    elif getattr(args, "no_claims_gate", False):
+        lines.append("warning: --no-claims-gate - this order's figures are NOT verified by verify_research_claims.py")
 
     size = len(brief.encode("utf-8"))
     if size > BRIEF_CAP_BYTES:

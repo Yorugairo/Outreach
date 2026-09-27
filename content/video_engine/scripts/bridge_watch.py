@@ -3,6 +3,7 @@
     python content/video_engine/scripts/bridge_watch.py --lane gemini --id 7aaa9146-... --replay
     python content/video_engine/scripts/bridge_watch.py --lane gemini --id <conversationId> --packet <packetId>
     python content/video_engine/scripts/bridge_watch.py --lane claude --id <session.jsonl or uuid> --replay
+    python content/video_engine/scripts/bridge_watch.py --lane astra --id - --packet <packetId> --once
 
 `bridge_send.py` writes the order and makes the send; this is the other half - it reads the addressee's own
 transcript (no polling of the CLI, no second harness) and writes three files:
@@ -25,6 +26,16 @@ completion report at step 103):
     An abstention that ends a turn is a reply, and the same rule catches it.
   * claude - the last `assistant` record's text blocks, joined. A `thinking` block carries no `text` key and
     is skipped by type, so it cannot reach a file.
+  * a follow-up packet (a repair, a revision, a nudge: `lastFollowupAt`, or a `conversationId` on the order) takes
+    only a reply stamped at or after the follow-up went out - three repairs of 2026-09-25 "replied" in 0-3 s with
+    their originals' text (R26-340 F2).
+
+The astra lane (R26-355) has no transcript: the lane writes `reply.md` INTO the packet folder, and the watcher reads
+that file, never a transcript. It lands only once it is proven the lane's own answer to this order - no other lane's
+watcher header, the packet's id named, no write into another packet's folder, and a file time after the order went out
+and after any follow-up that asked something new (a re-send of the order's own brief asks nothing). An unproven reply
+stays in `sent/` and is reported (`refused`, exit 4); a landed one keeps the lane's file byte for byte and gets a
+`watch.json` carrying the provenance checks.
 
 Exit codes: 0 done, 2 timeout (the deadline passed with no reply), 3 still working (a replay of a live
 conversation - outside the plan's three codes, and not an error), 1 error.
@@ -51,9 +62,11 @@ if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
 import bridge_env as env_mod  # noqa: E402
+import bridge_handlers as handlers  # noqa: E402
 
 REPO = env_mod.REPO
-LANES = ("gemini", "claude")
+LANES = ("gemini", "claude")   # the transcript lanes
+FILE_LANES = ("astra",)   # R26-355: the lane writes reply.md into the packet folder; the folder is read, never a transcript
 DEFAULT_POLL_S = 20
 HEAD_CHARS = 160
 DONE = "DONE"
@@ -61,15 +74,20 @@ REPLAY_ROOT = env_mod.BRIDGE_ROOT / "replay"
 GEMINI_BRAIN = Path.home() / ".gemini" / "antigravity" / "brain"
 CLAUDE_PROJECTS = Path.home() / ".claude" / "projects"
 CLAUDE_PROJECT_GLOB = "*agent-bridge-run-*"
-STATUS_EXIT = {"done": 0, "timeout": 2, "working": 3}
+STATUS_EXIT = {"done": 0, "timeout": 2, "working": 3, "refused": 4}
 SECRET_ENV_RE = re.compile(r"csrf|host_?bridge", re.IGNORECASE)
 _SENDER_RE = re.compile(r"sender=(\S+)")
 _POSITION = "POSITION:"
+_LANE_HEADER = re.compile(r"\A\s*<!--\s*lane:\s*([A-Za-z0-9_-]+)\s*;")
+_COMMENT = re.compile(r"\A\s*<!--(.*?)-->\s*", re.DOTALL)
+_SENT_AT = re.compile(r"sentAt:\s*([0-9T:+\-.Z]+)")
+_PACKET_PATH = re.compile(r"docs[\\/]+research[\\/]+runs[\\/]+bridge[\\/]+(?:queue|sent|replied|done)[\\/]+([^\\/\s`'\")]+)",
+                          re.IGNORECASE)
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--lane", choices=LANES, required=True)
+    parser.add_argument("--lane", choices=(*LANES, *FILE_LANES), required=True)
     parser.add_argument("--id", required=True, help="conversation id, session uuid, or a transcript path")
     parser.add_argument("--packet", default=None, help="packetId; the packet is expected in sent/")
     parser.add_argument("--replay", action="store_true", help="read the transcript once, never poll")
@@ -151,15 +169,25 @@ def _placeholder(record: dict[str, Any]) -> bool:
     return record.get("type") == "PLANNER_RESPONSE" and bool(_WAIT_PLACEHOLDER.match((record.get("content") or "").strip()))
 
 
-def gemini_reply(records: Sequence[dict[str, Any]]) -> dict[str, Any]:
+def _answers(record: dict[str, Any], after: dt.datetime | None, key: str = "created_at") -> bool:
+    """R26-340 F2: a reply to a follow-up must post-date the follow-up. With no `after` every record may answer (a new
+    conversation holds no older turn); with one, a record whose time is absent or earlier is not an answer."""
+    if after is None:
+        return True
+    when = parse_time(record.get(key))
+    return when is not None and when >= after
+
+
+def gemini_reply(records: Sequence[dict[str, Any]], after: dt.datetime | None = None) -> dict[str, Any]:
     """The last completed PLANNER_RESPONSE with text and no tool call, if nothing after it is pending - and a
-    "Waiting for task-N" placeholder is never that reply."""
+    "Waiting for task-N" placeholder is never that reply. With `after` (a follow-up's send time) only a record at or
+    after it counts, so a repair read seconds after its send never lands the original's text (R26-340 F2)."""
 
     index = None
     for position, record in enumerate(records):
         if record.get("type") != "PLANNER_RESPONSE" or _pending(record) or _placeholder(record):
             continue
-        if (record.get("content") or "").strip():
+        if (record.get("content") or "").strip() and _answers(record, after):
             index = position
     if index is None or any(_pending(r) or _placeholder(r) for r in records[index + 1 :]):
         return {"status": "working", "text": "", "record": None}
@@ -220,11 +248,11 @@ def _texts(record: dict[str, Any]) -> list[str]:
     return [b.get("text") or "" for b in _blocks(record) if b.get("type") == "text" and (b.get("text") or "").strip()]
 
 
-def claude_reply(records: Sequence[dict[str, Any]]) -> dict[str, Any]:
-    """The last assistant record that actually said something."""
+def claude_reply(records: Sequence[dict[str, Any]], after: dt.datetime | None = None) -> dict[str, Any]:
+    """The last assistant record that actually said something - at or after `after` when a follow-up is answered."""
 
     for record in reversed(list(records)):
-        if record.get("type") != "assistant":
+        if record.get("type") != "assistant" or not _answers(record, after, "timestamp"):
             continue
         texts = _texts(record)
         if texts:
@@ -260,7 +288,7 @@ def claude_usage(record: dict[str, Any] | None) -> dict[str, Any]:
     return {"inputTokens": usage.get("input_tokens"), "outputTokens": usage.get("output_tokens")}
 
 
-READERS: dict[str, Callable[[Sequence[dict[str, Any]]], dict[str, Any]]] = {
+READERS: dict[str, Callable[..., dict[str, Any]]] = {   # (records, after=None) -> the reply
     "gemini": gemini_reply,
     "claude": claude_reply,
 }
@@ -332,6 +360,20 @@ def packet_sent_at(folder: Path) -> str | None:
     return conversation.get("sentAt") or order.get("sentAt") or order.get("createdAt")
 
 
+def reply_after(folder: Path | None) -> dt.datetime | None:
+    """R26-340 F2: when the packet is a FOLLOW-UP on an existing conversation (a repair, a revision, a nudge), the time
+    it went out - its reply must come after it. A new order returns None: its conversation holds nothing older."""
+    if folder is None:
+        return None
+    conversation = _read_json(folder / "conversation.json")
+    order = _read_json(folder / "order.json")
+    if order.get("lastFollowupAt"):
+        return parse_time(order["lastFollowupAt"])
+    if order.get("conversationId") or conversation.get("followup"):
+        return parse_time(conversation.get("sentAt") or order.get("sentAt"))
+    return None
+
+
 def parse_time(value: str | None) -> dt.datetime | None:
     if not value:
         return None
@@ -357,6 +399,157 @@ def resolve_deadline(timeout_min: int | None, order: dict[str, Any], started: dt
     return parse_time(order.get("deadline"))
 
 
+# --------------------------------------------------------------------------- the file lane (R26-355)
+# Astra (the Codex lane) has no transcript this watcher can read and no sender: the parent hands it the order and it writes
+# `reply.md` INTO the packet folder. That file is the reply - once it is PROVEN to be this lane's answer to THIS order. A
+# reply that cannot be proven (another lane's watcher header, a file that never names the packet, a write into another
+# packet's folder, a file older than the order or than a follow-up that asked something new) is reported, never landed.
+
+
+def _check(name: str, ok: bool, detail: str) -> dict[str, Any]:
+    return {"name": name, "ok": bool(ok), "detail": detail}
+
+
+def _mtime(path: Path) -> dt.datetime:
+    return dt.datetime.fromtimestamp(path.stat().st_mtime).astimezone()
+
+
+def _stamp(when: dt.datetime | None) -> str | None:
+    return when.isoformat(timespec="seconds") if when else None
+
+
+def _order_brief(folder: Path, order: dict[str, Any]) -> str:
+    brief = order.get("brief")
+    if not brief and (folder / "brief.md").exists():
+        brief = (folder / "brief.md").read_text(encoding="utf-8", errors="replace")
+    return str(brief or "").strip()
+
+
+def dispatched_at(order: dict[str, Any], conversation: dict[str, Any]) -> dt.datetime | None:
+    """When the ORDER went out: a real send's `sentAt` (a conversation.json that is not a follow-up's), else the order's."""
+    if conversation.get("sentAt") and not conversation.get("followup"):
+        return parse_time(conversation["sentAt"])
+    return parse_time(order.get("sentAt") or order.get("createdAt"))
+
+
+def new_asks(folder: Path, order: dict[str, Any]) -> tuple[list[tuple[str, dt.datetime]], int]:
+    """Every follow-up that asked something NEW as (label, sentAt), and the count of re-sends ignored. A follow-up whose text
+    is the order's own brief asks nothing new: at 02:17 on 2026-09-25 the old daemon re-sent three 09-22 astra orders through
+    the Gemini send (R26-340 F6). A `lastFollowupAt` with no follow-up file behind it counts - what it asked is unreadable."""
+    brief = _order_brief(folder, order)
+    asks: list[tuple[str, dt.datetime]] = []
+    seen: list[dt.datetime] = []
+    resends = 0
+    for path in sorted((folder / "followups").glob("*.md")):
+        text = path.read_text(encoding="utf-8", errors="replace")
+        head = _COMMENT.match(text)
+        sent_match = _SENT_AT.search(head.group(1)) if head else None
+        sent = (parse_time(sent_match.group(1)) if sent_match else None) or _mtime(path)
+        seen.append(sent)
+        if (text[head.end():] if head else text).strip() == brief:
+            resends += 1
+        else:
+            asks.append((f"follow-up {path.name}", sent))
+    last = parse_time(order.get("lastFollowupAt"))
+    if last and not any(abs((last - s).total_seconds()) < 1 for s in seen):
+        asks.append(("lastFollowupAt (no follow-up file on disk)", last))
+    return asks, resends
+
+
+def _header_check(text: str, lane: str) -> dict[str, Any]:
+    match = _LANE_HEADER.match(text)
+    if match and match.group(1).lower() != lane:
+        return _check("lane-header", False, f"reply.md carries the {match.group(1)} watcher's header - written by another lane")
+    return _check("lane-header", True, "no other lane's watcher header" if not match else f"header names lane {lane}")
+
+
+def _packet_checks(text: str, packet: str) -> list[dict[str, Any]]:
+    named = packet in text
+    written = handlers.parse_reply(text).paths_written or []
+    others = sorted({m.group(1) for item in written for m in _PACKET_PATH.finditer(item) if m.group(1) != packet})
+    return [
+        _check("names-packet", named, f"the reply names packet {packet}" if named
+               else f"the reply never names packet {packet} - not provably this order's"),
+        _check("own-folder", not others, "no write into another packet's folder" if not others
+               else f"PATHS WRITTEN names another packet's folder: {', '.join(others[:3])}"),
+    ]
+
+
+def _after_ask_check(folder: Path, order: dict[str, Any], conversation: dict[str, Any],
+                     written: dt.datetime) -> tuple[dict[str, Any], dt.datetime | None]:
+    sent = dispatched_at(order, conversation)
+    if sent is None:
+        return _check("after-ask", False, "no dispatch time on disk (order sentAt / createdAt) - staleness unprovable"), None
+    asks, resends = new_asks(folder, order)
+    label, when = max([("the order", sent), *asks], key=lambda pair: pair[1])
+    ignored = f"; {resends} re-send(s) of the order's own brief ignored" if resends else ""
+    if written < when:
+        return _check("after-ask", False, f"stale: reply.md ({_stamp(written)}) predates {label} ({_stamp(when)}){ignored}"), when
+    return _check("after-ask", True, f"reply.md ({_stamp(written)}) post-dates {label} ({_stamp(when)}){ignored}"), when
+
+
+def file_reply(folder: Path, lane: str = "astra") -> dict[str, Any]:
+    """The packet's own `reply.md`, proven: `working` when there is none yet, `done` when every provenance check holds,
+    `refused` (with the first failing check as the reason) otherwise. Reads only; moves and writes nothing."""
+    order = _read_json(folder / "order.json")
+    conversation = _read_json(folder / "conversation.json")
+    packet = str(order.get("packetId") or folder.name)
+    path = folder / "reply.md"
+    text = path.read_text(encoding="utf-8", errors="replace") if path.exists() else ""
+    if not text.strip():
+        return {"status": "working", "checks": [], "reason": "no reply.md in the packet folder yet", "packetId": packet}
+    written = _mtime(path)
+    after, asked = _after_ask_check(folder, order, conversation, written)
+    checks = [_header_check(text, lane), *_packet_checks(text, packet), after]
+    failing = next((c for c in checks if not c["ok"]), None)
+    return {"status": "refused" if failing else "done", "checks": checks, "reason": failing["detail"] if failing else "",
+            "packetId": packet, "repliedAt": _stamp(written), "askedAt": _stamp(asked), "text": text}
+
+
+def land_file_reply(repo: Path | str, packet: str, lane: str = "astra") -> dict[str, Any]:
+    """Prove the packet's reply.md; when it holds, write `watch.json` (the provenance with it), move the packet to
+    `replied/` and ledger one `replied` line. The lane's own reply.md is never rewritten. Nothing moves otherwise."""
+    folder, state = locate_packet(repo, packet)
+    proof = file_reply(folder, lane)
+    if proof["status"] != "done" or state not in ("sent", "queue"):
+        return {"watch": None, "proof": proof, "paths": {}, "packetDir": str(folder)}
+    order = _read_json(folder / "order.json")
+    conversation = _read_json(folder / "conversation.json")
+    ident = conversation.get("conversationId") or order.get("conversationId")
+    watch = {
+        "lane": lane, "id": ident, "status": "done", "steps": 0,
+        "landedAt": dt.datetime.now().astimezone().isoformat(timespec="seconds"),
+        "repliedAt": proof["repliedAt"], "askedAt": proof["askedAt"],
+        "secondsToReply": seconds_to_reply(proof["askedAt"], proof["repliedAt"]),
+        "positionLine": position_line(proof["text"], lane), "source": "reply.md", "provenance": proof["checks"],
+    }
+    env_mod.write_json(folder / "watch.json", watch)
+    folder = env_mod.move_packet(packet, state, "replied", repo=repo)
+    env_mod.ledger_append(repo, {"lane": lane, "packetId": packet, "conversationId": ident, "event": "replied",
+                                 "replyShape": order.get("replyShape"), "secondsToReply": watch["secondsToReply"],
+                                 "steps": 0, "source": "reply.md"})
+    return {"watch": watch, "proof": proof, "paths": {"reply": str(folder / "reply.md"), "watch": str(folder / "watch.json")},
+            "packetDir": str(folder)}
+
+
+def run_file_watch(args: argparse.Namespace) -> dict[str, Any]:
+    """The CLI's file lane: `--replay` proves and moves nothing; `--once` (or neither) lands a proven reply."""
+    if not args.packet:
+        raise SystemExit(f"the {args.lane} lane reads a packet folder: --packet is required")
+    if args.replay and not getattr(args, "once", False):
+        folder, _state = locate_packet(args.repo, args.packet)
+        proof = file_reply(folder, args.lane)
+        return {"watch": {"lane": args.lane, "status": proof["status"], "steps": 0, "secondsToReply": None,
+                          "provenance": proof["checks"], "reason": proof["reason"]},
+                "paths": {}, "packetDir": str(folder)}
+    result = land_file_reply(args.repo, args.packet, args.lane)
+    if result["watch"] is None:
+        proof = result["proof"]
+        result["watch"] = {"lane": args.lane, "status": proof["status"], "steps": 0, "secondsToReply": None,
+                           "provenance": proof["checks"], "reason": proof["reason"]}
+    return result
+
+
 # --------------------------------------------------------------------------- the watch
 
 
@@ -367,6 +560,7 @@ def _poll(
     poll_sec: int,
     replay: bool,
     once: bool = False,
+    after: dt.datetime | None = None,
 ) -> tuple[list, dict, str]:
     """Read until the reply lands, the deadline passes, or exactly once when replaying.
 
@@ -377,7 +571,7 @@ def _poll(
     reader = READERS[lane]
     while True:
         records = read_records(path)
-        reply = reader(records)
+        reply = reader(records, after=after)
         if reply["status"] == "done" or (replay and not once):
             return records, reply, reply["status"]
         if deadline and dt.datetime.now().astimezone() >= deadline:
@@ -441,6 +635,8 @@ def _ledger(args: argparse.Namespace, order: dict[str, Any], watch: dict[str, An
 def run_watch(args: argparse.Namespace) -> dict[str, Any]:
     """Poll (or replay) one conversation, write the three files, advance the packet, ledger the event."""
 
+    if args.lane in FILE_LANES:
+        return run_file_watch(args)
     path = transcript_path(args.lane, args.id)
     secrets = environment_secrets()
     started = dt.datetime.now().astimezone()
@@ -453,7 +649,7 @@ def run_watch(args: argparse.Namespace) -> dict[str, Any]:
 
     deadline = resolve_deadline(args.timeout_min, order, started)
     once = bool(getattr(args, "once", False))
-    records, reply, status = _poll(args.lane, path, deadline, args.poll_sec, args.replay or once, once)
+    records, reply, status = _poll(args.lane, path, deadline, args.poll_sec, args.replay or once, once, reply_after(folder))
     landed_at = dt.datetime.now().astimezone().isoformat(timespec="seconds")
     steps = STEPPERS[args.lane](records, secrets)
     watch = {
@@ -489,7 +685,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(json.dumps(watch, ensure_ascii=False))
     else:
         print(f"status: {watch['status']} steps={watch['steps']} secondsToReply={watch['secondsToReply']}")
-        print(f"reply: {result['paths'].get('reply', result['paths']['watch'])}")
+        paths = result["paths"]
+        print(f"reply: {paths.get('reply') or paths.get('watch') or result.get('packetDir')}")
+        if watch.get("reason"):
+            print(f"reason: {watch['reason']}")
     return STATUS_EXIT.get(watch["status"], 1)
 
 

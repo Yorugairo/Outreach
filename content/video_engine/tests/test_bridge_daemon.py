@@ -409,3 +409,233 @@ def test_a_replied_packet_with_a_passing_prior_verdict_is_moved_not_rechecked(tm
     D.step_tier0(tick)
     assert not called
     assert not folder.exists() and E.packet_dir(tmp_path, pid, "done").exists()
+
+
+# --------------------------------------------------------------------------- R26-354: a report with no verdict up front, one repair
+
+
+def test_a_report_with_no_verdict_up_front_queues_one_form_repair_and_only_one(tmp_path, monkeypatch):
+    repo = make_repo(tmp_path)
+    (repo / "docs/research/tech/report.md").write_text(
+        "# R\n\n[Adoption | 41% | Acme | URL: https://example.com/x | Verified 2026-09-06]\n\n## NOT FOUND WHERE I LOOKED\n- roots\n",
+        encoding="utf-8")
+    monkeypatch.setattr(BD.handlers, "run_layers", lambda r: pytest.fail("no layer regen for a report with no verdict"))
+    folder = replied_packet(repo, "p-noverdict", shape="report-landed", reply="PATHS WRITTEN:\ndocs/research/tech/report.md\n")
+    BE.write_json(folder / "conversation.json", {"packetId": "p-noverdict", "conversationId": "c-1", "lane": "gemini"})
+
+    BD.step_tier0(BD.Tick(repo, dict(CONFIG)))
+    (folder / "tier0.json").unlink()   # re-checked on a later tick: the repair marker still stops a second repair
+    BD.step_tier0(BD.Tick(repo, dict(CONFIG)))
+
+    tier0 = json.loads((folder / "tier0.json").read_text(encoding="utf-8"))
+    assert not tier0["pass"] and tier0["class"] == "form" and "Verdict up front" in tier0["reason"]
+    assert (folder / BD.REPAIR_MARKER).exists() and len(BD.packets(repo, "queue")) == 1
+    assert [r["event"] for r in ledger_rows(repo)] == ["repair"]
+
+
+# --------------------------------------------------------------------------- R26-355: the astra lane reads its own reply.md
+
+
+BRIEF = "# ORDER - from the parent to Astra\n\nDo the thing, then write reply.md in this folder.\n"
+
+
+def _iso(when: dt.datetime) -> str:
+    return when.isoformat(timespec="seconds")
+
+
+def days_ago(days: float) -> dt.datetime:
+    return dt.datetime.now().astimezone() - dt.timedelta(days=days)
+
+
+def astra_sent(repo: Path, packet: str, *, reply: str | None, replied_at: dt.datetime, created_at: dt.datetime,
+               followups: tuple = ()) -> Path:
+    """An astra packet as the live ones sit: the order handed over by hand, the lane's reply.md written into the folder."""
+    folder = BE.packet_dir(repo, packet, "sent")
+    order = {"packetId": packet, "lane": "astra", "from": "claude", "replyShape": "paths-written", "brief": BRIEF,
+             "createdAt": _iso(created_at), "deadline": _iso(created_at + dt.timedelta(days=1))}
+    conversation = {"packetId": packet, "conversationId": "01a0c089-9991-7f51-84ed-a709555b08fa", "lane": "astra"}
+    for number, (sent_at, body) in enumerate(followups, start=1):
+        path = folder / "followups" / f"{number:02d}.md"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(f"<!-- sentAt: {_iso(sent_at)}; lane: astra; conversationId: {conversation['conversationId']} -->\n{body}",
+                        encoding="utf-8")
+        order.update(followups=number, lastFollowupAt=_iso(sent_at))
+        conversation.update(sentAt=_iso(sent_at), followup=number)
+    BE.write_json(folder / "order.json", order)
+    BE.write_json(folder / "conversation.json", conversation)
+    (folder / "brief.md").write_text(BRIEF, encoding="utf-8")
+    os.utime(folder / "brief.md", (created_at.timestamp(), created_at.timestamp()))
+    if reply is not None:
+        (folder / "reply.md").write_text(reply, encoding="utf-8")
+        os.utime(folder / "reply.md", (replied_at.timestamp(), replied_at.timestamp()))
+    return folder
+
+
+def astra_reply(repo: Path, packet: str, written: str = "docs/research/tech/note.md") -> str:
+    own = (repo / BE.BRIDGE_ROOT / "queue" / packet / "EXECUTION.md").as_posix()
+    return f"POSITION: done\nPATHS WRITTEN:\n{(repo / written).as_posix()}\n{own}\nDISAGREEMENTS:\n- none\n"
+
+
+def test_an_astra_packet_lands_from_its_own_reply_md_and_tier_zero_runs_on_the_same_tick(tmp_path):
+    repo = make_repo(tmp_path)
+    (repo / "docs/research/tech/note.md").write_text("body\n", encoding="utf-8")
+    text = astra_reply(repo, "a1b2c3d4e5f6")
+    folder = astra_sent(repo, "a1b2c3d4e5f6", reply=text, replied_at=days_ago(3), created_at=days_ago(3.1))
+    (folder / "EXECUTION.md").write_text("what I did\n", encoding="utf-8")
+
+    tick = BD.tick_once(repo, CONFIG)
+
+    done = BE.packet_dir(repo, "a1b2c3d4e5f6", "done")
+    assert done.is_dir() and not folder.exists(), tick.lines
+    assert (done / "reply.md").read_text(encoding="utf-8") == text, "the lane's own file is never rewritten"
+    watch = json.loads((done / "watch.json").read_text(encoding="utf-8"))
+    assert watch["lane"] == "astra" and watch["status"] == "done" and watch["source"] == "reply.md"
+    assert watch["provenance"] and all(c["ok"] for c in watch["provenance"])
+    assert json.loads((done / "tier0.json").read_text(encoding="utf-8"))["pass"] is True
+    assert [(r["event"], r["lane"]) for r in ledger_rows(repo)] == [("replied", "astra"), ("tier0", "astra")]
+    assert tick.summary["watched"] == 1 and tick.summary["tier0_done"] == 1
+
+
+def test_a_resend_of_the_orders_own_brief_is_not_a_new_ask(tmp_path):
+    """The live case: at 02:17 on 09-25 the old daemon re-sent three 09-22 astra orders through the Gemini send (R26-340 F6) -
+    `followups/01.md` is the order's brief verbatim, so a reply written before it still answers the order."""
+    repo = make_repo(tmp_path)
+    (repo / "docs/research/tech/note.md").write_text("body\n", encoding="utf-8")
+    folder = astra_sent(repo, "b1b2c3d4e5f6", reply=astra_reply(repo, "b1b2c3d4e5f6"), replied_at=days_ago(3),
+                        created_at=days_ago(3.1), followups=((days_ago(0.4), BRIEF),))
+    (folder / "EXECUTION.md").write_text("what I did\n", encoding="utf-8")
+
+    tick = BD.tick_once(repo, CONFIG)
+
+    assert BE.packet_dir(repo, "b1b2c3d4e5f6", "done").is_dir() and not folder.exists(), tick.lines
+
+
+def test_an_astra_reply_older_than_a_new_follow_up_is_stale_and_reported_once(tmp_path, monkeypatch):
+    seen = toasts(monkeypatch)
+    repo = make_repo(tmp_path)
+    folder = astra_sent(repo, "c1b2c3d4e5f6", reply=astra_reply(repo, "c1b2c3d4e5f6"), replied_at=days_ago(3),
+                        created_at=days_ago(3.1), followups=((days_ago(1), "A NEW ASK: also fix the gate.\n"),))
+
+    first = BD.tick_once(repo, CONFIG)
+    second = BD.tick_once(repo, CONFIG)
+
+    assert folder.is_dir() and not BE.packet_dir(repo, "c1b2c3d4e5f6", "replied").exists(), "never landed"
+    assert any("REPLY-REFUSED" in l and "predates" in l for l in first.lines), first.lines
+    assert not any("REPLY-REFUSED" in l for l in second.lines), "reported once"
+    assert [r["reason"] for r in ledger_rows(repo) if r["event"] == "escalated"] == ["unproven-reply"]
+    assert len(seen) == 1 and "c1b2c3d4e5f6" in seen[0][1]
+    assert json.loads((folder / "provenance.json").read_text(encoding="utf-8"))["status"] == "refused"
+
+
+def test_an_astra_reply_that_predates_its_order_is_stale(tmp_path, monkeypatch):
+    toasts(monkeypatch)
+    repo = make_repo(tmp_path)
+    folder = astra_sent(repo, "d1b2c3d4e5f6", reply=astra_reply(repo, "d1b2c3d4e5f6"), replied_at=days_ago(4),
+                        created_at=days_ago(3))
+
+    tick = BD.tick_once(repo, CONFIG)
+
+    assert folder.is_dir(), tick.lines
+    assert any("REPLY-REFUSED" in l and "predates" in l for l in tick.lines), tick.lines
+
+
+def test_an_astra_reply_written_by_another_lanes_watcher_is_refused(tmp_path, monkeypatch):
+    toasts(monkeypatch)
+    repo = make_repo(tmp_path)
+    header = f"<!-- lane: gemini; conversationId: c-1; landedAt: {_iso(days_ago(3))} -->\n\n"
+    folder = astra_sent(repo, "e1b2c3d4e5f6", reply=header + astra_reply(repo, "e1b2c3d4e5f6"), replied_at=days_ago(3),
+                        created_at=days_ago(3.1))
+
+    tick = BD.tick_once(repo, CONFIG)
+
+    assert folder.is_dir()
+    assert any("REPLY-REFUSED" in l and "gemini" in l for l in tick.lines), tick.lines
+
+
+def test_an_astra_reply_that_never_names_its_packet_is_refused(tmp_path, monkeypatch):
+    toasts(monkeypatch)
+    repo = make_repo(tmp_path)
+    folder = astra_sent(repo, "f1b2c3d4e5f6", reply="POSITION: done\nPATHS WRITTEN:\n- none\n", replied_at=days_ago(3),
+                        created_at=days_ago(3.1))
+
+    tick = BD.tick_once(repo, CONFIG)
+
+    assert folder.is_dir()
+    assert any("REPLY-REFUSED" in l and "never names" in l for l in tick.lines), tick.lines
+
+
+def test_an_astra_reply_that_wrote_into_another_packets_folder_is_refused(tmp_path, monkeypatch):
+    toasts(monkeypatch)
+    repo = make_repo(tmp_path)
+    other = (repo / BE.BRIDGE_ROOT / "queue" / "999999999999" / "reply.md").as_posix()
+    reply = astra_reply(repo, "a2b2c3d4e5f6").replace("DISAGREEMENTS", f"{other}\nDISAGREEMENTS")
+    folder = astra_sent(repo, "a2b2c3d4e5f6", reply=reply, replied_at=days_ago(3), created_at=days_ago(3.1))
+
+    tick = BD.tick_once(repo, CONFIG)
+
+    assert folder.is_dir()
+    assert any("REPLY-REFUSED" in l and "999999999999" in l for l in tick.lines), tick.lines
+
+
+def test_an_astra_packet_with_no_reply_yet_waits_and_times_out_once(tmp_path, monkeypatch):
+    seen = toasts(monkeypatch)
+    repo = make_repo(tmp_path)
+    waiting = astra_sent(repo, "a3b2c3d4e5f6", reply=None, replied_at=days_ago(0), created_at=days_ago(0.01))
+    late = astra_sent(repo, "a4b2c3d4e5f6", reply=None, replied_at=days_ago(0), created_at=days_ago(3))
+
+    first = BD.tick_once(repo, CONFIG)
+    BD.tick_once(repo, CONFIG)
+
+    assert waiting.is_dir() and late.is_dir()
+    assert any("WAIT a3b2c3d4e5f6" in l for l in first.lines), first.lines
+    assert [(r["packetId"], r.get("reason")) for r in ledger_rows(repo)] == [("a4b2c3d4e5f6", "timeout")]
+    assert len(seen) == 1 and not (waiting / "watch-skip.json").exists()
+
+
+def test_three_astra_landings_toast_nothing_and_their_sla_is_one_summary(tmp_path, monkeypatch):
+    """R26-340's rule holds: the three replies of 09-22 land today, so the SLA counts from the landing (no toast at once),
+    and when it passes the three escalations are ONE summary toast."""
+    seen = toasts(monkeypatch)
+    repo = make_repo(tmp_path)
+    ids = ["b5b2c3d4e5f6", "b6b2c3d4e5f6", "b7b2c3d4e5f6"]
+    for packet in ids:   # each names a file that is not there: tier 0 fails, the packet waits in replied/
+        astra_sent(repo, packet, reply=astra_reply(repo, packet, "docs/research/tech/missing.md"), replied_at=days_ago(3),
+                   created_at=days_ago(3.1))
+    config = {**CONFIG, "grace_min": 10_000}
+
+    first = BD.tick_once(repo, config)
+    assert [BE.packet_dir(repo, p, "replied").is_dir() for p in ids] == [True] * 3, first.lines
+    assert seen == [], "the landing itself toasts nothing"
+
+    later = dt.datetime.now().astimezone() + dt.timedelta(hours=2)
+    monkeypatch.setattr(BD, "now", lambda: later)
+    BD.tick_once(repo, config)
+
+    assert len(seen) == 1 and seen[0][0] == "Bridge: 3 escalations" and "3 sla" in seen[0][1], seen
+
+
+def test_a_form_failure_on_a_lane_with_no_sender_queues_no_repair(tmp_path):
+    repo = make_repo(tmp_path)
+    folder = BE.packet_dir(repo, "a8b2c3d4e5f6", "replied")
+    BE.write_json(folder / "order.json", {"packetId": "a8b2c3d4e5f6", "lane": "astra", "replyShape": "paths-written"})
+    BE.write_json(folder / "conversation.json", {"packetId": "a8b2c3d4e5f6", "conversationId": "c-1", "lane": "astra"})
+    (folder / "reply.md").write_text("I did it, see the links: [`a.md`](a.md)\n", encoding="utf-8")
+
+    tick = BD.Tick(repo, dict(CONFIG))
+    BD.step_tier0(tick)
+
+    assert json.loads((folder / "tier0.json").read_text(encoding="utf-8"))["class"] == "form"
+    assert not (folder / BD.REPAIR_MARKER).exists() and BD.packets(repo, "queue") == []
+    assert any("REPAIR-SKIP" in l and "no sender" in l for l in tick.lines), tick.lines
+
+
+def test_a_dry_run_proves_an_astra_reply_and_moves_nothing(tmp_path):
+    repo = make_repo(tmp_path)
+    (repo / "docs/research/tech/note.md").write_text("body\n", encoding="utf-8")
+    astra_sent(repo, "a9b2c3d4e5f6", reply=astra_reply(repo, "a9b2c3d4e5f6"), replied_at=days_ago(3), created_at=days_ago(3.1))
+    before = snapshot(repo)
+
+    tick = BD.tick_once(repo, CONFIG, dry_run=True)
+
+    assert snapshot(repo) == before
+    assert any("LAND a9b2c3d4e5f6" in l and "dry-run" in l for l in tick.lines), tick.lines

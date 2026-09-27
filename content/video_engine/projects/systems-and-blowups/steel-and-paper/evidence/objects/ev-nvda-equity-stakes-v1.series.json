@@ -1,0 +1,157 @@
+{
+ "title": "NVIDIA's stakes in other companies",
+ "sub": "Carrying value of NVIDIA's equity investments, $ billions, at each fiscal year end and 26 Jul 2026",
+ "src": "NVIDIA Forms 10-K (FY2025, FY2026) and 10-Q (Q2 FY2027)",
+ "unit": "$B",
+ "bars": [
+  {
+   "label": "Jan 2024",
+   "value": 1.546,
+   "note": "$1.5B",
+   "color": "deemph"
+  },
+  {
+   "label": "Jan 2025",
+   "value": 3.768,
+   "note": "$3.8B",
+   "color": "deemph"
+  },
+  {
+   "label": "Jan 2026",
+   "value": 39.977,
+   "note": "$40.0B",
+   "color": "amber"
+  },
+  {
+   "label": "Jul 2026",
+   "value": 95.638,
+   "note": "$95.6B",
+   "color": "crimson"
+  }
+ ],
+ "components": {
+  "non_marketable_musd": {
+   "2023-01-29": 288,
+   "2024-01-28": 1321,
+   "2025-01-26": 3387,
+   "2026-01-25": 22251,
+   "2026-07-26": 47898
+  },
+  "publicly_held_musd": {
+   "2024-01-28": 225,
+   "2025-01-26": 381,
+   "2026-01-25": 17726,
+   "2026-07-26": 47740
+  }
+ },
+ "status": "REAL",
+ "tier": "CONFIRMED",
+ "research_tier": "CONFIRMED",
+ "retrieved": "2026-09-24",
+ "sources": [
+  {
+   "publisher": "NVIDIA Corporation (SEC EDGAR)",
+   "title": "Form 10-K, fiscal year ended January 26, 2025",
+   "date": "2025-02-26",
+   "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581025000023/nvda-20250126.htm",
+   "on_disk": "docs/research/runs/r26-306-nvda-share-railway-gdp/sources/nvda-10k-fy2025-nvda-20250126.htm"
+  },
+  {
+   "publisher": "NVIDIA Corporation (SEC EDGAR)",
+   "title": "Form 10-K, fiscal year ended January 25, 2026",
+   "date": "2026-02-25",
+   "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
+   "on_disk": "docs/research/runs/r26-306-nvda-share-railway-gdp/sources/nvda-10k-fy2026-nvda-20260125.htm"
+  },
+  {
+   "publisher": "NVIDIA Corporation (SEC EDGAR)",
+   "title": "Form 10-Q, quarter ended July 26, 2026",
+   "date": "2026-08-26",
+   "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+   "on_disk": "docs/research/runs/r26-306-nvda-share-railway-gdp/sources/nvda-10q-q2fy2027-nvda-20260726.htm"
+  }
+ ],
+ "proof": [
+  {
+   "kind": "filing",
+   "tier": "CONFIRMED",
+   "path": "docs/research/runs/r26-306-nvda-share-railway-gdp/sources/nvda-10k-fy2025-nvda-20250126.htm",
+   "locator": "Note 8, adjustments to the carrying value of non-marketable equity securities",
+   "quote": "Balance at beginning of period $ 1,321 $ 288 Adjustments related to non-marketable equity securities: Net additions 1,309 859 Unrealized gains 816 194 Impairments and unrealized losses ( 59 ) ( 20 ) Balance at end of period $ 3,387 $ 1,321",
+   "values": {
+    "nm_2025": 3387,
+    "nm_2024": 1321,
+    "nm_2023": 288
+   }
+  },
+  {
+   "kind": "filing",
+   "tier": "CONFIRMED",
+   "path": "docs/research/runs/r26-306-nvda-share-railway-gdp/sources/nvda-10k-fy2025-nvda-20250126.htm",
+   "locator": "fair value table (Jan 26, 2025 and Jan 28, 2024)",
+   "quote": "Publicly-held equity securities Level 1 $ 381 $ — ... Other assets: Publicly-held equity securities Level 1 $ — $ 225",
+   "values": {
+    "ph_2025": 381,
+    "ph_2024": 225
+   }
+  },
+  {
+   "kind": "filing",
+   "tier": "CONFIRMED",
+   "path": "docs/research/runs/r26-306-nvda-share-railway-gdp/sources/nvda-10k-fy2026-nvda-20260125.htm",
+   "locator": "table of adjustments to the carrying value of non-marketable equity securities",
+   "quote": "Net additions 17,444 1,309 Unrealized gains 2,369 816 Reclassification (1) ( 848 ) — Impairments and unrealized losses ( 101 ) ( 59 ) Balance at end of period $ 22,251 $ 3,387",
+   "values": {
+    "nm_2026": 22251
+   }
+  },
+  {
+   "kind": "filing",
+   "tier": "CONFIRMED",
+   "path": "docs/research/runs/r26-306-nvda-share-railway-gdp/sources/nvda-10k-fy2026-nvda-20260125.htm",
+   "locator": "fair value summary, Jan 25, 2026",
+   "quote": "Publicly-held equity securities (1) (2) Level 1 17,726 — 12,886 4,840",
+   "values": {
+    "ph_2026": 17726
+   }
+  },
+  {
+   "kind": "filing",
+   "tier": "CONFIRMED",
+   "path": "docs/research/runs/r26-306-nvda-share-railway-gdp/sources/nvda-10q-q2fy2027-nvda-20260726.htm",
+   "locator": "carrying value of privately-held securities",
+   "quote": "Balance at beginning of period $ 42,336 $ 3,240 $ 22,251 $ 3,387 Adjustments related to non-marketable equity securities: Net additions 13,106 299 31,005 948 ... Balance at end of period $ 47,898 $ 3,799 $ 47,898 $ 3,799",
+   "values": {
+    "nm_2026q2": 47898
+   }
+  },
+  {
+   "kind": "filing",
+   "tier": "CONFIRMED",
+   "path": "docs/research/runs/r26-306-nvda-share-railway-gdp/sources/nvda-10q-q2fy2027-nvda-20260726.htm",
+   "locator": "Note 5 summary, Jul 26, 2026",
+   "quote": "Publicly-held equity securities (1) (2) Level 1 36,934 — — 31,977 4,957 Publicly-held equity securities (1) (3) Level 2 10,806 — — 10,806 —",
+   "values": {
+    "ph_l1": 36934,
+    "ph_l2": 10806
+   }
+  }
+ ],
+ "derived_from": {
+  "Jan 2024": "1,321 + 225 = 1,546",
+  "Jan 2025": "3,387 + 381 = 3,768",
+  "Jan 2026": "22,251 + 17,726 = 39,977",
+  "Jul 2026": "47,898 + 36,934 + 10,806 = 95,638"
+ },
+ "context_not_summed": {
+  "equity_method_infrastructure_financiers_musd_2026_07_26": 3300,
+  "equity_investment_commitments_bn_2026_07_26": 25,
+  "openai_sb_energy_lease_guarantees_cap_bn": 105,
+  "quotes": [
+   "We had $ 3.3 billion of investments in infrastructure financiers accounted for using the equity method as of July 26, 2026. (10-Q)",
+   "Equity investments 18 3 2 2 — — 25 (CFO commentary Q2 FY27, future commitments by fiscal year, $ billions)",
+   "In August 2026, we entered into guarantees, capped at a total of $ 105 billion, to provide credit support on a land, power, and shell buildout with affiliates of SB Energy Corp. (SB Energy) on behalf of a customer, an affiliate of OpenAI Group PBC (OpenAI) (10-Q)"
+  ]
+ },
+ "provenance_note": "R26-306 intake (2026-09-24). Part (b) of E99 s115, NVIDIA's investments, as FILED: non-marketable (private) + publicly-held equity securities at carrying/fair value. Carrying value, not cash invested - it includes unrealized gains (e.g. $7.5B in H1 FY27 on the private book alone). Equity-method stakes ($3.3B), the $25B of equity commitments and the $105B OpenAI-lease guarantee cap are kept OUT of the sum and named separately; the filings do not break the stakes out by company. This is the sourced raw material for the editorial 'NVIDIA funds its customers' page - a second, labelled construction, never a bigger pie slice."
+}

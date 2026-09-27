@@ -11,8 +11,9 @@ reply* - with zero tokens:
 
   * `paths-written`  every path the reply names exists (and carries the order's `marker` when it named one)
   * `contract-block` the order's `block` is present at the source and at every copy the order named
-  * `report-landed`  the report is under `docs/research/<area>/`, carries a proof line and the NOT FOUND
-                     block, and `build_docs_layers.py --write` then `--check` exit 0
+  * `report-landed`  the report is under `docs/research/<area>/`, carries a proof line, the NOT FOUND block and
+                     a `## Verdict up front` with a line under it (R26-354: its own template demands it; a report
+                     without one is a FORM failure - one repair), and `build_docs_layers.py --write` then `--check` exit 0
   * `review`         the reply parses with a POSITION line and is `done` with no disagreements, no prerequisites
   * `test-run`       the order's `command` exits 0 from the repo root
   * `free`           never closes here; a shapeless reply is judgment by definition
@@ -53,7 +54,7 @@ REPLAY_DIR = "replay"
 # Gemini to write us bad numbers"), so it goes to tier 1. A repair is asked for FORM only, never for evidence.
 FORM_CHECKS = ("paths-named", "reply-whole", "report-named", "not-found-block", "docs-layers", "command-named", "shape", "exists",
                "fetch-dir-named", "manifest", "manifest-parses", "entries", "entry", "outputs-named", "verify-named", "csv-named",
-               "intake-named", "section")   # P46 T8: the file shapes' FORM checks; sha256 / schema / rows / required-cells / claims-* / dedupe-* are substance
+               "intake-named", "section", "verdict-up-front")   # P46 T8: the file shapes' FORM checks; sha256 / schema / rows / required-cells / claims-* / dedupe-* are substance
 CLASS_FORM, CLASS_SUBSTANCE = "form", "substance"
 DETAIL_CHARS = 400
 
@@ -191,20 +192,48 @@ def extract_paths(text: str) -> list[str]:
     return seen
 
 
+_PACKET_STATE_ORDER = ("replied", "done", "sent", "queue")   # where a moved packet is most likely to be now
+
+
+def follow_moved_packet(path: Path) -> Path | None:
+    """R26-144: a path inside a bridge packet folder (`.../docs/research/runs/bridge/<state>/<id>/...`) that is not there,
+    found in the packet's CURRENT folder. The watcher moves a packet sent/ -> replied/ after the lane wrote a file beside
+    it, so the path the reply names is stale by the time tier 0 reads it. None when the path is outside a packet folder
+    or the file is in no state's folder."""
+    posix = Path(path).as_posix()
+    marker = f"{env_mod.BRIDGE_ROOT.as_posix()}/"
+    head, found, tail = posix.partition(marker)
+    if not found:
+        return None
+    state, _, rest = tail.partition("/")
+    if state not in env_mod.STATES or "/" not in rest:
+        return None
+    for other in _PACKET_STATE_ORDER:
+        candidate = Path(f"{head}{marker}{other}/{rest}")
+        if other != state and candidate.exists():
+            return candidate
+    return None
+
+
 def locate(raw: str, repo: Path, extra_dirs: Sequence[Path] = ()) -> tuple[Path, bool]:
-    """Where a named path actually is: absolute as given, else under the repo root, else under a named dir."""
+    """Where a named path actually is: absolute as given, else under the repo root, else under a named dir; a path
+    inside a packet folder the daemon has since moved is followed to the packet's current folder (R26-144)."""
 
     text = _clean(raw)
     if not text:
         return Path(repo), False
     direct = Path(text).expanduser()
     if _ABSOLUTE.match(text) or direct.is_absolute():
-        return direct, direct.exists()
+        if direct.exists():
+            return direct, True
+        moved = follow_moved_packet(direct)
+        return (moved, True) if moved else (direct, False)
     for base in (Path(repo), *extra_dirs):
         candidate = base / text
         if candidate.exists():
             return candidate, True
-    return Path(repo) / text, False
+    moved = follow_moved_packet(Path(repo) / text)
+    return (moved, True) if moved else (Path(repo) / text, False)
 
 
 def named_paths(order: dict[str, Any], text: str) -> list[str]:
@@ -414,10 +443,13 @@ def check_report_landed(order: dict[str, Any], text: str, repo: Path) -> Tier0Re
     checks.append(check("proof-line", proofs > 0, f"{proofs} proof line(s) `[... | URL: https://... | Verified 20..]`"))
     checks.append(check("not-found-block", NOT_FOUND_BLOCK in body, f"`{NOT_FOUND_BLOCK}` {'present' if NOT_FOUND_BLOCK in body else 'absent'}"))
     verdict = _verdict_line(body)
-    abstained = verdict is not None and "[UNVERIFIED]" in verdict
+    checks.append(check("verdict-up-front", bool(verdict), f"verdict: {verdict[:80]}" if verdict else (
+        "no `## Verdict up front` section - the report-landed template demands one (R26-354)" if verdict is None
+        else "`## Verdict up front` has nothing under it - the report-landed template demands the verdict line (R26-354)")))
+    abstained = bool(verdict) and "[UNVERIFIED]" in verdict
     checks.append(check("verdict-verified", not abstained,
                         "the verdict is an abstention - `[UNVERIFIED]` under `## Verdict up front`; a follow-up, not a pass"
-                        if abstained else (f"verdict: {verdict[:80]}" if verdict else "no `## Verdict up front` section (not required)")))
+                        if abstained else "the verdict is not an abstention"))
     if _first_failure(checks) is None:
         layers_ok, detail = run_layers(Path(repo))
         checks.append(check("docs-layers", layers_ok, detail))
@@ -426,13 +458,14 @@ def check_report_landed(order: dict[str, Any], text: str, repo: Path) -> Tier0Re
 
 
 def _verdict_line(body: str) -> str | None:
-    """The first non-empty line under `## Verdict up front`, or None when the report has no such section."""
+    """The first non-empty line under `## Verdict up front`, or None when the report has no such section; "" when the
+    section is empty (the next non-empty line is another heading, or there is none)."""
     lines = body.splitlines()
     for i, line in enumerate(lines):
         if line.strip().lower().startswith("## verdict up front"):
             for nxt in lines[i + 1:]:
                 if nxt.strip():
-                    return nxt.strip()
+                    return "" if nxt.lstrip().startswith("#") else nxt.strip()
             return ""
     return None
 

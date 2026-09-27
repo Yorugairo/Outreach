@@ -53,7 +53,7 @@ is not grounding: the verifier matches the span, the critic (step 9) scores whet
 | 2b | **The blind viewer** (E26 `:949`) | `viewer_windows.py <script>` -> `viewer_run.py <script> --title --thumb-file` -> `viewer_score.py <script>` | V01 an unperceived declared beat FAILs; V04 WARNs |
 | 3 | **The take and the word timeline** (E70 `:2264`) | `scratch_take.py --engine both`; `record_short_take.py <script>` (preflight) then `--go`; `align_take_whisper.py <script.txt> <take.mp3> <out.words.json>` (local Whisper only); `retime_take.py <take> --gaps` for the tight take | The recorder refuses a stale or failing gates report. A cut lands in an acoustic gap of at least 0.30 s, at 0.8 of the gap: `authoring/words.py` `cut_before` refuses a smaller gap by name |
 | 4 | **The beat plan** - species by sentence, the comparator, the capability inventory, a recipe per beat (E96 `:2801`, E76 `:2442`) | Read `docs/content-video-engine/SPECIES-BY-SENTENCE.md`; `lint_species_choice.py <project> --propose` drafts rows per sentence (INFO, it chooses nothing); pick recipes with `effects_card.py`; write `<build>/BEAT-PLAN.jsonl` (per beat: `t0`, `comparator.compared_to`, a recipe or `why_none`) | M41 FAILs a beat the plan does not cover; M38 FAILs proven-recipe coverage under 0.60 |
-| 5 | **The shot table** - GENERATE, THEN MODIFY - and name every departure (E99 s68; `docs/content-video-engine/PIPELINE.md:33` still holds: authored, never allocated - the beat plan is the intelligence and the compiler realises it) | `python content/video_engine/scripts/generate_base_table.py <project> <build> --table <build>/SHOT-TABLE-SHORT.py` writes the approved skeleton from step 4's `BEAT-PLAN.jsonl` (its optional per-beat `moves`) as the BASE and `<build>/BASE-TABLE.md` (the skeleton, act and rule per row; the beats the plan leaves silent; the signature mix beside the approved cuts'). Then the two doors: edit the generated rows in your `build_short.py` / the table, or layer `<build>/overrides.json` (`table.apply_sidecar`); every departure is a numbered row in `PRODUCTION-LEDGER.md` "Decisions taken without the operator": `N. BASE DEPARTURE - row <n> <what changed>: <why>, <ruling or path:line>` | `generate_base_table.py <project> <build> --departures` exits 1 on a departure with no ledger row; M45 parity by mechanism (a mechanism the plan owes and the cut lacks FAILs) and M46 signature variety (WARN) at step 7. A silent beat is the author's to fill or to leave - never filled by count. Never hand-edit the approved `SHOT-TABLE-SHORT.py` |
+| 5 | **The shot table** - GENERATE, THEN MODIFY - and name every departure (E99 s68; `docs/content-video-engine/PIPELINE.md:33` still holds: authored, never allocated - the beat plan is the intelligence and the compiler realises it) | **The base generator is STOPPED (E99 s77; BACKLOG R26-195)** - s77 Apply (1): "P66 is STOPPED (status `stopped`, not complete); no further compiler pass"; Apply (7): "the next short is built by hand on the door cut's pattern (E98 s7)"; s78 Apply (3): "the way v2 was made is the way the next short is made: the treatment row by row with its cites, the build script beside the approved one with each change a named constant". The rest of this cell is the record of the stopped path, kept as s77 Apply (6) keeps its tables: `python content/video_engine/scripts/generate_base_table.py <project> <build> --table <build>/SHOT-TABLE-SHORT.py` writes the approved skeleton from step 4's `BEAT-PLAN.jsonl` (its optional per-beat `moves`) as the BASE and `<build>/BASE-TABLE.md` (the skeleton, act and rule per row; the beats the plan leaves silent; the signature mix beside the approved cuts'). Then the two doors: edit the generated rows in your `build_short.py` / the table, or layer `<build>/overrides.json` (`table.apply_sidecar`); every departure is a numbered row in `PRODUCTION-LEDGER.md` "Decisions taken without the operator": `N. BASE DEPARTURE - row <n> <what changed>: <why>, <ruling or path:line>` | `generate_base_table.py <project> <build> --departures` exits 1 on a departure with no ledger row; M45 parity by mechanism (a mechanism the plan owes and the cut lacks FAILs) and M46 signature variety (WARN) at step 7. A silent beat is the author's to fill or to leave - never filled by count. Never hand-edit the approved `SHOT-TABLE-SHORT.py` |
 | 6 | **The build** - in a PRIVATE directory | The project's build-dir variable (`TARIFF_BUILD_DIR`, `TOKYO_BUILD_DIR`) or a new build script beside `build_short.py`; `table.compile_timeline(..., aspect="9:16", caption_style="phrase")`. The build ends by running the self-watch bar | Never build into a directory the operator is watching (`review-link-frozen-copy`) |
 | 7 | **The gates on the build** | `probe.py <build> --gate`; `gate_motion_density.py <build>`; `gate_one_shot_floor.py <build>`; `self_watch.py <build>` | Motion rows M01/M08/M10/M16 (stillness), M12 (chart held as homework), M25-M28 (layout), M31/M32 (empty stage, black seam) FAIL. The floor: M35 at least 3 chart forms, M36 at least 1 chart-to-chart transform, M37 docks on at least a third of the beats, M38 recipe coverage 0.60, M39 narrative-to-chart 1.0, M41 the plan. `NOT CLEAN` on the self-watch is a stop |
 | 8 | **Serve a frozen copy** | `python content/video_engine/projects/systems-and-blowups/tokyo-tea-break/serve_player.py <build> --port <private port>` (no-store); `self_watch.py <build> --html --player-url <url>` | A port nobody else is serving; never `--watch` on a link the operator holds |
@@ -74,10 +74,89 @@ is not grounding: the verifier matches the span, the critic (step 9) scores whet
 | A ring circles a number or a point on a chart; a picture's focus is a light | E56 `:1815` | the compiler |
 | A dip is a world change, never a dock's transition or an entry into a mount | E47 `:1441` | M31, M32 |
 | Fit a window by moving beats, never by clipping words | E41 `:1277` | `cut_before`, S01-S08 |
-| Never rebuild a served review build; build privately | memory `review-link-frozen-copy` (no ruling yet) | nothing |
+| Never rebuild a served review build; build privately | E99 s75 Apply (6); memory `review-link-frozen-copy` | nothing |
 | Never pipe a gated step into `tail` or `head` | memory `never-pipe-gated-steps-to-tail` (no ruling yet) | nothing |
 | Life marks belong to the plate they were measured on; never swap the plate under them | P58 T7 (2026-09-14) | nothing - your read |
 | Depth needs a camera move that already has a reason; never add one to show parallax | E49 `:1494`, E59 `:1903` | nothing - your read |
+
+## The editing rules - the builder's checklist (E99 s74-s80; BACKLOG R26-195, R26-200)
+
+E99 s77 Apply (3): "the day's EDITING rules are the BUILDER's, not a compiler's: fewer cuts and a directional flow (s74), a
+light only where the sentence names a thing (s76), no flash plates - a short plate is folded by the author (s75), a collision
+is fixed before a card (s75), a served build is frozen (s75), a base or a cut is read on frames beside the reference before the
+operator sees it (s70); they go into the one-shot runbook's checklist and the critic's table, and are cited by the receipt".
+Each box below quotes its ruling; tick it on your table before step 8. The critic reads the same rules as mechanisms 12-19
+(`docs/content-video-engine/CRITIC-REPORT.md`, "list of 2026-09-25").
+
+### Fewer cuts and a directional flow; fewer dips is build work (E99 s74; BACKLOG R26-347)
+
+- [ ] E99 s74 Apply (1): "between two worlds a cut or a dip is the last resort, taken only after a transform (melt-then-splash,
+  morph, recast, rescale, object-becomes-chart, the door, the snap, a camera move) has been refused by name for that pair, and
+  the `why` of every cut and every dip names the transform it could not use and why".
+- [ ] Fewer dips needs no card. The operator, 2026-09-25 (BACKLOG R26-347): "you dont need my approval for less dips, we already
+  have agreed that dips are used as the option when our other transitions that maintain continuity don't make sense, if we're
+  going from 12 to 10 that means we gained continuity." R26-347: "each dip whose two sides are NOT a world change (E99 s74, the
+  dip-is-a-world-change rule) becomes the continuity transform it refused (melt, morph, recast, rescale, object-becomes-chart,
+  the door, the snap, a camera move); a dip that stays names the transform refused. Build work, never an operator card."
+
+### Fold a short plate; fix a collision before a card; freeze a served build (E99 s75)
+
+- [ ] Fold a short plate - s75 Apply (3): "the compiler FOLDS a plate under M44's floor into its neighbour - the sentence rides
+  the world already on stage (its moves land there: a dock, a light, a caption), the world change is dropped, and a `BASE
+  DEPARTURE` line names the plan's plate and the fold - never a flash, never seconds stolen from a page"; s77 Apply (3) gives the
+  fold to the author: "no flash plates - a short plate is folded by the author (s75)".
+- [ ] Fix a collision before a card - s75 Apply (1): "a legibility FAIL on a served page (M25, M28) is FIXED before the cut is
+  carded, never listed as the plan's or the cut's - the card's INFO names what a viewer would feel, not what a gate could not fix".
+- [ ] Freeze a served build - s75 Apply (6): "a build is FROZEN AS A COPY the moment it is served for a card, and that copy is
+  never rebuilt (E45; `build-p66-cal-frozen-v7/` is what :8770 serves from this line); the working dir may move, the served one
+  may not" (step 8).
+
+### A light only where the sentence names a thing (E99 s76)
+
+- [ ] s76 Apply (1): "a spotlight, a focus_zoom, a callout or a ring is applied ONLY where the sentence names a specific thing on
+  the picture to point at - a number, a bar, a point, a named object in the plate - and the move's target is that thing; a light
+  whose sentence names nothing is NOT applied, and the `why` says 'no callout to make'".
+
+### Idle tokens counted, the camera on the named things, the open on the axes (E99 s79 Apply 5)
+
+s79 Apply (5): "the ONE-SHOT runbook's checklist and the critic's table gain three rows - the idle on every held thing (count
+the tokens), the camera on the named things, the open on the axes - so the next rebuild's treatment cannot miss them".
+
+- [ ] Idle tokens - count them on the table. s79 Apply (2): "`idle=live` on EVERY page row and `idle=drift` on every plate (E49) -
+  a rebuild that drops either owes a departure line; the titles and labels live with their page". The long form is amended by
+  E99 s84: "the long-form plate life is KEN BURNS ALONE - `plate_idle_paints` OFF (the 20 px drift s65 paired with it is withdrawn
+  for long form; shorts keep what they ship until re-ruled)".
+- [ ] The camera on the named things - s79 Apply (3): "the camera where the sentence names the thing (s76)" and "never a pan on
+  nothing".
+- [ ] The open on the axes - s79 Apply (1): "the holdings page OPENS ON ITS AXES at 0.0 (E73)"; E73: "The hook opens on its axes
+  and is answered on the ledger".
+
+### The frames beside the reference before the operator (E99 s70 Apply 4)
+
+- [ ] s70 Apply (4): "no base, batch or rendition reaches a card until the parent has read its frames beside the approved cut's
+  on a side-by-side sheet"; s77 Apply (3): "a base or a cut is read on frames beside the reference before the operator sees it
+  (s70)" (step 9).
+
+### A card's slot yields to the room when the room is gone (E99 s80; BACKLOG R26-202 (c))
+
+- [ ] s80 Apply (1): "a card that follows a card on one page takes the outgoing card's box (the measured rect, the footprint if
+  the aspects differ), never a park - the park is for a card with no room (E65; s72 Apply 2)". R26-202 (c), Tokyo v3b: "the
+  two-fingers card kept v2's slot + park at 36.18 because by 36.58 the page has rescaled through the tea card's room (the bracket
+  label 88 % covered) - the slot rule (s80) yields to the room rule when the room is gone."
+
+### One host per cut (BACKLOG R26-174)
+
+- [ ] R26-174 (one-shot #3): "The host's two renderings share one cut - the stick HollowStickMike on the stills, the coloured
+  Mike on the two-fingers clip (Japan did the same). One host per cut, or a two-fingers clip on HollowStickMike." No ruling
+  names it yet (`HollowStickMike` in `docs/portable/OPERATOR-RULINGS.md`: 0 hits); a ruling outranks this row.
+
+### A host plate enters the library only when approved, with its layer sidecar (BACKLOG R26-214 (a))
+
+- [ ] R26-214 (a): "once the operator approves the frames, the three plates enter the library the way approved plates do, with
+  their layer sidecars". The quarantine rule is unchanged (`docs/AGENTS-VIDEO-ENGINE.md`: "Output stays in **review quarantine**
+  until the operator approves a contact sheet") and the image stays out of git (E99 s31: "no, i don't think they should go into
+  the repo"). Until then the resolver cannot find a host plate by id, and R26-214: "the treatment must not write `idle=figure` on
+  a host plate" ((b) is the engine's refusal, P72 T17; (c) is the parent's decision D4 in P72 T0, a `⏸️` row).
 
 ## Known gaps (BACKLOG R26-135, R26-136)
 

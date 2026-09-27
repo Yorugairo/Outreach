@@ -20,8 +20,9 @@ scratch take, never a typed second. Each departure from the treatment is a NAMED
         on "twenty-one" / "a hundred and five" / "six hundred and thirteen".
   CAMERA_613               camera 1 - the row's ONE focus_zoom, on the +613 datum, on the words that name it
         (E99 s76; CAPABILITIES:85 one camera per timeline, :124 the declared target).
-  CERT_CROP                the 1845 certificate cut out of `world-certificate-wall-v1` as ONE certificate
-        (a PIXEL crop, x and y - `docks.still_card` crops a full-width BAND only; the departure is in the notes).
+  CERT_CROP                the railway share certificate (P69 T83, the operator-approved plate
+        `prop-railway-share-cert-v1b`, E99 s113) cut to its paper, deckle kept (a PIXEL crop, x and y -
+        `docks.still_card` crops a full-width BAND only); one certificate for rows 2, 18 and 22.
   AGENDA_ROWS_H            row 6: the numbered agenda (CAPABILITIES:43) in the room the page's park frees.
   HOST_PLATE               row 7: HOST WINDOW 1 - the Flow plate `host/H-1-studio.png` as the landing surface
         (`;use=landing` + the ken push ALONE - E99 s84 withdrew the 20 px drift for long form, R26-236), opened on
@@ -73,7 +74,7 @@ scratch take, never a typed second. Each departure from the treatment is a NAMED
         thrown back AS the page goes, up to the row's end - the anaphora on the bottom caption under it.
   PRESS_PLATE / CONC_PAGE / page_rail_return   row 18 (P69 T26): the desk holds the signpost (their chart again,
         SIGNPOST_CARD, in the record's slot, drawn for its size - T10c's card profile); dip 5 to RESET 2, the press, the
-        1845 certificate (0.3 of the stage) thrown on its name; dip 6
+        railway share certificate (0.36 of the stage, "RAILWAY SHARE" legible) thrown on its name; dip 6
         to the concentration bars (`;bar_style=soft`, HG3's option), "20%" written as the bar stands, PROP 3 stamped on
         "S&P five hundred" at an authored centre, camera 3 a real 1.2x push on the 20 (E99 s108, `chrome` fit, aimed by
         `at` - CONC_CAM_AT), the
@@ -81,6 +82,13 @@ scratch take, never a typed second. Each departure from the treatment is a NAMED
         20); the page melts back onto the press, the certificate RUNG round the whole card with its figure (RAIL_DROP,
         E99 s110 (2)); on "1845 is the proof"
         the railway index RETURNS built behind a blur-zoom and writes its -64% on "two-thirds".
+  page_close / OUTRO_*     row 24 (P69 T32): THE CLOSE - dip 10 and the divergence RETURNS by the spiral one last time,
+        all four lines on the memory line's scale; the page parks for the agenda ("three questions, thirty seconds")
+        and the board, the yardstick and the test land in its slot in turn; the un-park on "a copy of this chart", the
+        rings where it points and on the market; the opening's certificate landed back on "the certificate stays on the
+        desk"; then THE OUTRO - the build is the WHOLE take (UNIT_CUT_PHRASE None),
+        the Remotion kit's 16:9 card dipped in as "desk" ends and the recorded brand line stitched 0.7 s after it
+        (`authoring.audio.outro_clock` / `stitch_brand_line`, the approved shorts' clock; E41 - never the script's words).
 
 THE BODY'S PREFLIGHT (P69 T14, rows 7-24) is three constant tables, read before any body row is authored:
   BODY_ASSETS          every page object (with its builder), card, plate, prop, host still, cue file and outro part
@@ -101,7 +109,7 @@ row names one), and HOST_CARD_DOOR records that a card CAN now stand on a pictur
 - Recall(world): docs/portable/OPERATOR-RULINGS.md:3248 "A plate's life is DIRECTIONAL" (E99 s65 - the host plate carries the ken push and the 20 px drift, the long-form setting)
 - Recall(evidence): content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md:120 "seven percent of GDP in two thousand" (the dossier routes this sentence to the PIMCO equipment-and-software series - the page rings its own numbers, never a 7 or an 8 that is not in the data)
 - Recall(motion): docs/content-video-engine/CAPABILITIES.md:44 "THE NUMBERED AGENDA (P52 T8)" (row 6 - two to four numbered rows revealed one per word, in the room the park frees)
-- Recall(sound): content/video_engine/scripts/authoring/audio.py:471 "the cues the frame plays, the cues dropped" (R26-198 - the cues are bound to what the compiled timeline fires BEFORE the gate report is stamped)
+- Recall(sound): content/video_engine/scripts/authoring/audio.py:511 "the cues the frame plays, the cues dropped" (R26-198 - the cues are bound to what the compiled timeline fires BEFORE the gate report is stamped)
 - Recall(publish): docs/portable/OPERATOR-RULINGS.md:3280 "1440p confirmed" (E99 s81 - this build renders nothing and serves nothing; the frozen copy, the link and the render are the parent's)
 - Recall(rulings): docs/portable/OPERATOR-RULINGS.md:2342 "The hook opens on its axes" (E73 - row 1 is the page on its axes from the first frame)
 - Recall(rulings): docs/portable/OPERATOR-RULINGS.md:1494 "Nothing ever goes truly still" (E49 - `;idle=live` on every page row, `;idle=drift;drift=20` on the plate)
@@ -199,8 +207,12 @@ def _assert_read_only(before: dict) -> None:
 # row 18 (the turn: reset 2, PROP 3, camera 3, the halving compare) and moves it to row 19's first words (T27's).
 # P69 T27 authors row 19 (skips a gear: the two clocks, the GPU becoming the compute bar) and moves it on to row 20's first
 # words (the test, T28's). P69 T28 authors row 20 (host window 2, the test) and moved it to row 21's first words (SK hynix,
-# T29's); P69 T29 authors row 21 (SK hynix, one panels page) and moves it on to row 22's first words (the tripwires, T30's).
-UNIT_CUT_PHRASE = "Bravos put their"   # row 22 (the tripwires, T30)'s first words; the build stops at the cut BEFORE them
+# T29's); P69 T29 authors row 21 (SK hynix, one panels page) and moved it to row 22's first words (the tripwires, T30's);
+# P69 T30 authors row 22 (the tripwires: the board, PROP 6, the monitor, the trim proof) and moves it on to row 23's first
+# words (the ring, T31's) - the take glues "So" to its dash. P69 T32 authors row 24 (the close) and the cut is GONE: there
+# is no next row, so the build is the WHOLE take and ends on the outro card (main's outro clock, OUTRO_* below).
+UNIT_CUT_PHRASE = None                     # P69 T32: the whole take - row 24's first words are UNIT_CUT_ROW24 (dip 10)
+UNIT_CUT_ROW23 = "So— the certificate"     # row 23 (the ring, T31)'s first words - dip 7 (the take glues "So" to its dash)
 UNIT_TAIL_S = 0.6                           # ... and the last sentence is allowed to land before the cut ends
 
 # ---------------------------------------------------------------- THE EVIDENCE (every figure off its own object)
@@ -311,7 +323,12 @@ RAIL_DROP_S = 1.4
 # sub and source rewrite in the hand, the share-of-GDP line draws on). It fires on "the internet" - the sentence's
 # subject - so the crash and its -64% stand from their landing to the new era's first noun. Its own numbers only
 # (BODY_DEPARTURES row 9): no 7 % tick, no 8 % datum (neither is on the object, E77).
-GDP_RECAST_S = 2.0
+# P69 lane A job 4 (M47's WARN at 1:20 -> 1:22, a 2.0 s plain hand-over): the recast runs the H door's own 1.2 s
+# (DIV_RECAST_S / RECAST_S / DEBT_RECAST_S) - MEASURED (`scratchpad/p69-m47/before/B05-tiles.png` 80.8-81.7): at 2.0 s the
+# railway line un-draws over the GDP line for ~1 s on half-written axes; at 1.2 s the new line stands whole by 81.69, as
+# "crossed seven percent" is said. A KEYED recast is not this beat: the railway index and the share of GDP are two
+# datasets, and `keyed` hands the SAME data from one form to another (RECAST_KEYS).
+GDP_RECAST_S = 1.2
 # ... and the ring (E56: a ring circles a point on a chart) lands on the page's OWN datum: the Q2-2000 peak, 11.54 %,
 # on "then the tower came down" - the top before the fall, named by the sentence, and NOT under the seven / eight
 # words (the departure: the page's numbers are another measure than the voice's, so nothing of it is rung there).
@@ -352,19 +369,19 @@ GDP_AI_FROM = _nearest(GDP, 0, 2020.0)
 # ---------------------------------------------------------------- THE CARDS
 
 CERT_PLATE = REPO / ("content/video_engine/projects/systems-and-blowups/review/claims/"
-                     "steel-and-paper-plates-wave-1/objects/world-certificate-wall-v1.png")
-# ONE certificate, cut by PIXELS off the plate (x and y, not only a height). `docks.still_card` / `docks.dock_png`
-# crop a full-width BAND ((top, height) fractions - authoring/docks.py:85), which on this plate is five certificates
-# and the blue shaft; `docks.dock_still(..., still=True, frame_crop=(w, h, x, y))` (authoring/docks.py:70) is the
-# kit's only x-aware crop and it reads a PNG as happily as a clip. MEASURED on the plate's own 1536x1024 frame.
-# ONE WHOLE CERTIFICATE WITH ITS PRINTED FACE (the critic's read of copy e: the old rectangle took an
-# empty cartouche and a neighbour's corner). Picked by eye off the plate's own 1536x1024 frame and checked
-# for the blue light shaft pixel by pixel: this is the ONLY certificate on the wall whose four borders,
-# crest medallion, ruled signature line and engraved vignette are all visible at once. The plate's blue
-# light shaft clips its lower-left corner - that is the plate's own light, not the crop's edge.
-CERT_CROP = (282, 238, 296, 146)              # w, h, x, y
-CERT_ASPECT = round(CERT_CROP[1] / CERT_CROP[0], 4)
-CERT_CARD = "dock-h-certificate-1845"
+                     "sp-h-railway-share-cert-1/objects/prop-railway-share-cert-v1b.png")
+# P69 T83 (E99 s113): THE RAILWAY SHARE CERTIFICATE - the operator approved v1b on 2026-09-24 ("lets go with v1b ...
+# yes, you would update row 2 also"; the claim's approvals.json records it). It replaces the 1845 crop of
+# `world-certificate-wall-v1` everywhere in H (rows 2, 18, 22: ONE certificate, the same card each time). Its text is
+# intended - "RAILWAY SHARE" (the title under the locomotive vignette) and "ONE SHARE" (the lower-left cartouche) - and
+# it carries no date. The plate is ONE flat sheet on a flat #25313C ground, so the crop is the PAPER: MEASURED by pixels
+# off the ground (|rgb - #25313C| > 30) on the plate's own 1536x1024 frame, the sheet runs x 64-1471, y 54-972; the crop
+# takes it 2 px out on every side so the torn deckle is whole (its outermost teeth are not clipped flush) and a sliver
+# of the ground shows between the teeth. `docks.dock_still(..., still=True, frame_crop=(w, h, x, y))`
+# (authoring/docks.py:70) is the kit's x-aware crop and reads a PNG as happily as a clip.
+CERT_CROP = (1412, 923, 62, 52)               # w, h, x, y
+CERT_ASPECT = round(CERT_CROP[1] / CERT_CROP[0], 4)   # 0.6537 (the 1845 crop's was 0.8440)
+CERT_CARD = "dock-h-railway-share"
 # THE ROOM A FULL-STAGE PAGE LEAVES, measured on this build's own probe at 11.15 s: the chart's box is
 # [45, 193, 1350, 756], its ink [137, 289, 964, 465], its three end tags run x 1110-1883 at y 372 / 612 /
 # 649, and the anchored caption strip starts at y 919. The free rectangle is therefore x 1400-1900,
@@ -372,7 +389,9 @@ CERT_CARD = "dock-h-certificate-1845"
 # took the emptiest corner at the legibility floor, 101 x 102 px), so the row names it: 0.12 of the stage
 # wide at (0.80, 0.745) -> x 1420-1880, y 700-910. A card at full stage is SMALL, and that is the
 # geometric consequence of R26-205, not a choice - the notes carry the number.
-CERT_ROOM = {"centre": True, "centre_w": 0.12, "centre_x": 0.80, "centre_y": 0.733}   # 0.745 clipped the caption strip by 505 px
+# P69 T83: the railway share sheet is FLATTER (0.654 against the 1845 crop's 0.844), so the same room takes it WIDER at
+# the same height: 0.145 of the stage (278 x 182 px) sits in y ~701-883 - inside the measured room, under the lowest tag.
+CERT_ROOM = {"centre": True, "centre_w": 0.145, "centre_x": 0.80, "centre_y": 0.733}   # 0.745 clipped the caption strip by 505 px
 # "his fourth copy of the same chart" is a card of the TWO-LINE chart - the page as it stands at that
 # instant - never the finished four-line png (the critic's spoiler row: `ev-divergence-v1.png` carries the
 # memory line, its legend and +613 %, five seconds before the sentence that reveals them). The kit's door
@@ -732,6 +751,14 @@ assert DEBT["series"][DEBT_ISSUANCE]["pts"][DEBT_MID_AVG][1] == 28 and DEBT["ser
 # over the "$121B / issuance" pair. It is lifted DEBT_RANGE_DY of its own lines above the wedge's top edge.
 DEBT_RANGE_DY = -1.4
 DEBT_OPEN_S = 0.4
+# THE PAGE LANDS WITH INK (P69 lane A job 4; M47, P69 T87 - lane B's row, read off this door): capped at index 0 every
+# series drew NOTHING (one point is no line) and the plot stood bare 242.38-246.8 s under the question, only the title
+# writing (`scratchpad/p69t87/frames/h-0245.50.png`). The issuance now lands drawn to 2021 - the first year of the 2020-24
+# AVERAGE, the low ~$28B line - so "who is paying for the steel this time?" is asked over where the borrowing stood, and
+# "For years the giants ... out of pocket" carries the same stroke on to 2024. Taken over keeping the yields page up to
+# 246.3 (the question turns the story away from the Fed: the page change belongs on "But here's the question") and over
+# drawing the whole average under the question (that is the next sentence's line, drawn before it is said).
+DEBT_OPEN_CAP = 1
 DEBT_TITLE_S = 2.0
 # THE REHOOK'S QUESTION IS THE PAGE'S FIRST TITLE (no figure; the page draws its answer - who borrows): written on
 # "who is paying", and the object's own title "The builders started borrowing" is written back on "Then the bills got
@@ -756,6 +783,7 @@ CAPEX_2026 = next(k for k, b in enumerate(CAPEX["bars"]) if b["label"] == "Conse
 IG_TITLE = IG["title"]
 CAPEX_TITLE = CAPEX["title"]
 DEBT_RECAST_S = 1.2
+CAPEX_BARS_RISEN_S = 2.6   # MEASURED (P69 T82): the capex recast's bars stand risen 2.6 s after it starts (290.2 - 287.59)
 DEBT_MARK_S = 1.6        # a figure's / spread's write
 # NO RING ON A BAR (MEASURED on draft 6, the probe's M34): a callout on a bars datum circles the WHOLE bar and its stroke
 # crosses the category tick under it ("Projected" at 4:43, "2026 consensus" at 4:58). The bar the sentence turns to is
@@ -778,8 +806,8 @@ DATACENTER_STAMPED = True
 # PROP 2 MOVES TO THE CAPEX STATE (the operator, E99 s106: "i prefer the proposed for the data center"; P69 T26d built
 # the door). It stands at an AUTHORED place in the page's right margin beside the $690 bar - the operator's approved mock
 # (`scratchpad/datacenter-now-vs-proposed.png`, right half) and T26d's frame (`scratchpad/p69t26d/frames/dc-*`): centre
-# (0.85, 0.47) of the stage, 0.2 of its width. It is stamped AFTER the capex recast has landed (t_bet + DEBT_RECAST_S,
-# inside "centers." - on "a bet on data centers", never over the recast's hand-over) and it takes ONE move on "six hundred
+# (0.85, 0.47) of the stage, 0.2 of its width. It is stamped just AFTER "a bet on data centers" has ended AND the capex bars
+# have risen (P69 T82, E99 s112 - `t_dc`; T24 put it inside "centers.", on the recast's clock) and it takes ONE move on "six hundred
 # and ninety" (T26d's): up and a little smaller, turned 4 degrees, so it stands beside the 690's top as the figure is said.
 # It leaves with the page (the melt into the filings). The desk keeps the leases record alone.
 DATACENTER_PLACE = {"x": 0.85, "y": 0.47, "w": 0.2}
@@ -815,6 +843,9 @@ GPU_PROP_FILE = REPO / "content/video_engine/assets/props/cutouts" / (GPU_PROP +
 PHONE_PROP = "prop-smartphone-v1"
 PHONE_PROP_FILE = REPO / "content/video_engine/assets/props/cutouts" / (PHONE_PROP + ".png")
 TEST_CARD = "dock-h-test-card"
+# ROW 22's board, RAM and trim proof (P69 T30), named here because DOCK_META reads them (their notes: ROW 22 below)
+TRIPWIRE_CARD = "dock-h-tripwire-board"
+RAM_PROP = "prop-dram-memory-module-v1"
 # R26-290 (P69 T27): the desk card named only the two "+21%" tags (T10c's card names only a value two tags share), so the
 # "+105%" line - the one the sentence is about - carried no name. The signpost card is drawn from its OWN derived object
 # (`_signpost_object`): the hook object again, the semiconductor line carrying `card_name` - the short name the card
@@ -853,8 +884,8 @@ CAPEX_RECAST_WHY = ("tech's share of the IG index -> the hyperscalers' capex con
                     "filings)")
 
 DOCK_META = [
-    {"asset": CERT_CARD, "title": "An 1845 railway certificate",
-     "source": "Money Physics - plate world-certificate-wall-v1", "species": "deck", "badges": []},
+    {"asset": CERT_CARD, "title": "A railway share certificate",
+     "source": "Money Physics - plate prop-railway-share-cert-v1b", "species": "deck", "badges": []},
     {"asset": BRAVOS_CARD, "title": HOOK_CARD_TITLE,
      "source": "Yahoo Finance - pairing after Bravos Research", "species": "chart", "badges": []},
     {"asset": SELL_CARD, "title": "A sell ticket",
@@ -893,6 +924,23 @@ DOCK_META = [
      "source": "Money Physics - prop cutout " + PHONE_PROP, "species": "prop", "badges": []},   # row 20 (P69 T28): E99 s87 / s92
     {"asset": TEST_CARD, "title": "The test - 30 seconds a holding",
      "source": "Money Physics - the three-question test", "species": "chart", "badges": []},   # row 20: the checklist card
+    {"asset": TRIPWIRE_CARD, "title": "The watch - two tripwires, on the record",
+     "source": "Fed funds via FRED (DFF, 2026-08-27); memory monitor: Korean customs via SCML ledger", "species": "chart",
+     "badges": []},   # row 22 (P69 T30): the checklist card, the object's own source
+    {"asset": RAM_PROP, "title": "A DRAM memory module",
+     "source": "Money Physics - prop cutout " + RAM_PROP, "species": "prop", "badges": []},   # row 22: E99 s87 / s92
+    {"asset": "dock-h-railway-share-ring", "title": "A railway share certificate",
+     "source": "Money Physics - plate prop-railway-share-cert-v1b", "species": "deck", "badges": []},   # row 23a: CERT_CARD again
+    {"asset": "dock-h-railway-index-card", "title": "The railway index, 1843-1850",
+     "source": "Campbell & Turner railway index", "species": "chart", "badges": []},   # row 23a (P69 T31): row 9's page as a card
+    {"asset": "prop-memory-steel-ibeam-v1", "title": "Memory, the structural beam",
+     "source": "Money Physics - prop cutout prop-memory-steel-ibeam-v1", "species": "prop", "badges": []},   # row 23b
+    {"asset": "dock-h-memory-arithmetic", "title": "The arithmetic - run it yourself",
+     "source": "Fab build ~5 years (E99 s95); NVIDIA H100 80GB -> B200 192GB", "species": "chart",
+     "badges": []},   # row 23b: the checklist card (phone profile)
+    {"asset": "dock-h-weight-check", "title": "We checked. It's bigger.",
+     "source": "Bravos Research (attributed) - iShares Russell 3000 ETF holdings, 27 Aug 2026", "species": "chart",
+     "badges": []},   # row 23c: ev-weight-check-bars-v1 drawn as a card for its size
 ]
 
 
@@ -1149,7 +1197,7 @@ def page_arith() -> str:
 #     this is the chart it points at; measure_spoken_visuals' "this chart");
 #   DIP 5 to RESET 2, the press (`world-paper-and-steel-press-v1;use=reset`, the ken push alone - E99 s84): "The bubble
 #     isn't in the steel. It's in the paper wrapped around the steel." - the plate IS that sentence (a steel CNC bed under
-#     a lamp, a printing press spilling certificates); the 1845 certificate (row 2's card, CERT_CARD) is THROWN onto the
+#     a lamp, a printing press spilling certificates); the railway share certificate (row 2's card, CERT_CARD) is THROWN onto the
 #     press's pile on "railway certificates" (E99 s71: a named thing arrives);
 #   DIP 6 to the concentration page (`ev-index-concentration-bars-v1`, H3 - Bravos-attributed, the operator's 2026-08-24
 #     ruling): the 20 bar grows as the page lands and its "20%" is WRITTEN as it stands (the figure the compare needs,
@@ -1237,7 +1285,10 @@ SIGNPOST_CARD_WHY = ("the filings' record -> their two-line chart, one slot on t
 # ruled signature line read as a CERTIFICATE on the busy pile. No larger source exists (the plate and its source are both
 # 1536x1024) and no certificate on the wall carries printed words, so size is the lever; the crop stays row 2's (the
 # sentence is "that certificate AGAIN" - the same certificate). Its box: x 134-710, y 297-783, above the caption strip.
-PRESS_CERT_SLOT = {"centre": True, "centre_w": 0.30, "centre_x": 0.22, "centre_y": 0.50, "card_aspect": CERT_ASPECT,
+# P69 T83 (E99 s113, "verified" - the title must READ): the railway share sheet, 0.36 of the stage (691 x 452 px, the
+# flatter sheet at about the old card's height), so "RAILWAY SHARE" stands ~418 px wide with ~35 px capitals on the
+# stage and ~7 px capitals at a 390 px phone; centred a little right (0.24) to keep the ring's left bulge on the stage.
+PRESS_CERT_SLOT = {"centre": True, "centre_w": 0.36, "centre_x": 0.24, "centre_y": 0.50, "card_aspect": CERT_ASPECT,
                    "arrive": "throw", "mass": "paper"}
 # THE STATEMENT CARD: a named box (P69 T5 - a dock sharing a row with a stamp must name its box so the compiler can
 # measure it against the stamp's mark and ring) in the plot's EMPTY upper left - left of the bar, above the 2-4% rules.
@@ -1285,7 +1336,7 @@ PRESS_DIP_WHY = ("the records' desk -> the press, plate to plate (a WORLD change
                  "morph (a plate is not a chart)")
 CONC_DIP_WHY = ("the press -> the concentration page, plate to page (a WORLD change, E47 - 1845's paper to where 'that "
                 "paper lives today'): TAKEN the dip (dip 6), the last resort (E99 s74); refused: the snap / throw-then-"
-                "zoom / throw-then-push (the one card on the press is the 1845 certificate - pushing it to the stage "
+                "zoom / throw-then-push (the one card on the press is the railway share certificate - pushing it to the stage "
                 "would say the certificate IS the index page), object-becomes-chart (the press's paper is not the page's "
                 "data), the spiral return (a first page, not a returning one), the mount (the page does not belong to "
                 "the press's picture), the axes open as the boundary's carrier (it would CUT from the picture to the "
@@ -1689,6 +1740,390 @@ HYNIX_VERDICT_TITLE = HYNIX_SRC["title"]   # "Sold out, and paid for" - the obje
 HYNIX_LIT_S = 1.4
 
 
+# ---------------------------------------------------------------- ROW 22 (P69 T30): THE TRIPWIRES - THE BOARD, PROP 6, THE MONITOR
+# "Bravos put their tripwire on the record ... Mine is stricter ... The variable is memory - the RAM inside every one of
+# these data centers ... I built a monitor for it." ONE PAGE, the memory monitor, slid in beside the hynix page: the two
+# tripwires land as a board thrown on it, PROP 6 (the RAM) is stamped on its word, and the monitor's two memory prices
+# draw on the words that read them - the history, the soft June, the July print - each figure NAMING its basis (E99
+# s94). The trim proof lands in the page's room as "I trimmed some" is said; the certificate returns on "certificates".
+MONITOR_SRC_ID = "ev-memory-monitor-v1"
+MONITOR_SRC = _series(MONITOR_SRC_ID)
+# DERIVED (evidence/objects, P69 T30): the source's DRAM and HBM-CLASS verbatim; its TRIGGER series (the dashed 12-month
+# average) is not carried - the script's threshold is "the release itself" (a month getting cheaper), and a line named
+# TRIGGER that is a 12-month average would be a second, unspoken trigger on the page. The object's `src_full` says so.
+MONITOR_PAGE = "ev-memory-monitor-row22-v1"
+MONITOR = _series(MONITOR_PAGE)
+M_DRAM, M_HBM = 0, 1
+assert MONITOR["derived_from"] == [MONITOR_SRC_ID]
+# ... the points, names, colours and draw delays verbatim; the end tag's `label` (the source's July level) is not carried -
+# MEASURED on draft 1 (`p69-row22/d1t/b-tiles.png` 629.3): a tag rides the lead point, so a line drawn print by print
+# printed July's "$95.4k" at the May print. The tags name the series; the source keeps its levels.
+assert [{k: v for k, v in s.items() if k != "label"} for s in MONITOR_SRC["series"][:2]] == MONITOR["series"],     "the two memory prices are copied verbatim, never typed"
+assert all("label" not in s for s in MONITOR["series"])
+assert [s["name"] for s in MONITOR["series"]] == ["DRAM", "HBM-CLASS"] and MONITOR_SRC["series"][2]["name"] == "TRIGGER"
+assert all(MONITOR[k] == MONITOR_SRC[k] for k in ("sub", "src", "log", "yfmt", "xticks", "ylabel", "marks"))
+_M_PTS = [MONITOR["series"][s]["pts"] for s in (M_DRAM, M_HBM)]
+assert [p[0] for p in _M_PTS[0]] == [p[0] for p in _M_PTS[1]], "one print per month, both series"
+M_JUL = len(_M_PTS[0]) - 1          # the July print - the last on the object (the release its source line names)
+M_JUN, M_MAY = M_JUL - 1, M_JUL - 2
+assert MONITOR["xticks"][-1][1] == "Jul '26" and abs(MONITOR["marks"][0]["x"] - _M_PTS[0][M_JUN][0]) < 0.01
+
+
+def _m_change(s: int, a: int, b: int) -> str:
+    """A print-over-print change on the monitor's own points, one decimal, signed (the page's minus is U+2212)."""
+    v = 100.0 * (_M_PTS[s][b][1] / _M_PTS[s][a][1] - 1.0)
+    return ("%+.1f%%" % v).replace("-", "−")
+
+
+# THE FIGURES, EACH ON ITS OWN BASIS (E99 s94: "a figure is read on the basis its sentence states before it is called a
+# conflict, and a drawn figure names its basis"): DRAM on the July print - the bounce off June - and HBM-class over the
+# last two prints. The object records each basis; the door recomputes each from the points and asserts it.
+DRAM_JUL = _m_change(M_DRAM, M_JUN, M_JUL)      # +16.4%: 74,686 -> 86,970
+HBM_TWO = _m_change(M_HBM, M_MAY, M_JUL)        # +13.9%: 83,784 -> 95,408
+JUN_SOFT = _m_change(M_DRAM, M_MAY, M_JUN)      # -3.7%:  77,558 -> 74,686, the source's own June mark
+assert [b["figure"] for b in MONITOR["basis"]] == [x.replace("−", "-") for x in (DRAM_JUL, HBM_TWO, JUN_SOFT)]
+assert (DRAM_JUL, HBM_TWO, JUN_SOFT) == ("+16.4%", "+13.9%", "−3.7%")
+assert JUN_SOFT.replace("−", "-") in MONITOR_SRC["marks"][0]["label"], "the June figure is the source's own mark"
+MONITOR_TITLE = MONITOR_SRC["title"]      # "The monitor - what memory costs leaving Korea": the page's own, as it slides in
+assert MONITOR["title"] == MONITOR_TITLE
+MONITOR_DRAW_S = 0.4                      # the lead point's breath past the word a stretch lands on
+# THE SLIDE (P57 T13, CAPABILITIES:40): "a page to the page beside it" - the memory maker's price hands the board to what
+# memory costs; the slide's 0.6 s lands as "it reads what memory costs" is said, and the prices draw from that word.
+SLIDE_EXIT = "slide:left"
+SLIDE_S = 0.6                             # the engine's SLIDE_S
+SLIDE_WHY = ("the SK hynix panels page -> the memory monitor, page to page: TAKEN the slide (P57 T13, E87 s3 - 'one "
+             "frame pushes the next onto the stage ... a page to the page beside it'): the memory maker's price pushes "
+             "off as the price of memory comes on - 'I built a monitor for it: it reads what memory costs' - and the "
+             "monitor lands on its AXES as its prices begin to draw; refused: the dip (two pages are one kind of world, E47), "
+             "the melt's throw (spent INTO the hynix page 72 s earlier - the variety rule, E99 s74 Apply 1), a recast (a "
+             "panels page is not a `then=` state - the compiler's own refusal), rescale / extend (not the same series), "
+             "the spiral (a first page, not a returning one), the suck (a page does not collapse into a point on "
+             "another page)")
+# THE BOARD: Bravos' tripwire and mine, thrown on "Bravos" and landing a row as each is said - the checklist dock in the
+# PHONE profile (P69 T28b: <= 3 rows, 3 columns, no sub, ~30 characters a row, readable at >= 0.60 of the stage). Its
+# cells are ev-tripwire-board-v1's own, shortened to the profile's width (every figure the object's: 5.50% as "5.5%",
+# 3.63%, NOT LIT); derived into the build dir only (`_tripwire_card_object`). ITS ROWS LAND AS A RECAP, one every 0.8 s from
+# the landing - MEASURED on draft 9 (`d9t/A-tiles.png` 608.3): a card held under CHECKLIST.RECAP_S (12 s) reads no delay
+# anchor, and M12 caps a chart dock at 10 s, so "Mine" is on the board ~3.5 s before "Mine is stricter" is said; the two
+# tripwires are read as the pair the sentence opens on. The object's anchors are dropped (a recap reads none).
+TRIPWIRE_OBJECT = OBJECTS / "ev-tripwire-board-v1"
+TRIPWIRE_CARD_OBJECT_ID = "ev-tripwire-board-h22-v1"
+TRIPWIRE_CHECKLIST = {"profile": "phone", "head": ["Tripwire", "Fires if", "Now"],
+                      "rows": [{"cells": ["Bravos'", "Fed > 5.5%", "3.63%, not lit"],
+                                "colors": ["#f4f6f8", "#dce3ea", "#3bc9b0"]},
+                               {"cells": ["Mine", "RAM cheaper", "not lit"],
+                                "colors": ["#f4f6f8", "#dce3ea", "#3bc9b0"]}]}
+# THE BOARD LANDS BESIDE THE HYNIX LINE, NOT ON AN EMPTY PLOT (the parent's frame read of the first build-h pass,
+# `p69-row22/final/A-tiles.png` c-i: the monitor stood 18 s, 605.9-624, as axes with no data - the board, then the RAM,
+# on an empty chart). The hynix page holds through the board and the RAM: on "Bravos" the line SHRINKS into the left
+# third (`panel_focus` with a `region`, T8c's resize - the chart the sentence leaves held beside, never under, the card:
+# a settled card over a line's data is M25's FAIL) and the board takes the room it frees; the line grows back on "The
+# variable is memory" for the RAM, and the monitor slides in as its prices begin to draw ("it reads what memory costs").
+HYNIX_ASIDE = dict(HYNIX_BACK, region=[0.02, 0.22, 0.345, 0.58])   # x, y, w, h: stage fractions, the line's box beside the board
+TRIPWIRE_SLOT = {"centre": True, "centre_w": 0.60, "centre_x": 0.685, "centre_y": 0.50, "card_aspect": TEST_CARD_ASPECT}
+TRIPWIRE_OFF_LEAD_S = 0.1   # ... and it leaves in the breath before "The variable is memory"
+# PROP 6 - the RAM, STAMPED on "RAM" (E99 s87: the word names the thing), bare with its resting shadow, on the hynix
+# page's own empty upper left (PROP 4's room, HBM_PLACE - the memory maker's chart under "the variable is memory"), and
+# gone before the slide. The cutout is 317 x 229 px - drawn at <= 0.165 of the stage it is never upscaled.
+RAM_PROP_FILE = REPO / "content/video_engine/assets/props/cutouts" / (RAM_PROP + ".png")
+RAM_OPTS = {"prop": True, "arrive": "stamp"}   # mass unset: a stamp lands at `ink` (the engine's stampXf default)
+RAM_PLACE = {"x": 0.30, "y": 0.42, "w": 0.15}
+RAM_OFF_LEAD_S = 2.5   # MEASURED, drafts 12-13 (622.4-623.3): with its exit 0.3 or 1.0 s before the slide the prop never left - it stood through the slide onto the monitor
+# THE JUNE PRINT, RINGED on "June" - the monitor's own mark (BODY_DEPARTURES row 22: ev-june-print-v1 carries no marks,
+# so the ring is re-targeted to this object's June datum)
+# ... and June's figure is WRITTEN under DRAM's, naming its basis (E99 s94): the callout's label is written right of its
+# ring (the engine's CALLOUT LABEL_DX), which at the plot's right edge put "June print -3.7%" between the two end tags
+# (MEASURED, draft 2 `d2t/b-tiles.png` 654.6) - so the ring carries no label and the figure says it.
+JUNE_SUB = "DRAM, June print"
+# ... written on "one soft month" in 0.8 s: the parent's read (`final/C-tiles.png` c-e) - on "June" in 1.2 s it settled at
+# ~655.1 and the recast took it at 655.3, a flash; now it stands ~1.8 s settled before "trimmed"
+JUNE_FIG_S = 0.8
+JUNE_FIG_DY = 7.6    # pinned at the TIP with DRAM's, not at June's datum: MEASURED on draft 3 (`d3t/t-tiles.png` 654.8), a
+#                      figure at the June datum (one print in from the edge) is centred over the plot's right edge and its
+#                      sub was clipped ("DRAM, J"); at the tip the builder writes it right-aligned inside the plot, stacked
+#                      under DRAM's July figure, and the RING marks June's own datum
+# THE TWO FIGURES AT ONE CORNER: the two July prints stand 0.04 apart on the log scale at the plot's top right, their tags
+# beside them - MEASURED on draft 1 (`d1t/b-tiles.png` 648.0) the figures wrote over each other and over the tags. So
+# HBM-class keeps its figure ABOVE its tip (the figure's own side) and DRAM's is written BELOW its tip, into the empty
+# lower right under the 2026 climb, each in its series' own colour.
+DRAM_FIG_DY = 4.5     # MEASURED, draft 2 (643.8): at 2.6 the sub's first letters sat on DRAM's own 2026 climb
+HBM_FIG_DY = -1.3     # ... and at 0 HBM-class's sub ran along its own line into the tip (648.0)
+# THE TRIM PROOF - "If you're so bullish, why trim?": the paper's move in the half-month after each weak print (8 bars,
+# 7 of them down), as the page's SECOND STATE - recast on "trimmed" (E58: the same argument read from the paper's side),
+# its latest bar (Jul '26, the half-month after June's print) emphasized. NOT the treatment's "card in the room": MEASURED on
+# draft 1 (`p69-row22/d1/docks/dock-h-trim-proof.png`, `cards/compare.png`) the T10c card profile draws this object broken
+# at every width tried (691 and 1100 px - the values collapse into one row, the x labels thin to three, "-13.8%" runs off
+# the card), the legacy card (no `card_w`) reads ~11 px type at 720 px and drops the "Jul '26" label, and the monitor's plot
+# has no empty room a readable card fits (the lines fill it corner to corner - M25 / M27 would read a card on its ink).
+# DERIVED (evidence/objects, P69 T30): ev-trim-proof-v1 verbatim plus a stated scale, [-20, 20] % - MEASURED on draft 3
+# (`d3t/t-tiles.png` 660.0): on the builder's fitted scale the Jul '26 bar ran to the plot's floor, its "-13.8%" was written
+# into the category row and "Jul '26" was not drawn (the latest bar - the half-month after June's print - unnamed).
+TRIM_SRC = _series("ev-trim-proof-v1")
+TRIM_PAGE = "ev-trim-proof-row22-v1"
+TRIM = _series(TRIM_PAGE)
+assert TRIM["derived_from"] == ["ev-trim-proof-v1"] and TRIM["bars"] == TRIM_SRC["bars"] and TRIM["domain"] == [-20, 20]
+assert all(TRIM[k] == TRIM_SRC[k] for k in ("title", "sub", "src", "unit", "selection", "badges"))
+assert min(b["value"] for b in TRIM["bars"]) >= -20 and max(b["value"] for b in TRIM["bars"]) <= 20, "the scale clips nothing"
+TRIM_LATEST = next(k for k, b in enumerate(TRIM["bars"]) if b["label"] == "Jul '26")   # the half-month after June's print
+assert TRIM["bars"][TRIM_LATEST]["note"] == "-14%" and len(TRIM["bars"]) == 8
+# THE PAGE'S TITLE IS ITS QUESTION AND ITS ANSWER: the object's own title and its own first badge ("AFTER A WEAK PRINT /
+# 7 of 8 / the paper fell"), written as the page arrives. MEASURED on drafts 4-7 (`p69-row22/dom.py` at 661.0): on a
+# finished build the category labels of bars 7 and 8 stand at opacity 0.5 and 0 and bar 8 at ~97.7% of its height - the
+# engine's bars law in lpPaintChart (scene-evidence-engine.mjs ~:14430-14434: the bar `expoOut((cb - i*0.1) / 0.55)`, the
+# label `clamp01((cb - i*0.1 - 0.3) / 0.2)`, with cb clamped at 1) completes only for i <= 5, so an 8-bar page never
+# writes "Jul '26" (an ENGINE finding for the parent, not fixed here). A figure on bar 8 carrying its name (draft 7,
+# `d7t/t-tiles.png` 658.0 / 662.0) landed before its bar had grown and wrote over the bar's own "-13.8%" - refused.
+_TRIM_BADGE = TRIM["badges"][0]
+assert (_TRIM_BADGE["value"], _TRIM_BADGE["tag"]) == ("7 of 8", "the paper fell")
+TRIM_TITLE = "Why trim? After 7 of 8 weak prints, the paper fell"
+TRIM_RECAST, MONITOR_BACK = 1, 2      # the page's second and THIRD state (STATE_MAX 3): the trim proof, the monitor again
+RECAST_S = 1.2
+# ... and the trim bars UN-DRAW in the breath before "The flip": MEASURED on draft 8 (`d8-gate.log` M34 at 11:03), the plain
+# recast back kept the bars' "10.9%" standing on the returning HBM-class line
+TRIM_UNDRAW_S = 0.6
+# THE RETURN RECAST IS SHORT AND THE PRICES COME BACK ONTO A WHOLE AXIS (the parent's frame read, `final/D-tiles.png` b 663.6:
+# "2 / 1 / 800" on the monitor's y axis and "Oct '24 / Dec '24" under "Jan '2" - the trim page's ticks being unwritten and
+# the monitor's being written by the hand, under the returning prices). MEASURED on draft 14 (`d14t/F-tiles.png`, 0.1 s
+# steps): over RECAST_S 1.2 s the hand-over runs 663.1-664.3 and the prices re-capped at +0.5 s stood on it. So the return
+# recast runs FLIP_RECAST_S, and the prices are re-capped once its ticks are whole (CAPS_BACK_AT_S) - draft 15
+# (`d15t/F-tiles.png`): the hand-over runs 663.1-663.9 on an empty plot (~1.0 s with no ink, from the bars' un-draw), and
+# the prices land ~663.95 on "8000 ... 64000" and "Jan '23 ... Jul '26". The ~0.3 s of a half-written tick left on the
+# empty plot is the recast's own text hand-over (an engine law, named in the notes).
+FLIP_RECAST_S = 0.8
+# ... and the caps come back once the ticks are whole: a build_to / undraw cap is the PAGE's, read by every state's
+# series (MEASURED, draft 9 `d9t/D-tiles.png` 664.4-679.3: after the un-draw the monitor came back as empty axes), so the
+# two prices are capped at the July print again and the monitor arrives drawn (E25). Draft 10 (`d10-gate.log` M34 at
+# 11:03): re-capped on the recast's first frame they stood under the trim page's fading "10.9%".
+CAPS_BACK_S = 0.1
+CAPS_BACK_AT_S = 0.9
+TRIM_WHY = ("the memory monitor -> the trim proof -> the memory monitor, on one board (P69 T30, 'I trimmed some' / "
+            "'The flip'): TAKEN the plain recast twice, authored `keyed: false` (E58 - the same weak print read from "
+            "the paper's side: what the stocks did in the half-month after each one, 7 of 8 down; then back to the "
+            "price of memory for the condition that would prove the author wrong) - the page's third and last state "
+            "(STATE_MAX 3); refused: the treatment's card in the room (MEASURED, draft 1: the T10c card profile draws "
+            "this 8-bar signed object broken at 691 and 1100 px, the legacy card reads ~11 px type, and the monitor's "
+            "lines leave no room a readable card fits), a dip or a cut (no world changes, E47), a melt to a new page "
+            "(the monitor would be redrawn like new when it returns - E25), rescale / extend (another measure), morph "
+            "(another frame, not a strip of this one)")
+# "The flip": the page names the condition that proves the author wrong
+FLIP_TITLE = "The flip: memory breaks while the buildout holds"
+# "The certificates wear nicer names now ... but paper is paper": row 2's card returns, in the page's lower-right room
+# MEASURED, draft 2 (`d2t/c-tiles.png` 674.4): in the lower right (0.80, 0.66) it stood on DRAM's 2026 climb and hid the
+# "Jul '26" tick; the plot's upper left (above the 2023-24 prices, where the RAM stood) is the page's one empty room.
+# MEASURED, draft 8 (`d8-gate.log` M25 / M27 at 11:13): at (0.23, 0.34) w 0.16 its box (y 238-497, the deck's rail included)
+# rose over the y label and its flight crossed the title and sub. The 2023 prices never rise above y ~577 px (HBM-class's
+# Dec '23 high, 21.2k, on the page's log scale), so the card sits lower and smaller in that room.
+# P69 T83: the flatter railway share sheet takes the room wider at a lower height - 0.15 (288 x 188 px, y ~360-548),
+# its foot still above the 2023 prices' ~577 px.
+CERT_BACK_SLOT = {"centre": True, "centre_w": 0.15, "centre_x": 0.19, "centre_y": 0.42, "card_aspect": CERT_ASPECT}
+
+
+def page_monitor() -> str:
+    """Row 22's page (P69 T30): the derived memory monitor on its axes (E73), live (E49), in the long form's profile,
+    and its two recasts (TRIM_WHY): the trim proof, then the monitor again."""
+    return ("ledger:%s:line:%d:right:%s%s%s%s;then=%s:bars;then=%s:line"
+            % (MONITOR_PAGE, M_JUL, OPEN_ENTER, PAGE_EXIT_CUT, IDLE_LIVE, LONGFORM, TRIM_PAGE, MONITOR_PAGE))
+
+
+# ---------------------------------------------------------------- ROW 23 (P69 T31): THE RING - RESET 3, HOST WINDOW 3, DIPS 7-9
+# "So - the certificate, one more time: paper sold as safety, while the steel it paid for kept carrying trains." Three
+# worlds, each entered by a dip at a world change (E47): RESET 3 the spike and the paper (`world-spike-certificate-ring-v2`,
+# wave 1b, operator-approved 2026-08-29), the hynix page RETURNING for the bullish case (E40 s4 - it unwinds from its point,
+# never redrawn), and HOST WINDOW 3, the newsroom (the Flow order H-3 still, E99 s103 - it stands as generated).
+#
+# RESET 3: the certificate is THROWN onto the plate's own blank sheet on "the certificate" (s71 - the named thing
+# arrives), and RINGED on "paper sold as safety" with its figure, RAIL_DROP (E99 s110 (2), P69 T65's ring on a dock: the
+# sentence points at the certificate and carries its number); on "the certificates that financed it papered the walls" the
+# railway index - the certificates' own price, 1843-1850 - is thrown into the plate's dark upper left (RAIL_CARD, the page
+# of row 9 re-presented as a card); both leave in the breath before "Everything we checked holds", and the case is made
+# as THE VERDICT STACK (doc 29 s9.24, the operator's s68 evidence wall, CAPABILITIES "THE VERDICT STACK"): four documents
+# already docked in this cut fly in one per phrase - their chart ("Everything we checked"), the test ("sell scarcity ...
+# for cash"), the filings' lease commitments ("turned into debt"), the target-date statement ("A fifth of your index") -
+# and burst on the turn, "And the one number that would prove me wrong"; the RAM (PROP 6, row 22's) is stamped just after
+# "the price of memory" (E99 s87 / s112).
+RING_PLATE_ID = "world-spike-certificate-ring-v2"
+RING_PLATE = RING_PLATE_ID + ";use=reset"        # E61 the use; E99 s84 - Ken Burns ALONE on a long-form plate (R26-236)
+RING_KEN = (0.05, 10, -4)                        # the push toward the spike and the sheet (the plate's centre-right)
+# THE CERTIFICATE ON THE PLATE'S OWN BLANK SHEET: the plate (1536 x 1024) covers the 16:9 stage at 1.25x with 100 px cut
+# top and bottom, so its blank certificate stands at ~x 1100-1890, y 10-900 stage px, tilted; the railway share lands on
+# it at row 18's reading size (0.36 - "RAILWAY SHARE" reads at a 390 px phone, section 22.1), clear of the spike's head.
+# MEASURED, draft 1 (`p69-row23/d1t/A-tiles.png` b-i): the certificate came in at ROW 22's size and place (0.15 at (0.19,
+# 0.42)), not this row's - row 22 docks the same asset on the same slot 0 and the next scene's re-dock kept the old box
+# (the ring drew round the small card). On slot 1 it is laid out afresh (an engine item, for the parent).
+RING_CERT_CARD = "dock-h-railway-share-ring"      # THE SAME certificate under its own id (draft 3: slot 1 did not help)
+RING_SLOT = {"centre": True, "centre_x": 0.66, "centre_y": 0.45}   # the case's ONE slot: over the sheet, clear of the spike's head
+RING_CERT_SLOT = dict(RING_SLOT, centre_w=0.40, card_aspect=CERT_ASPECT, arrive="throw", mass="paper")
+RING_PHRASE = "paper sold as safety"             # the ring's pointing phrase (P69 T65: `points`, the ring's `at` on it)
+RAIL_CARD = "dock-h-railway-index-card"          # the railway index (row 9's page) drawn as a card for its size (T10c)
+# MEASURED, draft 1 (`d1t/A-tiles.png` g-i): thrown into the upper left at 0.34 the card's title took its height and the
+# line read as a strip (and it covered the ring's figure) - it takes the certificate's slot (s80) at 0.46 instead.
+RAIL_CARD_SLOT = dict(RING_SLOT, centre_w=0.46, card_aspect=BRAVOS_ASPECT, arrive=SLOT_HANDOFF_ARRIVE, mass="paper")
+RAIL_CARD_W = round(RAIL_CARD_SLOT["centre_w"] * 1920, 2)
+RING_OFF_LEAD_S = 0.6    # (the stack form) the certificate and the index leave this far before "Everything we checked holds"
+# THE CASE, ONE DOCUMENT PER PHRASE IN THE SLOT (the built form): each document already docked in this cut LANDS in the
+# slot the outgoing one held (s80) on its phrase - the railway index through "The owners of its paper paid the bill"; the
+# test (the LIVE phone checklist of row 20, re-filled as a recap - everything we checked) on "Everything we checked holds",
+# through "The builders sell scarcity, and they sell it for cash" (MEASURED, draft 2: landed on "The builders sell", the
+# index stood 9.0 s with no event - M05 FAIL at 11:29); the filings' lease
+# commitments on "In early twenty twenty-five"; the target-date statement on "A fifth of your index"; the slot clears on
+# the turn. THE VERDICT STACK (doc 29 s9.24) is the record's mechanism for this beat and it is authored below
+# (VERDICT_STACK_ON); MEASURED, draft 1 (`d1t/A-tiles.png` k-o - the wall flies in, recedes to its mosaic and bursts on
+# "And the one number"): the motion gate reads none of its beats - the host dock is ONE enter and the captions under a
+# live dock are the unpinned anchor - so M01 / M05 / M08 FAIL (13.7 s "with no visual event" at 11:35, `d1/GATES-MOTION.md`).
+# An engine item (the gate's stack beats), for the parent; until then the slot form ships.
+VERDICT_STACK_ON = False
+# THE HAND-OFF'S LEAD: MEASURED, draft 4 (`p69-row23/d4t/A-tiles.png` f-k, 696.5-697.4): a card LANDING in the slot the
+# outgoing one held is first seen ~0.9 s after its enter (the outgoing card's exit plays, the slot stands empty ~0.5 s,
+# then the new card drops in) - so each hand-off starts this far BEFORE its phrase and the card is down on the word.
+HANDOFF_LEAD_S = 0.8
+CASE_CARDS = ((TEST_CARD, "Everything we checked", 0.60, TEST_CARD_ASPECT),   # (asset, its phrase, width, aspect):
+              #                                                                     the phone profile's floor (T28b)
+              (LEASES_CARD, "In early twenty twenty-five", 0.64, LEASES_ASPECT),   # row 16b's reading width (its 8-9 px type at 0.50)
+              (ENVELOPE_CARD, "A fifth of your index", 0.30, ENVELOPE_ASPECT))
+# THE VERDICT STACK: the members are documents ALREADY DOCKED in this cut (doc 29 s9.24 - "the stack re-presents, it never
+# introduces"; the player resolves each member against the asset-data map, which holds only docked assets). The two phone
+# checklists (the test card, the board) are LIVE docks whose PNG is a placeholder, and the pages (the monitor, the
+# issuance) were never docked - so the test is the object's own scorecard PNG and the price of memory is carried by the
+# RAM after the burst (VERDICT_WHY).
+VERDICT_CARD = "dock-h-verdict-stack"            # the host dock: an invisible lifecycle anchor (s9.24)
+VERDICT_ITEMS = ((BRAVOS_CARD, "Everything we checked"),        # their chart - the one this video checked
+                 (TEST_CARD, "The builders sell scarcity"),     # scarce, cash: the test's steel answers
+                 (LEASES_CARD, "In early twenty twenty-five"),  # the money turned into debt: the lease commitments
+                 (ENVELOPE_CARD, "A fifth of your index"))      # the default your retirement sits in
+VERDICT_CLEAR_PHRASE = "And the one number"      # the pivot: the case is made, now what would prove it wrong
+MEMORY_PHRASE = ("the price of memory", "memory—")   # the RAM just after "memory" ends (the take glues the dash)
+RING_RAM_PLACE = {"x": 0.24, "y": 0.66, "w": 0.15}  # the plate's dark lower left, under the spike's shaft
+RAM_RING_OFF_LEAD_S = 2.5   # MEASURED, draft 1 (`d1t/B-tiles.png` b, 717.2): with its exit 1.2 s before dip 8 the RAM stood
+#                              through the dip's black (row 22's RAM_OFF_LEAD_S finding, R26-309)
+RING_DIP_WHY = ("the memory monitor -> the spike and the paper, page to plate (a WORLD change, E47 - 'So - the "
+                "certificate, one more time': the ring back to the opening's object): TAKEN dip 7; refused: the melt's "
+                "splash onto the plate (spent onto the press at 6:52 for the same certificate - the variety rule, E99 s74 "
+                "Apply 1), the suck (the monitor has no point on the plate to collapse into), the slide (a page to the "
+                "page beside it, not to a picture), a recast (a plate is not a chart state)")
+VERDICT_WHY = ("the certificate and the index -> the four documents of the case, over RESET 3: TAKEN the verdict stack "
+               "(doc 29 s9.24, the operator's s68 'the evidence is dancing around the world plate'): each document "
+               "flies in on its phrase, holds large while it is said, recedes to the mosaic, and the wall bursts on 'And "
+               "the one number that would prove me wrong' (the turn); refused: an agenda of the recap (the list is the "
+               "case's DOCUMENTS, already shown - the wall re-presents them), a page per claim (four world changes in "
+               "12 s), the price of memory as a fifth member (the board's PNG is a placeholder and the monitor was never "
+               "docked - the RAM is stamped on its word after the burst instead)")
+# THE HYNIX PAGE RETURNS for the bullish case - "builders with sold-out order books are not a house of cards. They're the
+# steel": dip 8 on "More bullish" (the treatment's dip 8 is on "The order books are booked solid", 6.6 s later - there the
+# plate would stand bare 7 s after the burst under the sentence the page answers; BODY_DEPARTURES row 23), the panels page
+# unwinding from its point with the line alone, retitled with the object's own verdict "Sold out, and paid for"; the I-beam
+# (MEMORY, `prop-memory-steel-ibeam-v1`, an ADDITION from the operator's prop sheet) stamped just after "the steel"; on
+# "A memory fab takes" the line shrinks aside (row 22's HYNIX_ASIDE) and THE ARITHMETIC is thrown into the room it frees -
+# ev-memory-arithmetic-v1's checklist in the phone profile (BODY_DEPARTURES row 23: two units, so a checklist card, not
+# bars), its five citing E99 s95; the line grows back as the card leaves.
+HYNIX_RETURN_PHRASE = "More bullish"
+HYNIX_RETURN_S = DIV_RETURN_S                     # the vortex's return, 1.6 s
+HYNIX_RETURN_ALONE = dict(HYNIX_ALONE)
+HYNIX_RETURN_ASIDE = dict(HYNIX_ALONE, region=list(HYNIX_ASIDE["region"]))
+IBEAM_PROP = "prop-memory-steel-ibeam-v1"
+IBEAM_PROP_FILE = REPO / "content/video_engine/assets/props/cutouts" / (IBEAM_PROP + ".png")
+IBEAM_OPTS = {"prop": True, "arrive": "stamp"}
+IBEAM_PLACE = {"x": 0.30, "y": 0.42, "w": 0.14}  # the line's empty upper left (PROP 4's and PROP 6's room on this page)
+ARITH_OBJECT = OBJECTS / "ev-memory-arithmetic-v1"
+ARITH_CARD = "dock-h-memory-arithmetic"
+ARITH_CARD_OBJECT_ID = "ev-memory-arithmetic-h23-v1"
+ARITH_S95 = "E99 s95"
+ARITH_CHECKLIST = {"profile": "phone", "head": ["Side", "The fact", "The number"],
+                   "rows": [{"cells": ["Supply", "a new memory fab", "~5 years"],
+                             "colors": ["#f4f6f8", "#dce3ea", "#3bc9b0"]},
+                            {"cells": ["Demand", "memory per chip", "80→192 GB"],
+                             "colors": ["#f4f6f8", "#dce3ea", "#ff8a8c"]},
+                            {"cells": ["2030?", "only if", "AI < factories"],
+                             "colors": ["#f4f6f8", "#dce3ea", "#f5b72e"]}]}
+ARITH_SRC = ("Fab build: ~5 years (the operator, E99 s95); memory per chip: NVIDIA H100 80GB -> B200 192GB; "
+             "capacity: 3 makers")
+ARITH_SLOT = dict(TRIPWIRE_SLOT, arrive="throw", mass="paper")
+ARITH_FROM_PHRASE_H = "A memory fab takes"
+ARITH_CARD_MAX_S = 9.8   # M12 caps a chart dock at 10 s - and under CHECKLIST.RECAP_S (12 s) its rows land as a RECAP
+HYNIX_RETURN_WHY = ("the spike and the paper -> the SK hynix page, plate to page (a WORLD change, E47 - 'More bullish: "
+                    "builders with sold-out order books'): TAKEN dip 8 and the page RETURNS by the spiral (E40 s4: it "
+                    "unwinds from its point, already drawn, never rolls out and builds again - row 21's page, the line "
+                    "alone); refused: a cut (a plate to a page is the dip's own case), `axes` (the line would be redrawn "
+                    "like new - E25), the melt's splash (a plate has no ink to melt), the arithmetic as its own page (two "
+                    "units - BODY_DEPARTURES row 23)")
+ARITH_CARD_WHY = ("the hynix line -> the arithmetic, on the returning page: TAKEN the line held aside (T8c's resize, row "
+                  "22's HYNIX_ASIDE) and the checklist thrown into the room it frees on 'A memory fab takes' (s71), the "
+                  "line growing back as the card leaves; refused: the card over the line (a settled card over a line's "
+                  "data is M25's FAIL), a card read row by row on its anchors (a hold past CHECKLIST.RECAP_S 12 s is past "
+                  "M12's 10 s - the rows land as a recap), a recast (a panels page is not a `then=` state)")
+# HOST WINDOW 3, THE NEWSROOM - "Decide for yourself which of those you believe." The H-3 still (Mike holding a share
+# certificate up in an empty newsroom, the left third kept empty "for a card to land" - its order), registered by id as
+# rows 7 and 20's stills are, Ken Burns alone (E99 s84). The railway share is thrown onto its desk on "is the
+# certificate" (the index they sold you IS the certificate), and the weight check - ev-weight-check-bars-v1, 20 vs 24.3,
+# PLAUSIBLE, E99 s93 lets it draw - takes its slot (s80) on "Nobody holding it", drawn as a card for its size (T10c); the
+# treatment's "accidental concentration, sold as safety" is read on it. The treatment's 'chart_to ev-weight-check-v1 on
+# "the index they sold you"' has no page to recast (the take says "Decide for yourself" first) - BODY_DEPARTURES row 23.
+HOST3_PLATE_ID = "world-h3-newsroom-v1"
+HOST3_PLATE_FILE = HERE / "host/H-3-newsroom.png"
+HOST3_PLATE = HOST3_PLATE_ID + ";use=landing"
+HOST3_KEN = (0.05, -10, 4)                       # the push toward Mike and the certificate he holds up
+HOST3_FROM_PHRASE = "Decide for yourself"
+WEIGHT_CARD = "dock-h-weight-check"
+WEIGHT_PAGE = "ev-weight-check-bars-v1"
+DESK_SLOT_H3 = {"centre": True, "centre_x": 0.25, "centre_y": 0.47}   # the plate's empty left third, over the desks
+HOST3_CERT_SLOT = dict(DESK_SLOT_H3, centre_w=0.36, card_aspect=CERT_ASPECT, arrive="throw", mass="paper")
+# MEASURED, draft 1 (`d1t/B-tiles.png` u-w): ev-weight-check-bars-v1 drawn as a card at 0.44 wrote its six y ticks on top
+# of each other and cut its second category ("Our check: the whole US") - the bars page's card profile at that size. The
+# card was then ev-weight-check-v1's shares PNG as a still (draft 5, `d5t/A-tiles.png` n-r): it read on the 16:9 stage but
+# its title stood ~5 px and its figures ~4 px at a 390 px phone (s90's floor is 59 stage px). So the weight check is the
+# CHECKLIST card in the PHONE profile (P69 T28b: <= 3 rows, 3 columns, no sub, readable at >= 0.60 of the stage) -
+# ev-weight-check-bars-v1's two figures and their two wholes, derived into the build dir (`_weight_card_object`); its
+# rows land as a recap (a hold under 12 s) - their number, then our check.
+WEIGHT_OBJECT_ID = "ev-weight-check-h23-v1"
+WEIGHT_CHECKLIST = {"profile": "phone", "head": ["Whose", "Share of", "Weight"],
+                    "rows": [{"cells": ["Bravos'", "the S&P 500", "20%"], "colors": ["#f4f6f8", "#dce3ea", "#5b8def"]},
+                             {"cells": ["Our check", "whole US market", "24.3%"],
+                              "colors": ["#f4f6f8", "#dce3ea", "#ff8a8c"]}]}
+# MEASURED, draft 6 (`d6t/C-tiles.png` b-f): at centre_y 0.62 the card's foot ran under the anchored caption; at 0.60 its
+# top meets only the lowest corner of the certificate Mike holds up (x 991-1245, y 211-429 stage px). 0.58 wide is the
+# phone profile's floor (60 px cells at the dock's scale vs s90's 59.08).
+# MEASURED on build-h's chain (`logs/t31-gate.log`, M25 FAIL at 12:35): at 0.60 its foot stood ~12 px in the anchored
+# caption strip (13,333 px, 20 % of the strip) - lifted to 0.585 (foot ~885 px), the left edge on the stage's edge.
+WEIGHT_CARD_SLOT = {"centre": True, "centre_x": 0.29, "centre_y": 0.585, "centre_w": 0.58, "card_aspect": TEST_CARD_ASPECT,
+                    "arrive": "land", "mass": "paper"}
+# "accidental concentration": the ring on the weight check's own bar (P69 T65 - the dock, its box the "our check" bar),
+# its number the object's own basis - 24.3% is the sum of SEVEN holdings (src_full) - the concentration the sentence names
+WEIGHT_RING_LABEL = "in 7 holdings"
+WEIGHT_RING_PHRASE = "accidental concentration"
+WEIGHT_RING_BOX = [0.03, 0.53, 0.97, 0.62]   # the card's "Our check" row, fractions of the card (read off the render)
+WEIGHT_CARD_W = round(WEIGHT_CARD_SLOT["centre_w"] * 1920, 2)
+NEWSROOM_DIP_WHY = ("the arithmetic on the hynix page -> the newsroom, page to plate (a WORLD change, E47 - 'Decide for "
+                    "yourself which of those you believe': the argument handed to the viewer, the host's third window): "
+                    "TAKEN dip 9; refused: the suck (spent into the desk at 7:44 and 8:33 - E99 s74 Apply 1), the melt's "
+                    "splash (spent onto the press at 6:52), a cut (a page to a plate is the dip's own case)")
+NEWSROOM_SLOT_WHY = ("the railway share -> the weight check, on the newsroom's desk: TAKEN the slot hand-off (E99 s80 - the "
+                     "weight check lands in the certificate's box: 'the index they sold you ... is the certificate', then "
+                     "what the index holds); refused: both at once (two cards in the host's empty third crowd it), a dip "
+                     "(no world change)")
+
+
+def verdict_stack(ws: list) -> tuple[dict, float, float]:
+    """Row 23a's verdict stack (doc 29 s9.24): the payload AND its host dock's window from ONE set of times (the
+    compiler's `stack_entry`, s9.24's 0.77 s dimming drift made mechanical) - each member on its phrase after "Everything
+    we checked", the burst on VERDICT_CLEAR_PHRASE. Called by the table (the window) and by main (the META)."""
+    import build_scene_timeline_f as C
+    t0 = W.at(ws, "Everything we checked")
+    items = [{"id": aid, "at": round(float(ws[W._phrase_from(ws, ph, t0)]["start_s"]), 2)} for aid, ph in VERDICT_ITEMS]
+    clear = round(float(ws[W._phrase_from(ws, VERDICT_CLEAR_PHRASE, t0)]["start_s"]), 2)
+    return C.stack_entry(items, clear, form="16:9")
+
+
+def page_hynix_return() -> str:
+    """Row 23's second world (P69 T31): row 21's panels page RETURNS by the spiral, built, live, in the long form's profile."""
+    return "ledger:%s:line::right:spiral%s%s%s" % (HYNIX_PAGE, PAGE_EXIT_CUT, IDLE_LIVE, LONGFORM)
+
+
+def page_close() -> str:
+    """Row 24's page (P69 T32): the divergence RETURNS by the spiral one last time - all four lines drawn, on the scale
+    the memory line needs (row 4's rescale, as the argument left it), live, in the long form's profile (LONGFORM)."""
+    return ("ledger:%s:line:%d:right:spiral%s%s%s%s"
+            % (LAYER_PAGE, DIV_LAST, PAGE_EXIT_CUT, IDLE_LIVE, LONGFORM, PAGE_DOMAIN % (FULL_YMIN, FULL_YMAX)))
+
+
 # the numbered agenda's rows (CAPABILITIES:43): the test the promise names, one row per word
 AGENDA_ROWS_H = [{"n": 1, "text": "Scarce?"}, {"n": 2, "text": "Cash or paper?"}, {"n": 3, "text": "Used tomorrow?"}]
 # ... and the agenda's room is measured the same way: the caption's band ends at y 576 and the parked chart holds
@@ -1933,6 +2368,110 @@ SLOT_WHY = ("the ticket -> Karp -> Uber -> the COO: TAKEN the slot hand-off (E99
             "(SLOT_HANDOFF_ARRIVE); refused: a dip per quote (no world changes between them, E47), three worlds "
             "(build-f's memo / burndown / racks plates - the G31 listing risk the treatment closes on screen). The ticket "
             "leaves with its page at the melt; its corner box is NOT the records' slot (a record there types at ~8 px)")
+
+
+# ---------------------------------------------------------------- ROW 24 (P69 T32): THE CLOSE AND THE OUTRO
+# "The steel gets used. The paper gets believed." The treatment's row 24 (REBUILD-TREATMENT-H.md:84): dip 10 back to the
+# page on "The steel gets used", the divergence ONE LAST TIME, the anaphora in STAGE mode, the agenda back in its slot on
+# "three questions, thirty seconds", and the outro clip on the last word with the recorded brand line 0.7 s after it
+# (CAPABILITIES:64; E41 - the brand line is a CHANNEL ASSET stitched under the card, never a script's words). The page
+# RETURNS BY THE SPIRAL (E40 s4: unwound from its point, already drawn - row 20's return), this time as the argument
+# left it at 1:44 - all four lines on the scale the memory line needs (FULL_YMIN..FULL_YMAX, row 4's rescale), in the long
+# form's profile (LONGFORM: rows from 14 on; rows 1-5 and 20 keep theirs - the operator, 2026-09-25, "hold it all for a
+# clean hg3 view"). The CTA sentences are not left on a parked page for 17 s (E50 / E21): the page parks for the agenda
+# (SPECIES-BY-SENTENCE.md:51 - "three things" -> the page parks and the agenda takes the room) and each thing the voice
+# names then takes the agenda's slot in turn (E99 s80): the tripwire board (row 22's) on "either tripwire", the yardstick
+# (row 14's page, drawn as a card for its size) on "the yardstick reading", the test (row 20's) on "run the test".
+# On "a copy of this chart" the page grows back (the un-park) and its last two rings point where the sentence does; the
+# certificate of the opening (row 1's) LANDS back on "the certificate stays on the desk" and stays to the card.
+UNIT_CUT_ROW24 = "The steel gets used."        # row 24's first words - dip 10 (the take's first "The steel gets used")
+CLOSE_TITLE = "Steel gets used. Paper gets believed."   # the anaphora's own words, written back as the page lands
+# NO SPREAD on "the difference" - MEASURED, draft 2 (`p69-row24/d2t/S-tiles.png` c1-c2 vs `dxt/X-tiles.png`): the same
+# `spread` (mega -> memory, row 1's) paints on this page WITHOUT `readability=longform` and paints NOTHING with it (rows
+# 1 and 20 bleed; row 10's longform debt page bleeds too) - an ENGINE item; an authored event the frame never shows is
+# not shipped, so the third line of the anaphora rides the caption and the park follows 2.2 s later.
+CLOSE_PARK_PHRASE = "You now have"             # (the take glues "test" to its dash) the page parks for the agenda (E61) as the sentence SETS it
+CLOSE_PARK_SCALE, CLOSE_PARK_ANCHOR, CLOSE_PARK_S = 0.34, "left", 0.9   # the line held aside (row 22's HYNIX_ASIDE width)
+# MEASURED, draft 3 (`p69-row24/d3/GATES-MOTION.md` M25 / M27): parked at 0.40 the page's end tags reached ~x 0.42 and
+# the cards' left edge (0.40) stood on them; at 0.34 they end ~0.38, clear of a card from 0.41
+CLOSE_AGENDA_PHRASES = ("three questions", "thirty seconds", "any holding")   # a row per phrase (row 2's own words)
+CLOSE_AGENDA_BOX = {"kind": "region", "x0": 0.46, "y0": 0.22, "x1": 0.94, "y1": 0.60}   # the room the park frees
+CLOSE_SLOT = {"centre": True, "centre_w": 0.58, "centre_x": 0.70, "centre_y": 0.555,
+              "card_aspect": TEST_CARD_ASPECT}  # the agenda's room: the phone checklist's floor is 0.60 (T28b), 0.58 here
+# ... its centre at 0.555: MEASURED, draft 5 (`d5/layout-probe.json` 775.42) - a LANDING card starts ~140 px taller than
+# its rest box, and from 0.51 the board's first frames stood on the page's key rail (y 146-194, which the park does not
+# scale); from 0.555 it rests at y 346-852, clear of the rail as it drops and of the caption strip (878) as it sits
+CLOSE_BOARD_PHRASE = "either tripwire"         # the board LANDS on "tripwire" (HANDOFF_LEAD_S before it) - MEASURED, draft 4
+#   (M27 at 12:55): THROWN, its flight crossed the parked page's ink and key rail (row 22's CERT_BACK_SLOT finding)
+YARD_CARD = "dock-h-yardstick-card"            # row 14's page drawn as a card for its displayed size (T10c's card profile)
+YARD_CARD_SLOT = dict(CLOSE_SLOT, centre_w=0.52, centre_y=0.51, card_aspect=BRAVOS_ASPECT, arrive=SLOT_HANDOFF_ARRIVE,
+                      mass="paper")
+# ... at 0.52, not the checklists' 0.58: MEASURED, draft 3 (M25 at 13:02) - a 16:9 card at 0.58 is 0.58 of the stage tall
+# and its top stood on the page's key rail (the legend chips, which the park does not scale); at 0.52 it spans y 0.25-0.77
+YARD_CARD_W = round(YARD_CARD_SLOT["centre_w"] * 1920, 2)
+YARD_CARD_OBJECT_ID = "ev-yardstick-card-h24-v1"   # derived (`_yard_card_object`): the tech line alone
+YARD_CARD_TITLE = "The yardstick: tech's share of US investment"
+YARD_CARD_YMAX = 32
+CLOSE_YARD_PHRASE = "the yardstick reading"
+CLOSE_TEST_PHRASE = "run the test"
+# NO RINGS ON THE PARKED PAGE ("mine on memory", "the whole index"): MEASURED, draft 3 (M34 at 13:07) - a callout keeps
+# its stage size on a page parked to a third, so the ring on the market's tip was painted across the mega-cap tag, and
+# the memory ring read as a dot at a 390 px phone; the board ("Mine / RAM cheaper") and the test carry those words.
+CLOSE_UNPARK_PHRASE = "a copy of this chart"   # the page grows back to the stage as "this chart" is named
+CLOSE_UNPARK_LEAD_S = 0.3
+CLOSE_TEST_OFF_LEAD_S = 0.3                    # the test leaves this far before the un-park (a card never under a growing
+#   plot); MEASURED, draft 1 (`d1t/A-tiles.png` m-o): at 0.7 its third row had barely landed as it went
+CLOSE_POINT_PHRASE = "where it's pointing"     # the ring on the memory line's tip: where this chart points (the address)
+CLOSE_SAFETY_PHRASE = "sold to you as"         # ... and on the market's line as "sold to you as safety" is said
+CLOSE_CERT_PHRASE = "the certificate stays"
+CLOSE_CERT_CARD = "dock-h-railway-share-close"   # the opening's certificate under its own id (row 23's re-dock finding)
+CLOSE_CERT_SLOT = {"centre": True, "centre_w": 0.16, "centre_x": 0.20, "centre_y": 0.42, "card_aspect": CERT_ASPECT,
+                   "arrive": "land", "mass": "paper"}   # the page's empty upper left (every line starts at 100)
+# ... LANDED, not thrown: MEASURED, draft 4 (M27 at 13:22) - the throw's flight crossed the page's key rail
+# MEASURED, draft 1 (`d1t/B-tiles.png` v-x): at 0.20 centred (0.26, 0.36) the card's lower right stood on the memory
+# line's climb (stage ~x 700-790, y 520-560); at 0.16 centred (0.23, 0.36) it ends ~85 px above the line; draft 5 (M27 at
+# 13:22): LANDING from there its first frames stood on the axis title (y 207-239) - centred (0.20, 0.42) it rests at
+# y 342-564, under the title and left of the climb
+CLOSE_RING_GAP_S = 0.2
+DIV_SP = next(i for i, n in enumerate(DIV_NAMES) if n.startswith("S&P"))   # "S&P 500 (the market)"
+# the market's ring stands a few weeks in from its tip: MEASURED, draft 4 (M34 at 13:19) - on the tip itself the ring was
+# painted across the mega-cap line's "+21% matches the market" tag beside it (a ring names a line, never a word)
+DIV_SP_RING = DIV_LAST - 20
+# THE OUTRO (CAPABILITIES:64; `recipe:outro-clip-life`, effects/recipes/outro-clip-life.json): the Remotion kit's YouTube
+# card ("subscribe") at 16:9 24 fps (channel-assets/money-physics/outro/landscape/RENDER-NOTES.md: "Which one the build
+# should use: outro-yt-1920x1080-24fps.mov for the long-form cut"), made seekable into the build; its seconds are the
+# clip's own (probed, 6.208 s - not the portrait card's 6.2), `life` declared over them (the compiler's SPECIES_KINDS: a
+# self-animating world, credited as continuous). The clock is the approved shorts' own (`authoring.audio.outro_clock`,
+# Tokyo / japan-tariff / the calendar): the card starts OUTRO_LEAD before the take ends and the brand line plays BRAND_GAP
+# after it, under the card (`audio.stitch_brand_line`); the runtime is whichever finishes last. The way IN is the DIP
+# (OUTRO_DIP_WHY - every approved cut's own token: `tokyo-tea-break/build_short.py:444` "E47: the card is a world change
+# - the dip, not the dissolve"; `authoring/shapes.py` OUTRO_EXIT).
+OUTRO_DIR = REPO / "content/video_engine/channel-assets/money-physics/outro"   # gitignored media, on disk (T14 inventory)
+OUTRO_CLIP = OUTRO_DIR / "landscape/outro-yt-1920x1080-24fps.mov"
+OUTRO_MP4 = "outro-yt-1920x1080-24fps.mp4"
+OUTRO_WORLD = "clip:%s/clips/%s" % (BUILD_DIR, OUTRO_MP4)   # relative to the episode (build_scene_timeline_f.py:6805)
+BRAND_LINE = OUTRO_DIR / "vo/audio/brand-line-paced.mp3"      # "Not a panic. Not a plot. Mechanics." (BRAND-LINE.txt)
+BRAND_GAP, BRAND_TAIL, OUTRO_LEAD = 0.7, 1.0, 0.1             # the approved shorts' own (memory-trades-the-calendar:46-47)
+CLOSE_DIP_WHY = ("the newsroom -> the divergence, plate to page (a WORLD change, E47 - 'The steel gets used': the host "
+                 "hands back to the argument, one last time): TAKEN dip 10 (the treatment's own) and the page RETURNS by "
+                 "the spiral (E40 s4 - unwound from its point, already drawn, never rolled out and built again), all four "
+                 "lines on the memory line's scale as the argument left it at 1:44; refused: enter=axes / built (drawn "
+                 "like new, or pasted), the suck (spent into the desk at 7:44 and 8:33 - E99 s74 Apply 1), the melt's "
+                 "splash (a splash paints a PLATE; this world is a page), a recast (the newsroom is not a chart), the "
+                 "snap / throw-then-push (no card of this page is on the desk - the weight check is another object)")
+OUTRO_DIP_WHY = ("the divergence -> the outro card, page to clip (a WORLD change, E47 - the video ends and the channel's "
+                 "card begins): TAKEN the dip as 'desk' ends (the approved shorts' own token, `tokyo-tea-break/"
+                 "build_short.py:444`: 'the card is a world change - the dip, not the dissolve'; OUTRO_EXIT); refused: "
+                 "the dissolve (E46 (2) licenses it as 'the join into the outro card' and the treatment says 'dissolves' "
+                 "- but every approved cut dips, and E47 is the later ruling; named for the operator), a cut (a world "
+                 "change is the dip's case), the melt / suck (the card is not a place the page can collapse into)")
+CLOSE_SLOT_WHY = ("the agenda -> the tripwire board -> the yardstick -> the test, in ONE slot beside the parked page (P69 "
+                  "T32, 'three questions' / 'either tripwire' / 'the yardstick reading' / 'run the test'): TAKEN the park "
+                  "(E61, SPECIES-BY-SENTENCE.md:51 - the agenda sentence parks the page and the agenda takes the room) and "
+                  "the slot hand-off (E99 s80 - each thing the voice names takes the outgoing one's box; all three LAND - a "
+                  "throw's flight crossed the parked page's ink, M27), the un-park on 'a copy of this chart'; refused: the page parked through the CTA "
+                  "with nothing named (E50 - 17 s past its last mark; E21), a world per card (no world changes, E47), the "
+                  "cards over the line (a settled card on a line's data is M25's FAIL)")
 IN_ROW_WHY = (
     ("row 5 recast 3 (P69 T18, 'catches up with it')", DIV_RECAST_WHY),
     ("row 6 the one slot (P69 T19, 'Alex Karp' / 'Uber's CTO' / 'And their COO')", SLOT_WHY),
@@ -1946,6 +2485,14 @@ IN_ROW_WHY = (
     ("row 21 the focus among the four charts (P69 T29, 'So a gigabyte' / 'That's why the memory' / 'So run the three')",
      FOCUS_WHY),
     ("row 21 the wafer compare (P69 T29, 'Every accelerator')", WAFER_WHY),
+    ("row 22 the trim proof and back (P69 T30, 'I trimmed some' / 'The flip')", TRIM_WHY),
+    ("row 23 the verdict stack over reset 3 (P69 T31, 'Everything we checked holds' -> 'And the one number')",
+     VERDICT_WHY),
+    ("row 24 the line aside and the arithmetic (P69 T31, 'A memory fab takes')", ARITH_CARD_WHY),
+    ("row 25 the certificate -> the weight check on the newsroom's desk (P69 T31, 'Nobody holding it')",
+     NEWSROOM_SLOT_WHY),
+    ("row 26 the park, the agenda and the one slot (P69 T32, 'You now have the test' -> 'a copy of this chart')",
+     CLOSE_SLOT_WHY),
 )
 # (the P69 T16 first cut, before T15b, is kept for the record: it entered the index from the STUDIO by dip 1 and
 # refused recast / rescale / morph, the melt, the snap / throw-then-zoom / throw-then-push, object-becomes-chart, the
@@ -1969,6 +2516,12 @@ BOUNDARY_WHY = {HOST_PLATE: HOST_DIP_WHY,   # a row's world -> the why of the tr
                 HOST2_PLATE: TEST_DESK_WHY,                                  # row 20a, host window 2 (P69 T28)
                 page_div_return(): DIV_RETURN_WHY,                           # row 20b, the divergence RETURNS
                 page_hynix(): HYNIX_MELT_WHY,                                # row 21, SK hynix (P69 T29)
+                page_monitor(): SLIDE_WHY,                                   # row 22, the tripwires (P69 T30)
+                RING_PLATE: RING_DIP_WHY,                                    # row 23a, reset 3, dip 7 (P69 T31)
+                page_hynix_return(): HYNIX_RETURN_WHY,                       # row 23b, dip 8, the hynix page RETURNS
+                HOST3_PLATE: NEWSROOM_DIP_WHY,                               # row 23c, host window 3, dip 9
+                page_close(): CLOSE_DIP_WHY,                                 # row 24a, dip 10, the divergence one last time
+                OUTRO_WORLD: OUTRO_DIP_WHY,                                  # row 24b, the outro card (P69 T32)
                 SLATE_PLATE: ("page -> slate: TAKEN the melt's splash onto the plate (E88; the operator's own second "
                               "ending, E76 s5) - the chart melts to a ball that splashes onto the slate (R26-229 b)")}
 
@@ -1982,7 +2535,7 @@ CARD_CLEAR_S = 1.2  # ... and it is GONE before the page recasts, so the hand-ov
 CAMERA_ZOOM, CAMERA_IN_S, CAMERA_HOLD_S = 1.06, 1.2, 2.4   # 1.10 cut the page title by 9 px (M43, measured)
 
 
-def shot_table(ws: list, unit_end: float) -> list:
+def shot_table(ws: list, unit_end: float, t_outro: float | None = None) -> list:
     """The treatment's rows 1-11, timed from the take (P69 T15-T19 grow it one body row at a time). A cut or a dip is
     the last resort (E99 s74); each boundary and each transform inside a row names what it took and refused."""
     at = lambda p: T.at(ws, p)
@@ -2091,8 +2644,11 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_pointing = at("They fail by pointing")            # ... its first leg (the dip and most of the way back) lands here
     t_dies = at("It dies when")                         # ... and it crosses back above its first print on the words
     t_began = at("borrowing began")                     # ... landing on its January 2000 high as "began" ends
-    t_fed = at("Fed at six and")                        # PROP 1 lands on the word that names it (E99 s87)
-    t_fed_settle = round(t_fed + STAMP_BUILD_S, 2)      # ... and the camera pushes as its landing settles (E51; M14)
+    t_fed = at("Fed at six and")                        # the page is retitled on the word that names the Fed ...
+    # E99 s112 (P69 T82): the stamp is PUNCTUATION - it lands just after "Fed" ends (the building IS the Fed; the title is
+    # retitled on the word, the stamp follows it). The door form: the contact from the word's end, the enter from it.
+    t_fed_stamp = D.stamp_enter(W.after(ws, "Fed at six and", "Fed"))
+    t_fed_settle = round(t_fed_stamp + STAMP_BUILD_S, 2)   # ... and the camera pushes as its landing settles (E51; M14)
     t_fed_release = at("back above five")               # ... held through their tripwire (the 5.5% rule reads in the push),
     #                                                     back at 1.0 before the AI era's end tag lands (t_cycle + TNX_AI_S)
     t_trade = at("internet trade rolled")               # the dot-com yield rolls over on its words ...
@@ -2105,7 +2661,14 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_years = at("For years the")                       # the 2020-24 average draws across its years ...
     t_pocket_end = at("Cash on hand")                   # ... landing on its 2024 end as "out of pocket" ends
     t_bills = at("Then the bills got")                  # the object's own title is written back on the turn to borrowing
-    t_avg28 = at("twenty-eight billion")                  # the average's figure lands on its number
+    # the average's figure is written ON THE WAITING LINE across the question (P69 lane A job 5, E99 s120 - the squint
+    # test: a flat stroke on the floor of a 0-150 axis read EMPTY for ~5 s, 243.4-248.5): its write (DEBT_MARK_S) runs
+    # "decides it: who is paying" and is whole as "paying" is said - the question's own verb, what the builders borrowed
+    # while they paid out of pocket - which is also when the stub reaches the datum it stands on (DEBT_OPEN_CAP, 2021,
+    # MEASURED ~245.0-245.5: the page's entry draws the stub over ~2.3 s). "paying" alone would leave 243.1-245.6 bare.
+    # ONE figure: the voice's "twenty-eight billion" (260.74) then names the number already standing (E28: the sub says
+    # its basis, "2020-24 average"); a second write of the same number would print it twice.
+    t_avg28 = round(W.word_in(ws, "who is paying", "paying") + 0.45 - DEBT_MARK_S, 2)
     t_last_year = at("Last year: a")                    # the 2025 actual climbs on "Last year" ...
     t_121 = at("twenty-one billion")                    # ... landing, with its figure, on "twenty-one"
     t_tracking = at("tracking toward")                  # the two 2026E estimates draw ...
@@ -2114,8 +2677,13 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_bet = at("bet on data centers")                   # recast 2: the capex consensus, on what the money now buys
     t_desk = round(at("Go into the filings") - DESK_MELT_LEAD_S, 2)   # the world changes to the paper ...
     t_filings = round(t_desk + MEMO_MELT_S + DESK_CARD_AFTER_S, 2)   # ... and the record is thrown as the splash lands
-    t_dc = round(t_bet + DEBT_RECAST_S, 2)              # PROP 2 is stamped on "a bet on data centers" once the capex
-    #                                                     recast has landed (E99 s106 - on the capex state, not the desk)
+    # PROP 2 is stamped on the capex state (E99 s106) just after "a bet on data centers" ENDS AND the capex bars have
+    # risen (E99 s112, P69 T82: "just after whatever pertinent motion, data point, or word"). MEASURED on T82's draft 2
+    # (`scratchpad/p69-t82/dc-bars*`): the gate books the recast's landing at t_bet + DEBT_RECAST_S (288.79), but the frame
+    # plays the capex bars rising 288.9-290.2 (the orange bar's top y 389 -> 378 px, 289.9 -> 290.2) - a contact on the
+    # word's end (289.40) lands beside a bar still growing, one thing on top of another. So the later of the two.
+    t_dc = D.stamp_enter(max(W.after(ws, "bet on data centers", "centers"),
+                             round(t_bet + CAPEX_BARS_RISEN_S + W.STAMP_AFTER_BEAT_S, 3)))
     # -- row 17 (P69 T25): THE ARITHMETIC - the desk holds the rehook, dip 4 onto the 94 page on the next sentence's
     # onset; the bar stands at 94 with its value, the title is relit on the repeat, and the page spins into the desk
     # before "So when you hear" (E50), the filings' record thrown back as it goes
@@ -2138,7 +2706,9 @@ def shot_table(ws: list, unit_end: float) -> list:
     # MEASURED, draft 1 (M05): held to 1.5 s before dip 6 it left the press 8.4 s with no event (374.2-382.6); off on
     # "And Bravos", the press carries "And Bravos Research's own number ... today." in STAGE captions (read: white on the
     # machine's dark body, not a bright wall - `draft1/tile-366.00.png`)
-    t_sp500 = any_at("S&P five", "the S&P")             # PROP 3 is stamped on the index's name (E99 s87)
+    # PROP 3 is stamped on the index's name (E99 s87) just after the WHOLE name ends (E99 s112, P69 T82): "S&P" alone
+    # would land it during "five hundred", mid-name
+    t_sp500 = D.stamp_enter(W.after(ws, "the S&P five", "S&P five hundred"))
     t_contact = round(t_sp500 + STAMP_BUILD_S, 2)       # ... and camera 3 pushes as its landing settles (E51; M14)
     t_every = at("and calls it the")                    # ... and releases as the sentence names the index "the market"
     t_target = any_at("every target-date", "target-date fund")   # the statement is thrown on its name
@@ -2153,7 +2723,9 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_thirds = at("lost two-thirds")                    # ... and its own -64% is written as "two-thirds" is said
     # -- row 19 (P69 T27): SKIPS A GEAR - the index melts on the words, the two clocks draw, the GPU becomes the 5
     t_gear = at("Railway steel")                        # the melt's start (T27b): the map has skipped its gear; the 20 lands on "twenty"
-    t_compute = any_at("compute doesn't", "Today's compute")   # the GPU is stamped on the word that names it (E99 s87)
+    # the GPU is stamped just after the word that names it ends (E99 s87 / s112, P69 T82) - not at the idea's end ("doesn't
+    # sit."): the GPU becomes the bar on "about five years", and the idea's end would leave it < 1 s to be read first
+    t_compute = D.stamp_enter(W.after(ws, "compute doesn't", "compute"))
     t_five = at("about five years")                     # ... and becomes the compute bar as "five years" is said
     t_sold = at("sold out into")                        # the `sold out` pill (a chip: no pill species)
     t_clock = at("Different demand")                    # the page is retitled with the sentence
@@ -2164,7 +2736,8 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_one = any_at("One: is what", "is what it sells")   # the questions return, one row on each question's word
     t_two = any_at("Two: does it", "does it fund")
     t_three = any_at("Three: if the", "if the hype died")
-    t_phone = W.word_in(ws, "check all three", "phone")  # the phone is stamped on the word that names it (E99 s87)
+    t_phone = D.stamp_enter(W.after(ws, "check all three", "phone"))   # just after "phone." ends - the word and the
+    #                                                     sentence end together (E99 s87 / s112, P69 T82)
     t_where = [W.word_in(ws, ph, w) for _, _, ph, w, _, _ in WHERE_CHIPS]   # where to look, each chip on its word
     t_steel = at("Steel answers")                       # the test card: the anaphora's recap, rows as it is said
     t_card = round(t_steel - TEST_CARD_LEAD_S, 2)       # ... thrown in the breath before, so it LANDS on "Steel"
@@ -2178,7 +2751,9 @@ def shot_table(ws: list, unit_end: float) -> list:
     t_hynix = round(at("Run it on the most") - HYNIX_MELT_LEAD_S, 2)
     t_row20_end = t_hynix
     h_sk = at("SK hynix")                               # the page names the company as the sentence does
-    h_stacked = at("stacked memory")                    # PROP 4 is stamped on the word that names it (E99 s87)
+    # PROP 4 is stamped just after the NOUN that names it, "stacked memory" (E99 s87 / s112, P69 T82): "stacked" alone would
+    # land it during "memory"; the idea's end ("need.") runs into "Over the last year", where the price draws
+    h_stacked = D.stamp_enter(W.after(ws, "stacked memory"))
     h_year = at("Over the last year")                   # the price draws the year ...
     h_pct = round(W.word_in(ws, HYNIX_BUILD_END, "percent") + 0.35, 2)   # ... and lands on "percent" with its +548%
     h_five = at("Five hundred. If")                     # camera 4 pushes on the tip as it is named again
@@ -2186,23 +2761,99 @@ def shot_table(ws: list, unit_end: float) -> list:
     h_scarcity = at("And the scarcity")                 # ... and releases as the sentence turns to what is underneath
     h_physics = W.word_in(ws, "it's physics", "physics")
     h_gig = at("So a gigabyte")                         # the wafer bars grow to the page, the 3 landing on "three times"
-    h_wafer = W.word_in(ws, "the wafer capacity", "wafer")   # PROP 5 is stamped on "wafer"
+    # PROP 5 is stamped just after "wafer capacity" (E99 s112, P69 T82): "wafer" alone lands during "capacity"; the idea's
+    # end ("the ordinary kind.") is 0.3 s before the 3x becomes 3 wafers on "Every accelerator"
+    h_wafer = D.stamp_enter(W.after(ws, "the wafer capacity", "wafer capacity"))
     h_accel = at("Every accelerator")                   # the 3x becomes 3 wafers as silicon is taken away
     h_laptop_s = at("That's why the memory")            # the contract bars grow to the page ...
     h_laptop = W.word_in(ws, "in a new laptop", "laptop")   # ... and the consumer bar is called out on "laptop"
     h_run3 = at("So run the three")                     # the line grows back as the questions are put to it
     h_answers = [at(a) for _, a in HYNIX_AGENDA]        # a row as each answer is said
-    h_racks = W.word_in(ws, "going into racks", "racks")   # the rack is stamped on the word that names it
+    h_racks = D.stamp_enter(W.after(ws, "going into racks", "racks"))   # just after "racks" is spoken (the operator's own
+    #                                                     example, E99 s112; P69 T82) - the answers land from "Scarce"
     h_passes = at("It passes")                          # the verdict: the object's own title
     h_vertical = W.word_in(ws, "The most vertical line", "vertical")   # the light travels the spring
     h_steel = W.word_in(ws, "on the board is steel", "steel")          # ... and the tip is ringed "steel"
     h_honest = at("Run it honestly")                    # the last retitle
-    t_row21_end = unit_end
+    # -- row 22 (P69 T30): THE TRIPWIRES - the board and PROP 6 land on the hynix page (its line aside, then back); the
+    # monitor slides in on "it reads what memory costs"; the prices on their words, the trim proof, the certificate back
+    m_bravos = at("Bravos put their")                   # the board is thrown on the name (E99 s71)
+    m_variable = at("The variable is")                     # the board leaves in the breath before the variable is named
+    # PROP 6 is stamped just after "RAM" ends (E99 s87 / s112, P69 T82) - not at the idea's end ("data centers.", 619.9):
+    # the prop must leave 2.5 s before the slide (RAM_OFF_LEAD_S, R26-309), which would leave it ~0.5 s on stage
+    m_ram = D.stamp_enter(W.after(ws, "the RAM inside", "RAM"))
+    m_reads = at("it reads what memory")                # the two prices draw their history on the words that read them ...
+    t_row22 = round(m_reads - SLIDE_S, 2)               # ... and the monitor slides in to land on them
+    t_row21_end = t_row22
+    m_data = W.word_in(ws, "customs export data", "data")      # ... landing on "data" (the May print)
+    m_first = at("the first month customs")             # the soft June draws as the rule is said ("getting cheaper")
+    m_cheaper = W.word_in(ws, "memory getting cheaper", "cheaper")
+    m_other = at("going the other")                     # the July print draws "the other way" ...
+    m_way = W.word_in(ws, "going the other", "way—")   # ... landing on "way" (the take glues it to its dash)
+    m_dram_up = W.word_in(ws, "DRAM up seventeen", "up")          # DRAM's figure, July print basis
+    m_hbm_up = W.word_in(ws, "actually need up fourteen", "up")   # HBM-class's figure, the last two prints
+    m_june = W.word_in(ws, "one soft month in June", "june")      # the June print ringed on its word ...
+    m_soft = W.word_in(ws, "one soft month in June", "one")       # ... its figure written as the soft month is named
+    m_trim = W.word_in(ws, "I trimmed", "trimmed")               # the trim proof thrown on its verb
+    m_flip = at("The flip")                             # the page names the condition that proves the author wrong
+    m_certs = at("The certificates wear")               # the certificate returns as it is named
+    # -- row 23 (P69 T31): THE RING - dip 7 onto RESET 3 on the cut before "So - the certificate" (the take glues "So" to
+    # its dash), dip 8 onto the returning hynix page on "More bullish", dip 9 onto the newsroom on "Decide for yourself"
+    def at_from(phrase: str, from_s: float) -> float:
+        """The phrase's first onset at or after `from_s` - row 23 re-says row 1's words ("paper sold as safety")."""
+        return round(float(ws[W._phrase_from(ws, phrase, from_s)]["start_s"]), 2)
+
+    t_row23 = cut(UNIT_CUT_ROW23)
+    t_row22_end = t_row23
+    r_cert = W.word_in(ws, "the certificate, one more", "the")   # thrown as "the certificate" is said
+    r_ring = at_from(RING_PHRASE, r_cert)               # RINGED on "paper sold as safety", its figure beside it (s110 (2))
+    r_financed = at("the certificates that financed")   # the certificates' own price is thrown on their name
+    r_checked = at("Everything we checked")             # the case: the verdict stack, one document per phrase
+    r_clear = at_from(VERDICT_CLEAR_PHRASE, r_checked)  # ... and the wall bursts on the turn
+    r_ring_off = round(r_checked - RING_OFF_LEAD_S, 2)
+    if VERDICT_STACK_ON:   # the record's form: the certificate and the index, then the wall (VERDICT_WHY)
+        ring_docks = [(RING_CERT_CARD, 1, r_cert, r_ring_off, dict(RING_CERT_SLOT)),
+                      (RAIL_CARD, 0, r_financed, r_ring_off, dict(RAIL_CARD_SLOT)),
+                      (VERDICT_CARD, 0, *verdict_stack(ws)[1:], {})]
+    else:                  # the built form: one slot, one document per phrase (CASE_CARDS), cleared on the turn
+        lands = ([round(r_financed - HANDOFF_LEAD_S, 2)]   # MEASURED on build-h's first pass (`final/A-tiles.png` i, 689.3):
+                 #   the index, entered ON "the certificates", was not yet down - it too takes the hand-off's lead
+                 + [round(at_from(ph, r_checked) - HANDOFF_LEAD_S, 2) for _, ph, _, _ in CASE_CARDS] + [r_clear])
+        ring_docks = [(RING_CERT_CARD, 1, r_cert, lands[0], dict(RING_CERT_SLOT)),
+                      (RAIL_CARD, 1, lands[0], lands[1], dict(RAIL_CARD_SLOT))]
+        ring_docks += [(aid, 1, a, b, dict(RING_SLOT, centre_w=w, card_aspect=asp, arrive=SLOT_HANDOFF_ARRIVE,
+                                           mass="paper"))
+                       for (aid, _, w, asp), a, b in zip(CASE_CARDS, lands[1:], lands[2:])]
+    r_ram = D.stamp_enter(W.after(ws, "the price of memory—", from_s=r_clear))   # just after "memory" ends
+    r_bullish = at(HYNIX_RETURN_PHRASE)                 # dip 8: the take runs "directions." into "More" (no gap - M13),
+    #                                                     so the dip is centred ON the onset (cut_before's own dip rule)
+    r_ibeam = D.stamp_enter(W.after(ws, "They're the steel—"))   # just after "the steel" ends
+    r_arith = at(ARITH_FROM_PHRASE_H)                   # the arithmetic thrown as the fab is named
+    r_arith_off = round(r_arith + ARITH_CARD_MAX_S, 2)
+    r_decide = at(HOST3_FROM_PHRASE)                    # dip 9 (the take runs "built." into "Decide": the onset, M13)
+    r_is_cert = W.word_in(ws, "trade is the", "the")    # the certificate thrown as "is the certificate" is said
+    r_nobody = round(at("Nobody holding it") - HANDOFF_LEAD_S, 2)   # the weight check takes its slot, down on "Nobody"
+    r_accidental = at("accidental concentration")       # ... "accidental concentration, sold as safety" read on it
+    # -- row 24 (P69 T32): THE CLOSE - dip 10 onto the divergence on "The steel gets used." (the take's first one: the
+    # anaphora returns at 800.19, "The steel gets used,"), then the outro card from t_outro (main's outro clock)
+    t_row24 = cut(UNIT_CUT_ROW24)
+    t_row23_end = t_row24
+    c_park = at_from(CLOSE_PARK_PHRASE, t_row24)
+    c_agenda = [at_from(ph, c_park) for ph in CLOSE_AGENDA_PHRASES]
+    c_board = round(at_from(CLOSE_BOARD_PHRASE, c_park) - HANDOFF_LEAD_S, 2)   # down on "tripwire"
+    c_yard = round(at_from(CLOSE_YARD_PHRASE, c_board) - HANDOFF_LEAD_S, 2)
+    c_test = round(at_from(CLOSE_TEST_PHRASE, c_yard) - HANDOFF_LEAD_S, 2)
+    c_unpark = round(at_from(CLOSE_UNPARK_PHRASE, c_test) - CLOSE_UNPARK_LEAD_S, 2)
+    c_point = at_from(CLOSE_POINT_PHRASE, c_unpark)
+    c_safety = at_from(CLOSE_SAFETY_PHRASE, c_point)
+    c_cert = round(at_from(CLOSE_CERT_PHRASE, c_safety) - HANDOFF_LEAD_S, 2)   # down on "the certificate"
+    if t_outro is None:
+        raise SystemExit("FAIL: row 24 (P69 T32) ends on the outro - main owes the table its t_outro")
 
     return [
         # -- ROWS 1-6: THE PAGE IS THE WORLD (E58 / E61). One world, two chart states, two cards in one slot.
         (0.0, t_melt, page_open(), (0, 0, 0), [
-            # THE 1845 CERTIFICATE ARRIVES - a thrown still card in the page's OWN room (E99 s71, E65).
+            # THE RAILWAY SHARE CERTIFICATE ARRIVES (P69 T83) - a thrown still card in the page's OWN room (E99 s71, E65).
             # THE PLACER CHOOSES IT: the authored slot was the caption workaround's companion, and with the
             # page full stage (R26-205) and the caption in the anchored strip the page's own measured empty
             # room is free. The notes carry the measurement (0 px on the ink, 0 px on the tags).
@@ -2376,7 +3027,7 @@ def shot_table(ws: list, unit_end: float) -> list:
         # 2000 peak from the stamp's settle, the chrome fitted into the frame (E99 s108, FED_CAM), and is back at 1.0
         # before the AI era's end tag lands (end tags are data, not chrome).
         (t_trigger, t_q, page_tnx(), (0, 0, 0), [
-            (FED_PROP, 0, t_fed, t_q, dict(FED_OPTS, place=dict(FED_PLACE), moves=[   # T23b: it leaves WITH the page (R26-219)
+            (FED_PROP, 0, t_fed_stamp, t_q, dict(FED_OPTS, names="Fed", place=dict(FED_PLACE), moves=[   # T23b: it leaves WITH the page (R26-219)
                 {"at": t_fed_settle, "x": FED_ASIDE_X, "dur": FED_CAM_IN_S, "ease": "cubic"}])),   # ... and steps aside as the push grows the plot
         ] if FED_STAMPED else [], RAIL_EXIT % TNX_MELT_S, [
             {"kind": "build_to", "at": t_trigger, "dur": TNX_OPEN_S, "series": TNX_DOT, "target": datum(TNX_OPEN_CAP)},
@@ -2409,16 +3060,16 @@ def shot_table(ws: list, unit_end: float) -> list:
         # hundred and ninety", and leaves with the page.
         (t_q, t_desk, page_debt(), (0, 0, 0), [
             (DATACENTER_PROP, 0, t_dc, t_desk,
-             dict(DATACENTER_OPTS, place=dict(DATACENTER_PLACE), moves=[dict(DATACENTER_MOVE, at=DATACENTER_MOVE_AT)])),
+             dict(DATACENTER_OPTS, names="data centers", place=dict(DATACENTER_PLACE), moves=[dict(DATACENTER_MOVE, at=DATACENTER_MOVE_AT)])),
         ] if DATACENTER_STAMPED else [], RAIL_EXIT % DEBT_MELT_S, [
-            {"kind": "build_to", "at": t_q, "dur": DEBT_OPEN_S, "series": DEBT_ISSUANCE, "target": datum(0)},
+            {"kind": "build_to", "at": t_q, "dur": DEBT_OPEN_S, "series": DEBT_ISSUANCE, "target": datum(DEBT_OPEN_CAP)},
             {"kind": "build_to", "at": t_q, "dur": DEBT_OPEN_S, "series": DEBT_HI, "target": datum(0)},
             {"kind": "build_to", "at": t_q, "dur": DEBT_OPEN_S, "series": DEBT_LO, "target": datum(0)},
             {"kind": "retitle", "at": t_who, "dur": DEBT_TITLE_S, "text": DEBT_Q_TITLE},
             {"kind": "build_to", "at": t_years, "dur": round(t_pocket_end - t_years, 2), "series": DEBT_ISSUANCE,
              "target": datum(DEBT_2024)},
             {"kind": "retitle", "at": t_bills, "dur": DEBT_TITLE_S, "text": DEBT["title"]},
-            {"kind": "figure", "at": t_avg28, "dur": DEBT_MARK_S, "target": datum(DEBT_MID_AVG, DEBT_ISSUANCE),
+            {"kind": "figure", "at": t_avg28, "dur": DEBT_MARK_S, "target": datum(DEBT_OPEN_CAP, DEBT_ISSUANCE),
              "text": DEBT_AVG_TEXT, "sub": DEBT_AVG_SUB},
             {"kind": "build_to", "at": t_last_year, "dur": round(t_121 + 0.4 - t_last_year, 2), "series": DEBT_ISSUANCE,
              "target": datum(DEBT_2025)},
@@ -2468,7 +3119,7 @@ def shot_table(ws: list, unit_end: float) -> list:
             {"kind": "steam", "at": t_stop, "dur": round(t_turn - t_stop, 2), "target": MUG_STEAM},
         ], {"keys": [], "attention": "landings"}),
         # -- ROW 18a (P69 T26): RESET 2, THE PRESS - dip 5 (PRESS_DIP_WHY) on "It was never the AI stocks"; the plate is the
-        # sentence ("the paper wrapped around the steel"); the ken push alone is its life (E99 s84); the 1845 certificate
+        # sentence ("the paper wrapped around the steel"); the ken push alone is its life (E99 s84); the railway share certificate
         # (row 2's card) is thrown onto the press's pile on "railway certificates" (E99 s71) and leaves before dip 6.
         (t_turn, t_conc, PRESS_PLATE, PRESS_KEN, [
             (CERT_CARD, 0, t_certs, t_press_off, dict(PRESS_CERT_SLOT)),
@@ -2479,7 +3130,7 @@ def shot_table(ws: list, unit_end: float) -> list:
         # its settle (E51), the chrome fitted into the frame (E99 s108); the statement card thrown on "target-date" in the room left; both leave on "Run the arithmetic"; on "fall
         # by half" the bar HALVES (HALVING_WHY) and "10%" lands on "ten percent", the old top a ghost.
         (t_conc, t_again, page_conc(), (0, 0, 0), [
-            (SP500_PROP, 0, t_sp500, t_run, dict(SP500_OPTS, place=dict(SP500_PLACE), moves=[   # R26-291: it steps up
+            (SP500_PROP, 0, t_sp500, t_run, dict(SP500_OPTS, names="S&P five hundred", place=dict(SP500_PLACE), moves=[   # R26-291: it steps up
                 dict(SP500_ASIDE, at=t_contact, dur=CONC_CAM_IN_S, ease="cubic")])),   # ... as the push grows the panel
             (ENVELOPE_CARD, 1, t_target, t_run, dict(ENVELOPE_SLOT)),
         ], "dip", [
@@ -2500,7 +3151,8 @@ def shot_table(ws: list, unit_end: float) -> list:
             (CERT_CARD, 0, t_cert_back, t_cert_off, dict(PRESS_CERT_SLOT)),
         ], MELT_EXIT % MEMO_MELT_S, [
             {"kind": "callout", "at": t_ring, "dur": round(t_cert_off - t_ring, 2), "label": RAIL_DROP,
-             "label_scale": CERT_RING_LABEL_SCALE, "pad": CERT_RING_PAD, "target": cert_face()},
+             "label_scale": CERT_RING_LABEL_SCALE, "pad": CERT_RING_PAD, "points": "that certificate",
+             "target": {"kind": "dock", "dock": CERT_CARD}},   # P69 T31: T65's ring on the dock (cert_face() retired)
         ], {"keys": [], "attention": "landings"}),
         # -- ROW 18d (P69 T26): "1845 IS THE PROOF" - the railway index RETURNS behind a blur-zoom (RAIL_RETURN_WHY),
         # BUILT (E25: a chart that comes back is never drawn like new); its own -64% is written at the trough as "the
@@ -2516,7 +3168,7 @@ def shot_table(ws: list, unit_end: float) -> list:
         # the compute bar on "sold out" (no pill species); the page is retitled "Different demand, different clock"; on
         # "Both are true at once" a callout rings each bar. The page stands to the row's end (T28's boundary).
         (t_gear, t_row9_end, page_clocks(), (0, 0, 0), [
-            (GPU_PROP, 0, t_compute, round(t_five + GPU_MORPH_S, 2), dict(GPU_OPTS, place=dict(GPU_PLACE))),   # handed to the morph at t_five
+            (GPU_PROP, 0, t_compute, round(t_five + GPU_MORPH_S, 2), dict(GPU_OPTS, names="compute", place=dict(GPU_PLACE))),   # handed to the morph at t_five
         ], RAIL_EXIT % CLOCKS_MELT_S, [
             {"kind": "chart_to", "to": "morph", "from": "prop:" + GPU_PROP, "mark": "b:%d" % CLOCKS_COMPUTE,
              "at": t_five, "dur": GPU_MORPH_S},
@@ -2533,7 +3185,7 @@ def shot_table(ws: list, unit_end: float) -> list:
         # CARD is thrown to land on "Steel answers" and fills as the anaphora's recap (TEST_SWEEP_WHY). Ken Burns alone
         # (E99 s84). The card leaves before the world changes.
         (t_test, t_div, HOST2_PLATE, HOST2_KEN, [
-            (PHONE_PROP, 0, t_phone, t_card, dict(PHONE_OPTS, place=dict(PHONE_PLACE))),
+            (PHONE_PROP, 0, t_phone, t_card, dict(PHONE_OPTS, names="phone", place=dict(PHONE_PLACE))),
             (TEST_CARD, 0, t_card, t_card_off, dict(TEST_CARD_SLOT, arrive="throw", mass="paper")),
         ], "suck:%g,%g" % TEST_SUCK_AT, [
             {"kind": "agenda", "at": t_one, "dur": round(t_card - t_one, 2), "target": TEST_AGENDA_BOX,
@@ -2568,9 +3220,13 @@ def shot_table(ws: list, unit_end: float) -> list:
         # drawn on "They're selling product", the rack stamped on "racks"; the verdict retitled on "It passes.", a light
         # travelling the spring on "vertical", the tip ringed on "steel".
         (t_hynix, t_row21_end, page_hynix(), (0, 0, 0), [
-            (HBM_PROP, 0, h_stacked, round(h_five - HBM_OFF_LEAD_S, 2), dict(HBM_OPTS, place=dict(HBM_PLACE))),
-            (WAFER_PROP, 0, h_wafer, round(h_laptop_s - 0.2, 2), dict(WAFER_OPTS, place=dict(WAFER_PLACE))),
-            (RACK_PROP, 0, h_racks, h_passes, dict(RACK_OPTS, place=dict(RACK_PLACE))),
+            (HBM_PROP, 0, h_stacked, round(h_five - HBM_OFF_LEAD_S, 2), dict(HBM_OPTS, names="stacked memory", place=dict(HBM_PLACE))),
+            (WAFER_PROP, 0, h_wafer, round(h_laptop_s - 0.2, 2), dict(WAFER_OPTS, names="wafer capacity", place=dict(WAFER_PLACE))),
+            (RACK_PROP, 0, h_racks, h_passes, dict(RACK_OPTS, names="racks", place=dict(RACK_PLACE))),
+            # P69 T30 (row 22's opening, on this page): the board beside the shrunk line, then the RAM in its room
+            (TRIPWIRE_CARD, 1, m_bravos, round(m_variable - TRIPWIRE_OFF_LEAD_S, 2),
+             dict(TRIPWIRE_SLOT, arrive="throw", mass="paper")),
+            (RAM_PROP, 0, m_ram, round(t_row22 - RAM_OFF_LEAD_S, 2), dict(RAM_OPTS, names="RAM", place=dict(RAM_PLACE))),
         ], RAIL_EXIT % HYNIX_MELT_S, [
             dict(HYNIX_ALONE, kind="panel_focus", at=t_hynix, dur=0.05),
             {"kind": "build_to", "at": t_hynix, "dur": 0.4, "panel": P_HYNIX, "series": H_PRICE, "target": datum(0)},
@@ -2601,6 +3257,8 @@ def shot_table(ws: list, unit_end: float) -> list:
             {"kind": "callout", "at": h_steel, "dur": round(h_honest - 0.2 - h_steel, 2),
              "target": {"kind": "datum", "index": HYNIX_LAST, "series": H_PRICE, "panel": P_HYNIX}},
             {"kind": "retitle", "at": h_honest, "dur": 1.6, "text": "Run it honestly"},
+            dict(HYNIX_ASIDE, kind="panel_focus", at=round(m_bravos - 0.6, 2), dur=FOCUS_S),   # P69 T30: aside for the board
+            dict(HYNIX_BACK, kind="panel_focus", at=m_variable, dur=FOCUS_S),                 # ... and back for the RAM
         ], {"keys": [
             {"t": h_five, "zoom": 1.0, "look": HYNIX_TIP,
              "ease": "inout"},
@@ -2615,7 +3273,117 @@ def shot_table(ws: list, unit_end: float) -> list:
             dict(HYNIX_KEY_UP, at=h_five, dur=HYNIX_KEY_LEG_S),
             dict(HYNIX_KEY_ASIDE, at=round(h_scarcity + HYNIX_CAM_OUT_S, 2), dur=HYNIX_KEY_LEG_S),
             dict(HYNIX_KEY_HOME, at=round(h_scarcity + HYNIX_CAM_OUT_S + HYNIX_KEY_LEG_S, 2), dur=HYNIX_KEY_LEG_S)])}),
-        # (-- ROWS 22-24 are T30-T32's, one row per slice; UNIT_CUT_PHRASE moves with each.)
+        # -- ROW 22 (P69 T30): THE TRIPWIRES - (the board and PROP 6 stand on row 21's page, above: HYNIX_ASIDE's note)
+        # the hynix page slides off (SLIDE_WHY) and the memory monitor lands on its axes as "it reads what memory costs" is
+        # said; the two prices draw their history on those words, the soft June on "memory getting cheaper", the July
+        # print on "the other way"; DRAM's +16.4% (July print) and HBM-class's +13.9% (last two prints) written on their
+        # words (E99 s94); the June print ringed on "June", its -3.7% written on "one soft month"; the trim proof as the
+        # page's second state on "trimmed"; the monitor back on "The flip", retitled; the certificate lands on
+        # "certificates", gone before row 23's dip.
+        (t_row22, t_row22_end, page_monitor(), (0, 0, 0), [
+            (CERT_CARD, 0, m_certs, round(t_row22_end - DOCKS_OFF_LEAD_S, 2),
+             dict(CERT_BACK_SLOT, arrive="land", mass="paper")),   # LANDS in its slot: MEASURED, draft 10 (M27 at 11:13),
+            #                                                      a throw's flight crossed the drawn prices
+        ], SLIDE_EXIT, [
+            {"kind": "build_to", "at": t_row22, "dur": 0.4, "series": M_DRAM, "target": datum(0)},
+            {"kind": "build_to", "at": t_row22, "dur": 0.4, "series": M_HBM, "target": datum(0)},
+            {"kind": "build_to", "at": m_reads, "dur": round(m_data + MONITOR_DRAW_S - m_reads, 2), "series": M_DRAM,
+             "target": datum(M_MAY)},
+            {"kind": "build_to", "at": m_reads, "dur": round(m_data + MONITOR_DRAW_S - m_reads, 2), "series": M_HBM,
+             "target": datum(M_MAY)},
+            {"kind": "build_to", "at": m_first, "dur": round(m_cheaper + MONITOR_DRAW_S - m_first, 2), "series": M_DRAM,
+             "target": datum(M_JUN)},
+            {"kind": "build_to", "at": m_first, "dur": round(m_cheaper + MONITOR_DRAW_S - m_first, 2), "series": M_HBM,
+             "target": datum(M_JUN)},
+            {"kind": "build_to", "at": m_other, "dur": round(m_way + MONITOR_DRAW_S - m_other, 2), "series": M_DRAM,
+             "target": datum(M_JUL)},
+            {"kind": "build_to", "at": m_other, "dur": round(m_way + MONITOR_DRAW_S - m_other, 2), "series": M_HBM,
+             "target": datum(M_JUL)},
+            {"kind": "figure", "at": m_dram_up, "dur": 1.2, "series": M_DRAM, "target": datum(M_JUL, M_DRAM),
+             "text": DRAM_JUL, "sub": "DRAM, July print", "color": "crimson", "dy": DRAM_FIG_DY},
+            {"kind": "figure", "at": m_hbm_up, "dur": 1.2, "series": M_HBM, "target": datum(M_JUL, M_HBM),
+             "text": HBM_TWO, "sub": "HBM-class, last two prints", "color": "teal", "dy": HBM_FIG_DY},
+            {"kind": "callout", "at": m_june, "dur": round(m_trim - 0.2 - m_june, 2), "target": datum(M_JUN, M_DRAM)},
+            {"kind": "figure", "at": m_soft, "dur": JUNE_FIG_S, "series": M_DRAM, "target": datum(M_JUL, M_DRAM),
+             "text": JUN_SOFT, "sub": JUNE_SUB, "color": "crimson", "dy": JUNE_FIG_DY},
+            {"kind": "chart_to", "at": m_trim, "dur": RECAST_S, "to": "recast", "state": TRIM_RECAST, "keyed": False},
+            {"kind": "retitle", "at": round(m_trim + RETITLE_AFTER_S, 2), "dur": RECAST_S, "text": TRIM_TITLE},
+            {"kind": "undraw", "at": round(m_flip - TRIM_UNDRAW_S - 0.1, 2), "dur": TRIM_UNDRAW_S, "target": datum(0)},
+            {"kind": "chart_to", "at": m_flip, "dur": FLIP_RECAST_S, "to": "recast", "state": MONITOR_BACK, "keyed": False},
+            {"kind": "build_to", "at": round(m_flip + CAPS_BACK_AT_S, 2), "dur": CAPS_BACK_S, "series": M_DRAM,
+             "target": datum(M_JUL)},
+            {"kind": "build_to", "at": round(m_flip + CAPS_BACK_AT_S, 2), "dur": CAPS_BACK_S, "series": M_HBM,
+             "target": datum(M_JUL)},
+            {"kind": "retitle", "at": round(m_flip + RETITLE_AFTER_S, 2), "dur": 1.6, "text": FLIP_TITLE,
+             "color": "neg", "color_span": "The flip"},
+        ], {"keys": []}),
+        # -- ROW 23a (P69 T31): RESET 3, THE SPIKE AND THE PAPER - dip 7 (RING_DIP_WHY); the certificate thrown onto the
+        # plate's own blank sheet on "the certificate" and RINGED on "paper sold as safety" with RAIL_DROP (P69 T65 - the
+        # ring on the dock; cert_face() retired); the railway index thrown into the dark upper left on "the certificates
+        # that financed it"; both leave in the breath before the case, which is the VERDICT STACK (VERDICT_WHY), burst on
+        # "And the one number"; the RAM stamped just after "the price of memory". Ken Burns alone (E99 s84).
+        (t_row23, r_bullish, RING_PLATE, RING_KEN, ring_docks + [
+            (RAM_PROP, 0, r_ram, round(r_bullish - RAM_RING_OFF_LEAD_S, 2),
+             dict(RAM_OPTS, names="memory—", place=dict(RING_RAM_PLACE))),
+        ], "dip", [
+            {"kind": "callout", "at": r_ring, "dur": round(r_financed - HANDOFF_LEAD_S - r_ring, 2), "label": RAIL_DROP,
+             "label_scale": CERT_RING_LABEL_SCALE, "pad": CERT_RING_PAD, "points": RING_PHRASE,
+             "target": {"kind": "dock", "dock": RING_CERT_CARD}},
+        ], {"keys": [], "attention": "landings"}),
+        # -- ROW 23b (P69 T31): THE BULLISH CASE - dip 8 (HYNIX_RETURN_WHY) and row 21's page RETURNS by the spiral, the
+        # line alone, retitled with its own verdict; the I-beam stamped just after "the steel"; on "A memory fab takes"
+        # the line shrinks aside and the arithmetic is thrown into the room (ARITH_CARD_WHY); the line grows back as it goes.
+        (r_bullish, r_decide, page_hynix_return(), (0, 0, 0), [
+            (IBEAM_PROP, 0, r_ibeam, round(r_arith - 0.6, 2),
+             dict(IBEAM_OPTS, names="the steel—", place=dict(IBEAM_PLACE))),
+            (ARITH_CARD, 1, r_arith, r_arith_off, dict(ARITH_SLOT)),
+        ], "dip", [
+            dict(HYNIX_RETURN_ALONE, kind="panel_focus", at=r_bullish, dur=0.05),
+            {"kind": "retitle", "at": r_bullish, "dur": HYNIX_RETURN_S, "text": HYNIX_VERDICT_TITLE},
+            dict(HYNIX_RETURN_ASIDE, kind="panel_focus", at=round(r_arith - 0.6, 2), dur=FOCUS_S),
+            dict(HYNIX_RETURN_ALONE, kind="panel_focus", at=r_arith_off, dur=FOCUS_S),
+        ], {"keys": []}),
+        # -- ROW 23c (P69 T31): HOST WINDOW 3, THE NEWSROOM - dip 9 (NEWSROOM_DIP_WHY) on "Decide for yourself"; the
+        # railway share thrown onto the desk on "is the certificate"; the weight check takes its slot on "Nobody holding
+        # it" (NEWSROOM_SLOT_WHY); both gone before row 24. Ken Burns alone (E99 s84).
+        (r_decide, t_row23_end, HOST3_PLATE, HOST3_KEN, [
+            (CERT_CARD, 0, r_is_cert, r_nobody, dict(HOST3_CERT_SLOT)),
+            (WEIGHT_CARD, 0, r_nobody, round(t_row23_end - DOCKS_OFF_LEAD_S, 2), dict(WEIGHT_CARD_SLOT)),
+        ], "dip", [
+            {"kind": "callout", "at": r_accidental, "dur": round(t_row23_end - DOCKS_OFF_LEAD_S - r_accidental, 2),
+             "label": WEIGHT_RING_LABEL, "points": WEIGHT_RING_PHRASE, "pad": 6, "label_scale": CERT_RING_LABEL_SCALE,
+             "target": {"kind": "dock", "dock": WEIGHT_CARD, "box": list(WEIGHT_RING_BOX)}},
+        ], {"keys": [], "attention": "landings"}),
+        # -- ROW 24a (P69 T32): THE CLOSE - dip 10 (CLOSE_DIP_WHY) and the divergence RETURNS by the spiral, all four lines
+        # drawn, retitled with the anaphora as it lands (no spread - the note above CLOSE_PARK_PHRASE); the page PARKS on
+        # "You now have the test" and the agenda lands in its room a row per phrase; the board, the yardstick and the test
+        # take that slot in turn (CLOSE_SLOT_WHY); it grows back on "a copy of this chart", rung where it points and on the
+        # market sold as safety; the opening's certificate lands back on "the certificate stays on the desk", to the card.
+        (t_row24, t_outro, page_close(), (0, 0, 0), [
+            (TRIPWIRE_CARD, 1, c_board, c_yard, dict(CLOSE_SLOT, arrive=SLOT_HANDOFF_ARRIVE, mass="paper")),
+            (YARD_CARD, 1, c_yard, c_test, dict(YARD_CARD_SLOT)),
+            (TEST_CARD, 1, c_test, round(c_unpark - CLOSE_TEST_OFF_LEAD_S, 2),
+             dict(CLOSE_SLOT, arrive=SLOT_HANDOFF_ARRIVE, mass="paper")),
+            (CLOSE_CERT_CARD, 0, c_cert, t_outro, dict(CLOSE_CERT_SLOT)),
+        ], "dip", [
+            {"kind": "retitle", "at": t_row24, "dur": DIV_RETURN_S, "text": CLOSE_TITLE},
+            {"kind": "chart_to", "at": c_park, "dur": CLOSE_PARK_S, "to": "park", "scale": CLOSE_PARK_SCALE,
+             "anchor": CLOSE_PARK_ANCHOR},
+            {"kind": "agenda", "at": c_agenda[0], "dur": round(c_board - 0.3 - c_agenda[0], 2),
+             "target": dict(CLOSE_AGENDA_BOX),
+             "rows": [dict(row, at=ta) for row, ta in zip(AGENDA_ROWS_H, c_agenda)]},
+            {"kind": "chart_to", "at": c_unpark, "dur": CLOSE_PARK_S, "to": "park", "scale": 1.0,
+             "anchor": CLOSE_PARK_ANCHOR},
+            {"kind": "callout", "at": c_point, "dur": round(c_safety - CLOSE_RING_GAP_S - c_point, 2),
+             "target": datum(DIV_LAST, DIV_MEMORY)},
+            {"kind": "callout", "at": c_safety, "dur": round(c_cert - CLOSE_RING_GAP_S - c_safety, 2),
+             "target": datum(DIV_SP_RING, DIV_SP)},
+        ], {"keys": []}),
+        # -- ROW 24b (P69 T32): THE OUTRO - the Remotion kit's YouTube card, dipped in as "desk" ends (OUTRO_DIP_WHY), its
+        # own life declared over its seconds (`recipe:outro-clip-life`); the brand line is in the audio, not on the table.
+        (t_outro, unit_end, OUTRO_WORLD, (0, 0, 0), [], "dip", [
+            {"kind": "life", "at": t_outro, "dur": round(unit_end - t_outro, 2)},
+        ]),
     ]
 
 
@@ -2631,9 +3399,22 @@ BED_LU = -28.0        # the LONG FORM's calibration (sound/SOUND-PLAN.json: "Bed
 VO_LUFS = -28.0       # vo-h-scratch/scratch-kokoro.mp3, measured with ffmpeg ebur128 on 2026-09-18
 BED_LUFS = -13.3      # sound/suno-hook-B.mp3, measured the same way
 BED_SWELL_DB, SNAP_S_BED = 4.0, 0.45
+CLOSE_BED_A, CLOSE_BED_B = "suno-close-A.mp3", "suno-close-B.mp3"   # the locked close pick is A (sound/SOUND-PLAN.json)
+CLOSE_BED_LUFS = -14.6    # sound/suno-close-A.mp3, measured with ffmpeg ebur128 on 2026-09-25 (B: -14.2)
+CLOSE_BED_PHRASE = "Subscribe for the watch"   # the CTA - where ep1's locked plan put the close bed (775.0 of 806.47 s)
+# P72 T20 (E81 apply 1 - every accent STARTS 8-10 dB under the voice; R26-363): each accent's loudness MEASURED 2026-09-25 with
+# ffmpeg ebur128 (integrated, the P70 T8 level.log method) on this folder's files; the gain is `A.e81_gain` off it, 9 dB under
+# VO_LUFS. Tuning from here is by ear (E81 apply 2) - a departure is written on the cue with its reason.
+STROKE_LUFS, WHOOSH_LUFS = -14.4, -16.2     # sound/fs-page-stroke-447925.mp3 (0.48 s), sound/fs-whoosh-3-648729.mp3
+ROLL_LUFS = -14.0                           # sound/fs-page-roll-464302.mp3
+LANDING_GAIN = A.e81_gain(VO_LUFS, STROKE_LUFS)   # 0.074 (was ACCENT 0.12: 4.7 dB under the take, measured)
+SUCK_GAIN = A.e81_gain(VO_LUFS, WHOOSH_LUFS)      # 0.092
+DIP_GAIN = SUCK_GAIN                              # the dip's whoosh is the same file (was ACCENT 0.12: 6.5 dB under)
+PAGE_GAIN = A.e81_gain(VO_LUFS, ROLL_LUFS)        # 0.070 (was ENTER_GAIN 0.12: 4.3 dB under)
+E81_LEVEL = "E81 start: %.1f dB under the VO (%.1f LUFS), %s at %.1f LUFS, measured (ffmpeg ebur128)"
 
 
-def sound_cues(rows: list) -> list:
+def sound_cues(rows: list, ws: list | None = None) -> list:
     """Which file plays where, and how loud - over the kit's own reading of the rows' transitions and arrivals."""
     stop = A.stop_dials()
     cues = []
@@ -2645,7 +3426,7 @@ def sound_cues(rows: list) -> list:
             # and a cue that claims the wrong one is dropped by the binder (R26-198)
             entry = "snap" if page["snap"] else "camera" if page["camera"] else OPEN_ENTER
             cues.append({"slot": "page enter %d (%s)" % (i + 1, entry), "at": round(r[0], 2),
-                         "gain": ENTER_GAIN, "fade_in": 0.0, "variants": {"A": ROLL}})
+                         "gain": PAGE_GAIN, "fade_in": 0.0, "variants": {"A": ROLL}})
         for d, opts in A.row_arrivals(r):
             arrive = opts["arrive"]
             contact = A.landing_contact(d[2], arrive, stop)
@@ -2653,18 +3434,32 @@ def sound_cues(rows: list) -> list:
             # stamp (the engine's `stampXf(d.mass || "ink")`) and `paper` for a throw or a land - never a stamp
             # read as paper because the row named nothing
             cues.append({"slot": "landing %d (%s, %s)" % (i + 1, arrive, A.arrival_mass(opts)),
-                         "at": round(contact - 1 / 24, 2), "gain": ACCENT, "fade_in": 0.0,
+                         "at": round(contact - 1 / 24, 2), "gain": LANDING_GAIN, "fade_in": 0.0,
                          "variants": {"A": STROKE, "B": ROLL},
-                         "note": "contact at %.2fs, the cue one frame early (the weight report Q5)" % contact})
+                         "note": "contact at %.2fs, the cue one frame early (the weight report Q5); %s"
+                                 % (contact, E81_LEVEL % (A.E81_UNDER_DB, VO_LUFS, STROKE, STROKE_LUFS))})
+        if r[5] == "dip" and str(r[2]) == OUTRO_WORLD:   # P69 T32: no whoosh into the card - the brand line is its
+            continue                                      # sound (the approved shorts sound nothing into their outro)
         if r[5] == "dip":   # the world change's own accent (E47) - AT THE ROW'S START: a row's exit is the door INTO
             # it (the engine's `dipIn` reads `sc.exit` against the scene before, transitions.mjs:96 /
             # build_scene_timeline_f.py:2660). P69 T15 fixed `r[1]`, which sounded the whoosh at the row's END.
-            cues.append({"slot": "dip %d" % (i + 1), "at": round(r[0] - 0.35, 2), "gain": ACCENT,
+            cues.append({"slot": "dip %d" % (i + 1), "at": round(r[0] - 0.35, 2), "gain": DIP_GAIN,
                          "fade_in": 0.0, "variants": {"A": WHOOSH}})
+    # P72 T20 / R26-286: the suck is cued where the engine plays it - the row's start (`A.suck_cues`, `A.fired`)
+    cues += [dict(c, note=c["note"] + "; " + E81_LEVEL % (A.E81_UNDER_DB, VO_LUFS, WHOOSH, WHOOSH_LUFS))
+             for c in A.suck_cues(rows, {"A": WHOOSH}, SUCK_GAIN)]
     env = A.bed_envelope(rows, BED_SWELL_DB, SNAP_S_BED, fallback_end=lambda d: float(d[2]) + 1.2)
     cues.append({"slot": "hook bed", "at": 0.0, "gain": A.bed_gain(VO_LUFS, BED_LU, BED_LUFS), "fade_in": 1.5,
                  "env": env, "variants": {"A": BED_HOOK_A, "B": BED_HOOK_B},
                  "note": "%+.0f LU under the VO (%.1f LUFS measured); the long form's calibration" % (BED_LU, VO_LUFS)})
+    # P69 T32: THE CLOSE BED - the project's locked pick (sound/SOUND-PLAN.json: "close=A (no extend)", its cue on the
+    # CTA at 775.0 of ep1's 806.47 s clock) on this take's own CTA, "Subscribe for the watch", at the same -28 LU
+    if ws and any(str(r[2]) == page_close() for r in rows):
+        cues.append({"slot": "close bed", "at": T.at(ws, CLOSE_BED_PHRASE),
+                     "gain": A.bed_gain(VO_LUFS, BED_LU, CLOSE_BED_LUFS), "fade_in": 2.0,
+                     "variants": {"A": CLOSE_BED_A, "B": CLOSE_BED_B},
+                     "note": "%+.0f LU under the VO (%.1f LUFS measured); the locked close pick (close=A), no extend"
+                             % (BED_LU, VO_LUFS)})
     return cues
 
 
@@ -2773,7 +3568,8 @@ BODY_ASSETS = {
          ("card", "ev-memory-arithmetic-v1", _OBJ + "ev-memory-arithmetic-v1.png - PNG card / checklist dock"),
          ("page", "ev-weight-check-bars-v1", _OBJ + "ev-weight-check-bars-v1.series.json - story (H5); also the "
                                              "newsroom desk card via docks.chart_card"),
-         ("host", "H-3 (no id constant yet)", _PROJ + "host/H-3-newsroom.png - RE-ROLL before HG4 (H7)")),
+         ("host", "world-h3-newsroom-v1", _PROJ + "host/H-3-newsroom.png - stands as generated (E99 s103; the re-roll "
+                                             "withdrawn)")),
     24: (("page", LAYER_PAGE, "dense-line (one last time)"),
          ("card", "agenda", "AGENDA_ROWS_H (species agenda)"),
          ("outro", "outro clip", _OUTRO + "landscape/outro-yt-1920x1080-24fps.mov - gitignored, on disk"),
@@ -2789,7 +3585,10 @@ BODY_ASSETS = {
 # Row 22's end figures are NOT a departure (E99 s?? (c), the operator: "I think you're reading hbm/dram pricing wrong"):
 # on ev-memory-monitor-v1's own points DRAM is +16.4% on the July print (86970 vs 74686, the bounce off June's -3.7%)
 # and HBM-class +13.9% over the last two prints (95408 vs 83784) - each figure is drawn WITH its basis.
-MEMORY_FIGURES = (("DRAM", "+16%", "on the July print"), ("HBM-class", "+14%", "over the last two prints"))
+# P69 T30 draws them to one decimal, recomputed off the points (DRAM_JUL / HBM_TWO / JUN_SOFT, row 22's block), each with
+# its basis written on the page ("DRAM, July print", "HBM-class, last two prints", "DRAM, June print").
+MEMORY_FIGURES = (("DRAM", DRAM_JUL, "on the July print"), ("HBM-class", HBM_TWO, "over the last two prints"),
+                  ("DRAM", JUN_SOFT, "on the June print"))
 BODY_DEPARTURES = (
     (9, "7% tick / 8% datum on ev-equip-ipp-gdp-v2", "cut - the page rings its own 11.54% (not shown under the 7/8 words)"),
     (9, "the note / figures '£250m' then '$1T+ today' (RAIL_NOTE; the treatment's row 9)",
@@ -2872,11 +3671,64 @@ BODY_DEPARTURES = (
     (21, "prop stamp 5 on 'wafer' becoming part of the compare (T26e: a prop becomes a mark)",
      "stamped over the 1x bar and held (WAFER_PLACE); the morph is refused on a panels page (`PANEL_CHART_TO` = park | "
      "compare - a panel has one chart state), so the compare restates 3x as 3 wafers on the bar (WAFER_WHY)"),
-    (22, "chart_to ev-tripwire-board-v1 (a checklist, refused as a page)", "PNG card / its checklist dock"),
-    (22, "the June datum ringed on ev-june-print-v1 (marks [])", "re-target: ring ev-memory-monitor-v1's own June mark"),
-    (22, "the certificate's '-66%' (returns)", "badge reading RAIL_DROP (-64%)"),
-    (23, "ev-memory-arithmetic-v1:bars (two units; 'doubles' vs 80 -> 192 GB)", "PNG card or its checklist dock"),
-    (23, "the certificate's '-66%' ringed", "badge reading RAIL_DROP (-64%), the ring on the badge"),
+    (22, "chart_to ev-tripwire-board-v1 (a checklist, refused as a page)",
+     "the checklist DOCK, thrown on 'Bravos' beside the hynix line shrunk aside (P69 T30, HYNIX_ASIDE): the phone "
+     "profile, derived "
+     "(`_tripwire_card_object`) - the object's two rows cut to ~30 characters, every figure the object's; the rows land as "
+     "a recap (TRIPWIRE_CHECKLIST's note)"),
+    (22, "`chart_to ev-memory-monitor-v1:line:axes` (three series)",
+     "the derived ev-memory-monitor-row22-v1 (P69 T30): the DRAM and HBM-class prices verbatim, the dashed 12-month average "
+     "('TRIGGER') not carried - the script's trigger is the release itself; the end tags name the series (a tag rides the "
+     "lead point, so a July level would print at the May print)"),
+    (22, "the June datum ringed on ev-june-print-v1 (marks [])",
+     "re-target: the ring on the monitor's own June datum, its figure (-3.7%, 'DRAM, June print') written under DRAM's"),
+    (22, "the trim proof `ev-trim-proof-v1` as a card in the room",
+     "the page's second state (TRIM_WHY): the card profile draws the 8-bar signed object broken, the legacy card reads "
+     "~11 px, the monitor has no room a readable card fits; derived ev-trim-proof-row22-v1 (the bars verbatim, a stated "
+     "[-20, 20] % scale); the monitor returns as the third state for 'The flip'"),
+    (22, "'The flip' a retitle in RED", "a retitle in the page's own title ink: the retitle species carries no colour "
+             "(an engine key, named for the parent)"),
+    (22, "the certificate's '-66%' (returns)", "the card returns bare on 'certificates' - no badge, no ring: row 23 "
+             "rings it with RAIL_DROP 2 s later, on the reset (T31)"),
+    (23, "ev-memory-arithmetic-v1:bars (two units; 'doubles' vs 80 -> 192 GB)",
+     "RESOLVED (P69 T31): its checklist dock, derived into the phone profile (ev-memory-arithmetic-h23-v1: Supply ~5 "
+     "years / Demand 80->192 GB / 2030? only if AI < factories), its five citing E99 s95 in the source line; thrown beside "
+     "the returning hynix line on 'A memory fab takes'; its rows land as a RECAP (a hold past 12 s is past M12's 10 s). "
+     "The voice says 'doubles', the card prints 80->192 GB (2.4x) - the object's figures"),
+    (23, "the certificate's '-66%' ringed",
+     "RESOLVED (P69 T31): P69 T65's ring on the DOCK with RAIL_DROP (-64%) as its label, `points` 'paper sold as "
+     "safety' - no badge (a badge and a ring would print it twice); row 18c's ring moved onto the dock too"),
+    (23, "dip 8 on 'The order books are booked solid through twenty twenty-six'",
+     "dip 8 on 'More bullish' (6.6 s earlier): the returning hynix page ('Sold out, and paid for') answers 'builders "
+     "with sold-out order books are not a house of cards', and the plate would stand bare ~7 s after the burst"),
+    (23, "`ev-memory-arithmetic-v1:bars` as the page dip 8 lands on", "row 21's panels page RETURNS by the spiral (E40 s4) "
+     "and carries the arithmetic as a card beside its line"),
+    (23, "'the index they sold you as the safe version' chart_to ev-weight-check-v1 (a fifth of the index ringed)",
+     "the take says 'Decide for yourself' FIRST, so the newsroom is already standing: no page to recast. The railway "
+     "share is thrown onto the desk on 'is the certificate', and the weight check (ev-weight-check-bars-v1, 20 vs 24.3) "
+     "takes its slot on 'Nobody holding it', read through 'accidental concentration, sold as safety'; no ring (its "
+     "number is printed on the bar)"),
+    (23, "`world-broadcast-set-v2;use=landing` + Mike (Flow order H-3)", "the H-3 still itself (Mike in the newsroom, "
+     "E99 s103), registered by id as rows 7 and 20's stills are; the broadcast set is not drawn"),
+    (23, "(additions)", "the railway index as a card on 'the certificates that financed it'; the VERDICT STACK on "
+     "'Everything we checked holds' (doc 29 s9.24; four docked documents, burst on 'And the one number'); PROP 6 the RAM "
+     "again after 'the price of memory'; the I-beam (prop-memory-steel-ibeam-v1) after 'They're the steel'"),
+    (24, "'Subscribe for the watch' the page parks (and holds to the outro)",
+     "the page parks on 'You now have the test' for the agenda (SPECIES-BY-SENTENCE.md:51) and grows back on 'a copy of "
+     "this chart': a page parked through the CTA's 17 s with nothing named is past E50's 12 s and E21 - so each thing the "
+     "CTA names takes the agenda's slot (CLOSE_SLOT_WHY)"),
+    (24, "the outro clip 'dissolves in' (the treatment; CAPABILITIES:64)",
+     "the DIP (OUTRO_DIP_WHY): every approved cut dips into its card (tokyo-tea-break/build_short.py:444, japan-tariff-"
+     "trick:322, memory-trades-the-calendar:266; authoring/shapes.py OUTRO_EXIT) - E46 (2) licenses the dissolve; "
+     "for the operator"),
+    (24, "the outro card (the portrait outro-v2.mov of the shorts)",
+     "the 16:9 YouTube card at 24 fps, outro-yt-1920x1080-24fps.mov ('subscribe'; RENDER-NOTES.md), 6.208 s probed"),
+    (24, "the anaphora 'in STAGE mode'",
+     "the page row's caption in the anchored strip (R26-205 - the page is full stage); the first line written back as "
+     "the page's title (CLOSE_TITLE)"),
+    (24, "(additions)", "the tripwire board (row 22's) on 'either tripwire', the yardstick (row 14's page as a card, "
+     "YARD_CARD) on 'the yardstick reading', the test (row 20's) on 'run the test' - each in the agenda's slot; rings on the memory line ('where it's pointing') and the market's ('sold to you as safety') once the page is back; the opening's certificate landed back on 'the certificate stays on "
+     "the desk'; the close bed (the locked close=A) on the CTA"),
 )
 
 # THE RULINGS THAT OVERRULE THE TREATMENT'S WORDING (REBUILD-TREATMENT-H.md predates them; a row obeys these).
@@ -2912,12 +3764,31 @@ TREATMENT_SUPERSEDED = (
 
 # ---------------------------------------------------------------- THE BUILD
 
-def _take_audio(unit_end: float) -> None:
-    """The take into the build - the UNIT's seconds only, so the clock the gates measure is the cut's own.
-    `vo-h-scratch/` is read and never written."""
+def _take_audio(unit_end: float | None) -> None:
+    """The take into the build - the UNIT's seconds only, so the clock the gates measure is the cut's own; with no
+    unit end (P69 T32, the whole take) the take is copied as it is, byte for byte, as the approved shorts copy theirs
+    before the brand line is stitched on. `vo-h-scratch/` is read and never written."""
     src = TAKE / (TAKE_STEM + ".mp3")
+    if unit_end is None:
+        import shutil
+        shutil.copyfile(src, EP.audio_master)
+        return
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(src), "-t", "%.3f" % unit_end,
                     "-c:a", "libmp3lame", "-q:a", "2", str(EP.audio_master)], check=True)
+
+
+def _outro_clock() -> tuple[float, float, float, float]:
+    """(t_vo_end, t_outro, t_line, runtime_s) for the whole take (P69 T32): the approved shorts' clock
+    (`authoring.audio.outro_clock`) on the take's own length, the card's seconds the clip's own (probed)."""
+    t_vo_end = round(A.probe_duration(EP.audio_master), 3)
+    line_s = A.probe_duration(BRAND_LINE)
+    outro_s = round(A.probe_duration(OUTRO_CLIP), 3)
+    if not (t_vo_end and line_s and outro_s):
+        raise SystemExit("FAIL: the outro clock needs the take, the brand line and the card on disk (%s, %s)"
+                         % (BRAND_LINE, OUTRO_CLIP))
+    t_outro, t_line, runtime_s = A.outro_clock(t_vo_end, line_s, outro_lead=OUTRO_LEAD, outro_s=outro_s,
+                                               brand_gap=BRAND_GAP, brand_tail=BRAND_TAIL)
+    return t_vo_end, t_outro, t_line, runtime_s
 
 
 def _hook_object() -> Path:
@@ -2952,6 +3823,33 @@ def _signpost_object() -> Path:
     return out
 
 
+def _yard_card_object() -> Path:
+    """Row 24a's yardstick card (P69 T32): ev-capital-formation-v1's tech line ALONE - its points, its "28%" tag and
+    its own "23%" dot-com mark verbatim - on a stated [0, YARD_CARD_YMAX] scale, titled with the object's own
+    "railway yardstick" (YARD_CARD_TITLE). MEASURED, draft 1 (`p69-row24/d1t/A-tiles.png` k-l): the whole object drawn
+    as a card cut its railway hline's label off the card's left edge ("s, 1844-47 - ~50% ...") and wrote it through
+    the scale line, and its two-line title took a third of the card - so the scale line and the hline (the comparator
+    row 14's page says) are not carried; the sentence is the READING, which is the tech line's last print. Records
+    `derived_from` and its basis. Written into the build dir only; returns the series path."""
+    import copy
+    src = json.loads((OBJECTS / (YARD_PAGE + ".series.json")).read_text(encoding="utf-8"))
+    tech = copy.deepcopy(src["series"][YARD_TECH])
+    assert tech["label"] == "28%" and tech["name"].startswith("COMPUTERS"), "the yardstick's tag is the object's"
+    assert max(p_[1] for p_ in tech["pts"]) < YARD_CARD_YMAX, "the stated scale holds the whole line"
+    obj = {"title": YARD_CARD_TITLE, "src": src["src"], "ymin": 0, "ymax": YARD_CARD_YMAX,
+           "yunit": src.get("yunit", "%"), "ylabel": src.get("ylabel", ""), "xticks": src.get("xticks", []),
+           "marks": copy.deepcopy(src.get("marks", [])), "series": [tech],
+           "derived_from": ["evidence/objects/" + YARD_PAGE + ".series.json"],
+           "basis": {"28%": "the object's tech series (COMPUTERS + SOFTWARE), its last print 2026 Q2 (28.18), verbatim",
+                     "23%": "the object's own dot-com high mark (2001 Q1), verbatim",
+                     "scale": "0-%d%%, stated on the card's own axis (the object's is 0-72 for its scale line)"
+                              % YARD_CARD_YMAX}}
+    out = BUILD / "objects" / (YARD_CARD_OBJECT_ID + ".series.json")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(obj, indent=1), encoding="utf-8")
+    return out
+
+
 def _test_card_object() -> Path:
     """Row 20's test card source (P69 T28b): ev-test-scorecard-v1's title and source; its checklist the phone profile's
     Ask / Steel / Paper (TEST_CARD_CHECKLIST, each row within ~30 characters), no sub; the rows land as a RECAP (no
@@ -2969,6 +3867,84 @@ def _test_card_object() -> Path:
     out.write_text(json.dumps(obj, indent=1), encoding="utf-8")
     png = out.with_name(TEST_CARD_OBJECT_ID + ".png")
     shutil.copyfile(TEST_OBJECT.with_suffix(".png"), png)
+    return png
+
+
+def _tripwire_card_object() -> Path:
+    """Row 22's board source (P69 T30): ev-tripwire-board-v1's title and source; its checklist the phone profile's
+    Tripwire / Fires if / Now (TRIPWIRE_CHECKLIST - the object's own two rows, each cut to the profile's ~30 characters,
+    every figure the object's), no sub; the rows land as a recap (TRIPWIRE_CHECKLIST's note).
+    Written with the object's PNG (the static fallback the compiler docks) into the build dir only; returns the PNG."""
+    import copy
+    import shutil
+    obj = copy.deepcopy(json.loads(TRIPWIRE_OBJECT.with_suffix(".series.json").read_text(encoding="utf-8")))
+    src_rows = obj["checklist"]["rows"]
+    assert [r["cells"][0] for r in src_rows] == ["Bravos'", "Mine"] and [r["cells"][3] for r in src_rows] == ["NOT LIT"] * 2
+    assert "5.50%" in src_rows[0]["cells"][1] and src_rows[0]["cells"][2] == "3.63%", "the board's figures are the object's"
+    obj["checklist"] = copy.deepcopy(TRIPWIRE_CHECKLIST)
+    assert all(len("".join(r["cells"])) <= 32 for r in obj["checklist"]["rows"]), obj["checklist"]["rows"]
+    obj.pop("sub", None)
+    out = BUILD / "objects" / (TRIPWIRE_CARD_OBJECT_ID + ".series.json")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(obj, indent=1), encoding="utf-8")
+    png = out.with_name(TRIPWIRE_CARD_OBJECT_ID + ".png")
+    shutil.copyfile(TRIPWIRE_OBJECT.with_suffix(".png"), png)
+    return png
+
+
+def _weight_card_object() -> Path:
+    """Row 23c's weight check (P69 T31): ev-weight-check-bars-v1's title and source; its two bars as the phone profile's
+    two rows (WEIGHT_CHECKLIST - each figure and each whole the object's own: 20 of the S&P 500, 24.3 of the whole US
+    market), no sub; the rows land as a recap. Records `derived_from` and its basis. Written with ev-weight-check-v1's PNG
+    (the same figures' static fallback) into the build dir only; returns the PNG."""
+    import copy
+    import shutil
+    src = json.loads((OBJECTS / (WEIGHT_PAGE + ".series.json")).read_text(encoding="utf-8"))
+    assert [b["note"] for b in src["bars"]] == ["20%", "24.3%"], "the card's figures are the object's"
+    assert "S&P 500" in src["bars"][0]["label"] and "whole US market" in src["bars"][1]["label"]
+    obj = {"title": src["title"], "src": src["src"], "checklist": copy.deepcopy(WEIGHT_CHECKLIST),
+           "research_tier": src["research_tier"],
+           "derived_from": ["evidence/objects/" + WEIGHT_PAGE + ".series.json"],
+           "basis": {"20%": "Bravos Research's number for the S&P 500 (attributed, the object's bar 1)",
+                     "24.3%": "the sum of seven holdings' weights in the iShares Russell 3000 holdings, 27 Aug 2026 "
+                              "(the object's bar 2 and its derivation)"}}
+    assert all(len("".join(r["cells"])) <= 32 for r in obj["checklist"]["rows"]), obj["checklist"]["rows"]
+    out = BUILD / "objects" / (WEIGHT_OBJECT_ID + ".series.json")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(obj, indent=1), encoding="utf-8")
+    png = out.with_name(WEIGHT_OBJECT_ID + ".png")
+    shutil.copyfile(OBJECTS / "ev-weight-check-v1.png", png)
+    return png
+
+
+def _arith_card_object() -> Path:
+    """Row 23b's arithmetic (P69 T31): ev-memory-arithmetic-v1's title; its checklist cut to the phone profile
+    (ARITH_CHECKLIST - Side / The fact / The number, every figure the object's: "4-5 years" as "~5 years" on E99 s95,
+    "80GB -> 192GB"), no sub; its source line names E99 s95 for the five (the coverage audit: "any drawn five cites E99
+    s95"); the rows land as a recap. Records `derived_from` and its basis. Written with the object's PNG (the static
+    fallback the compiler docks) into the build dir only; returns the PNG."""
+    import copy
+    import shutil
+    obj = copy.deepcopy(json.loads(ARITH_OBJECT.with_suffix(".series.json").read_text(encoding="utf-8")))
+    src_rows = obj["checklist"]["rows"]
+    assert [r["cells"][0] for r in src_rows] == ["SUPPLY", "DEMAND", "VERDICT"]
+    assert src_rows[0]["cells"][2] == "4-5 years" and src_rows[1]["cells"][2] == "80GB -> 192GB", "the object's figures"
+    assert src_rows[2]["cells"][2] == "AI < factories"
+    obj["checklist"] = copy.deepcopy(ARITH_CHECKLIST)
+    assert all(len("".join(r["cells"])) <= 32 for r in obj["checklist"]["rows"]), obj["checklist"]["rows"]
+    assert ARITH_S95 in ARITH_SRC
+    obj.pop("sub", None)
+    obj["src"] = ARITH_SRC
+    obj["derived_from"] = ["evidence/objects/ev-memory-arithmetic-v1.series.json"]
+    obj["basis"] = {"~5 years": "the source's '4-5 years' (SK hynix M15X 2026, Yongin ph.1 end-2027) on the operator's "
+                                "five (E99 s95, OPERATOR-RULINGS.md:3321)",
+                    "80\u2192192 GB": "the source's '80GB -> 192GB' (NVIDIA H100 -> B200), verbatim",
+                    "AI < factories": "the source's verdict cell, verbatim"}
+    out = BUILD / "objects" / (ARITH_CARD_OBJECT_ID + ".series.json")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(obj, indent=1), encoding="utf-8")
+    png = out.with_name(ARITH_CARD_OBJECT_ID + ".png")
+    shutil.copyfile(ARITH_OBJECT.with_suffix(".png"), png)
     return png
 
 
@@ -3026,7 +4002,22 @@ TABLE_TREATMENT = {1: "treatment rows 1-5 (the page, 0:00-0:42)", 2: "treatment 
                    20: "treatment row 20, the divergence returns unwound from its point, 'administered in public' "
                        "(P69 T28)",
                    21: "treatment row 21, SK hynix: one panels page - the line, camera 4, PROPS 4 and 5, the wafer "
-                       "compare, the contract prices, the line back with the three answers and the rack (P69 T29)"}
+                       "compare, the contract prices, the line back with the three answers and the rack (P69 T29); "
+                       "then treatment row 22's opening - the tripwire board beside the line, PROP 6 the RAM (P69 T30)",
+                   22: "treatment row 22, the tripwires: the memory monitor slid in on 'it reads what memory costs' "
+                       "- the prices on their words with each figure's basis, the June print ringed, the trim proof, "
+                       "the flip, the certificate back (P69 T30; the board and PROP 6 the RAM stand on row 21's page)",
+                   23: "treatment row 23, the ring: dip 7, reset 3 - the certificate thrown and ringed, the railway "
+                       "index, the verdict stack, the RAM (P69 T31)",
+                   24: "treatment row 23, the bullish case: dip 8, the hynix page returns by the spiral, the I-beam, "
+                       "the arithmetic beside the line (P69 T31)",
+                   25: "treatment row 23, host window 3 - the newsroom: dip 9, the certificate, the weight check on "
+                       "the desk (P69 T31)",
+                   26: "treatment row 24, the close: dip 10, the divergence one last time by the spiral, the park and "
+                       "the agenda, the board / the yardstick / the test in one slot, the un-park, the certificate "
+                       "(P69 T32)",
+                   27: "treatment row 24, the outro: the Remotion kit's YouTube card dipped in as 'desk' ends, the "
+                       "brand line stitched 0.7 s after it (P69 T32)"}
 
 
 def _flow_count(rows: list) -> tuple[int, int, int, int]:
@@ -3052,12 +4043,21 @@ def main() -> int:
     # THE UNIT ENDS ON A WHOLE SENTENCE (the critic's tail row: the trim left an orphan caption "So" on
     # the last frame). The cut before P12 is the boundary; the unit keeps every word up to the last HARD
     # STOP before it, and the audio runs UNIT_TAIL_S past that word so the line closes instead of snapping.
-    boundary = W.cut_before(ws_all, UNIT_CUT_PHRASE, exit="dip")
-    spoken = [w for w in ws_all if w["start_s"] < boundary]
-    last_stop = max(i for i, w in enumerate(spoken) if w["w"].rstrip().rstrip('"\u201d')[-1:] in W.HARD_STOPS)
-    ws = spoken[:last_stop + 1]
-    unit_end = round(ws[-1]["end_s"] + UNIT_TAIL_S, 2)
-    _take_audio(unit_end)
+    t_outro = None
+    if UNIT_CUT_PHRASE is None:   # P69 T32: the WHOLE take, then the outro card with the brand line stitched under it
+        ws = list(ws_all)
+        _take_audio(None)
+        t_vo_end, t_outro, t_line, unit_end = _outro_clock()
+        A.stitch_brand_line(EP.audio_master, BRAND_LINE, BRAND_GAP, unit_end)
+        print("  outro       : take %.2fs; the card at %.2fs; the brand line at %.2fs (%s); runtime %.2fs"
+              % (t_vo_end, t_outro, t_line, BRAND_LINE.name, unit_end))
+    else:
+        boundary = W.cut_before(ws_all, UNIT_CUT_PHRASE, exit="dip")
+        spoken = [w for w in ws_all if w["start_s"] < boundary]
+        last_stop = max(i for i, w in enumerate(spoken) if w["w"].rstrip().rstrip('"\u201d')[-1:] in W.HARD_STOPS)
+        ws = spoken[:last_stop + 1]
+        unit_end = round(ws[-1]["end_s"] + UNIT_TAIL_S, 2)
+        _take_audio(unit_end)
     W.write_timeline(EP, ws, unit_end)
     print("  take        : %s - the unit is 0.00-%.2fs (%d of %d words)"
           % (TAKE_STEM, unit_end, len(ws), len(ws_all)))
@@ -3091,19 +4091,34 @@ def main() -> int:
     D.register(HBM_PROP, HBM_PROP_FILE)          # row 21: PROP 4, the stacked die, stamped on "stacked memory"
     D.register(WAFER_PROP, WAFER_PROP_FILE)      # row 21: PROP 5, the wafer, stamped on "wafer"
     D.register(RACK_PROP, RACK_PROP_FILE)        # row 21: the rack, stamped on "racks" (the answer to "Used tomorrow?")
-    rows = shot_table(ws, unit_end)
+    D.register(TRIPWIRE_CARD, _tripwire_card_object())   # row 22: the board - the checklist keyed to this take
+    D.register(RAM_PROP, RAM_PROP_FILE)          # row 22: PROP 6, the RAM, stamped on "RAM"
+    D.register(RING_CERT_CARD, BUILD / "docks" / (CERT_CARD + ".png"))   # row 23a: the same certificate, its own id
+    D.chart_card(RAIL_CARD, OBJECTS / "ev-railway-index-v1.series.json", BUILD, "line", card_w=RAIL_CARD_W)   # row 23a
+    D.register(VERDICT_CARD, OBJECTS / "ev-holds-stack-v1.png")   # row 23a: the stack's host - an invisible anchor (s9.24)
+    D.register(IBEAM_PROP, IBEAM_PROP_FILE)      # row 23b: the I-beam, stamped just after "the steel"
+    D.register(ARITH_CARD, _arith_card_object())   # row 23b: the arithmetic - the checklist card, phone profile
+    D.register(HOST3_PLATE_ID, HOST3_PLATE_FILE)   # row 23c: the H-3 newsroom, by id (as rows 7 and 20's stills)
+    D.register(WEIGHT_CARD, _weight_card_object())   # row 23c: the weight check - the checklist card, phone profile
+    D.chart_card(YARD_CARD, _yard_card_object(), BUILD, "line", card_w=YARD_CARD_W)   # row 24a: the yardstick card
+    D.register(CLOSE_CERT_CARD, BUILD / "docks" / (CERT_CARD + ".png"))   # row 24a: the opening's certificate, its own id
+    if t_outro is not None:
+        D.seekable_clip(OUTRO_MP4, OUTRO_CLIP, BUILD)   # row 24b: the card, re-encoded seekable into build-h/clips/
+    rows = shot_table(ws, unit_end, t_outro)
     karp_record(ws, T.at(ws, "Alex Karp"))   # row 11: the record's words are filled BEFORE the META is written
-    (BUILD / "evidence-dock.json").write_text(json.dumps(DOCK_META, indent=1), encoding="utf-8")
+    meta = list(DOCK_META)
+    if VERDICT_STACK_ON:   # row 23a: the verdict stack's payload, from the same times as its window
+        stack, _, _ = verdict_stack(ws)
+        meta.append({"asset": VERDICT_CARD, "species": "stack", "title": "Everything we checked holds",
+                     "source": "four documents of this episode - each shown with its own source earlier",
+                     "badges": [], "stack": stack})
+    (BUILD / "evidence-dock.json").write_text(json.dumps(meta, indent=1), encoding="utf-8")
     table = BUILD / TABLE_NAME
     T.write_shot_table(table, rows,
                        '"""Steel and Paper H - the 1:30 unit, GENERATED by build_episode_h.py. Do not hand-edit."""\n')
     (HERE / "SHOT-TABLE-H.md").write_text(_shot_table_md(rows), encoding="utf-8")
     T.print_rows(rows, show_docks=True)
 
-    # R26-197: the receipt for this cut is THIS module's `## Recall` block (the project carries no PRODUCTION-LEDGER)
-    import recall_verify as RV
-    _inner = RV.resolve_ledger
-    RV.resolve_ledger = lambda target: Path(__file__) if Path(target).resolve() == HERE else _inner(target)
     rc = T.compile_timeline(
         HERE, BUILD, timeline_name=TIMELINE_NAME, shot_table_file=os.path.relpath(table, HERE),
         title=TITLE, subtitle=SUBTITLE, episode_id=EPISODE_ID,
@@ -3117,7 +4132,7 @@ def main() -> int:
         return rc
 
     # R26-198: the cues are BOUND to what the compiled timeline fires, and only then is the report stamped
-    cues = sound_cues(rows)
+    cues = sound_cues(rows, ws)
     plan_path = BUILD / "SOUND-PLAN.json"
     plan_path.write_text(json.dumps(
         {"note": "derived by build_episode_h.py; the project's sound/SOUND-PLAN.json is untouched", "cues": cues},

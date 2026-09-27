@@ -7,7 +7,7 @@ risk: standard
 owner: parent
 branch: main
 created: 2026-09-16
-updated: 2026-09-16
+updated: 2026-09-25 (P72 T0, 2026-09-25: T6 closed per D3; T9 done at P72 T3's merge, then complete)
 ---
 
 # The recipe lab
@@ -302,7 +302,7 @@ pushed without the operator's word. Every gated step runs UNPIPED.
 - Evidence: `scripts/lab_log.py --write | --table`: the six answers of 2026-09-17 on HG2 (seven lines - plate-dock-wipe answered twice, the earlier kept `superseded: true`) derive to `effects/lab/judgements.jsonl` (`lab_judgements.v1`: badge-ladder APPROVE good; read-park-build-write APPROVE good; spotlight-held-past-the-cut DENY reads-as-noise; plate-dock-wipe DENY off-doctrine; dock-lands-page-renames DENY off-doctrine; card-becomes-the-chart DENY off-doctrine; every `proof.t` the clip's t0 since no note named an instant); `approval-rates.{json,md}`: 23 features (4 shapes, 15 members, 4 clocks), Beta prior (strength 2, rate held inside [0.10, 0.90]) so a single observation reads 0.22 / 0.56, never 0 or 1, reasons carried per feature, the two citations in the header, no ranking model (the test greps for bradley/elo/pairwise). 17 tests. The judgement schema's `candidate_id` widened by the parent to admit `recipe:<name>` (T8's cards); the module asserts the schema's pattern instead of rewriting it.
 
 ### T6: Promotion - a proven recipe and a tracked DEFAULT
-- Status: pending
+- Status: closed (P72 T0, 2026-09-25, decision D3: the lab's promotion step is closed - recipes are proved as beats in proof doors (P69 T35, P71 T33-T36) and the defaults come from rulings (E99 s124 / s67), not from the lab; `authoring/defaults.py` is not written)
 - Owner: `implementation_luna`
 - Depends on: T5
 - Write set: `content/video_engine/scripts/lab_promote.py`, `content/video_engine/scripts/authoring/defaults.py`, `content/video_engine/tests/test_lab_promote.py`, `content/video_engine/tests/test_authoring_defaults.py`
@@ -332,7 +332,7 @@ pushed without the operator's word. Every gated step runs UNPIPED.
 
 - Evidence (T8b, the re-proof of the amended set, 2026-09-17, E99 s75 Apply 5 - the operator: "did the hg2 batches eveng et pdates?"): batch `effects/lab/batches/reproof-r3.jsonl`, no recipe file edited. `card-becomes-the-chart` as amended (fd2861b): the plate, the card lands at 4.57 s, the page grows out of it at 5.34 s with NO veil (luma 69.5 -> 53.5) - the amendment shows; the lab's verdict `needs an amended offset: page_enter:snap 5.12 -> 6.00` is M44 naming the plate, which s69 makes a diagnosis, not a refusal. `badge-ladder` survives as proven but lands THREE pills - the ask is an even count and the bed's richest series carries three; the fix is the lab's stamping (`lab_build.py`), not the recipe. `plate-dock-wipe` and `dock-lands-page-renames`: the s72 rework (scene-aware placement; a card that becomes the plate snaps/zooms into the evidence layer) is NOT expressible from their members - no member carries placement, and `effects_catalog_check.py:554-588` binds a proven recipe's members to its proof timeline - so a NEW candidate recipe plus a placement default are needed; both rendered as-is, `buildable with a companion`. `read-park-build-write` re-rendered (the lab moved, the bed did not): survives; its retitle CLIPS at the page edge ("a balance she...") - a new defect. THE PARENT'S READ of `build-lab-reproof-r3/recipe-card-becomes-the-chart/lab-members.png`: the amendment is real, and two faults keep it off a card under s75 Apply 1 - at 4.57 s the caption "unfunded bar tab." sits on the landed card's axis labels (E62: under a card the caption keeps its size and MOVES), and at 11.09 s the window runs out into bare cream (the lab's window ends on the next world's roll-out, not on the page's exit). BACKLOG R26-196. Not carded; HG2's refresh waits on the two fixes and on the operator's word on the way forward (s77 Apply 7).
 ### T9: Doctrine, the backlog and the layers
-- Status: running (the part the finished slices earned; HG1/HG2's answers and T6's pointers owed)
+- Status: running (the part the finished slices earned; HG1/HG2's answers and T6's pointers owed) - P72 T0, 2026-09-25: T6's pointers closed by D3; HG1's two cards withdrawn (E99 s82 / s84); HG2 ruled (s84). The rest - R26-237's four denied recipes and CAPABILITIES' recipe-lab row - lands with P72 T3, and T9 is done at T3's merge; P65 -> complete then.
 - Owner: parent
 - Depends on: T6, T7, T8
 - Write set: `docs/content-video-engine/BACKLOG.md` (R26-168, R26-176, R26-171, R26-172), `docs/content-video-engine/CAPABILITIES.md`, `docs/runbooks/ONE-SHOT.md` (step 4's pointer to the lab's defaults), `docs/portable/OPERATOR-RULINGS.md` (HG1 and HG2's answers), this plan's status, the generated docs layers

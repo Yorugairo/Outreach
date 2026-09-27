@@ -157,7 +157,7 @@ exact tokens into the conditioning. **Naming the failure is a way of describing 
 | | goes in the prompt | goes in the driver |
 |---|---|---|
 | what IS there | one figure · static camera · this pose · this prop · 9:16 | — |
-| what must NOT be | — | duplicate figures · extra limbs · style drift · watermark · text |
+| what must NOT be | — | duplicate figures · extra limbs · style drift · watermark · text the prompt did not name, or named text misspelled (E99 s113) |
 
 **Why they write negatives and we should not: they have no verification step.** A human
 clicking between browser tabs can only contain in advance. **We have an agent driving
@@ -166,7 +166,8 @@ observation as §53.8, arriving from the other direction — and it makes our pr
 *shorter* than theirs, again.
 
 **This becomes a real job for the driver** (backlog B7): a post-generation verifier that
-checks subject count, style match against the bound `@Mike`, and text/watermark presence,
+checks subject count, style match against the bound `@Mike`, watermark presence and any text (text the
+prompt did not name, or garbled, fails; named text is read off the frame and checked letter by letter, E99 s113),
 and re-rolls on failure — an automated pre-filter *before* the contact sheet reaches the
 operator, not a replacement for it.
 

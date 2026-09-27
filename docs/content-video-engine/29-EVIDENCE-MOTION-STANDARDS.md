@@ -1070,8 +1070,11 @@ under a two-gate release:
    explicitly approved on the contact sheet — text assets never ride a
    wave approval implicitly.
 
-Unreferenced generation keeps the absolute ban: no text, shapes-only
-echoes, blank diegetic surfaces. This is the DMP-deck pattern
+Unreferenced generation keeps shapes-only echoes and blank diegetic
+surfaces, and no text unless the narrative needs it (E99 s113,
+2026-09-24): any text is named in the prompt, spelled exactly, and
+verified on the frame read - garbled or invented lettering is
+refused. This is the DMP-deck pattern
 (antigravity-registered slides) generalized to the claim loop.
 
 ### 9.9 Preference order for host+evidence (operator, 2026-08-25)

@@ -1,0 +1,24 @@
+Snapshot 2026-09-26
+
+== AMD defense-grade XQ RFSoC page (search snippet; amd.com fetch fails ECONNRESET/timeouts): https://www.amd.com/en/products/adaptive-socs-and-fpgas/soc/zynq-ultrascale-plus-xq-rfsoc.html
+"Defense-grade AMD Zynq UltraScale+ XQ RFSoCs enable designers ... to advance state-of-the-art integrated Aerospace & Defense solutions" ... "ruggedized-packages with support for -55C to +125C operation" (snippet)
+
+== AMD/Xilinx "Radar and EW" application page (xilinx.com 301 -> https://www.amd.com/en/solutions/aerospace-and-defense/radar-and-ew.html; fetch ECONNRESET) - search snippet:
+"As a single-chip TRX solution for scalable, multi-function, phased array radar, the Zynq UltraScale+ RFSoC enables low latency transmit and receive for optimal response time in early warning scenarios."
+"Designed for coherency, the Zynq UltraScale+ RFSoC scales to any radar size-from 2 elements to 1000s of elements."
+"For EW applications deployed in high-altitude aircraft, UAVs, naval vessels, or ground-based tactical systems, XQ RFSoC devices provide the robustness required for mission-critical operations."
+Tier: PLAUSIBLE (manufacturer's own marketing, captured only as search snippet)
+Pack 1 sources/11: Xilinx 2019-02-20 release lists "Advanced phased-array radar" (CONFIRMED).
+
+== Chinese domestic alternative claim - Fudan Micro "FMZQ28DR" RFSoC
+Board-seller blog (cnblogs, posted 2024-09-03): https://www.cnblogs.com/pantong321/p/18394970
+"采用FDW复旦微电子FMZQ28DR- RFSoC处理器，兼容Gen1 ZU28/27、Gen3 ZU48/47DR RFSoC"
+(EN: uses the Fudan Microelectronics FMZQ28DR RFSoC processor, compatible with Gen1 ZU28/27, Gen3 ZU48/47DR RFSoC)
+Spec lines on the page are AMD's (Gen3 47DR: 8 ADC 14-bit to 5 GSPS; 8 DAC 14-bit to 9.85 GSPS). Whether FMZQ28DR itself matches Gen3 is NOT shown; the "28DR" name suggests a Gen1-class ZU28DR analogue (inference). Fudan's own product page (fmsh.com) not captured. Tier: UNSOURCED (seller blog).
+
+== Federal Register 2025-17893 (published 2025-09-16), BIS Entity List: https://www.govinfo.gov/content/pkg/FR-2025-09-16/html/2025-17893.htm
+"This rule is effective September 12, 2025."
+Fudan entities added for "acquiring and attempting to acquire U.S.-origin items in support of China's military modernization, for participating in China's advanced computing and integrated circuit manufacturing and distribution sectors"
+"Shanghai Fudan Microelectronics Co., Ltd. has supplied technology to Russian military end users."
+Licence: "a license requirement for all items subject to the EAR" / "a license review policy of presumption of denial."
+Entities per Kharon/snippet: Beijing, Shanghai, Shenzhen Fudan Microelectronics; Shanghai Fukong Hualong Microsystem; Shanghai Fuwei Xunjie; Sino IC Technology; Shanghai Fudan Microelectronics (HK) Co. (China, Singapore, Taiwan). Same action added the Aerospace Information Research Institute, CAS.

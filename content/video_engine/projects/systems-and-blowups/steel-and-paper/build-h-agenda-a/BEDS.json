@@ -1,0 +1,19 @@
+{
+ "door_sha256": "60326d0777d2e26e9a603a252747cf3d044c889a973514e7a2cb1466be71d3ef",
+ "forms": [
+  {
+   "form": "b",
+   "build": "C:\\Users\\Snipe\\AppData\\Local\\Temp\\claude\\C--Users-Snipe-Downloads-Outreach-Program--claude-worktrees-sweet-villani-1c3a16\\45114c3b-258a-4ca8-9aaf-b674a804cc7e\\scratchpad\\p72-t42\\tree\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\build-h-agenda-a\\form-b",
+   "bed_end": 49.45,
+   "rows": 2,
+   "gate_fail": 1
+  },
+  {
+   "form": "a",
+   "build": "C:\\Users\\Snipe\\AppData\\Local\\Temp\\claude\\C--Users-Snipe-Downloads-Outreach-Program--claude-worktrees-sweet-villani-1c3a16\\45114c3b-258a-4ca8-9aaf-b674a804cc7e\\scratchpad\\p72-t42\\tree\\content\\video_engine\\projects\\systems-and-blowups\\steel-and-paper\\build-h-agenda-a",
+   "bed_end": 49.45,
+   "rows": 1,
+   "gate_fail": 1
+  }
+ ]
+}

@@ -1957,3 +1957,344 @@ stretch; `:228` the freeze beat; `:223` T26d place/moves; `:224` T26f chrome; `:
   - spoken 6 pointing phrases, 0 uncovered;
   - stage gaps 2.5 s of 605.7 s;
   - **gate 2 FAIL (M11, M31) / 5 WARN (M02, M04, M21, M25, M27) / 21 PASS / 1 JUDGE / 5 INFO** - unchanged, no new WARN.
+
+## 21. P69 T30 - row 22 (10:05-11:19): the tripwires - the board, PROP 6, the memory monitor on its own basis, the trim proof, the flip - 2026-09-24
+
+The build runs 0.00-679.35 s. `UNIT_CUT_PHRASE` = "So— the certificate" (row 23's first words, T31's; the take glues "So" to its
+dash). RED: before the slice the table ended at row 21 (533.80-605.73); `logs/t30-gate-before.log` on HEAD's build: **2 FAIL / 5 WARN /
+21 PASS / 1 JUDGE / 5 INFO**. Treatment row 22 compiles as TABLE row 22 (605.23-679.35); row 21 now ends at the slide (605.23).
+
+Recall: `docs_find "slide transition"` -> `CAPABILITIES.md:40` (THE SLIDE - "a page to the page beside it"); `docs_find "memory monitor"`
+-> `CAPABILITIES.md:278` (SCML monitor cards: `ev-tripwire-board-v1`, `ev-memory-monitor-v1`); `docs_find "checklist dock"` ->
+`CAPABILITIES.md:277` (the test card, `profile: "phone"` - <= 3 rows, 3 columns, no sub, >= 0.60 of the stage); `docs_find "E52"` ->
+`OPERATOR-RULINGS.md:1688` (a page cites: one short line); E99 s94 `OPERATOR-RULINGS.md:3319`; `CAPABILITIES.md:223` (T26d place /
+moves), `:227` (the lit stretch), `:228` (the freeze).
+
+| table row | window | what |
+|---|---|---|
+| 22 `ledger:ev-memory-monitor-row22-v1:line:42:right:axes:cut;idle=live;readability=longform;then=ev-trim-proof-row22-v1:bars;then=ev-memory-monitor-row22-v1:line` | 605.23-679.35 | the hynix page SLIDES off left (`slide:left`, SLIDE_WHY) in the breath after "holding." and the memory monitor lands on its axes as "Bravos" is said, titled with the row's opening ("Two tripwires: Bravos' and mine"); **THE BOARD** (`dock-h-tripwire-board`, the phone checklist derived from `ev-tripwire-board-v1`: Bravos' / Fed > 5.5% / 3.63%, not lit; Mine / RAM cheaper / not lit) THROWN on "Bravos" (605.83), off before "The variable is" (615.32); **PROP 6** (`prop-dram-memory-module-v1`) STAMPED on "RAM" (616.96) on the empty plot, stepping into its upper left (T26d `moves`) as the prices draw (623.49), gone before "As of the September" (638.09); retitled with the monitor's own title on "monitor" (622.33); the two prices draw on their words - the history on "it reads what memory costs" landing on "data" (May '26), the soft June on "memory getting cheaper", the July print on "going the other way"; **+16.4% "DRAM, July print"** on "up seventeen" (642.39, under DRAM's tip) and **+13.9% "HBM-class, last two prints"** on "up fourteen" (646.49, over HBM-class's); **the June print RINGED** on "June" (653.89) with **−3.7% "DRAM, June print"** written under DRAM's figure; **recast 1** to the trim proof on "trimmed" (655.31), titled "Why trim? After 7 of 8 weak prints, the paper fell"; the bars un-draw in the breath before the flip and **recast 2** brings the monitor back on "The flip" (663.02), retitled "The flip: memory breaks while the buildout holds"; **the certificate** LANDS on "The certificates wear" (673.38) in the plot's empty upper left, off before row 23's dip (677.85) |
+
+**Acceptance (P69 T30):**
+- *Prop 6 on "the RAM inside every one of these data centers":* stamped on "RAM", `final/A-tiles.png` g-h (617.1 the ring, 617.6 at rest with its hatch). Cue `landing 22 (stamp, ink)` at 617.07.
+- *The monitor cites its release in the strip (E52):* the page's one source line reads "Korean customs, HS 8542.32 exports (production tier, full months) - SCML memory monitor, July 2026 release" on every monitor frame (`final/B`, `C`, `D`) - the object's own `src`, carried verbatim; the voice's "That's the July release" (647.71) falls on it.
+- *The June datum ringed:* the ring on the derived page's own June datum (DRAM, index 41) on "June", `final/C-tiles.png` c (654.2); the re-target from `ev-june-print-v1` (marks `[]`) is BODY_DEPARTURES row 22.
+- *Read on the SCRIPT'S basis (E99 s94), every drawn figure names its basis:* DRAM **+16.4%** = 86,970 / 74,686 (the July print over June's); HBM-class **+13.9%** = 95,408 / 83,784 (the July print over May's - the last two prints); June **−3.7%** = 74,686 / 77,558. The derived object records each basis (`basis[]`); the door recomputes each off the points and asserts it (`_m_change`: DRAM_JUL / HBM_TWO / JUN_SOFT), the June one against the source's own mark too. Each is written with its basis: "DRAM, July print", "HBM-class, last two prints", "DRAM, June print" (`final/C-tiles.png` a-d).
+
+**The derived objects** (`evidence/objects/`, both recording `derived_from` and their basis; the sources unchanged):
+- `ev-memory-monitor-row22-v1.series.json`: `ev-memory-monitor-v1`'s DRAM and HBM-CLASS points, names, colours and delays verbatim, its x ticks, y label, log scale, sub, source and June mark. NOT carried: (a) its TRIGGER series (the dashed 12-month average) - the script's threshold is "the release itself: the first month customs shows memory getting cheaper", and a line NAMED trigger that is a 12-month average would be a second, unspoken trigger on the page; (b) the end tags' July levels (`label` "$87.0k" / "$95.4k") - MEASURED on draft 1 (`p69-row22/d1t/b-tiles.png` 629.3) a tag rides the lead point, so drawn print by print it printed July's level at the May print; the tags now name the series. The door asserts the rest equal.
+- `ev-trim-proof-row22-v1.series.json`: `ev-trim-proof-v1` verbatim plus a stated scale, `domain: [-20, 20]` % (it clips nothing; asserted).
+- `build-h/objects/ev-tripwire-board-h22-v1.series.json` (build dir only, `_tripwire_card_object`): the board's two rows cut to the phone profile's width, every figure the object's (5.50% as "5.5%", 3.63%, NOT LIT), no sub.
+
+**Measured and fixed** (private drafts `scratchpad/p69-row22/d1..d11`):
+- **draft 1, the trim proof as a card** (`d1/docks/dock-h-trim-proof.png`; `cards/compare.png`): the T10c card profile draws this 8-bar signed object broken at 691 and 1100 px (the values collapse into one row, three x labels, "-13.8%" off the card); the legacy card (no `card_w`) reads ~11 px type and drops "Jul '26"; and the monitor's lines leave no room a readable card fits (M25 / M27 read a card on ink as FAIL). The trim proof became the page's SECOND STATE (TRIM_WHY), the monitor its THIRD, for the flip. (Before that, draft 1's page stood 37.5 s past its last data mark; now 15.1 s.)
+- **draft 1, the tags:** July's levels printed at the May print (above) - the derived object's tags name the series.
+- **draft 1, the board's "memory cheaper"** filled its cell into "not lit" - "RAM cheaper".
+- **drafts 1-3, the figures at one corner:** the two July tips stand 0.04 apart on the log scale at the plot's top right, beside their tags - the figures wrote over each other and the tags (`d1t/b-tiles.png` 648.0). HBM-class's figure now stands above its tip (`dy` -1.3) and DRAM's below (`dy` 4.5, clear of its own 2026 climb, `d2t` 643.8), each in its series' colour.
+- **draft 2, the ring's label:** the callout writes its label right of the ring (LABEL_DX), so at the plot's edge "June print -3.7%" stood between the two tags (`d2t/b-tiles.png` 654.6). The ring carries no label; the June figure says it.
+- **draft 3, the June figure at June's datum** was centred over the plot's right edge and clipped ("DRAM, J", `d3t` 654.8); pinned at the tip (right-aligned, stacked under DRAM's July figure) - the ring marks June's own datum.
+- **draft 3, the trim page's "-13.8%"** was written into the category row on the builder's own scale - the stated [-20, 20] scale.
+- **draft 7, a figure on the Jul '26 bar** to name it (see the engine finding below) landed before its bar had grown and wrote over the bar's own value - refused; the page's title carries the object's own answer ("7 of 8 ... the paper fell", its first badge).
+- **draft 8, M25 / M27 FAIL (11:13):** the certificate at (0.23, 0.34) w 0.16 rose over the y label and its flight crossed the title - moved to (0.19, 0.42) w 0.13, where the 2023 prices never rise above y ~577 px. **draft 10, M27 FAIL (11:13):** its throw's flight crossed the drawn prices - it LANDS in its slot (`arrive: land`).
+- **draft 8, M34 FAIL (11:03):** the plain recast back kept the bars' "10.9%" on the returning HBM-class line - the bars UN-DRAW 0.7 s before "The flip". **draft 9:** the undraw's caps are the PAGE's, read by every state, so the monitor came back as empty axes (`d9t/D-tiles.png` 664.4-679.3) - both prices are re-capped at the July print. **draft 10, M34 again:** re-capped on the recast's first frame they stood under the fading "10.9%" - re-capped 0.5 s in (CAPS_BACK_AT_S). Draft 11: 1 FAIL (M11) / 5 WARN in the private dir (no stage-gaps file there, so no M31).
+- **draft 9, the board's rows** land as a RECAP, 0.8 s apart from the landing (`d9t/A-tiles.png` 608.3): a card held under CHECKLIST.RECAP_S (12 s) reads no delay anchor, and M12 caps a chart dock at 10 s. "Mine" is on the board ~3.5 s before "Mine is stricter"; the anchors are dropped.
+- **the door: `ledger_page`'s child crashed** (`CalledProcessError`) printing the trim object's "≤" through a cp1252 pipe - the door sets `PYTHONIOENCODING=utf-8` for its children (the tool is not edited).
+
+**Named, not fixed:**
+- **ENGINE (for the parent): an 8-bar page never finishes its last bars.** `lpPaintChart` (`scene-evidence-engine.mjs` ~:14430-14434) paints each bar `expoOut(clamp01((cb - i*0.1) / 0.55))` and its category label `clamp01((cb - i*0.1 - 0.3) / 0.2)` with the build clock `cb` clamped at 1: on a finished build bar 7's label stands at 0.5 ("Jul '25", dim), bar 8's at 0 ("Jul '26" is never written - MEASURED in the DOM, `p69-row22/dom.py` at 661.0), and bar 8 at ~97.7% of its height (the -13.8% bar is drawn at ~-13.5). Only i <= 5 completes. The fix is the stagger normalised to the bar count (e.g. `i * min(0.1, 0.45 / (n - 1))`), with the goldens re-pinned. M26 reads nothing here ("no bars page printed a value").
+- **ENGINE KEY: "The flip" in RED.** The retitle species takes `text` only (`_validate_species` retitle branch, `build_scene_timeline_f.py` ~:2207; the engine's retitles map, ~:13598, clones the title's style) - a `color` key through `PS_PAL` would carry the treatment's red. The flip is retitled in the page's own title ink.
+- **The recast's hand-over shows the returning prices over the trim page's % ticks for ~0.4 s** (`final/D-tiles.png` b, 663.6 - "2 / 1 / 800" and "Oct '24" leaving): the plain recast's own tick hand-over.
+- **The figures' basis subs read ~5-6 px at a 390 px phone** (`final/phone-390-x2.png`): the figure species' sub size. The numbers read; the source line is the M25 INFO's 8.0 CSS px, pre-existing.
+- **M21 WARN adds s22 15.1 s (11:04 -> 11:19):** the last data mark is recast 2's landing; the flip, the certificate and "paper is paper" follow it. M21 was already WARN.
+- **M27 WARN lists 3 more instances** (the board, the RAM and the certificate "inside the plot's box, clear of its ink" - E65's placement tier); the row is the same WARN.
+- **The T26d fit's WARNs for the board and the RAM** ("the board lands over a stamp's mark", "the RAM over the data") are read off the stamp's reserved box and the page's full ink; the board leaves at 615.32 and the RAM lands at 616.96, on unwound prices - no frame shows either.
+- **The certificate returns bare** - no badge, no ring: row 23 (T31) throws it onto the reset and rings it with RAIL_DROP 2 s later.
+- **The empty plot 615.3-623.5** carries the RAM alone (the board has left; the prices draw on "it reads what memory costs").
+- **Voice "seventeen" vs +16.4%:** the take says "DRAM up seventeen percent"; the monitor's July print is +16.4% (s94's own figure). The page draws the data; the sentence is the script's. For the operator.
+
+**Transitions** (in `SHOT-TABLE-H.md`): the slide hynix -> monitor (SLIDE_WHY: the dip, the melt's throw (72 s earlier), a recast, rescale / extend, the spiral and the suck refused); inside the row, the trim proof and back (TRIM_WHY). Flow count: 0 cuts, 7 dips, 1 arrival carrying a boundary, 13 transforms.
+
+**Life:** 22 of 22 rows (row 22 `idle=live`). `final/life.txt`: 649.0 vs 651.0 (nothing lands) mean |dL| 5.01, 6.1 % of px changed; 668.0 vs 670.0 5.35 / 6.7 %.
+
+**The order of proof** (`logs/t30-*`, final build 0.00-679.35, every browser step alone, in order; `scratchpad/p69-row22/chain.sh`):
+- `t30-door1.log` rc 0; `t30-measure-write.log` - **the fixture re-measured** (`content/video_engine/assets/page-boxes.v1.json`: "7 builders x 21 geometr(ies) + 21 project page(s) from 2 timeline(s)", +2 entries - the monitor page's ink is new); `t30-measure-check.log` **"PASS 7 builders x 21 geometr(ies) measured identical"**; `t30-door2.log` rc 0, "13 page(s) MEASURED", cues **44 bound of 45** (the one dropped is T26's `page enter 17 (axes)`, unchanged; row 22's four: `page enter 22 (axes)` 605.23, `landing 22 (throw, paper)` 606.25, `(stamp, ink)` 617.07, `(land, paper)` 673.66), life 22 of 22.
+- `t30-probe.log`: 270 instants. `t30-frozen.log`: **"no run of identical frames over 0.50s (whole frame)"**.
+- `t30-door-final.log`: sha256 IDENTICAL to `t30-door2.sha` (the timeline, player.html, player.json, SHOT-TABLE-H.md, SHOT-TABLE-H.py).
+- `t30-seams.log`: **21 boundaries, 0 faults** (605.23 slide:left, darkest 31.3, clean). `t30-spoken.log`: **6 pointing phrases, 0 uncovered**. `t30-stagegaps.log`: **2.5 s of 679.4 s** (605.23 slide -> axes, 0.0 s).
+- `t30-pytest.log`: `test_page_boxes.py` **83 passed**.
+- **`t30-gate.log` 2 FAIL / 5 WARN / 21 PASS / 1 JUDGE / 5 INFO** - the same line as `t30-gate-before.log`. FAIL M11 and M31, both pre-existing. WARN M02, M04, M21 (+ s22), M25, M27 (+ 3 row-22 instances). **No new WARN row.** M01 PASS 9.5 s; M03 PASS 44 s; M05 PASS 7.0 of 8.0; M12 PASS; M18 PASS (longest 0.17 s at 9:09); M24 PASS; M28 PASS (11,800 pairs); M34 PASS (324 pairs).
+- No gated command was piped.
+
+**Tiles** (`scratchpad/p69-row22/final/`, rendered from build-h itself):
+- `A-tiles.png` 604.8-622.6: row 21's end, the slide, the board thrown and filled, the empty plot, PROP 6's stamp and rest, the retitle.
+- `B-tiles.png` 624.3-647.9: the RAM stepping aside, the history, the soft June, the July print, the two figures with their basis.
+- `C-tiles.png` 649.0-662.6: the held page, the June ring and figure, recast 1, the trim bars growing, "Jul '25" dim and no "Jul '26" (the engine finding).
+- `D-tiles.png` 663.1-679.3: the bars un-drawn, the hand-over ticks, the monitor back, "The flip", the certificate landed, the row's end.
+- `phone-390.png` + `phone-390-x2.png`: 608.3 / 655.2 / 661.5 / 674.4 at a 390 px phone.
+- `life.txt`. No build-f reference frames were cut for this row.
+
+### 21b. P69 T30b - the parent's three, from the frame read of section 21's tiles - 2026-09-24
+
+**Supersedes section 21 where they differ:** the board and PROP 6 now stand on ROW 21's page; the slide into the monitor is at 622.89 (was 605.23); the monitor carries the source's own title from its landing (no "Two tripwires" title, no retitle on "monitor"); the June figure is written on "one soft month" in 0.8 s; the return recast runs 0.8 s with the prices re-capped at +0.9 s.
+
+1. **THE EMPTY PLOT (605.9-~624, 18 s of axes with no data - the board, then the RAM, on an empty chart).** The parent's option (a), made to pass M25: the hynix page holds through the board and the RAM. On "Bravos" the line SHRINKS into the left third (`panel_focus` with a `region` [0.02, 0.22, 0.345, 0.58], HYNIX_ASIDE - T8c's resize) and the board is thrown into the room it frees (centre 0.685, w 0.60 - the phone profile's floor); on "The variable is" the line grows back to the page and the RAM is stamped in its empty upper left (PROP 4's room); the monitor slides in to land on "it reads what memory costs", and the prices draw from that word.
+   - Why (a) over (b): option (b) (the monitor's history drawn from "The variable is memory") still leaves the board on an empty plot for 9.4 s (605.9-615.3). And the board cannot stand over the hynix line as it is (a settled card over a line's data is M25's FAIL) - a `panel_focus` needs one panel active (`panel_focus_state`: "no panel in focus"), so the line is held BESIDE the board, never under it.
+   - MEASURED, draft 12 (`d12t/A-tiles.png` c-e): at w 0.30 the shrunk panel's x ticks ran together ("Oct '25Jan '26Apr '26Jul '26") - widened to 0.345 with the board moved right (`d13t/A-tiles.png`: the four ticks separate).
+   - MEASURED, drafts 12-13 (`d13t/X-tiles.png` 621.7-622.95): with its exit 0.3 or 1.0 s before the slide the RAM never left - the compiler wrote `exit: 621.89`, yet the prop stood through the slide onto the monitor (623.3). At 2.5 s before (620.39) it leaves (`d14t/X-tiles.png`: gone by 621.0). An engine question for the parent: a prop dock's exit close to its page's end is not honoured.
+   - Zero-ink stretches now: the slide lands at 623.49 and the prices' first points are drawn by ~624.2 (~0.8 s); the flip, below (~1.0 s). No other stretch of the row shows an empty plot.
+2. **THE -3.7% FLASH** (settled ~655.1, taken by the recast at 655.31). The figure is written on "one" of "one soft month" (652.69) in 0.8 s (JUNE_FIG_S): settled 653.49, it stands **~1.8 s** before "trimmed" (`final-t30b/C-tiles.png` c-f, 653.6-655.3); the ring stays on "June".
+3. **THE WRONG TICKS AT THE FLIP** ("2 / 1 / 800", "Oct '24 / Dec '24" under "Jan '2" at 663.6). MEASURED at 0.1 s steps (`d14t/F-tiles.png`): the plain recast's text hand-over unwrites the trim ticks 663.1-663.5 and writes the monitor's by the hand 663.5-664.3, and the prices (re-capped at +0.5 s) stood over the half-written axis. Door fix: the return recast runs 0.8 s (FLIP_RECAST_S) and the prices are re-capped at +0.9 s (CAPS_BACK_AT_S), once the ticks are whole (`d15t/F-tiles.png`; build-h `final-t30b/D-tiles.png` b-f): the hand-over runs on an empty plot (~1.0 s with no ink, from the bars' un-draw), and the prices land ~663.95-664.1 on "8000 ... 64000" and "Jan '23 ... Jul '26". **Left, an engine law:** for ~0.3 s a half-written tick ("16", "320") stands on the EMPTY plot (663.45-663.75) - the recast writes its arriving text by the hand (`lpWriteText` over the transition); only an engine option (the arriving ticks written before the transition's midpoint, or faded rather than written) removes it.
+
+**Named, new:**
+- **M21 row 21: 41.3 s (9:41 -> 10:22), up from 23.6 s** - the hynix page now holds the board and the RAM to 622.89 (its last data mark is still the operating profit, 581.6). Row 22's is 15.3 s. Same WARN row.
+- **The deep-receded bars panels show as faint dark ghosts at the right of the stage while the line is aside** (`final-t30b/A-tiles.png` b-e, 605.9-615.9): the wafer and contract panels at 0.05 ink (RECEDE_DEEP) - visible as shapes, not read (the probe skips <= 0.05).
+- **T26d fit WARNs:** the board lands "over a stamp's mark or ring" (the RAM's reserved box) and the RAM "over a reserved box" - the board leaves at 615.32, the RAM lands at 616.96; no frame shows them together.
+
+**Chain** (`logs/t30b-*`, every browser step alone, in order; `scratchpad/p69-row22/chain-b.sh`):
+- door rc 0; `measure_page_boxes.py --write` (the fixture: "+ 21 project page(s)", the monitor page re-measured under its source title); `--check` **"PASS 7 builders x 21 geometr(ies) measured identical"**; door2 rc 0, "13 page(s) MEASURED", cues **44 bound of 45**, life 22 of 22;
+- probe 272 instants; frozen **"no run of identical frames over 0.50s (whole frame)"**; door-final sha256 **IDENTICAL** to door2;
+- seams **21 boundaries, 0 faults** (622.89 slide:left, darkest 31.7, clean); spoken **6 pointing phrases, 0 uncovered**; stage gaps **2.5 s of 679.4 s** (622.89 slide -> axes, 0.0 s);
+- **gate 2 FAIL (M11, M31) / 5 WARN (M02, M04, M21, M25, M27) / 21 PASS / 1 JUDGE / 5 INFO** - unchanged from `t30-gate-before.log`, no new WARN row. M28 PASS (12,125 pairs); M34 PASS (339 pairs); M12 PASS; M18 PASS.
+
+**Tiles** (`scratchpad/p69-row22/final-t30b/`, from build-h): `A-tiles.png` 604.8-623.2 (the line aside, the board, the line back, the RAM, the slide); `B-tiles.png` 623.7-647.9; `C-tiles.png` 651.0-661.5 (the June figure settled 653.6-655.3, the trim page); `D-tiles.png` 662.6-679.3 (the flip's hand-over on an empty plot, the prices on whole axes at 664.1, the certificate); `phone-390.png` / `-x2.png` (610.0 / 617.2 / 653.6 / 674.4); `life.txt` (608.0 vs 610.0: 7.00 / 9.5 %; 649.0 vs 651.0: 5.01 / 6.1 %).
+
+## 22. P69 T83 (the railway share certificate), row 22's red flip (T86), T82 (every H stamp re-timed, E99 s112), and job 4 (M47: row 10's bare plot, row 5's 2.0 s recast) - 2026-09-24
+
+RED: `logs/t83-door-before.log` (HEAD deceff3's door) rc 0 with **10 `[WARN] P69 T81`** findings (9 stamps; the data centre twice - inside "centers." and +0.15 s from the capex recast's landing); `logs/t83-gate-before.log` **2 FAIL (M11, M31) / 5 WARN (M02, M04, M21, M25, M27) / 21 PASS / 1 JUDGE / 5 INFO**.
+
+### 22.1 T83 - v1b replaces the 1845 crop in rows 2, 18 and 22 (one certificate)
+
+- **The claim record.** The operator approved `prop-railway-share-cert-v1b` on 2026-09-24 ("v1c and v1b both look fine to me so lets go with v1b since that's your pick ... yes, you would update row 2 also"). Recorded in the main checkout's `review/claims/sp-h-railway-share-cert-1/approvals.json` as `operator_approved` / `operator_approved_at` / `operator_approval_note` - the three keys waves 1, 1b, 3-7b use (their manifests stay `review_only`, so this one does too). The door reads claim objects as `REPO / review/claims/<claim>/objects/...`, so the claim dir is mirrored into this worktree's gitignored review tree (as every other claim is); sha256 b24f2fa0... = the manifest's. No image enters git.
+- **The crop** (`CERT_CROP = (1412, 923, 62, 52)`): MEASURED by pixels off the flat ground (|rgb - #25313C| > 30) the sheet runs x 64-1471, y 54-972 on the 1536x1024 plate; the crop takes it 2 px out on every side so the torn deckle is whole. `CERT_ASPECT` 0.6537 (the 1845 crop's 0.8440). The card is renamed `dock-h-railway-share` (the old id said 1845, and `dock_still` re-cuts by id and mtime, so a stale still could have survived); its dock entry reads "A railway share certificate" / "Money Physics - plate prop-railway-share-cert-v1b" (the plate carries no date).
+- **The slots, refit to the flatter sheet:** row 2 `CERT_ROOM` 0.12 -> **0.145** (278 x 182 px at [1397, 701], inside the measured room under the lowest tag); rows 18a/18c `PRESS_CERT_SLOT` 0.30 at 0.22 -> **0.36 at 0.24** (691 x 452 px at [115, 314] - about the old card's height; the ring's left bulge stays on the stage, leftmost ~x 38); row 22 `CERT_BACK_SLOT` 0.13 -> **0.15** (288 x 188 px at [221, 360], its foot above the 2023 prices' ~577 px).
+- **The ring (s110) stays on the whole card** (`CERT_FACE` (0, 0, 1, 1); `cert_face()` refits from the slot's aspect): the region is the new card's box; "-64%" (RAIL_DROP) is written above-right over the press's red body. The ellipse crosses the card's left border and lower edge (as T26's grazed its corners); "RAILWAY SHARE", the vignette and "ONE SHARE" stay clear of the stroke.
+- **Legibility (s113 "verified"):** at row 18's held shot "RAILWAY SHARE" stands ~418 px wide with ~35 px capitals on the stage and ~7 px capitals at a 390 px phone - it READS (`scratchpad/p69-cert/tiles/phone-390-x2.png`, panels 2 and 3). At row 2 (0.145) and row 22 (0.15) the title reads on the 1080 stage (~12 px capitals) and only as a word shape at 390 px; neither room is larger (row 2's is the measured room under the tags; row 22's is capped by the y label above and the 2023 prices below).
+- **Named, not fixed:** row 2's throw crosses the "+21% MEGA-CAP TECH STOCKS" tag for ~0.1 s in flight (`tiles/CERT-a-9.60.png`) - the 1845 card's own flight path, unchanged (M27 reads the same); the throw's speed reads ~1205 px/s (M20 INFO; was ~1103).
+- Gate after job 1 (`logs/t83-gate.log`): **2 FAIL / 5 WARN / 21 PASS / 1 JUDGE / 5 INFO** - identical rows except M20's INFO (the card's name and speed). Chain `logs/t83-*`: door rc 0; boxes `--check` PASS (no page geometry changed - not written); probe 272 instants; frozen "no run of identical frames over 0.50s"; door-final sha256 IDENTICAL; seams 21 / 0 faults; spoken 6 / 0 uncovered; stage gaps 2.5 s of 679.4 s.
+- Tiles: `scratchpad/p69-cert/tiles/CERT-tiles.png` (9.6 / 10.4 / 15.0 row 2; 373.5 / 376.0 row 18a; 410.0 / 411.2 / 412.5 / 418.0 row 18c with the ring; 673.8 / 675.5 / 677.5 row 22) + `phone-390.png` / `-x2.png`; the 1845 crop for comparison `scratchpad/p69-cert/before/BEFORE-tiles.png`.
+
+### 22.2 Row 22's "The flip" in red (T86's key)
+
+The retitle takes `color: "neg", color_span: "The flip"` - "The flip" in `--lp-neg`, the rest in the title's own rose (`scratchpad/p69-cert/flip/FLIP-c-665.20.png`, settled; `FLIP-tiles.png` 663.6-670.0). `logs/flip-gate.log` 2 / 5 / 21 / 1 / 5, every row identical to job 1's.
+
+Also: the door's `Recall(sound)` citation moved `authoring/audio.py:471` -> `:511` (T84 moved the span; the parent's note). All 12 of the door's `Recall(...)` citations checked on their exact lines (0 off).
+
+### 22.3 T82 - every H stamp lands just AFTER its word (the door form)
+
+Each stamp's enter is `D.stamp_enter(W.after(ws, phrase, word))`, and each dock names the words it punctuates (`names=`), so T81's advice reads the right span (without `names` it reads the word at the NEW enter - the next word - and every re-timed stamp is flagged inside "at", "And", "that" ...; `logs/t82-d1.log`). The picks, each with its sentence:
+
+| row | prop | the sentence | anchor (contact) | why |
+|---|---|---|---|---|
+| 9 | the Fed | "The Fed at six and a half in two thousand" | after "Fed" (217.83; was 217.61) | the building IS the Fed; the retitle stays on the word (217.46), the stamp follows it; the camera push re-based on the new enter (`t_fed_settle`, +0.22 s) |
+| 10 | the data centre | "... becoming a bet on data centers." | after "centers." AND after the capex bars have risen (290.32; was 288.94) | MEASURED: the gate books the recast's landing at 288.79, but the frame plays the capex bars rising 288.9-290.2 (`scratchpad/p69-t82/dc-bars*`); on the word's end (289.40) the stamp landed beside a bar still growing. `CAPEX_BARS_RISEN_S` 2.6. The contact is 1.05 s after the word - the one stamp placed at the motion's end, not the word's end: **for the operator** |
+| 15 | PROP 3 (S&P) | "AI builders are now twenty percent of the S&P five hundred." | after "S&P five hundred" (388.00; was 386.26) | "S&P" alone lands during "five hundred", mid-name; camera 3 re-based (`t_contact` 389.35) |
+| 18 | the GPU | "Today's compute doesn't sit." | after "compute" (437.72) | the idea's end ("sit.", 438.62) would leave the GPU < 1 s on the page before it becomes the bar on "about five years" (439.44) |
+| 19 | the phone | "... check all three from your phone." | after "phone." (485.02) | the word and the sentence end together |
+| 21 | PROP 4 (HBM) | "They make the stacked memory the AI racks need." | after "stacked memory" (540.21) | T81's suggested `after('stacked')` lands during "memory"; the idea's end runs into "Over the last year", where the price draws |
+| 21 | PROP 5 (wafer) | "... three times the wafer capacity of the ordinary kind." | after "wafer capacity" (559.75) | "wafer" alone lands during "capacity"; the idea's end is 0.3 s before the 3x becomes 3 wafers |
+| 21 | the rack | "The memory is going into racks that are already under construction." | after "racks" (586.75) | the operator's own example; the answers land from "Scarce" |
+| 22 | PROP 6 (RAM) | "The variable is memory- the RAM inside every one of these data centers." | after "RAM" (617.45) | the idea's end (619.92) would leave it ~0.5 s before it must leave (RAM_OFF_LEAD_S, R26-309) |
+
+- **Advice after:** 0 `[WARN] P69 T81` lines; 0 `[INFO] P69 T84 retimed` (the door form moves each landing cue with its enter): the nine `landing N (stamp, ink)` cues in `SOUND-PLAN.json` moved 217.57->217.79, 288.90->290.28, 386.22->387.96, 437.29->437.68, 484.15->484.98, 539.46->540.17, 558.67->559.71, 586.32->586.71, 617.07->617.41 - each one frame before its contact; cues 44 bound of 45 (unchanged).
+- **Knock-ons checked:** no exit moved and none is nearer a page change; the only caption page that starts inside a shift ("capacity of the ordinary kind." 558.98) stays `anchor`; T26d's WARN on PROP 3's move now reads 389.35 (the same "over a label" finding); row 9's camera-reach WARN now reads t=220.38 (the same finding).
+- **Frames:** `scratchpad/p69-t82/<prop>-contact-sheet.png` (fed, dc, sp, gpu, phone, hbm, wafer, rack, ram): HEAD's contact instant / the named word ends (the mark still falling) / the new contact / settled. At every word end the prop is still coming down; nothing lands mid-word.
+- Gate (`logs/t82-gate.log`): **2 FAIL / 5 WARN / 21 PASS / 1 JUDGE / 5 INFO** - no row changes verdict; M03 44 -> 45 s (PASS). Chain `logs/t82-*`: door rc 0; boxes `--check` PASS; probe 273 instants; frozen "no run of identical frames over 0.50s"; door-final sha256 IDENTICAL; seams 21 / 0 faults; spoken 6 / 0 uncovered; stage gaps 2.5 s of 679.4 s.
+
+### 22.4 Job 4 - M47's two findings (P69 T87's row, lane B 965c4e2, read off this door)
+
+- **Row 10 (s10, 4:02 -> 4:06): the plot stood bare 4.4 s.** Every series was capped at index 0 (one point draws no line), so from 242.38 to 246.8 only the title wrote (`scratchpad/p69-m47/before/B10-tiles.png` d-g). The issuance now lands capped at 2021 (`DEBT_OPEN_CAP` 1 - the first year of the 2020-24 AVERAGE, the low ~$28B line): the first ink is on the plot ~0.3 s after it appears (243.1 -> ~243.4) and the stroke creeps to 2021 through the question (`scratchpad/p69-m47/after/A10-tiles.png` d-g), then "For years the giants ... out of pocket" carries the same stroke on to 2024. Why this over the other two: keeping the yields page up to ~246.3 leaves the Fed's page under "who is paying for the steel this time?" (the question turns the story; the page change belongs on "But here's the question"); drawing the whole average under the question draws the next sentence's line before it is said. MEASURED: the stub is drawn over ~2.3 s (243.1-245.5), not the build's 0.4 s - the page's own entry clock after the throw; it reads as the line starting under the question.
+- **Row 5 (s05, 1:20 -> 1:22): the 2.0 s plain recast hand-over** (railway index -> share of GDP) now runs the door's own 1.2 s (`GDP_RECAST_S`): at 2.0 s the railway line un-drew over the GDP line on half-written axes for ~1 s (`before/B05-tiles.png` b-e); at 1.2 s the overlap is ~0.6 s and the GDP line stands whole by 81.5, as "crossed seven percent" is said (`after/A05-tiles.png` b-f). A KEYED recast is not this beat: the two pages are two datasets, and `keyed` hands the same data from one form to another.
+- **ENGINE (for the parent, not fixed - outside the write set): the second `melt:throw` melts the WRONG page.** At 242.38 (s09 -> s10) the yields page is replaced for ~0.45 s by row 14's yardstick bars ("The railways took half. Tech takes 28 cents.") and THAT page balls and is thrown (`scratchpad/p69-m47/melt/M-tiles.png` d-f, 242.45-242.75); the first `melt:throw` (195.82, s08 -> s09) melts its own page correctly (`melt195/M-tiles.png`). The melt's snapshot looks cached from the first throw. Seams and stage gaps read it clean (the frame is not dark and not empty).
+- Gate (`logs/m47-gate.log`): **2 FAIL / 5 WARN / 21 PASS / 1 JUDGE / 5 INFO**; M23 now lists "s05 recast 1:20+1.2s". M47 is not in lane A's gate yet (T87 is lane B's), so its own verdict is not read here. Chain `logs/m47-*`: door rc 0; `measure_page_boxes.py --check` - the chain's first run died on a Playwright font-load NetworkError (`m47-measure-check.log`), re-run alone **PASS 7 builders x 21 geometr(ies) measured identical** (`m47-measure-check2.log`); probe 273 instants; frozen "no run of identical frames over 0.50s"; door-final sha256 IDENTICAL; seams 21 / 0 faults; spoken 6 / 0 uncovered; stage gaps 2.5 s of 679.4 s; 0 T81 advice, 0 T84 retimed, cues 44 bound of 45.
+
+### 22.5 Job 5 - the waiting line carries its number (E99 s120, the squint test)
+
+- **The finding** (the parent's read of `scratchpad/p69-m47/after/A10-tiles.png` d-i, 243.4-248.5): job 4's stub cleared M47 on paper, but a flat stroke on the floor of a 0-150 axis read EMPTY for ~5 s.
+- **The fix:** the 2020-24 average's own figure, "$28B a year" / "2020-24 average" (`DEBT_AVG_TEXT` / `DEBT_AVG_SUB`, the object's basis, E28), is now written ON the waiting line. It uses the page's `figure` species pinned to the stub's datum (`datum(DEBT_OPEN_CAP, DEBT_ISSUANCE)`, 2021), not a card.
+- **Its word:** the write (`DEBT_MARK_S` 1.6 s) starts at 243.89 and is whole as "paying" is said (245.04 + 0.45). It runs across "decides it: who is paying" - the question's own verb, what the builders borrowed while they paid out of pocket - and it finishes as the stub reaches 2021 (MEASURED ~245.0-245.5), so the figure is never ahead of its datum.
+  - Draft 1 wrote it FROM "paying" (245.04): `j5/J5-tiles.png` shows 243.1-245.6 still bare. Draft 2 (build-h) shows "$28B" written at 244.3, "$28B a year" at 245.0, and figure and sub whole at 245.6 (`scratchpad/p69-m47/j5b/J5-tiles.png` a-f).
+- **One figure:** it moved from "twenty-eight billion" (260.74) and was not duplicated. The voice then names the number already standing (`j5b/J5-h-261.50.png`); a second write would print $28B twice.
+- **The domain is kept (0-150):** the rise to $121B and the $130-150B range need it, and the figure carries the stretch.
+- **Frames at 390 px** (`j5b/phone-390-x2.png`, 243.5 / 245.0 / 247.0): "$28B a year" reads at 245.0 and 247.0; 243.5 (0.4 s after the page lands) is still the stub alone.
+- **Named, not fixed (ENGINE, for the parent):** the figure's SUB never finishes writing its last glyph - "averag" + a dim "e" at 249.0 and still at 272.0 (`scratchpad/p69-m47/j5late/zoom-272.png`). The same object's sub, so it predates this job; the write clock appears to stop short of 1 (T85's family).
+- Gate (`logs/j5-gate.log`): **2 FAIL / 5 WARN / 21 PASS / 1 JUDGE / 5 INFO**, identical to `j5-gate-before.log` except M28's pair count (12,224 -> 12,279, PASS).
+- Chain `logs/j5-*`: door rc 0; boxes `--check` PASS; probe 273 instants; frozen "no run of identical frames over 0.50s"; door-final sha256 IDENTICAL; seams 21 / 0 faults; spoken 6 / 0 uncovered; stage gaps 2.5 s of 679.4 s; 0 T81 advice, 0 T84 retimed, cues 44 bound of 45.
+
+## 23. P69 T31 - row 23 (11:19-12:45): the ring - reset 3, the case in one slot, the bullish page, host window 3, dips 7-9 - 2026-09-24
+
+The build runs 0.00-765.10 s. `UNIT_CUT_PHRASE` = "The steel gets used." (row 24's first words, T32's); row 23's own first words
+("So— the certificate") are `UNIT_CUT_ROW23`, dip 7. RED: before the slice the table ended at row 22 (622.89-679.35).
+`logs/t31-door-before.log` rc 0 (0 `[WARN] P69 T81`); **`logs/t31-gate-before.log` 2 FAIL / 5 WARN / 22 PASS / 1 JUDGE / 5 INFO**,
+read on HEAD's build with a fresh probe (`t31-probe-before.log`, 273 instants) and frozen measure (`t31-frozen-before.log`, "no run of
+identical frames over 0.50s"). The brief's line was 2 / 5 / 21 / 1 / 5; the merged tree adds M47 (lane B's T87) to the gate as a
+PASS - the extra PASS is that row, nothing else moved. Treatment row 23 compiles as TABLE rows 23 (the ring plate), 24 (the hynix
+page returning) and 25 (the newsroom); row 22 now ends on dip 7 (679.45, the onset rule's dip on "So").
+
+Recall: `docs_find "verdict stack"` -> `CAPABILITIES.md:264` and doc 29 s9.24 (the operator's s68 evidence wall "at a verdict beat
+('Everything we checked holds')"; build-f's own use at 701.73); `effects_card "verdict stack"` (the five phases, `stack_entry`);
+`CAPABILITIES.md:233` (T65, a ring on the named thing, "row 18 and row 23 retire `cert_face()` for this"); `:211` (T81, the door form
+`D.stamp_enter(W.after(...))`); `:277` (the phone checklist profile); `:226` (panels, `panel_focus`, T8c's resize); E40 s4
+(`OPERATOR-RULINGS.md:1246`, a returning page unwinds from its point); E99 s95 (`:3321`), s103 (`:3337`), s110 (2) (`:3351`), s112
+(`:3355`), s113 (`:3357`); `evidence/EVIDENCE-DOSSIER.md:197-201` (E1, SK hynix "essentially sold out" for 2026, VERIFIED).
+
+| table row | window | what |
+|---|---|---|
+| 23 `world-spike-certificate-ring-v2;use=reset` + ken `(0.05, 10, -4)` | 679.45-716.79 | **dip 7** (RING_DIP_WHY) onto RESET 3, the spike and the blank sheet; **the railway share THROWN** on "the certificate" (679.64) onto the sheet (`dock-h-railway-share-ring` - the same PNG under its own id, below) and **RINGED on "paper sold as safety"** (681.45) with RAIL_DROP **-64%** - P69 T65's ring on the DOCK, `points: "paper sold as safety"`; the **railway index** (row 9's page drawn as a card for its size, `dock-h-railway-index-card`, "British railway shares fell 64% from their peak") takes its slot (s80) to be down on "the certificates that financed it" (688.91); then THE CASE, one document per phrase in the same slot, each down on its words (HANDOFF_LEAD_S): **the test** (row 20's LIVE phone checklist, re-filled as a recap) on "Everything we checked holds" (696.49), **the filings' lease commitments** on "In early twenty twenty-five" (701.36), **the target-date statement** on "A fifth of your index" (705.60); the slot clears on the turn "And the one number" (708.73, stage captions carry "And the one number that would prove me wrong"); **PROP 6 the RAM STAMPED** just after "the price of memory—" (contact 711.67), gone 2.5 s before dip 8 |
+| 24 `ledger:ev-hynix-row21-panels-v1:line::right:spiral:cut;idle=live;readability=longform` | 716.79-743.04 | **dip 8** on "More bullish" (HYNIX_RETURN_WHY) and row 21's panels page **RETURNS BY THE SPIRAL** (E40 s4), the line alone (`panel_focus` HYNIX_ALONE at its first frame), retitled with the object's own verdict "Sold out, and paid for" as it unwinds (answering "builders with sold-out order books are not a house of cards"); **the I-beam** (`prop-memory-steel-ibeam-v1`, "MEMORY" - an ADDITION from the operator's prop sheet) STAMPED just after "They're the steel—" (contact 721.78) in the line's empty upper left (PROP 4's room); on "A memory fab takes" the line **shrinks aside** (row 22's region) and **THE ARITHMETIC is thrown** into the room (729.26; the phone checklist `ev-memory-arithmetic-h23-v1`: Supply / a new memory fab / ~5 years; Demand / memory per chip / 80→192 GB; 2030? / only if / AI < factories - its source line citing **E99 s95** for the five); the line grows back as the card leaves (739.06) for "slower than factories get built" |
+| 25 `world-h3-newsroom-v1;use=landing` + ken `(0.05, -10, 4)` | 743.04-765.10 | **dip 9** on "Decide for yourself" (NEWSROOM_DIP_WHY) onto HOST WINDOW 3 - Mike holding a share certificate up in the empty newsroom (the H-3 still, E99 s103); "Decide for yourself which of those you believe" / "More worried: the index they sold you" in STAGE captions over the plate's empty left third; **the railway share THROWN onto the desk** on "is the certificate" (750.12); **the weight check** (`ev-weight-check-h23-v1`, the phone checklist: Bravos' / the S&P 500 / 20%; Our check / whole US market / 24.3%) takes its slot (s80) to be down on "Nobody holding it" (755.29); on "accidental concentration" (761.38) **the ring on its "Our check" row** with its number beside it, **"in 7 holdings"** (the object's own derivation: seven holdings' weights sum to 24.3); gone 1.5 s before row 24 |
+
+**Acceptance (P69 T31):**
+- *The certificate thrown onto the reset and ringed:* `final/A-tiles.png` d-h (680.0 the throw, 680.6 down on the sheet, 681.6 the ring starting, 682.5 / 685.0 ringed with -64%). Cue `landing 23 (throw, paper)` 680.06.
+- *The memory-arithmetic bars and the weight check:* the arithmetic is the CHECKLIST card (BODY_DEPARTURES row 23 - two units, so not bars; the door's recorded fallback), `final/C-tiles.png` h-k; the weight check `final/D-tiles.png` g-k.
+- *The newsroom with the weight-check card thrown onto its desk:* `final/D-tiles.png` g-k (it LANDS in the certificate's box on the desk - s80's hand-off).
+- *Any drawn five cites E99 s95:* the arithmetic card's source line reads "Fab build: ~5 years (the operator, E99 s95); memory per chip: NVIDIA H100 80GB -> B200 192GB; capacity: 3 makers" (`final/C-tiles.png` i-k).
+- *Dips 7-9, each naming what it refused:* RING_DIP_WHY / HYNIX_RETURN_WHY / NEWSROOM_DIP_WHY (in `SHOT-TABLE-H.md`). Flow count now 0 cuts, 10 dips, 1 arrival carrying a boundary, 13 transforms.
+- *Retire `cert_face()` for T65's ring (rows 18 and 23):* DONE. Row 18c's ring is `target: {"kind": "dock", "dock": CERT_CARD}`, `points: "that certificate"` (its label, scale and pad unchanged) - read on `final/B-tiles.png` r18a-r18c (410.5 / 411.4 / 415.0: the ring closes round the card, -64% above-right, as T65's own frame read). Row 23a's ring is the same grammar. `cert_face()` and CERT_FACE stay in the module (named, unused) for the record; nothing reads them.
+
+**Measured and fixed** (private drafts `scratchpad/p69-row23/d1..d6`):
+- **THE VERDICT STACK (the record's form for this beat) - built, measured, and NOT shipped.** Draft 1 (`d1t/A-tiles.png` k-o) authors doc 29 s9.24's wall through the compiler's `stack_entry` (one set of times for the payload and the host dock): their chart on "Everything we checked", the test on "The builders sell scarcity", the lease commitments on "In early twenty twenty-five", the statement on "A fifth of your index", the burst on "And the one number". It flies, recedes to its mosaic and bursts as it should. But the motion gate reads NONE of its beats - the host dock is one enter, and the captions under a live dock are the unpinned anchor - so draft 1 FAILED **M01 / M05 / M08** (13.7 s "with no visual event" at 11:35, `d1/GATES-MOTION.md`). The door keeps it behind `VERDICT_STACK_ON = False` (VERDICT_WHY, `verdict_stack()`); the built form is the slot hand-off above. **ENGINE item for the parent** (below).
+- **The certificate came in at row 22's box** (`d1t/A-tiles.png` b-i, d3 too): row 22 docks the same asset (`dock-h-railway-share`) 1.5 s before; row 23a's dock compiled with its own `place` (883, 235, 768, 502) but the frame drew it at row 22's (the 0.15 card at (0.19, 0.42)) and the ring hugged that small card - slot 1 did not help (draft 3). Under its own id (`dock-h-railway-share-ring`, the same PNG, registered by `D.register`) it lands where the row puts it (`d4t`). **ENGINE item.**
+- **The railway index as its own card in the plate's upper left** (draft 1, 0.34): its title took the card's height and the line read as a strip, and it covered the ring's figure - it takes the certificate's slot at 0.46 instead.
+- **A card landing in a slot the outgoing one held is first seen ~0.9 s after its enter** (`d4t/A-tiles.png` f-k, 696.5-697.4: the outgoing card's exit plays, the slot stands empty ~0.5 s, then the new card drops in). Every hand-off starts HANDOFF_LEAD_S (0.8) before its phrase, so the card is down on the word (`final/A-tiles.png` j, `B-tiles.png` b/e/h).
+- **M05 FAIL in draft 2** (9.0 s with no event at 11:29): the test landed on "The builders sell", so the index stood through "Everything we checked holds" alone. The test now lands on "Everything we checked" - the test IS what was checked (three questions, steel's answers).
+- **The weight check:** `ev-weight-check-bars-v1` drawn as a card (T10c, 0.44) wrote its six y ticks on top of one another and cut its second category (`d1t/B-tiles.png` u-w); the object's shares PNG as a still read on the stage but ~4-5 px at a 390 px phone (`d5t`); the phone checklist reads at both (`final/phone-390-x2.png`). At centre_y 0.62 its foot ran under the anchored caption (`d6t`); at 0.60 it meets only the lowest corner of the certificate Mike holds.
+- **The RAM stood through dip 8** with its exit 1.2 s before it (`d1t/B-tiles.png` b, 717.2) - row 22's RAM_OFF_LEAD_S finding (R26-309); 2.5 s now (714.29).
+- **The lease commitments at 0.50** read ~9 px type on the stage (`final` first pass) - 0.64, row 16b's reading width.
+
+**Named, not fixed:**
+- **ENGINE (for the parent): the gate is blind to the verdict stack.** `gate_motion_density` credits the stack's host dock as one enter; the members' flights, the recede and the burst are no events, and a live host dock anchors the captions - so a verdict stack on a plate FAILs M01 / M05 / M08 however it dances. Owner: the gate (count each `stack.items[].at` and the burst as events, as `_arrival_events` does for a landing). Until then `VERDICT_STACK_ON = False`. The parent / operator may prefer the wall once the gate reads it: flipping the flag compiles draft 1's form (the members: their chart, the test's PNG, the lease commitments, the statement; the RAM after the burst).
+- **ENGINE: a dock re-docked on the NEXT scene keeps the previous scene's box** when the asset id is the same (row 22 -> row 23a, above) - the compiled `place` is right, the drawn one is not. A new id is the workaround here.
+- **ENGINE: the slot hand-off's landing is ~0.6 s later on the frame than its compiled contact** - the cues (`landing 23 (land, paper)` 689.19 / 695.97 / 700.84 / 705.08, `landing 25 (land, paper)` 754.77) play at enter + 0.32 s while the card is first seen ~0.9 s after its enter; E99 s116 says the sound follows what the frame plays. Measured on the frames above; not retimed here (the binder owns the contact).
+- **The stack's other limit:** a member must be DOCKED somewhere in the cut (the player resolves members against the asset-data map, which holds only docked assets), so the pages this episode draws (the monitor, the issuance, the concentration bars) can never be members, and the two live phone checklists' PNGs are placeholders ("(live card - see series payload)", `build-h/objects/ev-tripwire-board-h22-v1.png`) - for the parent, with the gate item.
+- **The spiral out of a plate reads ~1 s of dark board** (716.9-718.0, `final/C-tiles.png` b) - row 20's finding (section 19), unchanged.
+- **M21 adds s24 24.6 s** (11:58 -> 12:23): a returning page arrives drawn, so its only data mark is its landing; the I-beam, the aside and the card are not data marks. M21 was already WARN; no new WARN row.
+- **Dip 8 is on "More bullish", not the treatment's "The order books are booked solid"** (BODY_DEPARTURES row 23): the returning page answers "builders with sold-out order books are not a house of cards", and the ring plate would otherwise stand bare ~7 s after the case clears.
+- **The voice says "doubles"; the card prints 80→192 GB (2.4x)** - the object's figures. **The 80 GB / 192 GB carry no research tier on disk** (`ev-memory-arithmetic-v1` has a `src` and no `proof`): for the operator (the research gate, E99 s95 covers only the five).
+- **The newsroom's certificate is thrown onto the desk while Mike holds another** (the plate's own, E99 s103) - the thrown one is the railway share (the certificate of rows 2, 18, 22, 23a); the frame read decides whether two certificates read as one idea.
+- **The lease commitments at a 390 px phone** read as a document, not its figures (`final/phone-390-x2.png` B-f) - the record's own type; everything else on the phone sheet reads.
+- **The ring's -64% on the plate** stands above-right of the ring at the stage's top-right (~1720-1880, 60-100 px) - the callout's LABEL_DX; clear of the card and the spike.
+- **T26d WARN:** "the arithmetic card lands over a stamp's mark or ring" (the I-beam's reserved box) - the I-beam leaves at 728.66 and the card is thrown at 729.26; no frame holds both (`final/C-tiles.png` g-h).
+- **`world-broadcast-set-v2`** (wave 4, operator-approved) is not drawn: the treatment's "broadcast set + Mike" became the H-3 still (BODY_DEPARTURES row 23).
+- **The fixture:** `measure_page_boxes.py --check` DRIFTED on the merged tree before any row-23 geometry (`logs/t31-measure-check.log`: row 22's trim page, band 252 -> 249, plot 285 -> 288, one data-mask row, and the player sha) - lane B's merge; `--write` (`t31-measure-write.log`, "7 builders x 21 geometr(ies) + 21 project page(s)"), then `--check` **PASS** (`t31-measure-check2.log`). Row 23 adds no page key (the returning hynix page is row 21's).
+
+**The derived objects** (build dir, tracked like rows 20 and 22's; each records `derived_from` and its `basis`):
+- `build-h/objects/ev-memory-arithmetic-h23-v1.series.json` from `ev-memory-arithmetic-v1`: its title; the checklist cut to the phone profile (every figure the object's: "4-5 years" as "~5 years" on E99 s95, "80GB -> 192GB", "AI < factories"); the source line naming E99 s95; no sub. The door asserts the source's cells.
+- `build-h/objects/ev-weight-check-h23-v1.series.json` from `ev-weight-check-bars-v1`: its title, source and tier (PLAUSIBLE, s93 lets it draw); its two bars as two rows (20% of the S&P 500, 24.3% of the whole US market). The door asserts the bars' notes and wholes.
+- The PNGs beside them are copies (gitignored), the compiler's static fallbacks.
+
+**Life:** 25 of 25 rows (row 23 `ken 0.05/10/-4`, row 24 `idle=live`, row 25 `ken 0.05/-10/4`).
+
+**The order of proof** (`logs/t31-*`, final build 0.00-765.10, every browser step alone, in order; `scratchpad/p69-row23/chain.sh`):
+- The first full chain (`logs/t31-run1/`) was killed by a machine restart mid-frozen-measure, re-run whole, and then FAILED **M25** (`t31-run1/t31-gate.log`: "dock-h-weight-check in the caption strip at 12:35, 13,333 px, 20 % of the smaller") - the weight check's foot stood ~12 px in the anchored strip. Lifted to centre (0.29, 0.585) (`WEIGHT_CARD_SLOT`; draft 7 `d7t/D-tiles.png`), the chain re-run whole:
+- `t31-door3.log` rc 0; `t31-measure-check3.log` **PASS 7 builders x 21 geometr(ies) measured identical** (after `t31-measure-write.log`, above); `t31-door4.log` rc 0, "14 page(s) MEASURED", cues **57 bound of 58** (the one dropped is T26's `page enter 17 (axes)`, unchanged; row 23's eleven: `dip 23/24/25`, `landing 23 (throw, paper)` 680.06, four `landing 23 (land, paper)`, `landing 23 (stamp, ink)` 711.63, `landing 24 (stamp, ink)` 721.74, `landing 24 (throw, paper)` 729.68, `landing 25 (throw / land, paper)`), life 25 of 25, **0 `[WARN] P69 T81`, 0 `P69 T84 retimed`** (every door log);
+- `t31-probe.log` 321 instants; `t31-frozen.log` **"no run of identical frames over 0.50s (whole frame)"**;
+- `t31-door-final.log`: sha256 **IDENTICAL** to `t31-door4.sha` (the timeline, player.html, player.json, SHOT-TABLE-H.md, SHOT-TABLE-H.py);
+- `t31-seams.log` **24 boundaries, 1 fault**: 743.04 (dip 9 into the newsroom) "darkest 0.0, hold 743.000-743.083s x3" - three black frames at the dip's core; the gate's own reading (M32 INFO) is "a dip hold over a world darker than the threshold can separate (not a held black)" - the H-3 still's left third is black. Dips 7 and 8 are clean (679.45 darkest 2.5; 716.79 darkest 0.0);
+- `t31-spoken.log` **6 pointing phrases, 0 uncovered**; `t31-stagegaps.log` **3.2 s of 765.1 s** (679.45 / 716.79 / 743.04 each 0.2-0.3 s, licensed dips);
+- **`t31-gate.log` 2 FAIL / 4 WARN / 22 PASS / 1 JUDGE / 6 INFO** vs **`t31-gate-before.log` 2 FAIL / 5 WARN / 22 PASS / 1 JUDGE / 5 INFO**. FAIL M11 and M31, both pre-existing. WARN M02, M04 (22 plates vs 63), M21 (+ s24, above), M27 (+ the RAM and the I-beam "inside the plot's box" - E65's placement tier). **M25 went WARN -> PASS**: its two 6:35 safe-zone intrusions are no longer reported (the probe's instants moved with the longer cut; row 18's statement card is unchanged - for the parent's read), so one WARN row fewer and M26 is INFO. M01 PASS 9.5 s; M03 PASS 45 s; M05 PASS 18 plates, worst gap 7.3 s of 8.0; M12 PASS; M18 PASS (9,182 frames, longest 0.17 s); M28 PASS (12,887 pairs); M47 PASS (14 plot pages, longest empty 1.2 s).
+- No gated command was piped.
+
+**Tiles** (`scratchpad/p69-row23/final/`, from build-h itself): `A-tiles.png` 677.0-695.5 (row 22's end, dip 7, the throw, the ring and -64%, the index taking the slot); `B-tiles.png` 696.3-714.5 (the test, the leases, the statement, the turn in stage captions, the RAM) + `r18a-c` 410.5 / 411.4 / 415.0 (row 18c's ring on the dock); `C-tiles.png` 716.6-743.3 (dip 8, the spiral return, the retitle, the I-beam, the line aside, the arithmetic, the line back, dip 9); `D-tiles.png` 742.9-764.9 (the newsroom, the certificate on the desk, the weight check, its ring, the row's end); `phone-390.png` / `phone-390-x2.png` (682.5 / 689.2 / 698.5 / 703.0 / 733.0 / 751.5 / 757.0 / 762.0). Drafts `d1..d7` (`d1t`: the verdict stack as built). No build-f reference frames were cut for this row.
+
+## 24. P69 T32 - row 24 (12:45-13:32): the close - dip 10, the divergence one last time, the agenda and the one slot, the certificate, and the outro - 2026-09-25
+
+The build runs 0.00-811.78 s: the WHOLE take (805.675 s) and the outro card. `UNIT_CUT_PHRASE` is `None` (there is no next row);
+row 24's first words are `UNIT_CUT_ROW24` ("The steel gets used.", dip 10). RED: before the slice the table ended at row 25
+(743.04-765.10). **`logs/t32-gate-before.log` 2 FAIL / 4 WARN / 22 PASS / 1 JUDGE / 6 INFO** on HEAD 8f233a1's build with a fresh
+probe (`t32-probe-before.log`) and frozen measure (`t32-frozen-before.log`, "no run of identical frames over 0.50s"). Treatment row
+24 compiles as TABLE rows 26 (the page) and 27 (the outro).
+
+Recall: `docs_find "outro"` -> `CAPABILITIES.md:64` (the Remotion kit outro: the card in as the last word ends, the brand line
+stitched 0.7 s after it, `life` declared), `recipe:outro-clip-life` (`effects/recipes/outro-clip-life.json`, proof
+japan-tariff-trick s12), gate S07 (`gate_opening_structure.py:633`, the brand line is the outro's), `51-THE-SHORTS-FORMAT.md:29`;
+the attach itself in the record: `authoring/audio.py` `outro_clock` / `stitch_brand_line`, `authoring/shapes.py` OUTRO_EXIT
+("dip") and OUTRO_IS_THE_AUTHORS, `tokyo-tea-break/build_short.py:444` ("E47: the card is a world change - the dip, not the
+dissolve"), `japan-tariff-trick/build_short.py:322`, `memory-trades-the-calendar/build_short.py:266` and `:334-336`;
+`channel-assets/money-physics/outro/landscape/RENDER-NOTES.md` ("Which one the build should use: outro-yt-1920x1080-24fps.mov for
+the long-form cut"); `OPERATOR-RULINGS.md` E41 (`:1273`, the brand line is a channel asset) and E46 (2) (`:1410`, "a dissolve is
+... the join into the outro card"); `docs_find "page park"` -> `SPECIES-BY-SENTENCE.md:51` ("three things" -> the page parks,
+`chart_to park`, and the agenda takes the room); `effects_card "park"` (`chart_to:park`, scale 1.0 is the un-park); E40 s4
+(`:1246`, a returning page unwinds from its point); `sound/SOUND-PLAN.json` ("close=A (no extend)", its close bed at 775.0 of
+ep1's 806.47 s clock).
+
+| table row | window | what |
+|---|---|---|
+| 26 `ledger:ev-divergence-v1:line:234:right:spiral:cut;idle=live;readability=longform;domain=95,1138.74` | 765.17-805.58 | **dip 10** on "The steel gets used." (CLOSE_DIP_WHY) and the divergence **RETURNS BY THE SPIRAL** one last time (E40 s4) - all four lines on the scale row 4's rescale reached (FULL_YMIN..FULL_YMAX), in the long form's profile (LONGFORM, rows 14 on; rows 1-5 and 20 keep theirs - the operator's 09-25 hold); retitled with the anaphora "Steel gets used. Paper gets believed." as it lands; on "You now have" (770.42) the page **PARKS** to 0.34 (left) and **the agenda** lands in the room it frees, a row on "three questions" (771.40), "thirty seconds" (772.20), "any holding" (772.94); then ONE SLOT (CLOSE_SLOT_WHY, E99 s80): **the tripwire board** (row 22's phone checklist) LANDS on "either tripwire" (775.10 enter, down ~776.0), **the yardstick** (row 14's page as a card, derived `ev-yardstick-card-h24-v1`) on "the yardstick reading" (780.36), **the test** (row 20's) on "run the test" (784.82), off 0.3 s before the **UN-PARK** on "a copy of this chart" (788.94); a **ring** on the memory line's tip on "where it's pointing" (793.05) and on the market's line (20 points in from its tip, DIV_SP_RING) on "sold to you as safety" (798.31); **the opening's certificate** (`dock-h-railway-share-close`, the same PNG under its own id) LANDS on "the certificate stays on the desk" (802.36 enter, down ~803.2) in the page's empty upper left and stands to the card |
+| 27 `clip:build-h/clips/outro-yt-1920x1080-24fps.mp4` + `life` | 805.58-811.78 | **THE OUTRO** (`recipe:outro-clip-life`): the Remotion kit's 16:9 YouTube card ("Thanks for watching - subscribe for the next teardown.", 24 fps, 6.208 s probed), dipped in as "desk" ends (OUTRO_DIP_WHY), `life` declared over its seconds; the clock is `authoring.audio.outro_clock` on the take's own length (card at t_vo_end - 0.1 = 805.58, runtime 811.78); **the brand line** ("Not a panic. Not a plot. Mechanics.", `brand-line-paced.mp3`) stitched into `audio/episode.mp3` at 806.38 (0.7 s after the take, under the card - `stitch_brand_line`); no whoosh into the card (the approved shorts sound nothing into their outro) |
+
+**Acceptance (P69 T32):**
+- *The divergence page one last time:* `scratchpad/p69-row24/final/A-tiles.png` c-e (the spiral 766.5, landed 767.3, live 769.5), `B-tiles.png` s-aa.
+- *The agenda returns in its slot:* `final/A-tiles.png` f-h (771.2 the park, 772.5 two rows, 773.8 three rows).
+- *The outro with the brand line 0.7 s under the card:* `final/B-tiles.png` aa-ad (805.4 the dip, 805.9 the card in, 807.0 / 811.0);
+  the master's volume (draft 6, the same audio): 805.0-805.6 -87 dB (the take's tail), 806.4-809.9 **-22.2 dB mean (the brand
+  line)**, 810.2-811.7 -91 dB. The "dissolve" is the DIP (BODY_DEPARTURES row 24) - for the operator.
+- *Runtime over 8:00 (E74):* 811.78 s = 13:31.8.
+- *Each dip names what it refused:* CLOSE_DIP_WHY, OUTRO_DIP_WHY. Flow count now **0 cuts, 12 dips, 1 arrival, 13 transforms**.
+- *Life:* **26 of 27 rows** by token (row 26 `idle=live`); row 27 carries no token - its life is the declared `life` species (the
+  clip's own drift; `T.life_tokens` reads tokens and kens only). `t32-frozen.log` "no run of identical frames over 0.50s".
+- *E50:* see M21 below (named, not closed).
+
+**Measured and fixed** (private drafts `scratchpad/p69-row24/d1..d6`, `STEEL_H_BUILD_DIR`):
+- **The yardstick card** (d1 `d1t/A-tiles.png` k-l): the whole object drawn as a card cut its railway hline's label off the card's
+  left edge ("s, 1844-47 - ~50% (one technology)") and wrote it through the scale line - the card is derived (`_yard_card_object`):
+  the tech line alone, its "28%" tag and points verbatim, a stated [0, 32] scale, the object's source (`d2t/A-tiles.png` k-l).
+- **The spread on "the difference"** paints NOTHING on this page (d2 `d2t/S-tiles.png` c1-c2) - and paints on the same page
+  without `readability=longform` (`dxt/X-tiles.png`, a diagnostic draft); rows 1 and 20 bleed, and row 10's longform debt page
+  bleeds too. Not shipped (an authored event the frame never shows); **ENGINE item** below.
+- **The park at 0.40** left the page's end tags reaching ~x 0.42, under the cards' left edge (d3 M25 / M27 FAIL) - 0.34.
+- **Rings on the parked page** ("mine on memory", "the whole index", d1-d3): a callout keeps its stage size on a page parked to a
+  third - the market's ring was painted across the mega-cap tag (d3 **M34 FAIL** at 13:07) and the memory ring read as a dot at
+  390 px. Cut; the board ("Mine / RAM cheaper") and the test carry those words.
+- **The market's ring on its tip** (d4 **M34 FAIL** at 13:19) was painted across "+21% matches the market" - moved 20 points in.
+- **The board and the certificate THROWN** (d4 **M27 FAIL** at 12:55 / 13:22): the flights crossed the parked page's ink and key
+  rail - both LAND (SLOT_HANDOFF_ARRIVE). A landing card starts ~140 px taller than its rest box (d5 `layout-probe.json` 775.42:
+  box [896, 160, 896, 674] vs rest [787, 298, 1114, 536]), so its first frames stood on the key rail (y 146-194, which the park
+  does not scale) - the slot's centre moved 0.51 -> 0.555 and the certificate's (0.23, 0.36) -> (0.20, 0.42), under the axis title.
+- **The yardstick at 0.58** (16:9, so 0.58 of the stage tall) stood on the key rail (d3 M25) - 0.52.
+- **The test's third row** had barely landed as it left (d1) - it leaves 0.3 s (not 0.7) before the un-park.
+- **The certificate at 0.20 (0.26, 0.36)** stood on the memory line's climb (d1 `d1t/B-tiles.png` v-x) - 0.16.
+
+**Named, not fixed:**
+- **M21 adds s26 38.8 s** (12:47 -> 13:26): the gate's E50 clock counts only `build_to` / `bracket` / a data `chart_to`, so a page
+  that RETURNS drawn has its landing as its only mark (rows 20 and 24 are the same class: s20 18.5, s24 24.6). On the frame the page
+  parks at +3.7 s for the agenda and the three cards, grows back at +22 s, is rung at +26 and +31 s and takes the certificate at
+  +36 s - no full-stage stretch without a new thing over ~5 s. M21 was WARN; it stays WARN (9 pages).
+- **M27 WARN adds the certificate** inside the plot's box, clear of the ink, on the finished chart (the class of the target-date
+  statement at 6:34).
+- **The slot stands empty ~0.8 s at each hand-off** (780.4-781.3, 784.8-785.7; `final/A-tiles.png` l) - row 23's finding (a landing
+  is first seen ~0.9 s after its enter), unchanged; the cards are down on their words.
+- **The spiral out of a plate reads ~1 s of dark board** (765.2-766.2, `final/A-tiles.png` b) - row 20's finding, unchanged.
+- **The park does not scale the page's key rail** (the legend chips stand full width over a page parked to a third,
+  `final/A-tiles.png` f-p) - for the operator's read.
+- **The returning page wears the longform profile; it left (rows 1-5, 20) in the old one** - it comes back looking different
+  (type, title face). The operator's 09-25 hold keeps the earlier rows; HG3 / T33 decides the look for all of them.
+- **Seams:** `t32-seams.log` 26 boundaries, 3 near-black holds: 743.04 (dip 9, pre-existing), 765.17 (dip 10, x3) and 805.58
+  (into the card, x4) - the dips' own cores (M32 INFO).
+- **Dips 12, not the treatment's 10:** the earlier rows already count 10 (section 23); dip 10 and the dip into the card are the
+  11th and 12th by count.
+- **The certificate at 0.16** reads as the certificate, its "RAILWAY SHARE" small at 390 px (`final/phone-390-x2.png` g).
+- **The close bed** (`suno-close-A.mp3`, the locked pick, -14.6 LUFS measured 09-25; B -14.2) at 773.94 ("Subscribe for the
+  watch"), gain 0.0085 (-28 LU), 24.5 s - it ends ~798.4, 7 s before the last word, as ep1's plan did (775.0 + 24.5 of 806.47).
+- **The page-box fixture:** `t32-measure-check.log` DRIFTED on this slice's new page (the divergence in the longform profile on the
+  full domain); `t32-measure-write.log` added ONE key (`1eca65af9bc73d42`, 22 project pages) and the `measured` date;
+  `t32-measure-check2.log` PASS.
+
+**The derived object** (build dir): `build-h/objects/ev-yardstick-card-h24-v1.series.json` from `ev-capital-formation-v1`: the tech
+series verbatim, its "23%" mark, the object's source, a stated 0-32 scale; `derived_from` and `basis` recorded.
+
+**The order of proof** (`logs/t32-*`, every browser step alone, in order; `scratchpad/p69-row24/chain.sh`):
+- `t32-door1.log` rc 0; `t32-measure-check.log` DRIFT -> `t32-measure-write.log` -> `t32-measure-check2.log` **PASS 7 builders x
+  21 geometr(ies) measured identical**; `t32-door2.log` rc 0, "15 page(s) MEASURED", cues **63 bound of 64 derived** (the one
+  dropped is row 17's `page enter (axes)`, pre-existing);
+- `t32-probe.log` 349 instants; `t32-frozen.log` **"no run of identical frames over 0.50s (whole frame)"**;
+- `t32-door-final.log`: sha256 **IDENTICAL** to `t32-door2.sha` (the timeline, player.html, player.json, SHOT-TABLE-H.md,
+  SHOT-TABLE-H.py);
+- `t32-seams.log` 26 boundaries, 3 faults (above); `t32-spoken.log` **8 pointing phrases, 0 uncovered**; `t32-stagegaps.log`
+  765.17 0.2 s and 805.58 0.0 s, licensed dips;
+- **`t32-gate.log` 2 FAIL / 4 WARN / 22 PASS / 1 JUDGE / 6 INFO** vs **`t32-gate-before.log` 2 FAIL / 4 WARN / 22 PASS / 1 JUDGE /
+  6 INFO**. FAIL M11 and M31, both pre-existing. WARN M02, M04 (24 plates), M21 (9 pages, +s26), M27 (9 cards, +the certificate).
+- No gated command was piped.
+
+**Tiles** (`scratchpad/p69-row24/final/`, from build-h itself): `A-tiles.png` 764.9-790.4 (the newsroom's end, dip 10, the spiral,
+the page, the park and the agenda, the board, the yardstick, the test, the un-park); `B-tiles.png` 793.5-811.0 (the two rings, the
+certificate, the dip, the card); `phone-390-x2.png` (the agenda, board, yardstick, test, the page, the certificate, the card at 390
+px).

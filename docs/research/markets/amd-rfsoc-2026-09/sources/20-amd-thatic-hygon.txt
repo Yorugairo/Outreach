@@ -1,0 +1,35 @@
+Snapshot 2026-09-26 (text extracts via WebFetch; verbatim quotes as returned)
+
+== AMD Form 8-K exhibit (Q1 2016 earnings release), filed 2016-04-21
+URL: https://www.sec.gov/Archives/edgar/data/0000002488/000000248816000118/q116991.htm
+"AMD licensed high-performance processor and SoC technology to a newly-created JV it has formed with THATIC (Tianjin Haiguang Advanced Technology Investment Co., Ltd.)"
+"The $293 million licensing agreement is a meaningful step in AMD's IP monetization strategy intended to accelerate the Company's growth"
+"AMD also expects to receive royalty payments from the JV's future product sales."
+"Payments are contingent upon the JV achieving certain milestones."
+purpose: "develop SoCs tailored to the Chinese server market that will complement AMD's own offerings."
+
+== AMD Form 10-K FY2019 (accession 0000002488-20-000008), note "Equity Joint Ventures"
+URL: https://www.sec.gov/Archives/edgar/data/2488/000000248820000008/R11.htm
+"In February 2016, the Company and Higon Information Technology Co., Ltd. (THATIC), a third-party Chinese entity (JV Partner), formed a joint venture comprised of two separate legal entities"
+"The Company licensed certain of its intellectual property (Licensed IP) to the THATIC JV for a total of $293 million in license fees payable over several years"
+"The Company also expects to receive a royalty based on the sales of the THATIC JV's products to be developed on the basis of such Licensed IP"
+"In June 2019, the U.S. Commerce Department's Bureau of Industry and Security added certain Chinese entities to the Entity List, including THATIC and the THATIC JV"
+"The Company is complying with U.S. law pertaining to the Entity List designation"
+2019: "the Company recognized $60 million as licensing gain associated with the Licensed IP"
+2018: "$86 million of IP-related revenue upon completion of all technology milestones"
+2017: "the Company recognized $52 million as licensing gain"
+"The Company's receivable from the THATIC JV for the above agreements was $13 million and $18 million as of December 28, 2019 and December 29, 2018"
+
+URL: https://www.sec.gov/Archives/edgar/data/2488/000000248820000008/R42.htm (details table)
+Operating income related to licensed IP: FY2019 $60,000,000; FY2018 $0; FY2017 $52,000,000
+Estimated license fees (Feb 29 2016): $293,000,000
+THATIC JV equity method investment: $0 (both periods)
+Receivables THATIC JV: $13M (2019-12-28), $18M (2018-12-29)
+
+== Federal Register 2019-13245, published 2019-06-24, BIS
+URL: https://www.govinfo.gov/content/pkg/FR-2019-06-24/html/2019-13245.htm
+Five entities: Chengdu Haiguang Integrated Circuit (Hygon); Chengdu Haiguang Microelectronics Technology (HMC); Higon (Higon Information Technology, THATIC, ...); Sugon (Dawning, Zhongke Shuguang); Wuxi Jiangnan Institute of Computing Technology (JICT)
+"involved in activities determined to be contrary to the national security and foreign policy interests of the United States"
+Sugon and Wuxi Jiangnan "leading China's development of exascale high performance computing"; Sugon "publicly acknowledged a variety of military end uses"
+"This rule is effective June 24, 2019."
+Licence policy: "License requirement for all items subject to the EAR" / "presumption of denial" / "no license exceptions are available for exports, reexports, or transfers."

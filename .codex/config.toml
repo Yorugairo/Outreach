@@ -4,8 +4,8 @@
 approval_policy = "never"
 sandbox_mode = "danger-full-access"
 web_search = "live"
-model = "gpt-6-sol"
-model_reasoning_effort = "xhigh"
+model = "gpt-6-luna"
+model_reasoning_effort = "max"
 
 [features]
 multi_agent = true
@@ -43,7 +43,7 @@ description = "GPT-6 Luna-max read-only documentation researcher for primary-sou
 config_file = "agents/docs_researcher.toml"
 
 [agents.reviewer]
-description = "GPT-6 Luna-max read-only reviewer for correctness, security, and missing tests."
+description = "GPT-6 Sol-high independent read-only reviewer for correctness, security, and missing tests."
 config_file = "agents/reviewer.toml"
 
 [agents.professional_worker]
@@ -61,6 +61,14 @@ config_file = "agents/execution_sol.toml"
 [agents.professional_sol]
 description = "Professional/computer-use escalation after three consecutive substantive Luna task failures."
 config_file = "agents/professional_sol.toml"
+
+[agents.execution_astra]
+description = "Optional GPT-6 Astra-high execution/diagnosis step-up after three consecutive substantive Sol-xhigh task failures."
+config_file = "agents/execution_astra.toml"
+
+[agents.professional_astra]
+description = "Optional GPT-6 Astra-high professional/computer-use step-up after three consecutive substantive Sol-xhigh task failures."
+config_file = "agents/professional_astra.toml"
 
 # BEGIN OPERATOR-DISABLED UNUSED SKILLS
 # Product Design and Excel live control are intentionally inactive.

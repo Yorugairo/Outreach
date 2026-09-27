@@ -21,8 +21,9 @@ financially credible, never childish.
 LIGHT: soft even light from the upper left, gentle shadow falling lower
 right, low contrast. Camera eye-level, straight-on, no perspective
 distortion.
-HARD RULES: no readable text, letters, numbers, logos, or watermarks
-anywhere; documents show only illegible engraved scrollwork; no
+HARD RULES: no numbers, logos, or watermarks anywhere; no text or
+letters except words this prompt names, spelled exactly as given;
+otherwise documents show only illegible engraved scrollwork; no
 real-person likeness; no flags or political symbols.
 ```
 

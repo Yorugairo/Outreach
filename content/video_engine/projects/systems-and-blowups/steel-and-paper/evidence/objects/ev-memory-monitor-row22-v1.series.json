@@ -1,0 +1,456 @@
+{
+ "title": "The monitor - what memory costs leaving Korea",
+ "sub": "USD per kilogram of exported memory, monthly, log scale. The trigger is the release itself",
+ "src": "Korean customs, HS 8542.32 exports (production tier, full months) - SCML memory monitor, July 2026 release",
+ "log": true,
+ "yfmt": "usd",
+ "xticks": [
+  [
+   2023.04,
+   "Jan '23"
+  ],
+  [
+   2024.04,
+   "Jan '24"
+  ],
+  [
+   2025.04,
+   "Jan '25"
+  ],
+  [
+   2026.04,
+   "Jan '26"
+  ],
+  [
+   2026.54,
+   "Jul '26"
+  ]
+ ],
+ "ylabel": "USD per kilogram, log scale",
+ "series": [
+  {
+   "name": "DRAM",
+   "color": "crimson",
+   "pts": [
+    [
+     2023.0417,
+     7562.0
+    ],
+    [
+     2023.125,
+     8347.0
+    ],
+    [
+     2023.2083,
+     8550.0
+    ],
+    [
+     2023.2917,
+     7960.0
+    ],
+    [
+     2023.375,
+     7568.0
+    ],
+    [
+     2023.4583,
+     7709.0
+    ],
+    [
+     2023.5417,
+     10864.0
+    ],
+    [
+     2023.625,
+     9972.0
+    ],
+    [
+     2023.7083,
+     8914.0
+    ],
+    [
+     2023.7917,
+     10150.0
+    ],
+    [
+     2023.875,
+     10383.0
+    ],
+    [
+     2023.9583,
+     9083.0
+    ],
+    [
+     2024.0417,
+     10920.0
+    ],
+    [
+     2024.125,
+     12842.0
+    ],
+    [
+     2024.2083,
+     14434.0
+    ],
+    [
+     2024.2917,
+     14998.0
+    ],
+    [
+     2024.375,
+     15458.0
+    ],
+    [
+     2024.4583,
+     16239.0
+    ],
+    [
+     2024.5417,
+     18838.0
+    ],
+    [
+     2024.625,
+     18782.0
+    ],
+    [
+     2024.7083,
+     15556.0
+    ],
+    [
+     2024.7917,
+     20008.0
+    ],
+    [
+     2024.875,
+     17066.0
+    ],
+    [
+     2024.9583,
+     15464.0
+    ],
+    [
+     2025.0417,
+     14690.0
+    ],
+    [
+     2025.125,
+     13397.0
+    ],
+    [
+     2025.2083,
+     14203.0
+    ],
+    [
+     2025.2917,
+     15695.0
+    ],
+    [
+     2025.375,
+     14021.0
+    ],
+    [
+     2025.4583,
+     12160.0
+    ],
+    [
+     2025.5417,
+     14894.0
+    ],
+    [
+     2025.625,
+     17676.0
+    ],
+    [
+     2025.7083,
+     16595.0
+    ],
+    [
+     2025.7917,
+     20707.0
+    ],
+    [
+     2025.875,
+     24266.0
+    ],
+    [
+     2025.9583,
+     23725.0
+    ],
+    [
+     2026.0417,
+     35525.0
+    ],
+    [
+     2026.125,
+     48169.0
+    ],
+    [
+     2026.2083,
+     55149.0
+    ],
+    [
+     2026.2917,
+     66478.0
+    ],
+    [
+     2026.375,
+     77558.0
+    ],
+    [
+     2026.4583,
+     74686.0
+    ],
+    [
+     2026.5417,
+     86970.0
+    ]
+   ]
+  },
+  {
+   "name": "HBM-CLASS",
+   "color": "teal",
+   "delay": 1.4,
+   "pts": [
+    [
+     2023.0417,
+     19116.0
+    ],
+    [
+     2023.125,
+     15177.0
+    ],
+    [
+     2023.2083,
+     14440.0
+    ],
+    [
+     2023.2917,
+     12824.0
+    ],
+    [
+     2023.375,
+     14539.0
+    ],
+    [
+     2023.4583,
+     14988.0
+    ],
+    [
+     2023.5417,
+     13608.0
+    ],
+    [
+     2023.625,
+     15377.0
+    ],
+    [
+     2023.7083,
+     15900.0
+    ],
+    [
+     2023.7917,
+     18932.0
+    ],
+    [
+     2023.875,
+     18917.0
+    ],
+    [
+     2023.9583,
+     21224.0
+    ],
+    [
+     2024.0417,
+     28289.0
+    ],
+    [
+     2024.125,
+     28373.0
+    ],
+    [
+     2024.2083,
+     31588.0
+    ],
+    [
+     2024.2917,
+     25867.0
+    ],
+    [
+     2024.375,
+     33183.0
+    ],
+    [
+     2024.4583,
+     27822.0
+    ],
+    [
+     2024.5417,
+     33204.0
+    ],
+    [
+     2024.625,
+     32352.0
+    ],
+    [
+     2024.7083,
+     35134.0
+    ],
+    [
+     2024.7917,
+     52676.0
+    ],
+    [
+     2024.875,
+     43052.0
+    ],
+    [
+     2024.9583,
+     48946.0
+    ],
+    [
+     2025.0417,
+     38822.0
+    ],
+    [
+     2025.125,
+     37411.0
+    ],
+    [
+     2025.2083,
+     38285.0
+    ],
+    [
+     2025.2917,
+     30528.0
+    ],
+    [
+     2025.375,
+     35703.0
+    ],
+    [
+     2025.4583,
+     43841.0
+    ],
+    [
+     2025.5417,
+     42088.0
+    ],
+    [
+     2025.625,
+     44119.0
+    ],
+    [
+     2025.7083,
+     41367.0
+    ],
+    [
+     2025.7917,
+     44349.0
+    ],
+    [
+     2025.875,
+     50393.0
+    ],
+    [
+     2025.9583,
+     58869.0
+    ],
+    [
+     2026.0417,
+     55749.0
+    ],
+    [
+     2026.125,
+     72666.0
+    ],
+    [
+     2026.2083,
+     63748.0
+    ],
+    [
+     2026.2917,
+     72715.0
+    ],
+    [
+     2026.375,
+     83784.0
+    ],
+    [
+     2026.4583,
+     94138.0
+    ],
+    [
+     2026.5417,
+     95408.0
+    ]
+   ]
+  }
+ ],
+ "marks": [
+  {
+   "x": 2026.458,
+   "y": 74686,
+   "label": "Jun '26 print: -3.7%",
+   "sub": "the one weak month - reversed next print",
+   "dy": 150
+  }
+ ],
+ "derived_from": [
+  "ev-memory-monitor-v1"
+ ],
+ "src_full": "ev-memory-monitor-v1's DRAM and HBM-CLASS series, its x ticks, y label, log scale, sub, source line and its June mark, copied verbatim. Its third series (TRIGGER, the dashed 12-month average) is NOT carried: the script's threshold is 'the release itself: the first month customs shows memory getting cheaper' (SCRIPT-H-VO.txt:47) - a month-over-month fall - and the object's own sub says 'The trigger is the release itself'; a line named TRIGGER that is a 12-month average would put a second, unspoken trigger on the page. The title is the source's own. The end tags carry the series' NAMES, not the source's July levels ('$87.0k' / '$95.4k'): the lines draw print by print on the words, and a tag rides the lead point - MEASURED on P69 T30's draft 1 (629.3 s) a tag printed July's level at the May print. The levels stay on the source object.",
+ "basis": [
+  {
+   "figure": "+16.4%",
+   "series": "DRAM",
+   "basis": "July print",
+   "from": [
+    2026.4583,
+    74686.0
+   ],
+   "to": [
+    2026.5417,
+    86970.0
+   ],
+   "says": "DRAM's month-over-month change on the July print - the bounce off June's -3.7%"
+  },
+  {
+   "figure": "+13.9%",
+   "series": "HBM-CLASS",
+   "basis": "last two prints",
+   "from": [
+    2026.375,
+    83784.0
+   ],
+   "to": [
+    2026.5417,
+    95408.0
+   ],
+   "says": "HBM-class over the last two prints (June and July together, from the May print)"
+  },
+  {
+   "figure": "-3.7%",
+   "series": "DRAM",
+   "basis": "June print",
+   "from": [
+    2026.375,
+    77558.0
+   ],
+   "to": [
+    2026.4583,
+    74686.0
+   ],
+   "says": "the one soft month - the source's own mark 'Jun '26 print: -3.7%'"
+  }
+ ],
+ "ruling": "E99 s94 (docs/portable/OPERATOR-RULINGS.md:3319): read the monitor on the script's own basis - DRAM +16.4% on the July print (the bounce off June's -3.7%), HBM-class +13.9% over the last two prints; a drawn figure names its basis",
+ "proof": [
+  {
+   "kind": "object",
+   "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/objects/ev-memory-monitor-v1.series.json",
+   "locator": "series[0..1], xticks, marks[0], src",
+   "quote": "Korean customs, HS 8542.32 exports (production tier, full months) - SCML memory monitor, July 2026 release"
+  }
+ ],
+ "provenance_note": "P69 T30 (2026-09-24): row 22's monitor page - derived, every point copied from ev-memory-monitor-v1; the three figures are that object's own points, arithmetic only (the door recomputes and asserts them). The source file is unchanged."
+}

@@ -1,0 +1,111 @@
+{
+ "title": "NVIDIA's slice of data-center GPUs",
+ "sub": "Share of the data-center GPU market, 2024 ($125B) - GPUs only, no TPUs or ASICs",
+ "src": "IoT Analytics, 'The leading generative AI companies', 4 Mar 2025",
+ "unit": "%",
+ "total": 100.0,
+ "shares": [
+  {
+   "label": "NVIDIA",
+   "frac": 0.92,
+   "value": "92%",
+   "color": "crimson",
+   "note": "2024"
+  },
+  {
+   "label": "AMD",
+   "frac": 0.04,
+   "value": "4%",
+   "color": "deemph",
+   "note": "2024"
+  },
+  {
+   "label": "Huawei",
+   "frac": 0.02,
+   "value": "2%",
+   "color": "deemph",
+   "note": "2024"
+  },
+  {
+   "label": "Other",
+   "frac": 0.02,
+   "value": "2%",
+   "color": "deemph",
+   "note": "the remainder to 100"
+  }
+ ],
+ "labels": [
+  "NVIDIA",
+  "AMD",
+  "Huawei",
+  "Other"
+ ],
+ "values": [
+  92.0,
+  4.0,
+  2.0,
+  2.0
+ ],
+ "value_strings": [
+  "92%",
+  "4%",
+  "2%",
+  "2%"
+ ],
+ "status": "REAL",
+ "tier": "CONFIRMED",
+ "research_tier": "CONFIRMED",
+ "retrieved": "2026-09-24",
+ "sources": [
+  {
+   "publisher": "IoT Analytics",
+   "title": "The leading generative AI companies",
+   "author": "Joaquin Fernandez",
+   "date": "2025-03-04",
+   "url": "https://iot-analytics.com/leading-generative-ai-companies/",
+   "on_disk": "docs/research/runs/r26-306-nvda-share-railway-gdp/sources/iot-analytics-2025-03-04-leading-generative-ai-companies.html"
+  }
+ ],
+ "proof": [
+  {
+   "kind": "analyst_article",
+   "tier": "CONFIRMED",
+   "path": "docs/research/runs/r26-306-nvda-share-railway-gdp/sources/iot-analytics-2025-03-04-leading-generative-ai-companies.html",
+   "locator": "section '1. NVIDIA'",
+   "quote": "In 2024, US-based semiconductor company NVIDIA vastly led the data center GPU market, holding 92% of the market share (similar market share as in 2023).",
+   "values": {
+    "nvda_pct": 92
+   }
+  },
+  {
+   "kind": "analyst_article",
+   "tier": "CONFIRMED",
+   "path": "docs/research/runs/r26-306-nvda-share-railway-gdp/sources/iot-analytics-2025-03-04-leading-generative-ai-companies.html",
+   "locator": "section '2. AMD'",
+   "quote": "thereby increasing its market share by 1 percentage point (4% in 2024 vs. 3% in 2023)",
+   "values": {
+    "amd_pct": 4
+   }
+  },
+  {
+   "kind": "analyst_article",
+   "tier": "CONFIRMED",
+   "path": "docs/research/runs/r26-306-nvda-share-railway-gdp/sources/iot-analytics-2025-03-04-leading-generative-ai-companies.html",
+   "locator": "section '3. Emerging AI hardware players'",
+   "quote": "In 2024, Huawei secured 2% market share.",
+   "values": {
+    "huawei_pct": 2
+   }
+  },
+  {
+   "kind": "definition",
+   "path": "docs/research/runs/r26-306-nvda-share-railway-gdp/sources/iot-analytics-2025-03-04-leading-generative-ai-companies.html",
+   "locator": "note under the GPU section",
+   "quote": "Note: The data center GPU market does not include CPUs, consumer GPUs, TPUs , ASICs, or other chips; only GPU systems intended for data center use."
+  }
+ ],
+ "derived_from": {
+  "other_pct": "100 - 92 - 4 - 2 = 2 (remainder; not stated)"
+ },
+ "provenance_note": "R26-306 intake (2026-09-24). The NARROW denominator: GPUs only. Use it only with the sub saying so - with custom ASICs in the denominator the share falls to ~70% (ev-nvda-ai-chip-share-v1). The Gemini reply's IoT Analytics URL (/data-center-ai-chip-market/) 404s and its '75-80% of AI processors' figure was not found on the retrieved page (UNSOURCED)."
+}
