@@ -213,7 +213,7 @@
         "note": "from = VECMAP_GULF written out (golden :565); plate must be vecmap"
       },
       "doctrine": [
-        "CAPABILITIES VECTOR MAP",
+        "CAPABILITIES VECTOR MAP world",
         "P71 T22"
       ],
       "status": "wired",
@@ -1600,7 +1600,7 @@
         "symbol": "paintLight"
       },
       "doctrine": [
-        "CAPABILITIES VECTOR MAP",
+        "CAPABILITIES VECTOR MAP world",
         "E56",
         "P71 T22"
       ],
@@ -2479,7 +2479,7 @@
         "note": "plate must be vecmap"
       },
       "doctrine": [
-        "CAPABILITIES VECTOR MAP",
+        "CAPABILITIES VECTOR MAP world",
         "P71 T22"
       ],
       "status": "wired",
