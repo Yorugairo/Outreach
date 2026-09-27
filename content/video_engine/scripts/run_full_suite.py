@@ -1,6 +1,7 @@
 """run_full_suite.py - the whole video-engine suite, every test file in its own process, one after another.
 
     python content/video_engine/scripts/run_full_suite.py [--skip-goldens] [--out DIR] [--timeout S]
+                                                          [--inputs-from CHECKOUT | --no-stage] [--path-limit N]
 
 What it runs: every `content/video_engine/tests/test_*.py` (`python -m pytest`, one process per file) and every
 `content/video_engine/tests/kinetics/*.test.mjs` (`node --test`, one process per file). It walks only those two
@@ -18,6 +19,22 @@ The default `<out>` is `content/video_engine/runtime/suite/<UTC stamp>/` (gitign
 It never kills a process it did not start. A file over `--timeout` has its OWN child ended: `taskkill /PID <the pid
 it launched> /T /F` on Windows (that child and the processes it spawned), the process group it created on POSIX.
 Nothing is killed by name or by command line - other agents' runs share this machine (P72 T22, P71 T18).
+
+THE INPUTS (P72 T52, R26-405). A lane worktree lacks the gitignored inputs the main checkout holds (audio masters,
+cutouts, side builds, review claims, the Blender profile): 25 of the 30 failures at d1099fc lacked one, and 19 of
+them needed nothing else. `run_full_suite.inputs.json` declares, per test file, the gitignored paths it reads
+(`inputs`: a file, or a directory ending in `/` - every file git ignores under it in the source).
+Before the run each absent one is STAGED from `--inputs-from` (default: the main checkout of this repo, read-only):
+copied only when git IGNORES it in the target (`git check-ignore`, fed bytes), never over an existing file, and
+listed in SUMMARY.md and `<out>/staged-inputs.txt`. A file whose input is absent here and in the source, or present
+there but not ignored here, is SKIPPED with the reason - a SKIP, never a pass. `--no-stage` stages nothing.
+
+THE PATH LIMIT. Blender 5.2 opens assets by absolute path and is not long-path aware: from a 68-character lane root
+the generalization scene's 194-character asset path is 262 characters and the compile worker exits 17 (T52 measured:
+an 81-character root fails, a 40-character root passes). A junction or a `subst` drive does not help - every modeling
+test and `scene.py` take their root from `Path(__file__).resolve()`, which follows both back to the real root
+(measured, all three fail). So a file's declared `path_limit` directories are measured from this checkout, and a
+read past `--path-limit` (259, MAX_PATH less its NUL) skips the file with the length and the root it needs.
 """
 from __future__ import annotations
 
@@ -25,13 +42,14 @@ import argparse
 import json
 import os
 import re
+import shutil
 import signal
 import subprocess
 import sys
 import time
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 REPO = Path(__file__).resolve().parents[3]
 TESTS_REL = "content/video_engine/tests"
@@ -42,6 +60,11 @@ OUT_REL = "content/video_engine/runtime/suite"
 TIMEOUT_S = 1800            # the sweep's per-file ceiling (2026-09-26): the slowest file took ~10 min
 MESSAGE_MAX = 300           # a failure's first line, as SUMMARY.md prints it
 PYTEST_COLUMNS = "4000"     # pytest cuts its short-summary line to the terminal width; a child has no terminal
+INPUTS_REL = "content/video_engine/scripts/run_full_suite.inputs.json"
+INPUTS_SCHEMA = "run_full_suite.inputs.v1"
+PATH_LIMIT = 259            # MAX_PATH (260) less its NUL - Blender 5.2 is not long-path aware (T52: 262 fails)
+NAMES_MAX = 8               # a skip reason names this many paths, then counts the rest
+STAGED_LISTED = 60          # SUMMARY.md lists this many staged paths; staged-inputs.txt has them all
 
 PYTEST_SUMMARY = re.compile(r"^(FAILED|ERROR) (.+?)(?: - (.*))?$")
 TAP_SUBTEST = re.compile(r"^(\s*)# Subtest: (.*)$")
@@ -64,8 +87,9 @@ class Attempt:
 class FileResult:
     path: str
     kind: str                   # "pytest" | "node"
-    status: str = "pass"        # "pass" | "fail" | "flake"
+    status: str = "pass"        # "pass" | "fail" | "flake" | "skip"
     runs: list[Attempt] = field(default_factory=list)
+    reason: str = ""            # why a "skip" never ran
 
 
 # --- what runs ----------------------------------------------------------------------------------------------
@@ -86,6 +110,177 @@ def command(rel: str, python: str, node: str) -> list[str]:
     if kind_of(rel) == "node":
         return [node, "--test", "--test-reporter=tap", rel]
     return [python, "-m", "pytest", "-q", "-p", "no:cacheprovider", "-rfE", rel]
+
+
+# --- the inputs: staged from the source checkout, or the file skipped with the reason ---------------------------
+
+@dataclass
+class Staging:
+    source: str | None                                      # the checkout inputs were staged from, or None
+    staged: list[str] = field(default_factory=list)         # repo-relative, sorted
+    skips: dict[str, str] = field(default_factory=dict)     # test file -> why it does not run
+
+
+def _inside(rel: str) -> bool:
+    """A declared path is repo-relative, POSIX, and never leaves the checkout."""
+    parts = PurePosixPath(rel).parts
+    return bool(rel) and not rel.startswith("/") and ":" not in rel and "\\" not in rel and ".." not in parts
+
+
+def load_needs(repo: Path) -> dict[str, dict]:
+    """`run_full_suite.inputs.json`'s `files`: test file -> {"inputs": [...], "path_limit": [...], "why": ...}."""
+    path = repo / INPUTS_REL
+    if not path.is_file():
+        return {}
+    doc = json.loads(path.read_text(encoding="utf-8"))
+    if doc.get("schema") != INPUTS_SCHEMA:
+        raise ValueError(f"{INPUTS_REL}: schema is {doc.get('schema')!r}, not {INPUTS_SCHEMA!r}")
+    files = doc.get("files") or {}
+    for test, need in files.items():
+        for rel in [*need.get("inputs", []), *need.get("path_limit", [])]:
+            if not _inside(rel):
+                raise ValueError(f"{INPUTS_REL}: {test}: {rel!r} - a declared path stays inside the checkout "
+                                 "(repo-relative, forward slashes, no '..', no drive)")
+    return files
+
+
+def main_checkout(repo: Path) -> Path | None:
+    """The main checkout of `repo`'s repository (the worktree that owns the common .git), or None."""
+    got = subprocess.run(["git", "-C", str(repo), "rev-parse", "--path-format=absolute", "--git-common-dir"],
+                         capture_output=True, text=True, check=False)
+    if got.returncode != 0 or not got.stdout.strip():
+        return None
+    common = Path(got.stdout.strip())
+    return common.parent.resolve() if common.name == ".git" else None
+
+
+def _listed(checkout: Path, rel_dir: str) -> list[str]:
+    """The files git ignores under `rel_dir` in `checkout` (read-only: `git ls-files` walks that directory only)."""
+    if not (checkout / rel_dir).is_dir():
+        return []
+    got = subprocess.run(["git", "-C", str(checkout), "ls-files", "-z", "--others", "--ignored", "--exclude-standard",
+                          "--", rel_dir], capture_output=True, check=False)
+    return sorted(n.decode("utf-8") for n in got.stdout.split(b"\0") if n) if got.returncode == 0 else []
+
+
+def ignored_in(repo: Path, rels: list[str]) -> set[str]:
+    """The subset of `rels` git ignores in `repo`. Fed as BYTES, NUL-separated: a text-mode pipe on Windows sends
+    `\\r\\n`, and `x.png\\r` never matches `*.png`. A tracked path is never reported (check-ignore skips the index)."""
+    if not rels:
+        return set()
+    got = subprocess.run(["git", "-C", str(repo), "check-ignore", "--stdin", "-z"],
+                         input=b"\0".join(r.encode("utf-8") for r in rels) + b"\0", capture_output=True, check=False)
+    if got.returncode not in (0, 1):
+        raise RuntimeError(f"git check-ignore failed in {repo}: {got.stderr.decode('utf-8', 'replace').strip()}")
+    return {n.decode("utf-8") for n in got.stdout.split(b"\0") if n}
+
+
+def _make_parents(repo: Path, rels: list[str]) -> list[Path]:
+    """Each parent directory made before check-ignore (a directory-only rule like `**/review/` matches a directory
+    git can see); returns the ones made, deepest first, so the unused ones are removed again."""
+    made: list[Path] = []
+    for rel in rels:
+        missing = [p for p in (repo / rel).parents if p != repo and repo in p.parents and not p.exists()]
+        for directory in reversed(missing):
+            directory.mkdir()
+            made.append(directory)
+    return sorted(made, key=lambda p: len(p.parts), reverse=True)
+
+
+def _prune(made: list[Path]) -> None:
+    for directory in made:
+        if directory.is_dir() and not any(directory.iterdir()):
+            directory.rmdir()
+
+
+def _copy_new(src: Path, dst: Path) -> bool:
+    """Copy `src` to `dst` only when `dst` does not exist (`xb`: never an overwrite, even in a race)."""
+    try:
+        with src.open("rb") as reader, dst.open("xb") as writer:
+            shutil.copyfileobj(reader, writer)
+    except FileExistsError:
+        return False
+    shutil.copystat(src, dst)
+    return True
+
+
+def _names(rels: list[str]) -> str:
+    more = len(rels) - NAMES_MAX
+    return ", ".join(rels[:NAMES_MAX]) + (f" (+{more} more)" if more > 0 else "")
+
+
+def _wanted(repo: Path, source: Path | None, inputs: list[str]) -> tuple[list[str], list[str]]:
+    """(the absent files the source can supply, the declared inputs absent here and there)."""
+    want, absent = [], []
+    for rel in inputs:
+        if rel.endswith("/"):
+            there = [f for f in _listed(source, rel) if not (repo / f).exists()] if source else []
+            if not (repo / rel).is_dir() and not there:
+                absent.append(rel)
+            want += there
+        elif not (repo / rel).exists():
+            (want if source and (source / rel).is_file() else absent).append(rel)
+    return want, absent
+
+
+def stage_inputs(repo: Path, source: Path | None, needs: dict[str, dict], files: list[str]) -> Staging:
+    """Stage every declared input absent here from `source` (only what git ignores here), then name the files
+    that still lack one. `source` is only ever read."""
+    per_test = {rel: _wanted(repo, source, needs[rel].get("inputs", [])) for rel in files if rel in needs}
+    candidates = sorted({f for want, _ in per_test.values() for f in want})
+    made = _make_parents(repo, candidates)
+    ok = ignored_in(repo, candidates)
+    staged = [rel for rel in candidates if rel in ok and _copy_new(source / rel, repo / rel)]
+    _prune(made)
+    result = Staging(source=source.as_posix() if source else None, staged=staged)
+    for test, (want, absent) in per_test.items():
+        refused = [rel for rel in want if rel not in ok]
+        why = []
+        if absent:
+            where = f"and in {source.as_posix()}" if source else "(staging is off)"
+            why.append(f"input absent here {where}: {_names(absent)}")
+        if refused:
+            why.append(f"input absent here and not ignored here (never staged): {_names(refused)}")
+        if why:
+            result.skips[test] = "; ".join(why)
+    return result
+
+
+def path_limit_reason(repo: Path, dirs: list[str], limit: int = PATH_LIMIT, source: Path | None = None) -> str | None:
+    """None when every file under the declared paths fits `limit` characters from this checkout's real root; else
+    the reason, naming the longest path and the root length that would fit. A directory counts what is here AND
+    what the source would stage into it (a tool can leave a short stray file in a staged directory - MPFB writes
+    its logs into the profile - and the long paths the next staging brings back must still count)."""
+    root = repo.resolve()
+    rels = set()
+    for rel in dirs:
+        base = root / rel
+        if base.is_file():
+            rels.add(rel)
+            continue
+        if base.is_dir():
+            rels.update((Path(d) / f).relative_to(root).as_posix() for d, _, fs in os.walk(base) for f in fs)
+        if source:
+            rels.update(_listed(source, rel))
+    if not rels:
+        return None
+    longest = min(rels, key=lambda r: (-len(r), r))
+    size = len(str(root)) + 1 + len(longest)
+    if size <= limit:
+        return None
+    return (f"a declared read is {size} characters from this checkout (limit {limit}): {longest} - the checkout "
+            f"root must be at most {len(str(root)) - (size - limit)} characters (a junction or subst does not "
+            f"shorten it: the tests resolve() back to the real root)")
+
+
+def plan_inputs(repo: Path, source: Path | None, files: list[str], limit: int = PATH_LIMIT) -> Staging:
+    """The path-limit skips first (their inputs are not staged), then the staging for the rest."""
+    needs = load_needs(repo)
+    too_long = {rel: why for rel in files if rel in needs
+                for why in [path_limit_reason(repo, needs[rel].get("path_limit", []), limit, source)] if why}
+    staging = stage_inputs(repo, source, needs, [f for f in files if f not in too_long])
+    staging.skips.update(too_long)
+    return staging
 
 
 # --- one process per file -----------------------------------------------------------------------------------
@@ -205,10 +400,15 @@ def passed(attempt: Attempt) -> bool:
 # --- the run ------------------------------------------------------------------------------------------------
 
 def run_suite(repo: Path, out: Path, files: list[str], timeout: float, python: str, node: str,
-              rerun: bool = True) -> list[FileResult]:
+              rerun: bool = True, skips: dict[str, str] | None = None) -> list[FileResult]:
     results = []
     for n, rel in enumerate(files, 1):
         result = FileResult(path=rel, kind=kind_of(rel))
+        if rel in (skips or {}):
+            result.status, result.reason = "skip", skips[rel]
+            print(f"[{n}/{len(files)}] SKIP  {'':>8} {rel} - {result.reason}", flush=True)
+            results.append(result)
+            continue
         name = Path(rel).name + ".log"
         first = run_file(repo, rel, out / "logs" / name, timeout, python, node)
         first.failures = failures_of(first, result.kind)
@@ -230,14 +430,20 @@ def head_of(repo: Path) -> str:
     return got.stdout.strip() or "n/a (not a git checkout)"
 
 
-def summary_md(results: list[FileResult], meta: dict) -> str:
+def counts_of(results: list[FileResult]) -> dict[str, int]:
+    counts = {s: sum(1 for r in results if r.status == s) for s in ("pass", "fail", "flake", "skip")}
+    return dict(counts, run=len(results) - counts["skip"])
+
+
+def summary_md(results: list[FileResult], meta: dict, staging: Staging | None = None) -> str:
     fails = [r for r in results if r.status == "fail"]
     flakes = [r for r in results if r.status == "flake"]
+    c = counts_of(results)
     lines = ["# Full suite - SUMMARY", "",
              f"- repo: `{meta['repo']}` at `{meta['head']}`", f"- started: {meta['started']}  seconds: {meta['seconds']}",
              f"- command: `{meta['argv']}`", "",
-             f"files run {len(results)} / passed {len(results) - len(fails) - len(flakes)} / "
-             f"failed {len(fails)} / flaked {len(flakes)}", ""]
+             f"files run {c['run']} / passed {c['pass']} / failed {c['fail']} / flaked {c['flake']} / "
+             f"skipped {c['skip']}", ""]
     for title, group in (("Failed (failed again when rerun alone)", fails), ("Flaked (passed when rerun alone)", flakes)):
         lines += [f"## {title}", ""] + (["- none"] if not group else [])
         for r in group:
@@ -245,7 +451,24 @@ def summary_md(results: list[FileResult], meta: dict) -> str:
             lines.append(f"- `{r.path}` (exit {last.rc}, log `{last.log}`)")
             lines += [f"  - `{test}` - {message}" for test, message in last.failures]
         lines.append("")
-    return "\n".join(lines)
+    return "\n".join(lines + _skip_lines(results) + _staged_lines(staging))
+
+
+def _skip_lines(results: list[FileResult]) -> list[str]:
+    skipped = [r for r in results if r.status == "skip"]
+    return (["## Skipped (never run: an input absent, or a read past the path limit - never a pass)", ""]
+            + ([f"- `{r.path}` - {r.reason}" for r in skipped] or ["- none"]) + [""])
+
+
+def _staged_lines(staging: Staging | None) -> list[str]:
+    if staging is None:
+        return []
+    if staging.source is None:
+        return ["## Staged inputs (staging is off)", ""]
+    listed = [f"- `{rel}`" for rel in staging.staged[:STAGED_LISTED]]
+    more = len(staging.staged) - STAGED_LISTED
+    return ([f"## Staged inputs ({len(staging.staged)}, from `{staging.source}`)", ""] + (listed or ["- none"])
+            + ([f"- ... and {more} more (all in staged-inputs.txt)"] if more > 0 else []) + [""])
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -257,27 +480,41 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--no-rerun", action="store_true", help="do not rerun a failing file alone")
     ap.add_argument("--python", default=sys.executable, help="the interpreter for pytest (default: this one)")
     ap.add_argument("--node", default="node", help="the node executable")
+    ap.add_argument("--inputs-from", type=Path,
+                    help="the checkout gitignored inputs are staged from, read-only (default: this repo's main checkout)")
+    ap.add_argument("--no-stage", action="store_true", help="stage nothing; a file missing an input is skipped")
+    ap.add_argument("--path-limit", type=int, default=PATH_LIMIT,
+                    help=f"the longest declared read, in characters from this checkout (default {PATH_LIMIT})")
     args = ap.parse_args(argv)
     repo = args.repo.resolve()
     if not (repo / TESTS_REL).is_dir():
         ap.error(f"no {TESTS_REL} under {repo}")
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     out = (args.out or repo / OUT_REL / stamp).resolve()
+    source = None if args.no_stage else (args.inputs_from or main_checkout(repo))
+    if source is not None:
+        if not source.is_dir():
+            ap.error(f"--inputs-from {source} is not a directory")
+        source = source.resolve()
     files = discover(repo, args.skip_goldens)
-    print(f"run_full_suite: {len(files)} files in {repo} -> {out}", flush=True)
+    staging = plan_inputs(repo, source, files, args.path_limit)
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "staged-inputs.txt").write_text("".join(f"{rel}\n" for rel in staging.staged), encoding="utf-8")
+    print(f"run_full_suite: {len(files)} files in {repo} -> {out}; staged {len(staging.staged)} inputs from "
+          f"{staging.source or '(staging is off)'}, {len(staging.skips)} files skipped", flush=True)
     start = time.monotonic()
-    results = run_suite(repo, out, files, args.timeout, args.python, args.node, rerun=not args.no_rerun)
+    results = run_suite(repo, out, files, args.timeout, args.python, args.node, rerun=not args.no_rerun,
+                        skips=staging.skips)
     meta = {"repo": repo.as_posix(), "head": head_of(repo), "started": stamp,
             "seconds": round(time.monotonic() - start, 1),
             "argv": " ".join(["run_full_suite.py", *(sys.argv[1:] if argv is None else argv)])}
-    counts = {s: sum(1 for r in results if r.status == s) for s in ("pass", "fail", "flake")}
-    out.mkdir(parents=True, exist_ok=True)
-    (out / "SUMMARY.md").write_text(summary_md(results, meta) + "\n", encoding="utf-8")
+    counts = counts_of(results)
+    (out / "SUMMARY.md").write_text(summary_md(results, meta, staging) + "\n", encoding="utf-8")
     (out / "summary.json").write_text(json.dumps(
-        dict(meta, run=len(results), **counts, files=[asdict(r) for r in results]), indent=1) + "\n",
-        encoding="utf-8")
-    print(f"run_full_suite: files run {len(results)} / passed {counts['pass']} / failed {counts['fail']} / "
-          f"flaked {counts['flake']} - {out / 'SUMMARY.md'}", flush=True)
+        dict(meta, **counts, staged={"from": staging.source, "files": staging.staged},
+             files=[asdict(r) for r in results]), indent=1) + "\n", encoding="utf-8")
+    print(f"run_full_suite: files run {counts['run']} / passed {counts['pass']} / failed {counts['fail']} / "
+          f"flaked {counts['flake']} / skipped {counts['skip']} - {out / 'SUMMARY.md'}", flush=True)
     return 1 if counts["fail"] else 0
 
 

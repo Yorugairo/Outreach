@@ -1,0 +1,395 @@
+{
+ "schema": "run_full_suite.inputs.v1",
+ "about": "P72 T52 (R26-405): the gitignored inputs each test file reads, staged by run_full_suite.py from --inputs-from (default the main checkout) when absent here; a path ending in / is a directory (every file git ignores under it). path_limit: directories a non-long-path-aware reader (Blender 5.2) opens by absolute path.",
+ "files": {
+  "content/video_engine/tests/test_agenda_page.py": {
+   "inputs": [
+    "content/video_engine/assets/icons/",
+    "content/video_engine/assets/props/"
+   ]
+  },
+  "content/video_engine/tests/test_balance_scale.py": {
+   "inputs": [
+    "content/video_engine/assets/icons/",
+    "content/video_engine/assets/props/"
+   ]
+  },
+  "content/video_engine/tests/test_change_report.py": {
+   "inputs": [
+    "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short-t6/audio/"
+   ]
+  },
+  "content/video_engine/tests/test_chart_card_readable.py": {
+   "inputs": [
+    "content/video_engine/projects/systems-and-blowups/steel-and-paper/host/"
+   ]
+  },
+  "content/video_engine/tests/test_chip_stamp.py": {
+   "inputs": [
+    "content/video_engine/assets/icons/",
+    "content/video_engine/assets/props/"
+   ]
+  },
+  "content/video_engine/tests/test_chip_stamp_arrival.py": {
+   "inputs": [
+    "content/video_engine/assets/icons/",
+    "content/video_engine/assets/props/"
+   ]
+  },
+  "content/video_engine/tests/test_chip_stamp_reserved.py": {
+   "inputs": [
+    "content/video_engine/assets/icons/",
+    "content/video_engine/assets/props/"
+   ]
+  },
+  "content/video_engine/tests/test_chip_states.py": {
+   "inputs": [
+    "content/video_engine/assets/icons/",
+    "content/video_engine/assets/props/"
+   ]
+  },
+  "content/video_engine/tests/test_docks_keep_their_box.py": {
+   "inputs": [
+    "content/video_engine/assets/icons/",
+    "content/video_engine/assets/props/"
+   ]
+  },
+  "content/video_engine/tests/test_editor.py": {
+   "inputs": [
+    "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short-t7/"
+   ]
+  },
+  "content/video_engine/tests/test_effects_catalog_drift.py": {
+   "inputs": [
+    "content/video_engine/assets/icons/",
+    "content/video_engine/assets/props/"
+   ]
+  },
+  "content/video_engine/tests/test_empty_room_keeps_text.py": {
+   "inputs": [
+    "content/video_engine/assets/icons/",
+    "content/video_engine/assets/props/"
+   ]
+  },
+  "content/video_engine/tests/test_finance_2d_stick_proof.py": {
+   "inputs": [
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/audio/canonical/history_episode_1_master.mp3",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-2d-stick-proof-v1/"
+   ]
+  },
+  "content/video_engine/tests/test_finance_asset_demand.py": {
+   "inputs": [
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/review/"
+   ]
+  },
+  "content/video_engine/tests/test_finance_channel.py": {
+   "inputs": [
+    "content/video_engine/projects/systems-and-blowups/assets/generated/"
+   ]
+  },
+  "content/video_engine/tests/test_finance_sentence_native_asset_wave.py": {
+   "inputs": [
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/"
+   ]
+  },
+  "content/video_engine/tests/test_finance_sketchbook_proof.py": {
+   "inputs": [
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/audio/canonical/history_episode_1_master.mp3",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-sketchbook-proof-v1/"
+   ]
+  },
+  "content/video_engine/tests/test_finance_stealth_wealth_proof.py": {
+   "inputs": [
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/audio/canonical/history_episode_1_master.mp3",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-stealth-wealth-proof-v1/"
+   ]
+  },
+  "content/video_engine/tests/test_finance_whiteboard_asset_proof.py": {
+   "inputs": [
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/audio/canonical/history_episode_1_master.mp3",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-asset-blend-proof-v1/"
+   ]
+  },
+  "content/video_engine/tests/test_finance_whiteboard_code_drawn_proof.py": {
+   "inputs": [
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/audio/canonical/history_episode_1_master.mp3",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-code-drawn-proof-v1/",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-asset-blend-proof-v1/"
+   ]
+  },
+  "content/video_engine/tests/test_finance_whiteboard_deck_asset_proof.py": {
+   "inputs": [
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/audio/canonical/history_episode_1_master.mp3",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-deck-asset-proof-v1/",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-asset-blend-proof-v1/"
+   ]
+  },
+  "content/video_engine/tests/test_lab_build.py": {
+   "inputs": [
+    "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-lab-reproof-r2/recipe-read-park-build-write/SHOT-TABLE-LAB.py",
+    "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-p66-cal/SHOT-TABLE-SHORT.py",
+    "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p66-base/SHOT-TABLE-SHORT.py",
+    "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/sound/"
+   ]
+  },
+  "content/video_engine/tests/test_measure_motion_energy.py": {
+   "inputs": [
+    "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short/player.html"
+   ]
+  },
+  "content/video_engine/tests/test_membership_stack.py": {
+   "inputs": [
+    "content/video_engine/assets/icons/",
+    "content/video_engine/assets/props/"
+   ]
+  },
+  "content/video_engine/tests/test_model_blender.py": {
+   "path_limit": [
+    "content/video_engine/assets/modeling/native/generalization/contract/environment/8afd9f3f3075-native/model-assets/candidates/layered-environment/layered-environment-r1/resources/environment.blend",
+    "content/video_engine/assets/modeling/native/generalization/contract/prop/e7e4323080c6-native/model-assets/candidates/hinged-prop/hinged-prop-r1/resources/hinged-prop.blend"
+   ]
+  },
+  "content/video_engine/tests/test_model_face_targets.py": {
+   "inputs": [
+    "content/video_engine/tests/fixtures/modeling/baseline/profile/",
+    "content/video_engine/tests/fixtures/modeling/baseline/tools/packages/mpfb-2.0.17.zip"
+   ],
+   "path_limit": [
+    "content/video_engine/assets/modeling/native/fighter-family-v1.1.blend"
+   ]
+  },
+  "content/video_engine/tests/test_model_fight_motion.py": {
+   "inputs": [
+    "content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/assets/raw/source-short/ufc-sharaf-steveson-high.mkv",
+    "content/video_engine/review/model-engines/benchmark-v1/3d/source-fight-rig/"
+   ],
+   "path_limit": [
+    "content/video_engine/assets/modeling/native/fighter-family-v1.1.blend",
+    "content/video_engine/review/model-engines/benchmark-v1/3d/source-fight-rig/"
+   ]
+  },
+  "content/video_engine/tests/test_model_fight_motion_contact_transfer.py": {
+   "inputs": [
+    "content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/assets/raw/source-short/ufc-sharaf-steveson-high.mkv",
+    "content/video_engine/review/model-engines/benchmark-v1/3d/source-fight-rig/"
+   ],
+   "path_limit": [
+    "content/video_engine/assets/modeling/native/fighter-family-v1.1.blend",
+    "content/video_engine/review/model-engines/benchmark-v1/3d/source-fight-rig/"
+   ]
+  },
+  "content/video_engine/tests/test_model_motion.py": {
+   "inputs": [
+    "content/video_engine/projects/martial-matters/pilots/knockout-brain-matchcut-001/assets/raw/source-short/ufc-sharaf-steveson-high.mkv"
+   ]
+  },
+  "content/video_engine/tests/test_model_presets.py": {
+   "inputs": [
+    "content/video_engine/tests/fixtures/modeling/baseline/profile/",
+    "content/video_engine/tests/fixtures/modeling/baseline/tools/packages/mpfb-2.0.17.zip"
+   ],
+   "path_limit": [
+    "content/video_engine/tests/fixtures/modeling/baseline/profile/",
+    "content/video_engine/assets/modeling/native/fighter-family-v1.1.blend"
+   ]
+  },
+  "content/video_engine/tests/test_p33_first_five_evidence_obligation.py": {
+   "inputs": [
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/p33-two-elevator-mechanism-v1/"
+   ]
+  },
+  "content/video_engine/tests/test_plate_caption_room.py": {
+   "inputs": [
+    "content/video_engine/assets/icons/",
+    "content/video_engine/assets/props/"
+   ]
+  },
+  "content/video_engine/tests/test_plate_library_layers.py": {
+   "inputs": [
+    "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/plates/",
+    "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/objects/world-banker-apartment-v2.png",
+    "content/video_engine/projects/systems-and-blowups/review/claims/finance-episodes-plates-wave-1/objects/world-banker-apartment-v2.layers.json"
+   ]
+  },
+  "content/video_engine/tests/test_production_console.py": {
+   "inputs": [
+    "content/video_engine/projects/systems-and-blowups/sources/decks/teacher-stamped-production-visuals/"
+   ]
+  },
+  "content/video_engine/tests/test_production_console_snapshot.py": {
+   "inputs": [
+    "content/video_engine/projects/systems-and-blowups/sources/decks/teacher-stamped-production-visuals/"
+   ]
+  },
+  "content/video_engine/tests/test_production_editor.py": {
+   "inputs": [
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/audio/canonical/history_episode_1_master.mp3",
+    "content/video_engine/projects/systems-and-blowups/sources/decks/teacher-stamped-production-visuals/",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/review/",
+    "content/video_engine/projects/systems-and-blowups/assets/generated/",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-01-002-memory-stocks-vertical-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-01-003-bubble-reflex-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-01-004-factory-capacity-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-01-006-index-safe-default-v2.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-01-008-automatic-inflow-feedback-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-01-009-memory-correction-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-01-010-memory-overpriced-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-01-011-memory-cycle-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-01-012-physical-bottleneck-repriced-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-01-013-hidden-safe-index-loop-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-02-002-symptom-not-diagnosis-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-02-003-next-buyer-belief-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-02/beat-03-002-hbm-stack-accelerator-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-02/beat-03-004-gpu-hbm-fuel-system-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-02/beat-03-008-009-physical-capacity-gate-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-02/beat-03-011-015-bakery-capacity-analogy-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-001-buyer-behavior-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-003-classic-cycle-counterargument-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-004-changed-customer-behavior-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-013-guidance-not-gospel-v2.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-014-evidence-hierarchy-v2.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-015-bottleneck-boom-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-001-beyond-three-memory-companies-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-002-strategic-chokepoints-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-003-market-reprices-control-v2.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-005-not-civilization-ranking-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-006-listed-cash-flow-market-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-012-different-cash-flow-structures-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-015-016-simple-joke-complex-mechanism-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-017-018-market-prices-cashflows-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-020-tech-corridor-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-021-subcontractor-strategic-upgrade-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-022-memory-enables-work-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-024-stranded-compute-bridge-v2.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-001-003-index-product-elevator-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-004-007-dual-failure-v2.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-010-shared-causal-weather-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-011-016-automatic-size-weighting-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-017-018-diworsification-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-019-024-basketball-roster-v1.png"
+   ]
+  },
+  "content/video_engine/tests/test_production_editor_revisions.py": {
+   "inputs": [
+    "content/video_engine/projects/systems-and-blowups/sources/decks/teacher-stamped-production-visuals/",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/review/",
+    "content/video_engine/projects/systems-and-blowups/assets/generated/",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-01-002-memory-stocks-vertical-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-01-003-bubble-reflex-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-01-004-factory-capacity-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-01-006-index-safe-default-v2.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-01-008-automatic-inflow-feedback-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-01-009-memory-correction-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-01-010-memory-overpriced-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-01-011-memory-cycle-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-01-012-physical-bottleneck-repriced-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-01-013-hidden-safe-index-loop-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-02-002-symptom-not-diagnosis-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/beat-02-003-next-buyer-belief-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-02/beat-03-002-hbm-stack-accelerator-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-02/beat-03-004-gpu-hbm-fuel-system-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-02/beat-03-008-009-physical-capacity-gate-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-02/beat-03-011-015-bakery-capacity-analogy-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-001-buyer-behavior-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-003-classic-cycle-counterargument-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-004-changed-customer-behavior-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-013-guidance-not-gospel-v2.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-014-evidence-hierarchy-v2.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-04/beat-04-015-bottleneck-boom-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-001-beyond-three-memory-companies-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-002-strategic-chokepoints-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-003-market-reprices-control-v2.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-005-not-civilization-ranking-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-006-listed-cash-flow-market-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-05/beat-05-012-different-cash-flow-structures-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-015-016-simple-joke-complex-mechanism-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-017-018-market-prices-cashflows-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-020-tech-corridor-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-021-subcontractor-strategic-upgrade-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-022-memory-enables-work-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-06/beat-05-024-stranded-compute-bridge-v2.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-001-003-index-product-elevator-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-004-007-dual-failure-v2.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-010-shared-causal-weather-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-011-016-automatic-size-weighting-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-017-018-diworsification-v1.png",
+    "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-07/beat-06-019-024-basketball-roster-v1.png"
+   ]
+  },
+  "content/video_engine/tests/test_prop_alpha.py": {
+   "inputs": [
+    "content/video_engine/assets/icons/",
+    "content/video_engine/assets/props/"
+   ]
+  },
+  "content/video_engine/tests/test_prop_free_placement.py": {
+   "inputs": [
+    "content/video_engine/assets/icons/",
+    "content/video_engine/assets/props/"
+   ]
+  },
+  "content/video_engine/tests/test_prop_morph.py": {
+   "inputs": [
+    "content/video_engine/assets/icons/",
+    "content/video_engine/assets/props/"
+   ]
+  },
+  "content/video_engine/tests/test_publish_package.py": {
+   "inputs": [
+    "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short-t0/self-watch/"
+   ]
+  },
+  "content/video_engine/tests/test_recipe_walk.py": {
+   "inputs": [
+    "docs/research/runs/p56-recipe-seeds/seeds.jsonl"
+   ]
+  },
+  "content/video_engine/tests/test_recipes_carry_the_rulings.py": {
+   "inputs": [
+    "content/video_engine/assets/icons/",
+    "content/video_engine/assets/props/"
+   ]
+  },
+  "content/video_engine/tests/test_review_queue.py": {
+   "inputs": [
+    "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-review/"
+   ]
+  },
+  "content/video_engine/tests/test_ring_on_the_named_thing.py": {
+   "inputs": [
+    "content/video_engine/assets/icons/",
+    "content/video_engine/assets/props/"
+   ]
+  },
+  "content/video_engine/tests/test_seal_ground.py": {
+   "inputs": [
+    "content/video_engine/assets/icons/",
+    "content/video_engine/assets/props/"
+   ]
+  },
+  "content/video_engine/tests/test_stamp_is_a_seal.py": {
+   "inputs": [
+    "content/video_engine/assets/icons/",
+    "content/video_engine/assets/props/"
+   ]
+  },
+  "content/video_engine/tests/test_the_stamp_arrival.py": {
+   "inputs": [
+    "content/video_engine/assets/icons/",
+    "content/video_engine/assets/props/"
+   ]
+  },
+  "content/video_engine/tests/test_wave3_docks_probe.py": {
+   "inputs": [
+    "content/video_engine/assets/icons/",
+    "content/video_engine/assets/props/"
+   ]
+  },
+  "content/video_engine/tests/test_wave3_followups_b.py": {
+   "inputs": [
+    "content/video_engine/assets/icons/",
+    "content/video_engine/assets/props/"
+   ]
+  }
+ }
+}

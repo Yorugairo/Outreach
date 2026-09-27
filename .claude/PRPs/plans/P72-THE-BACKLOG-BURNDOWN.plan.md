@@ -1222,7 +1222,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T52: The suite's standing failures (R26-405)
-- Status: pending
+- Status: running - the runner stages inputs / skips with the reason, LF for nine fixtures, Blender's path limit named (lane B, the T52 commit); the six pre-existing failures were missing inputs (dated); open: R26-411's seven (three LF pins, the review queue's stale P65 pin, the plate library's absolute paths, the hand baseline, the fresh worktree's missing generated catalogue)
 - The first `run_full_suite.py` on lane B (c0b42c4): 30 failures, none from wave 9 or P73; classified in R26-405 (missing gitignored inputs, Blender's path, CRLF working copies, six pre-existing unowned, the register). Build: the runner stages or skips absent inputs with the reason; LF for byte-compared fixtures; a short-path Blender run; each pre-existing failure diagnosed at its cause.
 
 ### T46f: The wave-3 carries - what T46a-e could not close

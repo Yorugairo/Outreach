@@ -198,3 +198,181 @@ def test_the_parsers_read_the_first_line_and_skip_a_suite_failed_only_by_its_sub
                                                 ["a/test_y.py", "ImportError: no module named z"]]
     assert RFS.tap_failures(tap) == [["bad one", "Expected values to be strictly equal:"],
                                      ["group > inner bad", "boom"]]
+
+
+# --- P72 T52: the gitignored inputs, staged or skipped with the reason ------------------------------------------
+
+GIT = shutil.which("git")
+needs_git = pytest.mark.skipif(GIT is None, reason="git is not installed")
+IGNORE = "*.bin\n**/review/\nprofile/\n__pycache__/\n"
+READS = "from pathlib import Path\nROOT = Path(__file__).resolve().parents[3]\n"
+
+
+def _git(cwd: Path, *args: str) -> str:
+    done = subprocess.run(["git", "-c", "core.autocrlf=false", "-c", "user.name=t52",
+                           "-c", "user.email=t52@example.invalid", *args],
+                          cwd=cwd, capture_output=True, text=True, check=True)
+    return done.stdout
+
+
+def _checkout(root: Path, files: dict[str, bytes | str]) -> Path:
+    """A git checkout carrying the ignore rules and `files` (the tracked ones are committed)."""
+    root.mkdir(parents=True, exist_ok=True)
+    _git(root, "init", "-q")
+    (root / ".gitignore").write_text(IGNORE, encoding="utf-8")
+    for rel, body in files.items():
+        (root / rel).parent.mkdir(parents=True, exist_ok=True)
+        (root / rel).write_bytes(body if isinstance(body, bytes) else body.encode("utf-8"))
+    _git(root, "add", "-A")
+    _git(root, "commit", "-q", "-m", "base")
+    return root
+
+
+def _needs_text(needs: dict) -> str:
+    return json.dumps({"schema": RFS.INPUTS_SCHEMA, "files": needs}, indent=1)
+
+
+def _needs(repo: Path, needs: dict) -> None:
+    path = repo / RFS.INPUTS_REL
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(_needs_text(needs), encoding="utf-8")
+
+
+def _pair(tmp_path: Path, tests: dict[str, str], needs: dict) -> tuple[Path, Path]:
+    """A target checkout with `tests` and the declared needs, and a source checkout holding the ignored inputs."""
+    target = _checkout(tmp_path / "target", {"pytest.ini": "[pytest]\n", "data/present.bin": b"the target's own",
+                                             RFS.INPUTS_REL: _needs_text(needs),
+                                             **{f"{T}/{name}": body for name, body in tests.items()}})
+    source = _checkout(tmp_path / "source", {"pytest.ini": "[pytest]\n", "notes/plain.txt": "tracked in the source"})
+    for rel, body in {"data/a.bin": b"alpha\r\n", "data/present.bin": b"the source's copy",
+                      "x/review/deep/b.png": b"png", "kit/profile/p/q/r.dat": b"deep", "kit/profile/s.dat": b"s",
+                      "loose/untracked.txt": b"neither tracked nor ignored"}.items():
+        (source / rel).parent.mkdir(parents=True, exist_ok=True)
+        (source / rel).write_bytes(body)
+    return target, source
+
+
+@needs_git
+def test_absent_ignored_inputs_are_staged_from_the_source_never_overwriting_and_reported(tmp_path: Path) -> None:
+    body = READS + textwrap.dedent('''\
+        def test_reads():
+            assert (ROOT / "data/a.bin").read_bytes() == b"alpha\\r\\n"
+            assert (ROOT / "x/review/deep/b.png").read_bytes() == b"png"
+            assert (ROOT / "kit/profile/p/q/r.dat").read_bytes() == b"deep"
+            assert (ROOT / "data/present.bin").read_bytes() == b"the target's own"
+        ''')
+    needs = {f"{T}/test_reads.py": {"inputs": ["data/a.bin", "x/review/deep/b.png", "kit/profile/", "data/present.bin"]}}
+    target, source = _pair(tmp_path, {"test_reads.py": body}, needs)
+    out = tmp_path / "out"
+
+    rc = RFS.main(["--repo", str(target), "--out", str(out), "--inputs-from", str(source)])
+
+    got = _summary(out)
+    assert rc == 0 and (got["run"], got["pass"], got["skip"]) == (1, 1, 0)
+    staged = ["data/a.bin", "kit/profile/p/q/r.dat", "kit/profile/s.dat", "x/review/deep/b.png"]
+    assert got["staged"] == {"from": source.resolve().as_posix(), "files": staged}
+    assert (target / "data/a.bin").read_bytes() == b"alpha\r\n"                      # bytes, not text
+    assert (target / "data/present.bin").read_bytes() == b"the target's own"        # never overwritten
+    assert _git(target, "status", "--porcelain") == ""                                # every staged file is ignored
+    summary = (out / "SUMMARY.md").read_text(encoding="utf-8")
+    assert f"## Staged inputs (4, from `{source.resolve().as_posix()}`)" in summary
+    assert "- `x/review/deep/b.png`" in summary
+
+
+@needs_git
+def test_an_input_absent_everywhere_or_not_ignored_here_skips_its_file_with_the_reason(tmp_path: Path) -> None:
+    tests = {"test_nowhere.py": "def test_x():\n    assert True\n",
+             "test_unignored.py": "def test_y():\n    assert True\n",
+             "test_plain.py": "def test_z():\n    assert True\n"}
+    needs = {f"{T}/test_nowhere.py": {"inputs": ["data/nowhere.bin", "gone/review/"]},
+             f"{T}/test_unignored.py": {"inputs": ["loose/untracked.txt", "notes/plain.txt"]}}
+    target, source = _pair(tmp_path, tests, needs)
+    out = tmp_path / "out"
+
+    rc = RFS.main(["--repo", str(target), "--out", str(out), "--inputs-from", str(source)])
+
+    got = _summary(out)
+    by_name = {Path(f["path"]).name: f for f in got["files"]}
+    assert rc == 0 and (got["run"], got["pass"], got["fail"], got["skip"]) == (1, 1, 0, 2)
+    assert by_name["test_plain.py"]["status"] == "pass"
+    assert by_name["test_nowhere.py"]["status"] == "skip" and by_name["test_nowhere.py"]["runs"] == []
+    assert by_name["test_nowhere.py"]["reason"] == (
+        f"input absent here and in {source.resolve().as_posix()}: data/nowhere.bin, gone/review/")
+    assert by_name["test_unignored.py"]["reason"] == (
+        "input absent here and not ignored here (never staged): loose/untracked.txt, notes/plain.txt")
+    assert not (target / "loose").exists() and not (target / "notes").exists() and not (target / "gone").exists()
+    assert got["staged"]["files"] == []
+    summary = (out / "SUMMARY.md").read_text(encoding="utf-8")
+    assert "files run 1 / passed 1 / failed 0 / flaked 0 / skipped 2" in summary
+    assert f"- `{T}/test_nowhere.py` - input absent here and in" in summary
+
+
+@needs_git
+def test_without_a_source_nothing_is_staged_and_a_missing_input_skips(tmp_path: Path) -> None:
+    needs = {f"{T}/test_reads.py": {"inputs": ["data/a.bin"]}}
+    target, _source = _pair(tmp_path, {"test_reads.py": "def test_x():\n    assert True\n"}, needs)
+    out = tmp_path / "out"
+
+    rc = RFS.main(["--repo", str(target), "--out", str(out), "--no-stage"])
+
+    got = _summary(out)
+    assert rc == 0 and got["skip"] == 1 and got["staged"] == {"from": None, "files": []}
+    assert got["files"][0]["reason"] == "input absent here (staging is off): data/a.bin"
+    assert not (target / "data/a.bin").exists()
+
+
+@needs_git
+def test_the_default_source_is_the_main_checkout_of_a_linked_worktree(tmp_path: Path) -> None:
+    main = _checkout(tmp_path / "main", {"a.txt": "a"})
+    linked = tmp_path / "wt"
+    _git(main, "worktree", "add", "-q", "--detach", str(linked))
+
+    assert RFS.main_checkout(linked) == main.resolve()
+    assert RFS.main_checkout(main) == main.resolve()
+    assert RFS.main_checkout(tmp_path) is None
+
+
+def test_a_declared_read_past_the_path_limit_from_this_checkout_skips_with_the_length(tmp_path: Path) -> None:
+    repo = _tree(tmp_path, (f"{T}/test_pass.py",))
+    deep = repo / "assets/native/a-rather-long-directory-name/model.blend"
+    deep.parent.mkdir(parents=True)
+    deep.write_bytes(b"blend")
+    _needs(repo, {f"{T}/test_pass.py": {"path_limit": ["assets/native/"]}})
+    longest = len(str(deep.resolve()))
+    out = tmp_path / "out"
+
+    fits = RFS.path_limit_reason(repo, ["assets/native/"], limit=longest)
+    over = RFS.path_limit_reason(repo, ["assets/native/"], limit=longest - 1)
+    rc = RFS.main(["--repo", str(repo), "--out", str(out), "--no-stage", "--path-limit", str(longest - 1)])
+
+    assert fits is None
+    assert over == (f"a declared read is {longest} characters from this checkout (limit {longest - 1}): "
+                    f"assets/native/a-rather-long-directory-name/model.blend - the checkout root must be at most "
+                    f"{len(str(repo.resolve())) - 1} characters (a junction or subst does not shorten it: the "
+                    f"tests resolve() back to the real root)")
+    got = _summary(out)
+    assert rc == 0 and got["skip"] == 1 and got["files"][0]["reason"] == over
+
+
+@needs_git
+def test_a_path_limit_dir_already_here_is_measured_with_what_the_source_would_stage_into_it(tmp_path: Path) -> None:
+    """A tool can leave a stray file in a staged directory (MPFB writes its logs into the profile): the directory is
+    then HERE but short, and the long paths the next staging brings back must still count."""
+    target, source = _pair(tmp_path, {"test_x.py": "def test_x():\n    assert True\n"}, {})
+    (target / "kit/profile").mkdir(parents=True)
+    (target / "kit/profile/log.txt").write_bytes(b"a stray log")
+    longest = len(str(target.resolve() / "kit/profile/p/q/r.dat"))
+
+    with_source = RFS.path_limit_reason(target, ["kit/profile/"], limit=longest - 1, source=source)
+    here_only = RFS.path_limit_reason(target, ["kit/profile/"], limit=longest - 1)
+
+    assert with_source is not None and "kit/profile/p/q/r.dat" in with_source
+    assert here_only is None
+
+
+def test_a_needs_entry_that_leaves_the_checkout_is_refused(tmp_path: Path) -> None:
+    repo = _tree(tmp_path, (f"{T}/test_pass.py",))
+    for bad in ("../outside.bin", "C:/abs.bin", "/abs.bin", "a/../../b.bin"):
+        _needs(repo, {f"{T}/test_pass.py": {"inputs": [bad]}})
+        with pytest.raises(ValueError, match="stays inside the checkout"):
+            RFS.load_needs(repo)

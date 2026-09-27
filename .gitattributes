@@ -17,3 +17,22 @@ content/video_engine/projects/**/*.svg -text
 # T4c native model descriptors, receipts and scene bindings pin exact JSON bytes.
 # Preserve their LF content across Windows checkouts (core.autocrlf=true).
 content/video_engine/assets/modeling/native/generalization/** -text whitespace=trailing-space,space-before-tab,cr-at-eol
+
+# BYTE-COMPARED FIXTURES CHECK OUT LF (P72 T52, R26-405). Each is LF in the index and compared as BYTES by a test -
+# a sha256 pin or a byte-for-byte rebuild - so core.autocrlf=true's CRLF working copy read as drift that was only
+# line endings (the first full-suite run on lane B: fed_debt_wall_evidence, fed_pilot_objects, lab_enumerate,
+# model_fight_motion, model_fight_motion_contact_transfer). `eol=lf` also normalises a CRLF commit back to LF.
+# The claims-bound derived files and the extractor (fed_pilot_objects: claims.v1.json pins their LF sha256):
+content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure/evidence/derived/extraction_metadata.json text eol=lf
+content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure/evidence/derived/funding_rates.csv text eol=lf
+content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure/evidence/derived/repo_daily.csv text eol=lf
+content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure/evidence/extract_sources.py text eol=lf
+# The debt wall's committed build outputs (fed_debt_wall_evidence rebuilds both and compares bytes):
+content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure/evidence/derived/debt-wall-2025-2027.json text eol=lf
+content/video_engine/projects/systems-and-blowups/fed-liquidity-pressure/evidence/objects/debt-wall-2025-2027.series.json text eol=lf
+# The lab's enumeration (lab_enumerate: the committed file IS a fresh enumeration, byte for byte):
+content/video_engine/effects/lab/candidates.jsonl text eol=lf
+# The source exchange and its clock (fight_motion.py pins the exchange's sha256 as FIXTURE_SHA256, the exchange pins
+# the clock's; model_fight_motion and model_fight_motion_contact_transfer refuse a stale one):
+content/video_engine/tests/fixtures/modeling/blender/characters/source-exchange/exchange.v1.json text eol=lf
+content/video_engine/tests/fixtures/modeling/motion/source-exchange-clock.v1.json text eol=lf
