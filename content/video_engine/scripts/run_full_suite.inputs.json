@@ -1,6 +1,6 @@
 {
  "schema": "run_full_suite.inputs.v1",
- "about": "P72 T52 (R26-405): the gitignored inputs each test file reads, staged by run_full_suite.py from --inputs-from (default the main checkout) when absent here; a path ending in / is a directory (every file git ignores under it). path_limit: directories a non-long-path-aware reader (Blender 5.2) opens by absolute path.",
+ "about": "P72 T52 (R26-405): the gitignored inputs each test file reads, staged by run_full_suite.py from --inputs-from (default the main checkout) when absent here; a path ending in / is a directory (every file git ignores under it). path_limit: directories a non-long-path-aware reader (Blender 5.2) opens by absolute path. generated: a gitignored output built before the run when absent (its builder runs from the checkout root with --repo <checkout> appended).",
  "files": {
   "content/video_engine/tests/test_agenda_page.py": {
    "inputs": [
@@ -390,6 +390,116 @@
     "content/video_engine/assets/icons/",
     "content/video_engine/assets/props/"
    ]
+  }
+ },
+ "generated": {
+  "docs/ANIMATION-REGISTRY.jsonl": {
+   "build": [
+    "content/video_engine/scripts/build_docs_layers.py",
+    "--ensure",
+    "--only",
+    "animation-registry"
+   ],
+   "why": "P72 T52b (R26-411 (e)): the 'animation-registry' docs layer - gitignored build output (P63 T4) a fresh checkout lacks; built through the layer table, upstream first, digests stamped."
+  },
+  "docs/ASSETS-INDEX.jsonl": {
+   "build": [
+    "content/video_engine/scripts/build_docs_layers.py",
+    "--ensure",
+    "--only",
+    "asset-index"
+   ],
+   "why": "P72 T52b (R26-411 (e)): the 'asset-index' docs layer - gitignored build output (P63 T4) a fresh checkout lacks; built through the layer table, upstream first, digests stamped."
+  },
+  "docs/CAPABILITIES-INDEX.jsonl": {
+   "build": [
+    "content/video_engine/scripts/build_docs_layers.py",
+    "--ensure",
+    "--only",
+    "capabilities-index"
+   ],
+   "why": "P72 T52b (R26-411 (e)): the 'capabilities-index' docs layer - gitignored build output (P63 T4) a fresh checkout lacks; built through the layer table, upstream first, digests stamped."
+  },
+  "docs/CRAFT-MAP.jsonl": {
+   "build": [
+    "content/video_engine/scripts/build_docs_layers.py",
+    "--ensure",
+    "--only",
+    "craft-map"
+   ],
+   "why": "P72 T52b (R26-411 (e)): the 'craft-map' docs layer - gitignored build output (P63 T4) a fresh checkout lacks; built through the layer table, upstream first, digests stamped."
+  },
+  "docs/DOC-OVERLAP.jsonl": {
+   "build": [
+    "content/video_engine/scripts/build_docs_layers.py",
+    "--ensure",
+    "--only",
+    "doc-overlap"
+   ],
+   "why": "P72 T52b (R26-411 (e)): the 'doc-overlap' docs layer - gitignored build output (P63 T4) a fresh checkout lacks; built through the layer table, upstream first, digests stamped."
+  },
+  "docs/DOCS-INDEX.jsonl": {
+   "build": [
+    "content/video_engine/scripts/build_docs_layers.py",
+    "--ensure",
+    "--only",
+    "docs-index"
+   ],
+   "why": "P72 T52b (R26-411 (e)): the 'docs-index' docs layer - gitignored build output (P63 T4) a fresh checkout lacks; built through the layer table, upstream first, digests stamped."
+  },
+  "docs/DOCS-MANIFEST.jsonl": {
+   "build": [
+    "content/video_engine/scripts/build_docs_layers.py",
+    "--ensure",
+    "--only",
+    "docs-manifest"
+   ],
+   "why": "P72 T52b (R26-411 (e)): the 'docs-manifest' docs layer - gitignored build output (P63 T4) a fresh checkout lacks; built through the layer table, upstream first, digests stamped."
+  },
+  "docs/DOCS-STANDARD.md": {
+   "build": [
+    "content/video_engine/scripts/build_docs_layers.py",
+    "--ensure",
+    "--only",
+    "docs-standard"
+   ],
+   "why": "P72 T52b (R26-411 (e)): the 'docs-standard' docs layer - gitignored build output (P63 T4) a fresh checkout lacks; built through the layer table, upstream first, digests stamped."
+  },
+  "docs/DOCS-TOPICS.jsonl": {
+   "build": [
+    "content/video_engine/scripts/build_docs_layers.py",
+    "--ensure",
+    "--only",
+    "topic-index"
+   ],
+   "why": "P72 T52b (R26-411 (e)): the 'topic-index' docs layer - gitignored build output (P63 T4) a fresh checkout lacks; built through the layer table, upstream first, digests stamped."
+  },
+  "docs/EFFECTS-CATALOG.jsonl": {
+   "build": [
+    "content/video_engine/scripts/build_docs_layers.py",
+    "--ensure",
+    "--only",
+    "effects-catalog"
+   ],
+   "why": "P72 T52b (R26-411 (e)): gitignored build output a fresh checkout lacks - lab_enumerate and the catalogue's other readers failed on FileNotFoundError. Built through its docs layer (the docs index upstream first, the digests stamped); the builder alone resolves 93 of 819 cites."
+  },
+  "docs/GATES-REGISTRY.jsonl": {
+   "build": [
+    "content/video_engine/scripts/build_docs_layers.py",
+    "--ensure",
+    "--only",
+    "gates-registry"
+   ],
+   "why": "P72 T52b (R26-411 (e)): the 'gates-registry' docs layer - gitignored build output (P63 T4) a fresh checkout lacks; built through the layer table, upstream first, digests stamped."
+  },
+  "docs/RESEARCH-LEDGER.jsonl": {
+   "build": [
+    "content/video_engine/scripts/build_docs_layers.py",
+    "--ensure",
+    "--only",
+    "research-ledger"
+   ],
+   "why": "P72 T52b (R26-411 (e)): the 'research-ledger' docs layer - gitignored build output (P63 T4) a fresh checkout lacks; built through the layer table, upstream first, digests stamped."
   }
  }
 }

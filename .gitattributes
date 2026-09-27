@@ -36,3 +36,8 @@ content/video_engine/effects/lab/candidates.jsonl text eol=lf
 # the clock's; model_fight_motion and model_fight_motion_contact_transfer refuse a stale one):
 content/video_engine/tests/fixtures/modeling/blender/characters/source-exchange/exchange.v1.json text eol=lf
 content/video_engine/tests/fixtures/modeling/motion/source-exchange-clock.v1.json text eol=lf
+# The golden sources and the recipes (P72 T52b, R26-411 (a)): test_route_map, test_morph_floor_and_strip and
+# test_decade_ruler assert these committed files carry no `\r` (build_golden_sources.py and the recipe authors write
+# LF); a CRLF checkout failed all three on line endings alone. Both directories are flat: `*.json` is every file.
+content/video_engine/tests/golden/sources/*.json text eol=lf
+content/video_engine/effects/recipes/*.json text eol=lf

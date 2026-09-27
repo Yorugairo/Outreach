@@ -376,3 +376,93 @@ def test_a_needs_entry_that_leaves_the_checkout_is_refused(tmp_path: Path) -> No
         _needs(repo, {f"{T}/test_pass.py": {"inputs": [bad]}})
         with pytest.raises(ValueError, match="stays inside the checkout"):
             RFS.load_needs(repo)
+
+
+# --- the generated layers (P72 T52b, R26-411 (e)): built before the run when absent, never staged ---------------------
+BUILDER = textwrap.dedent('''\
+    import sys
+    from pathlib import Path
+    repo = Path(sys.argv[sys.argv.index("--repo") + 1])
+    if "--fail" in sys.argv:
+        print("the builder's own last line")
+        sys.exit(3)
+    (repo / "gen").mkdir(exist_ok=True)
+    (repo / "gen/catalog.bin").write_bytes(b"built:" + " ".join(sys.argv[1:sys.argv.index("--repo")]).encode())
+    ''')
+READS_GEN = READS + 'def test_reads():\n    assert (ROOT / "gen/catalog.bin").read_bytes() == b"built:--only one"\n'
+
+
+def _generated(tmp_path: Path, build: list[str], present: bytes | None = None) -> tuple[Path, Path]:
+    manifest = json.dumps({"schema": RFS.INPUTS_SCHEMA, "files": {}, "generated": {
+        "gen/catalog.bin": {"build": build, "why": "a generated layer the readers need"}}})
+    target = _checkout(tmp_path / "target", {"pytest.ini": "[pytest]\n", "tools/make_gen.py": BUILDER,
+                                             RFS.INPUTS_REL: manifest, f"{T}/test_reads_gen.py": READS_GEN})
+    if present is not None:
+        (target / "gen").mkdir()
+        (target / "gen/catalog.bin").write_bytes(present)
+    return target, tmp_path / "out"
+
+
+@needs_git
+def test_an_absent_generated_layer_is_built_before_the_run_and_reported(tmp_path: Path) -> None:
+    target, out = _generated(tmp_path, ["tools/make_gen.py", "--only", "one"])
+
+    rc = RFS.main(["--repo", str(target), "--out", str(out), "--no-stage"])
+
+    got = _summary(out)
+    assert rc == 0 and (got["run"], got["pass"]) == (1, 1)
+    assert got["generated"] == [{"path": "gen/catalog.bin", "status": "built", "detail": ""}]
+    assert _git(target, "status", "--porcelain") == ""                  # the layer is gitignored output
+    summary = (out / "SUMMARY.md").read_text(encoding="utf-8")
+    assert "## Generated (built before the run when absent)" in summary and "- `gen/catalog.bin` - built" in summary
+
+
+@needs_git
+def test_a_generated_layer_already_here_is_never_rebuilt(tmp_path: Path) -> None:
+    target, out = _generated(tmp_path, ["tools/make_gen.py", "--only", "one"], present=b"built:--only one")
+    before = (target / "gen/catalog.bin").stat().st_mtime_ns
+
+    RFS.main(["--repo", str(target), "--out", str(out), "--no-stage"])
+
+    assert _summary(out)["generated"] == [{"path": "gen/catalog.bin", "status": "present", "detail": ""}]
+    assert (target / "gen/catalog.bin").stat().st_mtime_ns == before
+
+
+@needs_git
+def test_a_generated_layer_whose_builder_fails_is_reported_and_its_readers_still_run_and_fail(tmp_path: Path) -> None:
+    target, out = _generated(tmp_path, ["tools/make_gen.py", "--fail"])
+
+    rc = RFS.main(["--repo", str(target), "--out", str(out), "--no-stage", "--no-rerun"])
+
+    got = _summary(out)
+    assert rc == 1 and (got["run"], got["fail"]) == (1, 1)
+    assert got["generated"] == [{"path": "gen/catalog.bin", "status": "failed",
+                                 "detail": "exit 3: the builder's own last line"}]
+    assert "- `gen/catalog.bin` - failed (exit 3: the builder's own last line)" in (out / "SUMMARY.md").read_text(
+        encoding="utf-8")
+
+
+def test_a_generated_entry_that_leaves_the_checkout_is_refused(tmp_path: Path) -> None:
+    repo = _tree(tmp_path, (f"{T}/test_pass.py",))
+    for path, build in (("../out.jsonl", ["tools/b.py"]), ("docs/x.jsonl", ["C:/tools/b.py"]), ("docs/x.jsonl", [])):
+        (repo / RFS.INPUTS_REL).parent.mkdir(parents=True, exist_ok=True)
+        (repo / RFS.INPUTS_REL).write_text(json.dumps({"schema": RFS.INPUTS_SCHEMA, "files": {},
+                                                       "generated": {path: {"build": build}}}), encoding="utf-8")
+        with pytest.raises(ValueError, match="generated"):
+            RFS.load_generated(repo)
+
+
+def test_the_real_manifest_builds_every_docs_layer_through_the_layer_table() -> None:
+    """R26-411 (e): a fresh checkout has no `docs/EFFECTS-CATALOG.jsonl` (gitignored build output) and lab_enumerate
+    and the catalogue's other readers failed on FileNotFoundError. It is built through the layer table, upstream
+    first (`--ensure --only effects-catalog`): the builder alone, with no docs index, resolves 93 of 819 cites. The
+    other eleven layers are build output too (P63 T4) and a fresh checkout lacks them all (the full run on one:
+    build_animation_registry, build_craft_map, build_docs_manifest, build_research_ledger, docs_find failed), so the
+    manifest declares every layer's first output - the same table, never a copy that drifts from it."""
+    import docs_layers as DL
+
+    gen = RFS.load_generated(ROOT)
+    want = {layer.outputs[0]: ["content/video_engine/scripts/build_docs_layers.py", "--ensure", "--only", layer.name]
+            for layer in DL.LAYERS}
+    assert {path: spec["build"] for path, spec in gen.items()} == want
+    assert want["docs/EFFECTS-CATALOG.jsonl"][-1] == "effects-catalog"

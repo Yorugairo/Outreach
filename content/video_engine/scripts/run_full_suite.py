@@ -35,6 +35,15 @@ an 81-character root fails, a 40-character root passes). A junction or a `subst`
 test and `scene.py` take their root from `Path(__file__).resolve()`, which follows both back to the real root
 (measured, all three fail). So a file's declared `path_limit` directories are measured from this checkout, and a
 read past `--path-limit` (259, MAX_PATH less its NUL) skips the file with the length and the root it needs.
+
+THE GENERATED LAYERS (P72 T52b, R26-411 (e)). Some inputs are not copied, they are BUILT: the manifest's `generated`
+names gitignored outputs - the first output of each of the twelve docs layers, `docs/EFFECTS-CATALOG.jsonl` among
+them - and the builder that writes each; a checkout that lacks one runs its builder once, from the checkout root with
+`--repo <checkout>` appended, after the staging and before the first test file - never over one already here. Each
+is built through the layer table (`build_docs_layers.py --ensure --only <layer>`: upstream first, the digests
+stamped, so no reader starts a background refresh mid-run); the catalogue's builder alone, with no docs index,
+resolves 93 of 819 cites. A builder that fails is reported with its exit and last line in SUMMARY.md; the run goes
+on and the readers fail on their own.
 """
 from __future__ import annotations
 
@@ -127,21 +136,37 @@ def _inside(rel: str) -> bool:
     return bool(rel) and not rel.startswith("/") and ":" not in rel and "\\" not in rel and ".." not in parts
 
 
-def load_needs(repo: Path) -> dict[str, dict]:
-    """`run_full_suite.inputs.json`'s `files`: test file -> {"inputs": [...], "path_limit": [...], "why": ...}."""
+def _manifest(repo: Path) -> dict:
+    """`run_full_suite.inputs.json`, schema-checked; {} when the checkout has none."""
     path = repo / INPUTS_REL
     if not path.is_file():
         return {}
     doc = json.loads(path.read_text(encoding="utf-8"))
     if doc.get("schema") != INPUTS_SCHEMA:
         raise ValueError(f"{INPUTS_REL}: schema is {doc.get('schema')!r}, not {INPUTS_SCHEMA!r}")
-    files = doc.get("files") or {}
+    return doc
+
+
+def load_needs(repo: Path) -> dict[str, dict]:
+    """`run_full_suite.inputs.json`'s `files`: test file -> {"inputs": [...], "path_limit": [...], "why": ...}."""
+    files = _manifest(repo).get("files") or {}
     for test, need in files.items():
         for rel in [*need.get("inputs", []), *need.get("path_limit", [])]:
             if not _inside(rel):
                 raise ValueError(f"{INPUTS_REL}: {test}: {rel!r} - a declared path stays inside the checkout "
                                  "(repo-relative, forward slashes, no '..', no drive)")
     return files
+
+
+def load_generated(repo: Path) -> dict[str, dict]:
+    """The manifest's `generated`: output path -> {"build": [script, *args], "why": ...}, both inside the checkout."""
+    generated = _manifest(repo).get("generated") or {}
+    for rel, spec in generated.items():
+        build = spec.get("build") if isinstance(spec, dict) else None
+        if not _inside(rel) or not isinstance(build, list) or not build or not _inside(str(build[0])):
+            raise ValueError(f"{INPUTS_REL}: generated {rel!r}: the output and its builder script ({build!r}) stay "
+                             "inside the checkout (repo-relative, forward slashes, no '..', no drive)")
+    return generated
 
 
 def main_checkout(repo: Path) -> Path | None:
@@ -281,6 +306,34 @@ def plan_inputs(repo: Path, source: Path | None, files: list[str], limit: int = 
     staging = stage_inputs(repo, source, needs, [f for f in files if f not in too_long])
     staging.skips.update(too_long)
     return staging
+
+
+# --- the generated layers: built once before the run when absent ------------------------------------------------
+
+@dataclass
+class Generated:
+    path: str
+    status: str                 # "present" | "built" | "failed"
+    detail: str = ""            # a failure's exit code and the builder's last line
+
+
+def build_generated(repo: Path, python: str, generated: dict[str, dict]) -> list[Generated]:
+    """Run each absent output's builder from the checkout root, `--repo <checkout>` appended; never one already here."""
+    done = []
+    for rel in sorted(generated):
+        if (repo / rel).exists():
+            done.append(Generated(rel, "present"))
+            continue
+        script, *args = generated[rel]["build"]
+        got = subprocess.run([python, str(repo / script), *args, "--repo", str(repo)], cwd=str(repo),
+                             capture_output=True, text=True, encoding="utf-8", errors="replace", check=False)
+        lines = [line.strip() for line in (got.stdout + got.stderr).splitlines() if line.strip()]
+        if got.returncode == 0 and (repo / rel).exists():
+            done.append(Generated(rel, "built"))
+            continue
+        why = (lines[-1] if lines else "(no output)") if got.returncode else f"{rel} was not written"
+        done.append(Generated(rel, "failed", f"exit {got.returncode}: {why}"[:MESSAGE_MAX]))
+    return done
 
 
 # --- one process per file -----------------------------------------------------------------------------------
@@ -435,7 +488,8 @@ def counts_of(results: list[FileResult]) -> dict[str, int]:
     return dict(counts, run=len(results) - counts["skip"])
 
 
-def summary_md(results: list[FileResult], meta: dict, staging: Staging | None = None) -> str:
+def summary_md(results: list[FileResult], meta: dict, staging: Staging | None = None,
+               generated: list[Generated] | None = None) -> str:
     fails = [r for r in results if r.status == "fail"]
     flakes = [r for r in results if r.status == "flake"]
     c = counts_of(results)
@@ -451,7 +505,7 @@ def summary_md(results: list[FileResult], meta: dict, staging: Staging | None = 
             lines.append(f"- `{r.path}` (exit {last.rc}, log `{last.log}`)")
             lines += [f"  - `{test}` - {message}" for test, message in last.failures]
         lines.append("")
-    return "\n".join(lines + _skip_lines(results) + _staged_lines(staging))
+    return "\n".join(lines + _skip_lines(results) + _staged_lines(staging) + _generated_lines(generated))
 
 
 def _skip_lines(results: list[FileResult]) -> list[str]:
@@ -469,6 +523,13 @@ def _staged_lines(staging: Staging | None) -> list[str]:
     more = len(staging.staged) - STAGED_LISTED
     return ([f"## Staged inputs ({len(staging.staged)}, from `{staging.source}`)", ""] + (listed or ["- none"])
             + ([f"- ... and {more} more (all in staged-inputs.txt)"] if more > 0 else []) + [""])
+
+
+def _generated_lines(generated: list[Generated] | None) -> list[str]:
+    if not generated:
+        return []
+    return (["## Generated (built before the run when absent)", ""]
+            + [f"- `{g.path}` - {g.status}" + (f" ({g.detail})" if g.detail else "") for g in generated] + [""])
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -498,10 +559,12 @@ def main(argv: list[str] | None = None) -> int:
         source = source.resolve()
     files = discover(repo, args.skip_goldens)
     staging = plan_inputs(repo, source, files, args.path_limit)
+    generated = build_generated(repo, args.python, load_generated(repo))
     out.mkdir(parents=True, exist_ok=True)
     (out / "staged-inputs.txt").write_text("".join(f"{rel}\n" for rel in staging.staged), encoding="utf-8")
     print(f"run_full_suite: {len(files)} files in {repo} -> {out}; staged {len(staging.staged)} inputs from "
-          f"{staging.source or '(staging is off)'}, {len(staging.skips)} files skipped", flush=True)
+          f"{staging.source or '(staging is off)'}, {len(staging.skips)} files skipped; generated: "
+          f"{', '.join(f'{g.path} {g.status}' for g in generated) or 'none declared'}", flush=True)
     start = time.monotonic()
     results = run_suite(repo, out, files, args.timeout, args.python, args.node, rerun=not args.no_rerun,
                         skips=staging.skips)
@@ -509,10 +572,11 @@ def main(argv: list[str] | None = None) -> int:
             "seconds": round(time.monotonic() - start, 1),
             "argv": " ".join(["run_full_suite.py", *(sys.argv[1:] if argv is None else argv)])}
     counts = counts_of(results)
-    (out / "SUMMARY.md").write_text(summary_md(results, meta, staging) + "\n", encoding="utf-8")
+    (out / "SUMMARY.md").write_text(summary_md(results, meta, staging, generated) + "\n", encoding="utf-8")
     (out / "summary.json").write_text(json.dumps(
         dict(meta, **counts, staged={"from": staging.source, "files": staging.staged},
-             files=[asdict(r) for r in results]), indent=1) + "\n", encoding="utf-8")
+             generated=[asdict(g) for g in generated], files=[asdict(r) for r in results]), indent=1) + "\n",
+        encoding="utf-8")
     print(f"run_full_suite: files run {counts['run']} / passed {counts['pass']} / failed {counts['fail']} / "
           f"flaked {counts['flake']} / skipped {counts['skip']} - {out / 'SUMMARY.md'}", flush=True)
     return 1 if counts["fail"] else 0

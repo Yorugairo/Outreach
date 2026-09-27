@@ -451,21 +451,26 @@ def test_an_exploration_or_calibration_candidate_says_so_on_the_card(data):
 
 
 def test_the_live_queue_carries_both_of_p65s_human_gate_rows():
-    """T4's own evidence: HG1 is a real batch card with a clip, HG2 is owed until T8's re-proof run lands."""
-    live = {i["id"]: i for i in BRQ.load_data(DATA)["items"]}
-    # a card the parent PULLS is `owed` with the reason in `owed` (2026-09-17: the renditions were read on their sheets
-    # and were not the mechanisms); a live card is therefore a real batch OR an owed one, never anything else
-    for cid in ("lab-smoke-r2-plate-carries-a-card", "lab-batch-r1-plate-carries-a-card"):
+    """T4's own evidence, as the queue records it now: both P65 HG1 cards were PULLED by the parent (2026-09-17, the
+    reason in `owed`) and then WITHDRAWN - `status: ruled` with a ruling that says it is the parent's withdrawal, not
+    the operator's (P72 T0 part 2, 122b971, 2026-09-25) - and HG2 is RULED AS ANSWERED (E99 s82). The rows stay in the
+    queue as ruled records; neither HG1 card is ever re-opened or re-asked (R26-411 (b))."""
+    data = BRQ.load_data(DATA)
+    live = {i["id"]: i for i in data["items"]}
+    hg1_ids = ("lab-smoke-r2-plate-carries-a-card", "lab-batch-r1-plate-carries-a-card")
+    for cid in hg1_ids:
         hg1 = live[cid]
-        assert hg1["kind"] in ("batch", "owed") and hg1["status"] == "open" and "P65 HG1" in hg1["ids"]
-        if hg1["kind"] == "batch":
-            assert hg1["candidates"] and all(c["proof"]["type"] == "clip" for c in hg1["candidates"])
-        else:
-            assert hg1["owed"].strip()
+        assert hg1["kind"] == "owed" and hg1["status"] == "ruled" and "P65 HG1" in hg1["ids"]
+        assert hg1["owed"].startswith("PULLED 2026-09-17")
+        assert hg1["ruling"].startswith("WITHDRAWN by the parent, not an operator ruling (P72 T0, 2026-09-25)")
+        assert "Never re-asked" in hg1["ruling"]
     hg2 = live["p65-hg2-the-reproved-set-and-m38"]
-    assert hg2["kind"] in ("owed", "batch") and "P65 HG2" in hg2["ids"]
-    if hg2["kind"] == "owed":
-        assert "reproof" in hg2["owed"] or "PULLED" in hg2["owed"]
+    assert hg2["kind"] == "batch" and hg2["status"] == "ruled" and "P65 HG2" in hg2["ids"]
+    assert hg2["ruling"].startswith("RULED AS ANSWERED (E99 s82 process")
+    assert all(c["proof"]["type"] == "clip" for c in hg2["candidates"])
+    ruled = {i["id"] for i in BRQ.ruled_items(data)}
+    assert {*hg1_ids, hg2["id"]} <= ruled
+    assert not {*hg1_ids, hg2["id"]} & {i["id"] for i in BRQ.open_items(data)}, "a ruled P65 card is never open"
 
 
 def test_a_candidates_answer_posts_through_the_same_door(tmp_path):

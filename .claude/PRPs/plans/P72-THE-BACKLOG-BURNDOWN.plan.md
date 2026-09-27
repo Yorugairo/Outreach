@@ -1222,7 +1222,7 @@ videos under the main checkout; BOOM at VERIFY.md's TRUE times).
 - Evidence: pending
 
 ### T52: The suite's standing failures (R26-405)
-- Status: running - the runner stages inputs / skips with the reason, LF for nine fixtures, Blender's path limit named (lane B, the T52 commit); the six pre-existing failures were missing inputs (dated); open: R26-411's seven (three LF pins, the review queue's stale P65 pin, the plate library's absolute paths, the hand baseline, the fresh worktree's missing generated catalogue)
+- Status: running - T52 (the runner stages inputs, LF for nine fixtures, Blender's path limit) and T52b (R26-411: LF for golden sources and recipes, the missing docs layers built first, the review-queue and plate-library pins) landed on lane B; a fresh autocrlf clone runs 514, 502 pass; open: R26-416 (three stale pins - glow_edges, wave3_page_marks, the effects gallery's --pin - and the Codex hand baseline, which retires with its lane)
 - The first `run_full_suite.py` on lane B (c0b42c4): 30 failures, none from wave 9 or P73; classified in R26-405 (missing gitignored inputs, Blender's path, CRLF working copies, six pre-existing unowned, the register). Build: the runner stages or skips absent inputs with the reason; LF for byte-compared fixtures; a short-path Blender run; each pre-existing failure diagnosed at its cause.
 
 ### T46f: The wave-3 carries - what T46a-e could not close

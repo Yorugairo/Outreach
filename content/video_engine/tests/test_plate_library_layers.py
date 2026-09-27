@@ -283,7 +283,9 @@ def test_the_two_probe_plates_declare_four_split_layers_each(index):
 
 def test_the_new_dock_plate_is_registered_as_a_plate_the_operator_has_not_approved(index):
     dock = {p["id"]: p for p in index["plates"]}["world-tokyo-customs-dock-v1"]
-    assert Path(dock["path"]) == DOCK and DOCK.is_file()
+    # the tracked index records the path of the checkout that BUILT it (the main checkout's absolute path); the
+    # library's own key compares it with this checkout's file, so the pin holds in any worktree (R26-411 (c))
+    assert L.repo_key(dock["path"]) == L.repo_key(DOCK) and DOCK.is_file()
     assert dock["register"] == "woodblock-vox-newsprint" and dock["channel"] == "money-physics"
     assert dock["source"] == "p58-probe" and dock["generator"] == "gpt-image-2.0"
     assert "customs" in dock["semantic"] and "crane" in dock["semantic"]
