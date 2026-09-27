@@ -145,13 +145,16 @@ def resolve_pin(payload: bytes, fetched: str) -> dict[str, Any]:
 Point = tuple[float, float]
 
 
-def project(lon: float, lat: float) -> Point:
-    """Equirectangular onto the 1000 x 500 box, rounded once, at the source."""
+def project(lon: float, lat: float, meridian: float = 0.0) -> Point:
+    """Equirectangular onto the 1000 x 500 box, rounded once, at the source. P73 T6: on a map centred on `meridian`
+    (degrees east), x goes on through recentre_x - the ONE formula the rings, the centroids and the places share; at
+    Greenwich (0, the default) this is the projection it always was, to the bit."""
     lon = min(180.0, max(-180.0, float(lon)))
     lat = min(90.0, max(-90.0, float(lat)))
     x = (lon + 180.0) / 360.0 * BOX_W
     y = (90.0 - lat) / 180.0 * BOX_H
-    return (round(x, DECIMALS), round(y, DECIMALS))
+    point = (round(x, DECIMALS), round(y, DECIMALS))
+    return (recentre_x(point[0], meridian), point[1]) if meridian else point
 
 
 def dedupe(points: Sequence[Point]) -> list[Point]:
@@ -284,6 +287,175 @@ def path_string(points: Sequence[Point]) -> str:
     head = f"M {_num(points[0][0])} {_num(points[0][1])}"
     tail = "".join(f" L {_num(x)} {_num(y)}" for x, y in points[1:])
     return f"{head}{tail} Z"
+
+
+# ------------------------------------------------------ the central meridian (P73 T6, R26-406)
+#
+# The file is centred on Greenwich and Natural Earth cuts it at +-180, so a United States -> Hong Kong route crossed the
+# Atlantic and Europe. A map centred on meridian m is the SAME data moved in map units: a point's x goes to
+# wrap(x - xm + W/2), xm the meridian's own x (= project(lon - m), to the rounding). A RING cannot be wrapped point by
+# point - the one that straddles the new seam would streak across the frame - so it is moved whole, cut at the seam into
+# one ring per side (Sutherland-Hodgman against each window of the box) and the rings Natural Earth cut at the OLD seam
+# (+-180, which now stands inside the frame) are JOINED back along it by cancelling their shared edges, so no hairline
+# runs through Chukotka on a Pacific map. The player (species/vecmap.mjs vmRecentreX) mirrors recentre_x for the points
+# the compiler's asset does not carry (a place's x, a typed mappoint's); test_pacific_map pins the two.
+
+MERIDIAN_MIN, MERIDIAN_MAX = -180.0, 180.0
+
+
+def meridian_value(meridian: float) -> float:
+    """The meridian as a float in -180..180; ValueError naming it otherwise (nan and inf are not longitudes)."""
+    m = float(meridian)
+    if not (MERIDIAN_MIN <= m <= MERIDIAN_MAX):   # False for nan too
+        raise ValueError(f"meridian {meridian!r} is outside {MERIDIAN_MIN:g}..{MERIDIAN_MAX:g} - the longitude (degrees "
+                         "east) the map centres on: 150 centres the Pacific, -90 the Americas")
+    return m
+
+
+def _meridian_shift(meridian: float, box_w: float = BOX_W) -> float:
+    """What a meridian adds to every x before the wrap: W/2 - xm (0 at Greenwich)."""
+    return box_w / 2.0 - (meridian_value(meridian) + 180.0) / 360.0 * box_w
+
+
+def recentre_x(x: float, meridian: float, box_w: float = BOX_W) -> float:
+    """THE ONE FORMULA: a point's x (map units, the file's Greenwich box) on the map centred on `meridian`, wrapped into
+    [0, W) and rounded as the file is. Greenwich (0) returns x itself."""
+    if meridian_value(meridian) == 0:
+        return x
+    v = round((x + _meridian_shift(meridian, box_w)) % box_w, DECIMALS)
+    return 0.0 if v >= box_w else v
+
+
+def parse_path(d: str) -> list[Point]:
+    """path_string's inverse: "M x y L x y ... Z" -> the ring's nodes."""
+    nums = [float(t) for t in d.replace("M", " ").replace("L", " ").replace("Z", " ").split()]
+    return [(nums[i], nums[i + 1]) for i in range(0, len(nums) - 1, 2)]
+
+
+def _clip_x(ring: Sequence[Point], x0: float, keep_above: bool) -> list[Point]:
+    """Sutherland-Hodgman against one vertical line: the part of the ring at x >= x0 (or <= x0)."""
+    inside = (lambda p: p[0] >= x0) if keep_above else (lambda p: p[0] <= x0)
+    out: list[Point] = []
+    for i, cur in enumerate(ring):
+        prev = ring[i - 1]
+        if inside(cur) != inside(prev):
+            t = (x0 - prev[0]) / (cur[0] - prev[0])
+            out.append((x0, prev[1] + t * (cur[1] - prev[1])))
+        if inside(cur):
+            out.append(cur)
+    return out
+
+
+def _tidy(ring: Sequence[Point]) -> list[Point]:
+    """Round as the file is, drop repeats, and drop a node standing between two collinear edges on one vertical line
+    (the cut and the join leave them)."""
+    pts = dedupe([(round(x, DECIMALS), round(y, DECIMALS)) for x, y in ring])
+    changed = True
+    while changed and len(pts) > 3:
+        changed = False
+        for i in range(len(pts)):
+            a, b, c = pts[i - 1], pts[i], pts[(i + 1) % len(pts)]
+            if a[0] == b[0] == c[0] and (b[1] - a[1]) * (c[1] - b[1]) > 0:
+                del pts[i]
+                changed = True
+                break
+    return pts
+
+
+def _cut_at_seam(ring: Sequence[Point], shift: float, box_w: float) -> list[list[Point]]:
+    """The ring moved by `shift` (unwrapped: it stays one continuous shape) and cut into the box's windows - each piece
+    moved back into [0, W]. One piece when the new seam misses it."""
+    moved = [(x + shift, y) for x, y in ring]
+    lo, hi = min(p[0] for p in moved), max(p[0] for p in moved)
+    pieces: list[list[Point]] = []
+    for k in (-1, 0, 1):
+        a, b = k * box_w, (k + 1) * box_w
+        if hi <= a or lo >= b:
+            continue
+        part = _clip_x(_clip_x(moved, a, True), b, False) if (lo < a or hi > b) else list(moved)
+        part = _tidy([(x - k * box_w, y) for x, y in part])
+        if len(part) >= MIN_RING_NODES and abs(ring_area(part)) > 1e-9:
+            pieces.append(part)
+    return pieces
+
+
+def _join_on_line(rings: list[list[Point]], x0: float) -> list[list[Point]]:
+    """Rings that touch along the vertical line x0 (Natural Earth's cut at +-180) become one: every edge lying on the line
+    is split at every node the line carries, each piece that runs against another ring's piece is cancelled with it, and
+    the edges left are walked back into rings. Rings that share no edge there come back as they went."""
+    on = lambda p: p[0] == x0   # noqa: E731 - both sides were rounded by _tidy, so equality is exact
+    touching = [i for i, r in enumerate(rings) if any(on(r[j]) and on(r[j - 1]) for j in range(len(r)))]
+    if len(touching) < 2:
+        return rings
+    # one winding for the rings being joined, so a shared edge runs one way in one ring and the other way in the next
+    group = [r if ring_area(r) > 0 else list(reversed(r)) for r in (rings[i] for i in touching)]
+    ys = sorted({p[1] for r in group for p in r if on(p)})
+    edges: list[tuple[Point, Point]] = []
+    for r in group:
+        for j in range(len(r)):
+            a, b = r[j - 1], r[j]
+            if on(a) and on(b):
+                inner = [y for y in ys if min(a[1], b[1]) < y < max(a[1], b[1])]
+                chain = [a] + [(x0, y) for y in (inner if b[1] > a[1] else reversed(inner))] + [b]
+                edges += list(zip(chain, chain[1:]))
+            else:
+                edges.append((a, b))
+    live = list(edges)
+    for e in edges:
+        if on(e[0]) and on(e[1]) and e in live and (e[1], e[0]) in live:
+            live.remove(e)
+            live.remove((e[1], e[0]))
+    if len(live) == len(edges):
+        return rings
+    out_of: dict[Point, list[Point]] = {}
+    for a, b in live:
+        out_of.setdefault(a, []).append(b)
+    joined: list[list[Point]] = []
+    for a, _ in live:
+        if not out_of.get(a):
+            continue
+        ring, cur = [a], out_of[a].pop(0)
+        while cur != a:
+            ring.append(cur)
+            if not out_of.get(cur):   # an edge set that does not close (never on Natural Earth's cut): leave it as it was
+                return rings
+            cur = out_of[cur].pop(0)
+        ring = _tidy(ring)
+        if len(ring) >= MIN_RING_NODES and abs(ring_area(ring)) > 1e-9:
+            joined.append(ring)
+    keep = [r for i, r in enumerate(rings) if i not in touching]
+    return sorted(joined, key=lambda r: -abs(ring_area(r))) + keep
+
+
+def recentre(document: dict[str, Any], meridian: float) -> dict[str, Any]:
+    """A NEW map document centred on `meridian`: every country's rings moved, cut at the new seam and joined at the old
+    one; its bbox from the rings; its centroid the file's centroid moved as a point (recentre_x). The document records
+    `meridian` and the `seam`: its longitude, the countries it cuts (`split`) and the ones joined across +-180
+    (`joined`). Greenwich returns the document itself; the input is never mutated."""
+    m = meridian_value(meridian)
+    if m == 0:
+        return document
+    box_w = float(document["box"][0])
+    shift, old_seam = _meridian_shift(m, box_w), recentre_x(0.0, m, box_w)
+    countries: dict[str, Any] = {}
+    split: list[str] = []
+    joined: list[str] = []
+    for cid, c in document["countries"].items():
+        rings: list[list[Point]] = []
+        for d in c["paths"]:
+            pieces = _cut_at_seam(parse_path(d), shift, box_w)
+            if len(pieces) > 1 and cid not in split:
+                split.append(cid)
+            rings += pieces
+        whole = _join_on_line(rings, old_seam)
+        if whole is not rings:
+            joined.append(cid)
+        points = [p for r in whole for p in r]
+        countries[cid] = {"name": c["name"], "centroid": [recentre_x(c["centroid"][0], m, box_w), c["centroid"][1]],
+                          "bbox": bbox_of(points), "paths": [path_string(r) for r in whole]}
+    seam_lon = m - 180.0 if m > 0 else m + 180.0
+    return {**{k: v for k, v in document.items() if k != "countries"}, "meridian": m,
+            "seam": {"lon": seam_lon, "split": sorted(split), "joined": sorted(joined)}, "countries": countries}
 
 
 # -------------------------------------------------------------------- the node budget

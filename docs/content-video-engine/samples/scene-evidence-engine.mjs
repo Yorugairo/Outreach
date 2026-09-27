@@ -23920,14 +23920,26 @@ async function mount(doc) {
   /* the SVG transform that puts a raw map path (its own units, untouched) on the stage */
   const fitXf = (fit) => "translate(" + fit.tx.toFixed(2) + " " + fit.ty.toFixed(2) + ") scale(" + fit.sx.toFixed(5) + ")";
 
+  /* P73 T6 (R26-406): THE CENTRAL MERIDIAN. A `;meridian=<deg>` map is the compiler's re-centred world (build_world_map
+     .recentre: every ring moved, cut at the new seam, joined at the old, the centroids moved) carrying its own `meridian`.
+     The points the asset does not carry - a place's x (the gazetteer's) and a typed mappoint's, both in the FILE's
+     Greenwich units - go through the SAME formula here: x' = wrap(x - xm + W/2), xm the meridian's x (build_world_map
+     .recentre_x, pinned against this by test_pacific_map / vecmap_meridian.test). The file has no meridian: x itself. */
+  const vmRecentreX = (data, x) => {
+    const m = data && Number.isFinite(+data.meridian) ? +data.meridian : 0;
+    if (!m) return x;
+    const W = data.box[0], v = (x - (m + 180) / 360 * W + W / 2) % W;
+    return v < 0 ? v + W : v;
+  };
+
   /* the TARGET of a light, an arc's end or a stamp, in MAP units: a country resolves to its centroid, a
      declared map point to itself. A name that is not in the data resolves to nothing and nothing is painted -
      the compiler refuses it by name long before here (the targeting law, s9.27). */
   const vmTarget = (data, tg) => {
     if (!tg || !data) return null;
     if (tg.kind === "country") { const c = data.countries[tg.id]; return c && c.centroid ? c.centroid : null; }
-    if (tg.kind === "mappoint") return [+tg.x, +tg.y];
-    if (tg.kind === "place") return typeof tg.x === "number" && typeof tg.y === "number" ? [tg.x, tg.y] : null;   /* P73 T5: the compiler wrote the point */
+    if (tg.kind === "mappoint") return [vmRecentreX(data, +tg.x), +tg.y];
+    if (tg.kind === "place") return typeof tg.x === "number" && typeof tg.y === "number" ? [vmRecentreX(data, tg.x), tg.y] : null;   /* P73 T5: the compiler wrote the point */
     return null;
   };
 

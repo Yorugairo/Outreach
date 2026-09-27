@@ -137,7 +137,9 @@ SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pa
             "event-timeline",        # P73 T2: THE DATED EVENT TIMELINE - the AMD RFSoC story's dates on one axis: a tick a year to 2019, the seven empty years CUT (`//`, "7 yrs"), a tick a month from June 2026, each stretch writing its rule, today marked, every event landed on its word, the ship date struck and run along the axis to 6 May 2027, "Ships now" lit (its two words ride PROOF_FRAMES)
             "event-timeline-9x16",   # P73 T2: the same page at 9:16 - the axis UPRIGHT, dates running down, the labels in a column beside it (a portrait layout, not a squeezed one)
             "vecmap-transship",   # P73 T5: MAP POINTS - the AMD RFSoC route framed tight on the United States and China: the US lit, the route landed on HONG KONG (a named point from the gazetteer - a dot and its name in the light's ink), the second leg on to China lit, one dot of the part on each leg (its ping rides PROOF_FRAMES)
-            "vecmap-place-singapore"]   # P73 T5: SINGAPORE lit at the foot of the peninsula and HSINCHU in Taiwan, framed tight on Southeast Asia to Taiwan; a test-bed beat (Singapore's ping rides PROOF_FRAMES)
+            "vecmap-place-singapore",   # P73 T5: SINGAPORE lit at the foot of the peninsula and HSINCHU in Taiwan, framed tight on Southeast Asia to Taiwan; a test-bed beat (Singapore's ping rides PROOF_FRAMES)
+            "vecmap-pacific",   # P73 T6 (R26-406): A PACIFIC-CENTRED MAP - the transship row on `;meridian=150`: the United States at the right, the route WEST across the Pacific to Hong Kong and on to China, Russia whole across 180
+            "vecmap-seam-split"]   # P73 T6: a country the SEAM cuts renders clean - `vecmap;meridian=-90`, Russia lit as two halves at the two edges, no ring streaking across the frame
 
 
 # P61 T9 (b): THE PAGES. A golden need not be a timeline - the effects gallery is a static review

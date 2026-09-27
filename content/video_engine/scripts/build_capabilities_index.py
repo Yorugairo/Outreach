@@ -46,7 +46,10 @@ WHAT_MAX = 100          # characters in `what`, the ellipsis included; cut at a 
                         # word stays searchable - `terms` carries the whole row); P72 T50 stopped the trimming - see MD_MAX_BYTES
 STATE_NOTE_MAX = 60     # characters in the state cell's first clause
 SLUG_MAX = 60
-MD_MAX_BYTES = 50_000   # the start-of-session page; raise only with a stated reason. 2026-09-23: 40_000 -> 44_000 - P69's catch-up adds 16 capability rows (~1.9 KB of one-line entries) to a page already at 39,288 bytes
+MD_MAX_BYTES = 56_000   # the start-of-session page; raise only with a stated reason. 2026-09-26: 50_000 -> 56_000 - P72
+                        # wave 9, T51c and P73 T1-T6 landed 22 rows (278 -> 300; the page was 50,100 bytes); the operator's
+                        # standing word (P72 T50): expand unless verifiable bloat can be cut - T50's measure found none a
+                        # day ago, and these rows are new capabilities; headroom ~35 rows at the ~160-byte mean line. 2026-09-23: 40_000 -> 44_000 - P69's catch-up adds 16 capability rows (~1.9 KB of one-line entries) to a page already at 39,288 bytes
                         # 2026-09-25: 44_000 -> 50_000 - P70/P71/P72 landed 41 capability rows since P72 T1 (237 -> 278;
                         # the page was 49,575 bytes). P72 T50 measured the bloat first: 0 duplicate and 0 near-duplicate
                         # lines, no phrase in the names or summaries repeated past 6 times, 4 names restating their

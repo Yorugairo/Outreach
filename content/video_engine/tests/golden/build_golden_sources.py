@@ -6298,6 +6298,41 @@ FRAME_T.update({"vecmap-transship": 9.4,         # both legs drawn (8.1), USA / 
                 "vecmap-place-singapore": 7.5})  # Singapore and Hsinchu lit, both past their pop
 
 
+def vecmap_pacific() -> tuple[dict, dict]:
+    """P73 T6 (R26-406): the transshipment route on a PACIFIC-CENTRED map (`vecmap:USA,CHN;meridian=150;fit=tight`) - the
+    same row as vecmap-transship on the same clock, only the plate's meridian changed: the United States lights (4.0) at
+    the frame's right, the route leaves it WEST across the Pacific (5.0) and lands on Hong Kong (5.9, lit + ping), the
+    second leg runs on to China (7.2) and China lights as it lands (8.1); one dot of the part on each leg from 8.4.
+    Russia stands whole across 180 (Natural Earth's cut joined), the seam at 30 W off the frame. Hong Kong's name is
+    written BELOW its dot (`side`, the author's): the route now ARRIVES from the east, where the auto order's first
+    choice (right) would put the name on the line. Judged at 9.4."""
+    tl, uris = vecmap_transship()
+    species = tl["scenes"][0]["species"]
+    for sp in species:
+        if sp["kind"] == "light" and sp["target"].get("id") == "HKG":
+            sp["target"]["side"] = "below"
+    return _map_surface("vecmap:USA,CHN;meridian=150;fit=tight", species,
+                        "Golden: a Pacific-centred map - the United States -> Hong Kong -> China route across the Pacific")
+
+
+SEAM_SPLIT_RUS_AT = 4.0   # Russia lights on its word
+
+
+def vecmap_seam_split() -> tuple[dict, dict]:
+    """P73 T6 (R26-406): a country the SEAM cuts, rendered clean - the whole world centred on the Americas
+    (`vecmap;meridian=-90`), so the seam runs down 90 E through Russia, China, India and Antarctica. Russia lights (4.0)
+    and lights as TWO halves, one at each edge of the map - no ring streaks across the frame, no fill leaks between them;
+    the old seam (180, the Bering Strait) sits inside the frame with Chukotka joined to the mainland. A test-bed beat: no
+    route and no figure claimed. Judged at 5.0, lit."""
+    species = [{"kind": "light", "at": SEAM_SPLIT_RUS_AT, "dur": 20.0, "idle": "breath", "target": {"kind": "country", "id": "RUS"}}]
+    return _map_surface("vecmap;meridian=-90", species, "Golden: the seam - Russia cut at 90 E on an Americas-centred map, lit clean")
+
+
+SURFACES.update({"vecmap-pacific": vecmap_pacific, "vecmap-seam-split": vecmap_seam_split})
+FRAME_T.update({"vecmap-pacific": 9.4,      # the transship's instant: both legs drawn across the Pacific, the three places lit
+                "vecmap-seam-split": 5.0})  # Russia's two halves lit, one at each edge
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

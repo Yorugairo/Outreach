@@ -1,0 +1,58 @@
+{
+ "caption_modes": [
+  "stage",
+  "anchor"
+ ],
+ "caption_pages": [],
+ "captions": [],
+ "episode_id": "golden",
+ "evidence": {},
+ "narration": {
+  "canonical_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "words_path": ""
+ },
+ "project_id": "golden",
+ "runtime_s": 30.0,
+ "scenes": [
+  {
+   "docks": [],
+   "exit": "cut",
+   "scene_id": "s01",
+   "span": [
+    0.0,
+    30.0
+   ],
+   "species": [
+    {
+     "at": 4.0,
+     "dur": 20.0,
+     "idle": "breath",
+     "kind": "light",
+     "target": {
+      "id": "RUS",
+      "kind": "country"
+     }
+    }
+   ],
+   "world": {
+    "box": [
+     1000,
+     500
+    ],
+    "focus": [],
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    },
+    "kind": "vecmap",
+    "map": "world-110m@-90",
+    "meridian": -90
+   }
+  }
+ ],
+ "schema_version": "scene_evidence_timeline.v1",
+ "sound": [],
+ "subtitle": "P39 golden surface",
+ "title": "Golden: the seam - Russia cut at 90 E on an Americas-centred map, lit clean"
+}

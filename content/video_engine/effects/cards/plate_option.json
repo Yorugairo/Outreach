@@ -924,6 +924,27 @@
    "doctrine": ["R26-382", "R26-383", "P72 T46d", "E99 s106"], "status": "wired",
    "proof": {"golden": null, "test": "content/video_engine/tests/test_wave3_page_marks.py::test_the_fit_goes_into_the_strip_and_tight_frames_closer", "first_use": null},
    "callable": {"today": true, "why": "accepted by PLATE_OPTS on a vector map with a focus set; refused by name on any other world, on the whole world, and for any value but tight"}
+  },
+  {
+   "id": "plate_option:meridian",
+   "axis": "plate_option",
+   "token": "meridian",
+   "title": "Vector map central meridian",
+   "aliases": [],
+   "does": "A vector map centred on a longitude: rings, centroids and places moved by one formula, a country the seam cuts split into a ring at each edge, Natural Earth's 180 cut joined - a US -> Hong Kong arc crosses the Pacific at 150.",
+   "when": "a route or a region spans the Pacific (US -> Asia), or the default Greenwich map sends an arc the long way round (the compiler WARNs with the meridian that fixes it) (R26-406)",
+   "when_source": "content/video_engine/tests/test_pacific_map.py:1",
+   "author": {
+    "key": "`;meridian=<deg>` (degrees east, -180..180) on a `vecmap[:<A3 list>]` plate id; 0 is Greenwich, the map with no option",
+    "example": "'vecmap:USA,CHN;meridian=150;fit=tight'",
+    "example_source": "content/video_engine/tests/test_pacific_map.py:1",
+    "check": "plate"
+   },
+   "phases": [], "blends": [], "options": [], "dials": null,
+   "lives": {"form": "inline", "path": "content/video_engine/scripts/build_scene_timeline_f.py", "symbol": "world_for_plate", "also": ["vecmap_meridian", "vecmap_seam_warns", "world_map"], "note": "the formula and the cut/join in scripts/build_world_map.py (recentre_x, recentre); the player's mirror for places and mappoints is species/vecmap.mjs vmRecentreX"},
+   "doctrine": ["R26-406", "P73 T6", "E99 s106"], "status": "wired",
+   "proof": {"golden": "vecmap-pacific", "test": "content/video_engine/tests/test_pacific_map.py::test_meridian_is_a_vector_map_plate_option", "first_use": null},
+   "callable": {"today": true, "why": "accepted by PLATE_OPTS on a vector map; refused by name on any other world and for any value that is not plain degrees in -180..180"}
   }
  ]
 }

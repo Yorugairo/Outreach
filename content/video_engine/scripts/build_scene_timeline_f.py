@@ -116,7 +116,7 @@ DOCK_INKS = ("own", "page")   # E99 s87, OPEN ON THE OPERATOR'S EYE: how a stamp
 MORPH_SHAPES = ("tab", "plate", "card")           # P47 T3: the named prop outline a morph page starts from (`;morph=<shape>`; tab is the default)
 PLATE_USES = ("landing", "bridge", "reset")   # E61: the three things a plate is - a landing surface, a bridge, a reset; `;use=<one>` names it on the row
 RACE_PATHS = ("eased", "clothoid")   # E91 s1 (R26-78): the path a racing mark takes BETWEEN two period knots - `eased` is the engine as it is (each coordinate on its own easing), `clothoid` is the fit through the SAME knots (P52 T17 arm B). The period clock, the knots and the ranks are identical in both: this names the SHAPE of the move and never its timing, and the operator chose it where the beat wants energy rather than smoothness
-PLATE_OPTS = ("idle", "drift", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path", "depth", "plane", "form", "field", "room", "domain", "build", "readability", "bar_style", "morph_series", "caption_room", "fit")   # P72 T46d (R26-383): fit=tight - a vector map frames its focus set tight (VECMAP_FITS), refused by name on any other world   # R26-149 (P72 T17): morph_series=<n> - the series a morph-ENTERING line page becomes (default 0), refused by name out of range   # P69 T10b: bar_style=soft - a BARS page's bars take rounded shoulders (the two corners away from zero) and the prop's own cross-hatched shadow from the one stage light (the operator, 2026-09-22); refused by name off the bars builder and beside form=extruded_bar   # P69 T8 (E99 s97): readability=longform[:bravos|middle|phone]|landscape-phone - the PAGE PROFILE a ledger page is drawn in, and a long form's type preset, the row's word (it wins over the series file's own field); legal on the builders ledger_page.READABILITY_BUILDERS names, refused by name elsewhere   # R26-226 (E99 s82): build=lines[:<s>] - a MULTI-LINE page's series draw one at a time, each whole, its end tag and inline badge landing as it lands (the operator: "draw the first line completely, label it, badge it, draw the 2nd line completely, badge it"); `lines:<s>` names ONE series' seconds, so the page's whole build is N x s   # R26-221 (E99 s81): room=<x>,<y>,<w>,<h> - the rectangle of a PICTURE PLATE a card may stand in, fractions of the stage; a plate's answer to a page's quiet_zone, and what lets `read` then `park` work on a plate   # R26-223 (E99 s81): domain=<ymin>,<ymax> - the y scale a LEDGER PAGE is BORN on, so a hook opens on the two lines' own scale instead of standing four seconds on the object's and rescaling; the object's own domain stays the default   # E99 s55 + s63: drift=<px> - the AMPLITUDE of the plate idle's walk, per scene (20 long form, 30-40 shorts; PLATE_DRIFT_FLOOR 2.0 is the floor, PLATE_DRIFT_MAX 90 the geometric ceiling), refused beside an idle that has no dx/dy   # E99 s35: field=soak|plates|scribble - which GROUND the page's charcoal arrives on, chosen by the sentence's JOB: the two-plate cross-fade for continuity (connecting ideas, speaking across plates), the soak for a new idea or a separator, the scribble as the opt-in back-up   # P58 T5 / E98 s3: form=extruded_bar | tilted_line[:<deg>] - the two 2.5D CHART FORMS, how the page's marks are drawn (a prism per bar; the line on a tilted plane). Opt-in, refused by name when the page's builder cannot draw it, and refused beside plane= (one plane per page)   # P58 T4 / E98 s3: depth=<k> - the page is a card at a DEPTH, taking that share of the camera's move (kinetics/camera.mjs PARALLAX); plane=tilt:<deg>[,<axis>]|quad:<8 numbers> - the surface it is drawn on, projected by the embed grammar's own homography. Both opt-in; the flat page is the reading form   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
+PLATE_OPTS = ("idle", "drift", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path", "depth", "plane", "form", "field", "room", "domain", "build", "readability", "bar_style", "morph_series", "caption_room", "fit", "meridian")   # P73 T6 (R26-406): meridian=<deg> - a vector map centred on that longitude (150: the Pacific), its rings cut at the new seam and joined at the old (build_world_map.recentre), refused by name out of -180..180 and on any other world   # P72 T46d (R26-383): fit=tight - a vector map frames its focus set tight (VECMAP_FITS), refused by name on any other world   # R26-149 (P72 T17): morph_series=<n> - the series a morph-ENTERING line page becomes (default 0), refused by name out of range   # P69 T10b: bar_style=soft - a BARS page's bars take rounded shoulders (the two corners away from zero) and the prop's own cross-hatched shadow from the one stage light (the operator, 2026-09-22); refused by name off the bars builder and beside form=extruded_bar   # P69 T8 (E99 s97): readability=longform[:bravos|middle|phone]|landscape-phone - the PAGE PROFILE a ledger page is drawn in, and a long form's type preset, the row's word (it wins over the series file's own field); legal on the builders ledger_page.READABILITY_BUILDERS names, refused by name elsewhere   # R26-226 (E99 s82): build=lines[:<s>] - a MULTI-LINE page's series draw one at a time, each whole, its end tag and inline badge landing as it lands (the operator: "draw the first line completely, label it, badge it, draw the 2nd line completely, badge it"); `lines:<s>` names ONE series' seconds, so the page's whole build is N x s   # R26-221 (E99 s81): room=<x>,<y>,<w>,<h> - the rectangle of a PICTURE PLATE a card may stand in, fractions of the stage; a plate's answer to a page's quiet_zone, and what lets `read` then `park` work on a plate   # R26-223 (E99 s81): domain=<ymin>,<ymax> - the y scale a LEDGER PAGE is BORN on, so a hook opens on the two lines' own scale instead of standing four seconds on the object's and rescaling; the object's own domain stays the default   # E99 s55 + s63: drift=<px> - the AMPLITUDE of the plate idle's walk, per scene (20 long form, 30-40 shorts; PLATE_DRIFT_FLOOR 2.0 is the floor, PLATE_DRIFT_MAX 90 the geometric ceiling), refused beside an idle that has no dx/dy   # E99 s35: field=soak|plates|scribble - which GROUND the page's charcoal arrives on, chosen by the sentence's JOB: the two-plate cross-fade for continuity (connecting ideas, speaking across plates), the soak for a new idea or a separator, the scribble as the opt-in back-up   # P58 T5 / E98 s3: form=extruded_bar | tilted_line[:<deg>] - the two 2.5D CHART FORMS, how the page's marks are drawn (a prism per bar; the line on a tilted plane). Opt-in, refused by name when the page's builder cannot draw it, and refused beside plane= (one plane per page)   # P58 T4 / E98 s3: depth=<k> - the page is a card at a DEPTH, taking that share of the camera's move (kinetics/camera.mjs PARALLAX); plane=tilt:<deg>[,<axis>]|quad:<8 numbers> - the surface it is drawn on, projected by the embed grammar's own homography. Both opt-in; the flat page is the reading form   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
 # P48 T4: `;then=<series>:<variant>[:<emphasize>]` names ANOTHER chart the same page can become - a second full
 # ledger_page.v1 spec on `world.page_states`, built at load and hidden until a `chart_to` reaches it. Repeat the
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
@@ -240,6 +240,8 @@ MAP_PREFIX = "map:"                               # ... and its key in the asset
 MAPS_DIR = REPO / "content/video_engine/assets/maps"
 MAP_PLACES_FILE = MAPS_DIR / "places.json"        # P73 T5: the map's named POINTS (Hong Kong, Singapore, Macau, Hsinchu) - build_map_places.py
 VECMAP_FOCUS_MAX = 6                              # a focus set of seven countries is the whole world: drop the list (E59: a composition frames its places)
+VECMAP_MERIDIAN_SEP = "@"                         # P73 T6 (R26-406): `world-110m@150` - the map re-centred on 150 E, built once per build and shipped under its own `map:` key
+VECMAP_MERIDIAN_RE = re.compile(r"^-?\d+(\.\d+)?$")   # ... a meridian is written as plain degrees east: 150, -90, 120.5
 VECMAP_FITS = ("tight",)                          # P72 T46d (R26-383): `;fit=tight` - species/vecmap.mjs VECMAP.TIGHT_PAD / TIGHT_ZOOM_MAX (CHN 02:21 frames Hormuz, not the continent)
 SPECIES_CLIP = "clip"              # world.kind for a clip; the player seeks a <video> to the scene clock
 # VIDEO DOCK (ruling E44 / backlog R26-7, operator 2026-09-06: "use the chart plate/ledger AND THEN DOCK
@@ -4363,13 +4365,18 @@ def _validate_flow_fail(entry: dict) -> list[str]:
     return errs
 
 
-@functools.lru_cache(maxsize=2)
+@functools.lru_cache(maxsize=4)
 def world_map(name: str = WORLD_MAP) -> dict:
     """The committed map as data: ``{"box": [w, h], "countries": {A3: {name, centroid, bbox, paths}}}``.
 
     Read once per build (the file is 187 KB and the same for every scene). ValueError names the map when
     the file is not there - it is built by scripts/build_world_map.py, which is the only thing allowed to
-    fetch, and the contract it writes is pinned by tests/test_world_map.py."""
+    fetch, and the contract it writes is pinned by tests/test_world_map.py. P73 T6: ``<map>@<meridian>`` is that
+    file re-centred (build_world_map.recentre - cut at the new seam, joined at the old), built once per build."""
+    if VECMAP_MERIDIAN_SEP in name:
+        base, _, m = name.partition(VECMAP_MERIDIAN_SEP)
+        WM = _world_map_module()
+        return WM.recentre(world_map(base), WM.meridian_value(float(m)))
     p = MAPS_DIR / f"{name}.paths.json"
     if not p.is_file():
         raise ValueError(f"map {name!r}: no file at {p} - run scripts/build_world_map.py")
@@ -4380,6 +4387,90 @@ def world_map_json(name: str = WORLD_MAP) -> str:
     """The map as the asset map carries it: the file's own bytes as text, under ``map:<name>``. The player
     parses it once (species/vecmap.mjs memoises by the string), so the whole world costs one asset."""
     return json.dumps(world_map(name), separators=(",", ":"))
+
+
+def _world_map_module():
+    """build_world_map, imported where a meridian needs it (it is the formula's one home; the compiler never fetches)."""
+    import build_world_map as WM
+    return WM
+
+
+def vecmap_meridian(value, where: str) -> float:
+    """P73 T6 (R26-406): `;meridian=<deg>` -> the longitude the map centres on. Plain degrees east (150, -90, 120.5) in
+    -180..180; anything else is refused by name - an exponent, a unit or a word is not a longitude."""
+    text = str(value).strip()
+    if not VECMAP_MERIDIAN_RE.match(text) or not (-180.0 <= float(text) <= 180.0):
+        raise ValueError(f"{where}: meridian {str(value)!r} is not a longitude in -180..180 - the degrees east the map "
+                         "centres on, written plainly (150 centres the Pacific, -90 the Americas; 0 is Greenwich, the map "
+                         "with no option)")
+    m = float(text)
+    return int(m) if m.is_integer() else m
+
+
+def vecmap_map_name(base: str, meridian: float) -> str:
+    """`world-110m@150`: the map re-centred, as the world names it and the asset map keys it (`map:world-110m@150`)."""
+    return f"{base}{VECMAP_MERIDIAN_SEP}{meridian:g}"
+
+
+def _vecmap_target_x(data: dict, tg: dict) -> float | None:
+    """A map target's x ON THIS MAP (map units): a country's centroid from the (re-centred) data, a place's or a
+    mappoint's x through the one formula - the player's vmTarget, mirrored for the findings."""
+    if not isinstance(tg, dict):
+        return None
+    if tg.get("kind") == COUNTRY_TARGET:
+        c = data["countries"].get(tg.get("id"))
+        return c["centroid"][0] if c else None
+    if tg.get("kind") == PLACE_TARGET:
+        p = map_places().get(tg.get("id"))
+        x = p["x"] if p else None
+    elif tg.get("kind") == MAPPOINT_TARGET:
+        x = tg.get("x")
+    else:
+        return None
+    if not isinstance(x, (int, float)):
+        return None
+    m = data.get("meridian") or 0
+    return _world_map_module().recentre_x(float(x), m, data["box"][0]) if m else float(x)
+
+
+def _short_way_meridian(x0: float, x1: float, box_w: float, m: float) -> int:
+    """The meridian (whole degrees) at the midpoint of the SHORT way between two x's on a map centred on m - the one
+    that puts the route in the middle of the frame."""
+    lon = lambda x: x / box_w * 360.0 - 180.0 + m   # noqa: E731 - the x back to a longitude east
+    a, b = lon(x0), lon(x1)
+    d = (b - a + 180.0) % 360.0 - 180.0
+    mid = (a + d / 2.0 + 180.0) % 360.0 - 180.0
+    return int(round(mid))
+
+
+def vecmap_seam_warns(world: dict, row_species) -> list[str]:
+    """P73 T6 (R26-406): the map's findings (E99 s106 - WARNs, never refusals): an ARC that runs more than half the box
+    across goes the LONG way round (a United States -> Hong Kong route over Europe on the Greenwich map), named with the
+    meridian that carries it the short way; a FOCUS country the seam cuts stands in two halves at the two edges (its box
+    is the whole width), named with a meridian that keeps it whole."""
+    if not isinstance(world, dict) or world.get("kind") != VECMAP_KIND:
+        return []
+    try:
+        data = world_map(world.get("map") or WORLD_MAP)
+    except ValueError:
+        return []
+    box_w, m, out = float(data["box"][0]), float(data.get("meridian") or 0), []
+    for sp in row_species or []:
+        if not isinstance(sp, dict) or sp.get("kind") != SPECIES_ARC:
+            continue
+        x0, x1 = _vecmap_target_x(data, sp.get("from")), _vecmap_target_x(data, sp.get("to"))
+        if x0 is None or x1 is None or abs(x1 - x0) <= box_w / 2:
+            continue
+        name = lambda tg: tg.get("id") or f"({tg.get('x')}, {tg.get('y')})"   # noqa: E731
+        out.append(f"arc {name(sp['from'])} -> {name(sp['to'])} at {sp.get('at')}s goes the LONG way round on this map "
+                   f"({abs(x1 - x0) / box_w * 360:.0f} deg across the frame, the short way crosses the seam) - "
+                   f"`;meridian={_short_way_meridian(x0, x1, box_w, m)}` on the plate id carries it the short way")
+    for cid in (world.get("focus") or []):
+        if cid in (data.get("seam") or {}).get("split", []):
+            keep = int(round((data["countries"][cid]["centroid"][0] / box_w * 360.0 - 180.0 + m + 180.0) % 360.0 - 180.0))
+            out.append(f"the seam at {data['seam']['lon']:g} deg cuts focus country {cid} - its halves stand at the two "
+                       f"edges and its box is the whole width; `;meridian={keep}` keeps it whole")
+    return out
 
 
 VECMAP_REGION_MIN = 0.3   # species/vecmap.mjs VECMAP.REGION_MIN: the thinnest strip beside a card's room the map may be fitted into
@@ -9295,6 +9386,9 @@ def plate_room_spec(value, where: str, key: str = "room") -> list[float]:
 
 
 def _check_opt(key: str, value, where: str) -> None:
+    if key == "meridian":   # P73 T6: a longitude; that the world IS a vector map is checked in world_for_plate
+        vecmap_meridian(value, where)
+        return
     if key == "morph_series":   # R26-149 (P72 T17): the index here; the page's own series in world_for_plate
         morph_series_value(value, where)
         return
@@ -11530,6 +11624,15 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
             raise ValueError(f"{plate_id!r}: fit={fit} frames the FOCUS SET tight - name the places "
                              "(`vecmap:<A3 list>;fit=tight`); the whole world has nothing to frame tighter")
         world["fit"] = fit
+    meridian = opts.pop("meridian", None)
+    if meridian is not None:   # P73 T6 (R26-406): the map centred on this longitude - a vector map's option, refused by name elsewhere
+        if world.get("kind") != VECMAP_KIND:
+            raise ValueError(f"{plate_id!r}: meridian={meridian} is a VECTOR MAP option (the longitude the world map "
+                             f"centres on) - a {world.get('kind') or 'picture'} world has no projection to re-centre")
+        _m = vecmap_meridian(meridian, repr(plate_id))
+        if _m != 0:   # Greenwich is the file itself: `meridian=0` writes nothing, so it is the map with no option
+            world["meridian"] = _m
+            world["map"] = vecmap_map_name(WORLD_MAP, _m)
     caption_room = opts.pop(CAPTION_ROOM_OPT, None)
     if caption_room is not None:
         # P72 T14 (R26-268): the rectangle of this PICTURE PLATE its STAGE caption sits in - the caption's answer to
@@ -16583,6 +16686,8 @@ def main() -> int:
             _thread["from"] = _prev["scene_id"]
         if world.get("kind") == VECMAP_KIND:
             uris[MAP_PREFIX + world["map"]] = world_map_json(world["map"])   # ONCE: the same key for every vecmap scene in the build
+            for _w in vecmap_seam_warns(world, row_species):   # P73 T6 (R26-406): the long way round, a focus the seam cuts
+                print(f"  [WARN] P73 T6: shot row {i + 1} ({a}-{b}s): {_w}")
         elif world.get("kind") == SPECIES_CLIP:
             uris[world["asset_id"]] = data_uri(Path(world.pop("clip_path")))   # raw mp4, keyed by the clip's stem
         elif "asset_id" in world:

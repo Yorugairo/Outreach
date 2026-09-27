@@ -478,6 +478,8 @@ def test_every_wired_card_is_in_a_recipe():
     # golden (H row 18b's 20 bar lit on "twenty percent"); no body row adopts it and no recipe composes it before P71-HG1.
     # P72 T46d's tight map framing (plate_option:fit) is tested alone in test_wave3_page_marks.py; no recipe composes it
     # before P72-HG1 (the AMD RFSoC episode's route map is its first use).
+    # P73 T6's central meridian (plate_option:meridian) is tested alone in test_pacific_map.py and pinned by the
+    # vecmap-pacific / vecmap-seam-split goldens; no recipe composes it before P73-HG1 (the AMD RFSoC route map is its first use).
     # P73 T2's dated event timeline (page_builder:timeline) is tested alone in test_event_timeline.py and pinned by the
     # event-timeline goldens (the AMD RFSoC story's dates); no committed beat plays it until that episode's row, so no recipe
     # is invented for it here.
@@ -488,6 +490,7 @@ def test_every_wired_card_is_in_a_recipe():
                          "page_species:datum_badge", "page_species:explode", "page_species:glow", "page_species:lens", "page_species:member",
                          "plate_option:bar_style",
                          "plate_option:build", "plate_option:caption_room", "plate_option:domain", "plate_option:fit",
+                         "plate_option:meridian",
                          "plate_option:readability",
                          "plate_option:room", "species:balance", "species:chapter", "species:equation", "species:freeze"], uncovered
     assert excluded == ["kinetics:arap", "kinetics:camera", "kinetics:chartxf", "kinetics:clothoid", "kinetics:contour",
