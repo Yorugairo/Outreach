@@ -54,7 +54,7 @@
     "centre_x": 0.745,
     "centre_y": 0.47
    },
-   "role": "ONE slot in the freed column (hand-off, the default): at 0.45 of the stage the card keeps its source; BOOM's stack (0.35 twins) drops it - R26-413"
+   "role": "ONE slot in the freed column (hand-off, the default: 0.45, the source at the floor); BOOM's stack (0.35 twins, y 0.30 / 0.665) cites at the citation size since R26-413 (a)"
   },
   {
    "card": "arrival:throw",
@@ -116,6 +116,6 @@
   "P71 T18"
  ],
  "status": "candidate",
- "source": "P71 T33 (harvest v2 T40 + R36; BOOM 08:44-08:55, VERIFY.md corrected: the twins stack BESIDE the parked plot, then the crimson '?' by the right axis); proved as a private test-bed beat by projects/_proofs/p71-recipes/proof_t33.py (two forms; the hand-off is the default - the stack drops both cards' sources below ~860 px, R26-413) on Steel and Paper H row 9 ('Every transformative technology overshoots ... AI spending just crossed eight.', take 68.08 s) - host ev-equip-ipp-gdp-v2 read 2015-today, twins ev-railway-index-v1 and ev-equip-ipp-gdp-v2 read 1995-2005 - no approved cut carries it",
+ "source": "P71 T33 (harvest v2 T40 + R36; BOOM 08:44-08:55, VERIFY.md corrected: the twins stack BESIDE the parked plot, then the crimson '?' by the right axis); proved as a private test-bed beat by projects/_proofs/p71-recipes/proof_t33.py (two forms; the hand-off is the default - the stack cites at the citation size since P72 T53 (f)) on Steel and Paper H row 9 ('Every transformative technology overshoots ... AI spending just crossed eight.', take 68.08 s) - host ev-equip-ipp-gdp-v2 read 2015-today, twins ev-railway-index-v1 and ev-equip-ipp-gdp-v2 read 1995-2005 - no approved cut carries it",
  "count": 0
 }

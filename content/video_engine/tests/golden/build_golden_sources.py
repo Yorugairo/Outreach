@@ -6472,6 +6472,42 @@ SURFACES.update({"box-the-last-move": box_the_last_move})
 FRAME_T.update({"box-the-last-move": 9.2})   # the box drawn whole (8.0 + DRAW_S) and standing - its leave begins at 10.65
 
 
+# ---- P72 T53 (f) / R26-413 (a): A CARD KEEPS ITS SOURCE AT ANY SIZE ------------------------------------------------------
+#   card-keeps-its-source   Steel and Paper H row 9's railway index (the COMMITTED `ev-railway-index-v1` object, its
+#                           points and its own citation read in place) drawn as a CHART CARD for 672 displayed px - 0.35
+#                           of the stage, P71 T33's stack twin (BOOM 08:48) - by chart_card's own `card` profile
+#                           (`chart_card.card_timeline`, the path every card takes: the whole stage is the card). Two
+#                           changes, both P71 T33's twin's: the era as the title ("Railway shares, 1845"; the object's
+#                           own headline wraps to two lines at this width) and its "1843 level" rule dropped. The source's
+#                           first clause ("Campbell & Turner railway share index") will not fit one line at the floor,
+#                           so it is ELLIPSISED ("Campbell & Turner..."), and at the floor it would cost the plot
+#                           PLOT_MIN, so it stands at the citation's size (LP_CARD.SRC_CITE_X) - before R26-413 this
+#                           card cited nothing - and its shorter plot still states its scale in two ticks (1000, 2000: a
+#                           card's axis takes a phone panel's divisions, E28). Judged at the card's landing (LAND_T).
+CARD_SOURCE_OBJECT = LIT_PROJECT / "evidence/objects/ev-railway-index-v1.series.json"
+CARD_SOURCE_W = 672.0   # proof_t33 FORMS["stack"].w x 1920
+
+
+def card_keeps_its_source() -> tuple[dict, dict]:
+    import tempfile
+    import chart_card as CC
+    obj = json.loads(CARD_SOURCE_OBJECT.read_text(encoding="utf-8"))
+    assert obj["src"].startswith("Campbell & Turner") and obj.get("hline"), (obj["src"], obj.get("hline"))
+    obj["title"] = "Railway shares, 1845"
+    obj.pop("hline")
+    with tempfile.TemporaryDirectory() as td:
+        path = Path(td) / "ev-railway-index-v1.series.json"
+        path.write_text(json.dumps(obj), encoding="utf-8")
+        tl, uris, _aspect = CC.card_timeline(path, "line", card_w=CARD_SOURCE_W)
+    page = tl["scenes"][0]["world"]["page"]
+    assert page["source"].startswith("Campbell & Turner") and page["source"].endswith(LPG.CARD_SOURCE_ELLIPSIS), page["source"]
+    return dict(tl, title="Golden: a chart card keeps its source at any size (672 px, P71 T33's stack twin)"), uris
+
+
+SURFACES.update({"card-keeps-its-source": card_keeps_its_source})
+FRAME_T.update({"card-keeps-its-source": 8.6})   # chart_card.LAND_T: the card's own landing - the instant every card is drawn at
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

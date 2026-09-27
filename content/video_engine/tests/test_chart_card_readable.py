@@ -11,7 +11,10 @@ memory line dropped (build_episode_h._hook_object), read on the studio's left mo
                       (12 phone px on a 16:9 frame played 390 px wide = 59.08 stage px); the full page shrunk to the card
                       (today's card) is measured far under it.
   (2) EDGE TO EDGE    the chart runs from the card's margin to its margin, the plot keeps at least PLOT_MIN of the card's
-                      height, no sub, no y label, no badge rail, no key, at most one short source line.
+                      height while its source stands at the floor, no sub, no y label, no badge rail, no key, ONE short
+                      source line. P72 T53 (f), R26-413 (a): A CARD KEEPS ITS SOURCE AT ANY SIZE - a clause too long is
+                      ellipsised, and a source that would cost the plot PLOT_MIN steps down to the citation's size
+                      (LP_CARD.SRC_CITE_X of the floor, the house citation's 9.4 phone px) while the plot yields; never dropped.
   (3) THICKER LINES   every line, as displayed, at least twice the full page's own line, as displayed (the same object
                       drawn as a full-stage page, measured in the same browser).
   (4) SHORT BADGES    the end tags are the values alone, in their lines' ink; the x ticks are the two ends; the card
@@ -140,9 +143,35 @@ def test_apply_card_draws_the_page_as_a_card():
     assert page["title"] == "Two lines, one warning", "the card keeps its title"
 
 
-def test_a_long_source_is_dropped_rather_than_shrunk():
-    assert LPG.card_source("A very long source name that no card of this size could ever hold on one line", CARD_W) == ""
+def test_a_long_source_is_ellipsised_never_dropped():
+    """P72 T53 (f), R26-413 (a) (it was `test_a_long_source_is_dropped_rather_than_shrunk`): a first clause too long for
+    one line is cut at the last word that fits and SAYS so; a first word too long is cut at a character; only a page
+    that names no source has none."""
+    long = "A very long source name that no card of this size could ever hold on one line"
+    got = LPG.card_source(long, CARD_W)
+    assert got.endswith(LPG.CARD_SOURCE_ELLIPSIS) and long.startswith(got[:-1].rstrip()), got
+    k = 1920 / CARD_W
+    room = 1920 - 2 * LPG.CARD_PAD_PX * k
+    assert LPG.longform_text_px(got, "source", LPG.CARD_TYPE_PX * k) <= room, "one line at the floor"
+    nxt = " ".join(long.split()[:len(got[:-1].split()) + 1]) + LPG.CARD_SOURCE_ELLIPSIS
+    assert LPG.longform_text_px(nxt, "source", LPG.CARD_TYPE_PX * k) > room, "the LAST word that fits"
+    word = LPG.card_source("Supercalifragilisticexpialidociousnesses", 300)
+    assert word.endswith(LPG.CARD_SOURCE_ELLIPSIS) and len(word) > 2, word
     assert LPG.card_source("Yahoo Finance - pairing after Bravos Research", CARD_W) == "Yahoo Finance"
+    assert LPG.card_source("", CARD_W) == "" and LPG.card_source("   ", 300) == ""
+    for w in (300.0, 520.0, 672.0, 864.0):   # P71 T33's twins' own sources, at every width it probed and under
+        for src in ("Campbell & Turner - railway share index, 1843-1850", "BEA via FRED - quarterly since 1970"):
+            assert LPG.card_source(src, w), (src, w)
+
+
+def test_the_engine_keeps_the_cards_source_at_the_citations_size():
+    """R26-413 (a) in the engine: LP_CARD states the citation's size (9.4 phone px) and the card branch never hides
+    its source line."""
+    src = ENGINE.read_text(encoding="utf-8")
+    assert "SRC_CITE_X: 9.4 / 12" in src
+    i = src.index("if (cardP && srcText.trim() && lpCardPlotH(pg, T, box) < lpCardPlotNeed(pg, T))")
+    branch = src[i:src.index("}", src.index("lpCardBox(", i))]
+    assert "LP_CARD.SRC_CITE_X" in branch and 'display = "none"' not in branch, branch
 
 
 def test_a_card_is_drawn_by_two_builders_and_is_never_a_row_option(tmp_path):
@@ -329,10 +358,25 @@ def test_every_word_on_the_card_is_at_the_phone_floor_as_displayed(cards):
     got = cards["card"]
     assert not got["errors"], got["errors"]
     assert got["card"], "the page is drawn under the card profile"
-    words = [w for w in got["words"] if not _is_line_name(w)]
+    words = [w for w in got["words"] if not _is_line_name(w) and not _is_source(w)]
     assert words, "the card writes words"
     small = min(words, key=lambda w: w["px"])
     assert _displayed(small["px"]) >= FLOOR - TOL, (round(_displayed(small["px"]), 2), small)
+
+
+def _is_source(w) -> bool:
+    return "lp-src" in str(w.get("role", ""))
+
+
+@needs_browser
+def test_the_cards_source_stands_at_the_floor_or_the_citations_size_and_never_under(cards):
+    """P72 T53 (f), R26-413 (a): the one other word allowed under the floor is the citation (gate_motion_density's
+    TYPE_FLOOR_EXEMPT; the design pass's "minimal space") - and never under its own size, 9.4 phone px."""
+    got = cards["card"]
+    src = [w for w in got["words"] if _is_source(w)]
+    assert [w["text"] for w in src] == ["Yahoo Finance"], "row 7's card cites (it dropped its source before)"
+    cite = 9.4 * 1920 / 390
+    assert _displayed(src[0]["px"]) >= cite - TOL, (round(_displayed(src[0]["px"]), 2), src[0])
 
 
 def test_a_line_name_is_the_one_word_under_the_floor_and_never_under_its_named_share(cards):
@@ -357,6 +401,56 @@ def test_the_full_page_shrunk_to_the_card_was_far_under_the_floor(cards):
     assert max(lines) < 0.5 * max(cards["page"]["lines"]), "and its lines thinner than the page's own"
 
 
+TWIN_W = 0.35 * 1920   # P71 T33's stack twin (proof_t33 FORMS["stack"].w, BOOM 08:48): 672 displayed px
+RAILWAY = EP / "evidence/objects/ev-railway-index-v1.series.json"
+
+
+@pytest.fixture(scope="module")
+def twin(tmp_path_factory):
+    """P72 T53 (f), R26-413 (a): the committed railway index as P71 T33's twin draws it (the era as its title, its rule
+    dropped) - a card that never grows into a page - drawn at 672 px, probed at its landing on the served player."""
+    if not _chromium_available():
+        pytest.skip("playwright chromium not installed")
+    import chart_card as CC
+    import served_player as SPL
+    tmp = tmp_path_factory.mktemp("twin")
+    obj = json.loads(RAILWAY.read_text(encoding="utf-8"))
+    obj["title"] = "Railway shares, 1845"
+    obj.pop("hline", None)
+    series = tmp / "ev-railway-index-v1.series.json"
+    series.write_text(json.dumps(obj), encoding="utf-8")
+    tl, uris, _aspect = CC.card_timeline(series, "line", card_w=TWIN_W)
+    html = tmp / "twin.html"
+    html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
+    with SPL.served(html, 1920, 1080) as (page, errs):
+        page.wait_for_function("document.fonts.status === 'loaded'")
+        got = _at(page, CC.LAND_T, (1920, 1080), CARD_PROBE)
+        return dict(got, errors=errs, source=tl["scenes"][0]["world"]["page"]["source"])
+
+
+@needs_browser
+def test_a_twin_at_672_px_keeps_its_source_at_the_citations_size(twin):
+    """R26-413 (a)'s acceptance: at 672 px T10c's card dropped the source (PLOT_MIN); the card now CITES - its first
+    clause ellipsised to one line, at the citation's size or the floor, never under 9.4 phone px."""
+    assert not twin["errors"], twin["errors"]
+    assert twin["source"].startswith("Campbell & Turner") and twin["source"].endswith(LPG.CARD_SOURCE_ELLIPSIS), twin["source"]
+    src = [w for w in twin["words"] if _is_source(w)]
+    assert [w["text"] for w in src] == [twin["source"]], src
+    shown = src[0]["px"] * TWIN_W / 1920
+    assert shown >= 9.4 * 1920 / 390 - TOL, round(shown, 2)
+    assert twin["src"] == twin["source"], "drawn, not hidden"
+
+
+@needs_browser
+def test_a_card_whose_source_shortened_its_plot_still_states_its_scale(twin):
+    """E28 (an axis states its scale): the long form's one-division rule wrote ONE y tick (or none) on a short plot -
+    H row 24a's yardstick card lost its only "20" when its source took its line. A card's axis takes a phone panel's
+    divisions (P72 T47, lpPhoneDivs): two labelled ticks or more wherever two fit a label apart."""
+    years = {"1844", "1850"}
+    ticks = [w["text"] for w in twin["words"] if w["role"] == "svg:lab" and w["text"] not in years]
+    assert len(ticks) >= 2, ticks
+
+
 @needs_browser
 def test_the_chart_runs_edge_to_edge_and_the_plot_keeps_its_room(cards):
     got = cards["card"]
@@ -367,10 +461,14 @@ def test_the_chart_runs_edge_to_edge_and_the_plot_keeps_its_room(cards):
     right = max(b[0] + b[2] for b in tags)   # the end badges stand past the plot's right edge, inside the card's margin
     assert 1920 - pad - 3 * LPG.CARD_TYPE_PX * 1920 / CARD_W / 4 <= right <= 1920 - pad + 2, (right, tags)
     px, py, pw, ph = got["panel"]
-    assert ph >= 0.4 * 1080 - 1, ("the plot keeps PLOT_MIN of the card", got["panel"])
+    src = [w for w in got["words"] if _is_source(w)]
+    assert got["src"] == "Yahoo Finance" and len(src) == 1, "ONE short source line - kept (P72 T53 (f))"
+    if _displayed(src[0]["px"]) >= FLOOR - TOL:
+        assert ph >= 0.4 * 1080 - 1, ("the plot keeps PLOT_MIN of the card", got["panel"])
+    else:   # the source stepped down to the citation's size because the plot needed the room - and the plot yields the rest
+        assert 0.25 * 1080 <= ph < 0.4 * 1080, ("the source stepped down only for the plot's room", got["panel"])
     assert all(got["hidden"]), "no sub, no badge rail, no key"
     assert not any(w["role"].startswith("svg:") and "ylabel" in w["role"] for w in got["words"])
-    assert got["src"] in ("", "Yahoo Finance"), "at most one short source line"
 
 
 @needs_browser

@@ -10455,12 +10455,20 @@ async function mount(doc) {
        STROKE_X  every line, its bloom and its tip at this many times the full page's own, as displayed - the page's
                  line is the template's 4-unit `.ser` at PAGE_UNIT stage px a unit (the full-stage page at rest,
                  MEASURED 1.3340 by P69 T6c);
-       PLOT_MIN  the share of the card's height the plot keeps: a source line that would leave it less is dropped
-                 (the page the card becomes carries the citation in full);
+       PLOT_MIN  the share of the card's height the plot keeps while the source line stands at TYPE_PX; a source that
+                 would leave it less steps down to TYPE_PX x SRC_CITE_X - P72 T53 (f), R26-413 (a): A CARD KEEPS ITS SOURCE AT ANY
+                 SIZE (an unsourced figure on screen is a truth problem; P71 T33's twins lost theirs under ~860 px). It
+                 is never dropped: at the citation's size the plot yields what is left. (The page a card grows into carries the
+                 citation in full, as it always did.)
+       SRC_CITE_X the source's size, as a share of TYPE_PX (12 phone px), when TYPE_PX would cost the plot its room: the house citation, 9.4 phone px (the
+                 design pass, 2026-09-07 - "cited sources should take up minimal space, not maximal" - set
+                 .lp-src.compact at 26 px on the 1080-wide stage = 9.39 px on a 390-px phone): 46.3 displayed px on a
+                 16:9 card; the citation is the one word exempt from the phone floor
+                 (gate_motion_density.TYPE_FLOOR_EXEMPT) and no squint row reads it (E99 s120 / s126 / s129);
        HANDOVER_U the share of a push (enter=camera, SNAP_S) over which the card gives way to the FULL page (a SNAP
                  already grows the full page out of the card's rectangle and hides the card on its first frame). */
   const LP_CARD = Object.freeze({ TYPE_PX: 12 * 1920 / 390, PAD_PX: 8, GAP_PX: 4, STROKE_X: 2, PAGE_UNIT: 1.334,
-                                  PLOT_MIN: 0.4, HANDOVER_U: 0.6,
+                                  PLOT_MIN: 0.4, SRC_CITE_X: 9.4 / 12, HANDOVER_U: 0.6,
                                   MIN_VW: 520 });   /* a card's narrowest viewBox (a page's LP_PHONE.MIN_W is 1000): room for a plot left of named end tags */
   const lpCardK = (pg) => { const w = +((((pg || {}).axes) || {}).card_w); return w > 0 ? STAGE_W / w : 1; };
   const lpCardType = (pg) => {
@@ -11215,9 +11223,9 @@ async function mount(doc) {
         let box = lfBox = cardP ? lpCardBox(pg, T, subBottom, srcText.trim() ? src.offsetHeight * ps : 0, cPad, LP_CARD.GAP_PX * cardK)
           : lpLongformBox(pg, T, subBottom, srcText.trim() ? src.offsetHeight * ps : 0, badges.length ? rail.offsetHeight * ps : 0,
                           keyBand);
-        if (cardP && srcText.trim() && lpCardPlotH(pg, T, box) < lpCardPlotNeed(pg, T)) {   /* the plot keeps its room: the source goes */
-          src.style.display = "none";
-          box = lfBox = lpCardBox(pg, T, subBottom, 0, cPad, LP_CARD.GAP_PX * cardK);
+        if (cardP && srcText.trim() && lpCardPlotH(pg, T, box) < lpCardPlotNeed(pg, T)) {   /* P72 T53 (f), R26-413 (a): the source */
+          src.style.fontSize = (LP_CARD.TYPE_PX * LP_CARD.SRC_CITE_X * cardK / ps).toFixed(3) + "px";   /* steps down to the citation's size and */
+          box = lfBox = lpCardBox(pg, T, subBottom, src.offsetHeight * ps, cPad, LP_CARD.GAP_PX * cardK);   /* STAYS; the plot yields */
         }
         for (const k of [lfKey, ...lfStateKeys]) if (k) k.el.style.top = (un(box.keyY / STAGE_H) * 100).toFixed(3) + "%";
         lfGeom = lpLongformGeom(T, box.top, box.bot, box.floor);
@@ -14429,7 +14437,7 @@ async function mount(doc) {
         lpMark(st, "ylab:" + n, "ylabel", lpText(st.chart, "lab", pe ? L - 10 + (pe[0][0] - L) : L - 10, pe ? pe[0][1] + 8 : y + 8, "end", lpTick(tv) + (ax.unit || ""),
           lpPhoneTypeOf(st) ? { style: "font-size:" + lpTypeU(st, "tick") + "px" } : undefined), { v: tv, x: pe ? L - 10 + (pe[0][0] - L) : L - 10, y: pe ? pe[0][1] + 8 : y + 8 }); n++; } tv *= 2; }
     } else lpYTicks(st, y0, y1, my, L, W - R, ax.unit || "", L - 10, Y2 ? lpY2Divs(y0, y1, yDivs || 5)
-      : st.panelBand > 0 && LFT ? lpPhoneDivs(B - T, y0, y1, LFT.tick) || yDivs : yDivs, PJ ? pj : null);   /* P71 T13: a y2 page's left axis states its range too; P72 T47: a phone panel's, two ticks */
+      : (st.panelBand > 0 || st.readability === LP_READABILITY.CARD) && LFT ? lpPhoneDivs(B - T, y0, y1, LFT.tick) || yDivs : yDivs, PJ ? pj : null);   /* P71 T13: a y2 page's left axis states its range too; P72 T47: a phone panel's, two ticks; P72 T53 (f): a CARD's too - the source it keeps shortens its plot, and the long form's one division left H row 24a's yardstick card with no tick at all (E28) */
     lpYLabel(st, pg, L, T - (LFT ? LFT.ylab_gap : 12));
     if (Y2) lpY2Draw(st, Y2, { L, R, T, B, W, P, LFT });   /* P71 T13: the right axis's ticks placed, both axes inked, its name written */
     const brkFs = PHONE ? lpTypeU(st, "tick") : P ? 40 : 24;   /* P69 T66: the x ticks' own size, in units (the template's .lab, or the phone type) */

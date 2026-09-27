@@ -12794,19 +12794,21 @@ def _check_dock_park_at(v, raw: dict) -> None:
 
 
 def under_choice_note(world: dict | None, dopt: dict | None, label: str, boxes: list | None = None,
-                      aspect: str | None = None) -> str | None:
+                      aspect: str | None = None, park: dict | None = None) -> str | None:
     """P71 T15 / E99 s124 amended: the WARN for a card dock over a ledger page's PLOT (a chart plate IS the ledger page,
     E61) that names neither `under`. `boxes`: what the dock draws on the page (its park, its read) - a card no box of
     which meets the plot is not over the chart and is asked nothing (review round 2). None for a dock that chose, for one
     over a picture plate, and for a dock that is not a held card (a prop, a stamp, a cutout, a press card, a card on a
-    surface). s106: advice, never a refusal or a move."""
+    surface). s106: advice, never a refusal or a move. `park` (P72 T53 (f), R26-413 (b)): the `chart_to park` standing
+    when the dock enters (`park_standing`) - the plot is read where the parked chart DRAWS it (`parked_boxes`), so a
+    card in the column the park freed is not over the chart; None = the page as built."""
     dopt = dopt or {}
     if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER or dopt.get("under"):
         return None
     if dopt.get("prop") or dopt.get("cutout") or dopt.get("press") or dopt.get(EMBED_KEY) or dopt.get("arrive") == "stamp":
         return None
     page = world.get("page") if isinstance(world.get("page"), dict) else {}
-    plot = LPG.page_boxes(page, aspect or "16:9").get("plot") if page else None
+    plot = parked_boxes(LPG.page_boxes(page, aspect or "16:9"), park).get("plot") if page else None
     if not plot or not any(isinstance(b, dict) and _overlap_area(b, plot) > 0 for b in (boxes or [])):
         return None
     title = str(page.get("title") or "")[:44]
@@ -12814,6 +12816,104 @@ def under_choice_note(world: dict | None, dopt: dict | None, label: str, boxes: 
     return (f"{label}: a dock over the chart's plot{named} - choose under: \"hover\" (keep the chart read: the card lifts and "
             "holds, the chart stays sharp) or under: \"blur\" (focus a temporary evidence dock: the chart blurs while it "
             "reads) - E99 s124 amended; compiled as today (s106)")
+
+
+# ---- P72 T53 (f), R26-413 (b): THE PLACEMENT CHECKS READ THE PAGE AFTER A PARK -----------------------------------------
+# P71 T33 (the inset echo, BOOM 08:48's stack): the host page PARKS left to 0.58 and two twin cards land in the column
+# the park freed - and three advisors WARNed as if the cards sat over the plot (T15's choose-under, T5's covers-the-end-
+# names / basis-label, E65's no-room), because each read the page AS BUILT. The engine's park (`lpPaintPark`) scales the
+# CHART element - the plot, its axes, its end tags, its basis label - about PARK_ORIGIN's corner of the chart's box, the
+# key rail about the same point (`lpParkKey`), and the source line only under anchor=top (it rides the chart's foot);
+# the title, the sub and the badge rail stand. `parked_boxes` is that transform on `page_boxes`; the checks read it at
+# the dock's ENTER, under the park begun by then (its destination: a park mid-way is already where it is going, as
+# `page_on_screen` reads a recast). Placement itself is untouched: only what the three advisors READ.
+PARK_CHART_BOXES = ("chart", "plot", LPG.TAGS_KEY, LPG.BASIS_BOX, LPG.KEY_BOX, LPG.Y2_BOX)   # the chart's own ink boxes
+PARK_CHART_TEXT = ("the x axis", "the y axis", "an end tag", "the end names", "the basis label", LPG.KEY_BOX)   # ... as page_text_boxes names them
+
+
+def park_standing(row_species: list | None, t: float) -> dict | None:
+    """The row's `chart_to park` standing at t - the last begun by t - as ``{"scale", "anchor"}``; None before any, or
+    when the last is the UN-PARK (scale 1.0). Pure."""
+    parks = sorted((sp for sp in (row_species or []) if isinstance(sp, dict) and sp.get("kind") == "chart_to"
+                    and sp.get("to") == "park" and _num(sp.get("at")) and float(sp["at"]) <= float(t) + 1e-9),
+                   key=lambda sp: float(sp["at"]))
+    if not parks:
+        return None
+    sc = parks[-1].get("scale", 0.72)
+    sc = float(sc) if _num(sc) else 0.72
+    return None if abs(sc - 1.0) < 1e-9 else {"scale": sc, "anchor": parks[-1].get("anchor") or "top"}
+
+
+def _park_origin(chart: dict, anchor: str) -> tuple[float, float]:
+    """The engine's PARK_ORIGIN on the chart's stage box: top / left the top-left corner, bottom the bottom-left, right
+    the top-right."""
+    return (chart["x"] + (chart["w"] if anchor == "right" else 0.0),
+            chart["y"] + (chart["h"] if anchor == "bottom" else 0.0))
+
+
+def _parked_rect(r: dict, origin: tuple[float, float], sc: float) -> dict:
+    ox, oy = origin
+    return dict(r, x=round(ox + (r["x"] - ox) * sc, 1), y=round(oy + (r["y"] - oy) * sc, 1),
+                w=round(r["w"] * sc, 1), h=round(r["h"] * sc, 1))
+
+
+def _parked_source(r: dict, chart: dict, sc: float) -> dict:
+    """lpPaintPark's citation under anchor=top: moved with the parked chart's foot, scaled about its own left top."""
+    return dict(r, y=round(chart["y"] + (r["y"] - chart["y"]) * sc, 1), w=round(r["w"] * sc, 1), h=round(r["h"] * sc, 1))
+
+
+def parked_boxes(boxes: dict, park: dict | None) -> dict:
+    """`page_boxes` as the page DRAWS them under a standing park (`park_standing`): a NEW dict - the chart's own boxes
+    (PARK_CHART_BOXES, the axis bands, each end tag as drawn) scaled about the park's origin, the source moved with the
+    chart's foot under anchor=top; everything else as built. The data mask is a grid over the plot, so it rides the
+    plot's box. `park` None, or a page with no chart box: the boxes themselves. Pure."""
+    chart = boxes.get("chart") if isinstance(boxes, dict) else None
+    if not park or not isinstance(chart, dict):
+        return boxes
+    sc, anchor = float(park["scale"]), str(park.get("anchor") or "top")
+    o = _park_origin(chart, anchor)
+    out = dict(boxes)
+    for k in PARK_CHART_BOXES:
+        if isinstance(boxes.get(k), dict):
+            out[k] = _parked_rect(boxes[k], o, sc)
+    if isinstance(boxes.get("axis"), dict):
+        out["axis"] = {k: (_parked_rect(v, o, sc) if isinstance(v, dict) else v) for k, v in boxes["axis"].items()}
+    if isinstance(boxes.get(LPG.TAG_BOXES_KEY), list):
+        out[LPG.TAG_BOXES_KEY] = [_parked_rect(b, o, sc) for b in boxes[LPG.TAG_BOXES_KEY]]
+    if anchor == "top" and isinstance(boxes.get("source"), dict):
+        out["source"] = _parked_source(boxes["source"], chart, sc)
+    return out
+
+
+def page_text_boxes_at(page: dict | None, aspect: str | None, park: dict | None) -> list[tuple[str, dict]]:
+    """`page_text_boxes` where the page draws them under a standing park: the chart's own words (PARK_CHART_TEXT)
+    scaled with it, the source with the chart's foot under anchor=top, the rest as built. `park` None: exactly
+    `page_text_boxes`. Pure."""
+    text = page_text_boxes(page, aspect)
+    if not park or not page:
+        return text
+    chart = LPG.page_boxes(page, aspect or "16:9").get("chart")
+    if not isinstance(chart, dict):
+        return text
+    sc, anchor = float(park["scale"]), str(park.get("anchor") or "top")
+    o = _park_origin(chart, anchor)
+    return [(n, _parked_rect(r, o, sc) if n in PARK_CHART_TEXT
+             else _parked_source(r, chart, sc) if (n == "source" and anchor == "top") else r) for n, r in text]
+
+
+def park_freed_room(room: str | None, box: dict | None, page: dict | None, aspect: str | None,
+                    park: dict | None) -> str | None:
+    """E65's room for a placed card under a standing park: "park" (the room the park freed) when the placer's room was
+    the no-room CORNER and the card's box meets neither the parked plot nor any word the parked page writes - the card
+    is not in a corner of the page it stands beside; else the room as placed. Pure."""
+    if room != "corner" or not park or not page or not isinstance(box, dict):
+        return room
+    plot = parked_boxes(LPG.page_boxes(page, aspect or "16:9"), park).get("plot")
+    if isinstance(plot, dict) and _overlap_area(box, plot) > 0:
+        return room
+    if any(_overlap_area(box, r) > 0 for _n, r in page_text_boxes_at(page, aspect, park)):
+        return room
+    return "park"
 
 
 def dock_carries_chart(ev: dict | None) -> bool:
@@ -17006,9 +17106,10 @@ def main() -> int:
                 read_moves.append(f"{sid}.{aid} -> {e63['read_moved']['to']}")
             elif e63.get("read_deferred"):
                 read_defers.append(f"{sid}.{aid}")
+            _park = park_standing(row_species, float(enter))   # P72 T53 (f): the checks read the page AFTER a park
             _drawn_read = None if (stamp_fit or e63.get("read_deferred")) else (e63.get("read_place") or _read_box)
             _uc = under_choice_note(world, dopt, f"shot row {i + 1} ({a}-{b}s) dock {aid}",
-                                    [eplace, _drawn_read], ASPECT)
+                                    [eplace, _drawn_read], ASPECT, _park)
             if _uc:
                 print(f"  [WARN] P71 T15: {_uc}")
             if isinstance(_drawn_read, dict):   # P71 T5: the clash WARN covers the READ as well as the park (s106)
@@ -17022,7 +17123,7 @@ def main() -> int:
                 if _full:   # P71 T5 r4: the room is full at the park size - kept legible, told with the numbers
                     print(f"  [WARN] P71 T5: {_full}")
                     prop_warns.append(f"row {i + 1} {aid}")
-                _text = page_text_boxes((world or {}).get("page"), ASPECT)
+                _text = page_text_boxes_at((world or {}).get("page"), ASPECT, _park)
                 for _what, _box in (("its park", eplace), ("its read", _drawn_read)):
                     for _n in text_cover_notes(f"shot row {i + 1} ({a}-{b}s) dock {aid} ({_what})", _box, _text):
                         print(f"  [WARN] P71 T5: {_n}")
@@ -17046,7 +17147,8 @@ def main() -> int:
                     print(f"  [WARN] P69 T26d: shot row {i + 1} ({a}-{b}s) dock {aid}: {_w}")
                     prop_warns.append(f"row {i + 1} {aid}")
             if isinstance(eplace, dict) and eplace.get("room"):   # E65: the room every placed card took
-                card_rooms.append((f"{sid}.{aid}", eplace["room"],
+                card_rooms.append((f"{sid}.{aid}", park_freed_room(eplace["room"], eplace, (world or {}).get("page"),
+                                                                   ASPECT, _park),
                                    [eplace["x"], eplace["y"], eplace["w"], eplace["h"]],
                                    str((world or {}).get("page", {}).get("title") or "")[:44]))
             if True:

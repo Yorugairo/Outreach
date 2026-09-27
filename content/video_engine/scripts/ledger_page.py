@@ -7338,9 +7338,12 @@ def infer_variant(series: dict) -> str | None:
 #   CARD_PAD_PX    the card's only margin (displayed px): the plot runs edge to edge inside it - no page margins, no
 #                  caption bands, no sub, no y label, no badge rail, no key;
 # end tags reduced to their short badge (the value, in its line's ink), the x ticks to the two ends (the minor ones
-# dropped), the source to its first clause on one line - or none, when it will not fit, or when the plot would keep less
-# than its room (the engine's LP_CARD.PLOT_MIN, or a line card's end badges stacked a line apart). The card keeps its
-# TITLE and its NUMBER.
+# dropped), the source to its first clause on one line. P72 T53 (f), R26-413 (a): A CARD KEEPS ITS SOURCE AT ANY SIZE
+# (an unsourced figure on screen is a truth problem) - a first clause that will not fit one line is ELLIPSISED to fit
+# (`card_source`), and where the plot would keep less than its room (the engine's LP_CARD.PLOT_MIN, or a line card's end
+# badges stacked a line apart) the source steps down to the citation's size (LP_CARD.SRC_CITE_X of the floor) and the plot yields -
+# it was dropped before, and a card that never grows into a page was left citing nothing. The card keeps its TITLE and
+# its NUMBER.
 # It is the long form's look (the flat ground, the panel, Inter) - a card of a long-form page. NOT a row option: only
 # `chart_card` sets it, and a row that names `readability=card` is refused as an unknown profile.
 CARD = "card"
@@ -7350,6 +7353,7 @@ CARD_TYPE_PX = CARD_PHONE_FLOOR * 1920 / CARD_PHONE_W   # 59.08: the floor itsel
 CARD_STROKE_X = 2.0
 CARD_PAD_PX = 8.0   # the engine's LP_CARD.PAD_PX
 CARD_SOURCE_CUTS = (" - ", "; ", ", ", " (")   # the source's first clause ends at the first of these
+CARD_SOURCE_ELLIPSIS = "…"               # P72 T53 (f): a clause too long for one line is cut at a word and says so
 # THE NAMES A VALUE CANNOT CARRY (the parent's frame read of the first card, 2026-09-23: "+21%" grey and "+21%" blue
 # "are indistinguishable except by colour - a viewer cannot tell the S&P from mega-cap"). On a card the end-tag
 # shortening stops at the BADGE for every tag whose value another tag also shows: the value keeps the floor and a SHORT
@@ -7413,14 +7417,27 @@ def card_error(page: dict, card_w: float, card_h: float, aspect: str | None = "1
 
 def card_source(source: str, card_w: float, stage_w: int = 1920) -> str:
     """The card's one short source line: the source's first clause, when it fits one line inside the card's margins at
-    CARD_TYPE_PX - else nothing (the page the card becomes carries the whole citation)."""
+    CARD_TYPE_PX. P72 T53 (f), R26-413 (a): a clause that does not fit is ELLIPSISED - cut at the last word that fits
+    with the ellipsis (at a character only when its first word alone is too wide) - never dropped: a card keeps its
+    source at any size. "" only for a page that names no source."""
     text = str(source or "").strip()
     for cut in CARD_SOURCE_CUTS:
         if cut in text:
             text = text.split(cut, 1)[0].strip()
     k = stage_w / float(card_w)
     room = stage_w - 2 * CARD_PAD_PX * k
-    return text if text and longform_text_px(text, "source", CARD_TYPE_PX * k) <= room else ""
+    fits = lambda t: longform_text_px(t, "source", CARD_TYPE_PX * k) <= room   # noqa: E731
+    if not text or fits(text):
+        return text
+    words = text.split()
+    for n in range(len(words) - 1, 0, -1):
+        cut = " ".join(words[:n]).rstrip(",;:-(") + CARD_SOURCE_ELLIPSIS
+        if fits(cut):
+            return cut
+    for n in range(len(words[0]) - 1, 0, -1):
+        if fits(words[0][:n] + CARD_SOURCE_ELLIPSIS):
+            return words[0][:n] + CARD_SOURCE_ELLIPSIS
+    return words[0][:1] + CARD_SOURCE_ELLIPSIS
 
 
 def apply_card(page: dict, card_w: float, card_h: float, stage_w: int = 1920) -> dict:

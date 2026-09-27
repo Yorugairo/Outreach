@@ -198,7 +198,7 @@ def test_the_main_loop_asks_with_the_boxes_it_draws():
     src = COMPILER.read_text(encoding="utf-8")
     assert src.count("under_choice_note(") == 2, "defined once, called once - in the dock loop"
     assert re.search(r"_uc = under_choice_note\(world, dopt, f\"shot row \{i \+ 1\} \(\{a\}-\{b\}s\) dock \{aid\}\",\n"
-                     r"\s+\[eplace, _drawn_read\], ASPECT\)\n"
+                     r"\s+\[eplace, _drawn_read\], ASPECT, _park\)\n"   # P72 T53 (f): the park standing at the enter
                      r"\s+if _uc:\n\s+print\(f\"  \[WARN\] P71 T15: \{_uc\}\"\)", src)
     assert src.index("_uc = under_choice_note(") > src.index("_drawn_read = None if (stamp_fit or"), \
         "asked once the read it draws is known"

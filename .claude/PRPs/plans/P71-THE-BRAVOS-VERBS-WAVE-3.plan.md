@@ -2417,7 +2417,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T33: The inset echo - the plot parks, the historical twins stack BESIDE it, then the "?" (was P69 T54; RESCOPED by BOOM's frames)
-- Status: done - lane B (the T33 commit): `recipe:inset-echo-then-the-question` candidate, proved on H row 9 in two forms; the parent chose the HAND-OFF as the default (the stack drops both cards' sources below ~860 px, which the recipe's own 'dont' refuses); the stack waits on R26-413 (P72 T53 (f))
+- Status: done - lane B (the T33 commit): `recipe:inset-echo-then-the-question` candidate, proved on H row 9 in two forms; the parent chose the HAND-OFF as the default (the stack drops both cards' sources below ~860 px, which the recipe's own 'dont' refuses); the stack cites on both cards since P72 T53 (f) - the author's pick
 - Owner: implementation_luna (LANE B)
 - Depends on: T18 (the "?"); done: P69 T8b (panels), T10c (the chart card for its displayed size), the park
   (`chart_to park`, CAPABILITIES `:124`)
