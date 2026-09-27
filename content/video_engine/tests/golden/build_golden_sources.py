@@ -6508,6 +6508,70 @@ SURFACES.update({"card-keeps-its-source": card_keeps_its_source})
 FRAME_T.update({"card-keeps-its-source": 8.6})   # chart_card.LAND_T: the card's own landing - the instant every card is drawn at
 
 
+
+# ---- P72 T53 (h) / R26-414 (a): THE LEADER - the total points back at the bar it dwarfs ------------------------------------
+#   leader-points-back   Steel and Paper H row 16's own three bars (P71 T34's derived page: the dossier's "rebuild as three
+#                        bars", EVIDENCE-DOSSIER.md C1), every value READ off the committed `ev-debt-issuance-line-v1`: the
+#                        2020-24 year's $28B, 2025's $121B and the top of 2026E's range, $150B. The total is written at its
+#                        bar ("$150B", "the total" - the figure takes the bar's own number's place, R26-284), then a LEADER
+#                        arcs from that figure back to the 2020-24 bar's printed "$28B" and rings it, and the multiple the
+#                        page computes (150 / 28 -> "5.4x", `multiple: true`) pops on the arc: the Bravos STK 0:08 pointer
+#                        back (R35). Flat profile, 16:9. Judged when the leader has landed.
+LEADER_DEBT = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/objects/ev-debt-issuance-line-v1.series.json"
+LEADER_OID = "lab-issuance-three-bars"
+LEADER_FIG_AT, LEADER_AT, LEADER_DUR = 8.5, 11.0, 1.6
+
+
+def leader_three_bars() -> dict:
+    """The derived page's object (proof_t34.ratio_object's, rebuilt here from the committed file so the golden reads it)."""
+    debt = json.loads(LEADER_DEBT.read_text(encoding="utf-8"))
+    by = {s["label"]: s["pts"] for s in debt["series"]}
+    return {"title": debt["title"],
+            "sub": "Hyperscaler bond issuance, US$ billions a year - 2020-24 an average; 2026E the top of the $130-150B range",
+            "src": debt["src"], "unit": "$", "unit_suffix": "B",
+            "bars": [{"label": "2020-24, a year", "value": by["issuance"][0][1], "color": "deemph"},
+                     {"label": "2025", "value": by["issuance"][-1][1], "color": "deemph"},
+                     {"label": "2026E, top of range", "value": by["$150B"][-1][1], "color": "crimson"}]}
+
+
+LEADER_SPECIES = [
+    {"kind": "figure", "at": LEADER_FIG_AT, "dur": 1.4, "target": {"kind": "datum", "index": 2}, "text": "$150B",
+     "sub": "the total"},                                                                                  # "a hundred and fifty"
+    {"kind": "leader", "at": LEADER_AT, "dur": LEADER_DUR, "from": {"kind": "figure", "text": "$150B"},
+     "to": {"kind": "datum", "index": 0, "part": "value"}, "ring": True, "multiple": True},               # "It is big enough"
+]
+
+
+def leader_points_back(extra: list | None = None, aspect: str = "16:9", species: list | None = None,
+                       obj: dict | None = None, opts: str = "") -> tuple[dict, dict]:
+    """The golden's timeline; `extra` / `species` / `aspect` / `obj` / `opts` (plate options) are test_leader's reads
+    only - the committed golden is the plain call. The compiler's own page checks run (check_leader writes the multiple)."""
+    import tempfile
+    import build_scene_timeline_f as BST
+    species = [dict(e) for e in (species if species is not None else LEADER_SPECIES)] + [dict(e) for e in (extra or [])]
+    plate = f"ledger:{LEADER_OID}:bars{opts}"
+    assert not BST.validate_species(species, (0, 0, 0), plate), BST.validate_species(species, (0, 0, 0), plate)
+    with tempfile.TemporaryDirectory() as td:
+        ep = Path(td)
+        (ep / "evidence/objects").mkdir(parents=True)
+        (ep / f"evidence/objects/{LEADER_OID}.series.json").write_text(json.dumps(obj or leader_three_bars()), encoding="utf-8")
+        saved = BST.ASPECT
+        BST.ASPECT = aspect
+        try:
+            world = BST.world_for_plate(plate, (0, 0, 0), ep)
+            BST.stamp_full_stage(world["page"])
+            BST.derive_rescale_states(world, species, plate, ep)
+        finally:
+            BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    tl = _timeline("Golden: the total points back at the bar it dwarfs (leader)", scenes, {}, aspect)
+    return tl, (dict(_base_uris(), **BST.longform_assets(tl)) if "longform" in opts else _base_uris())
+
+
+SURFACES.update({"leader-points-back": leader_points_back})
+FRAME_T.update({"leader-points-back": round(LEADER_AT + LEADER_DUR + 0.6, 2)})   # landed: the arc, its head, the ring, the 5.4x
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

@@ -444,6 +444,10 @@ SPECIES_EVENTS["lit_stretch"] = ("at", "end")
 # edges are events, as the lit stretch's are: it leaves on its word and lands (the far ring, the figure) at its end.
 # What it does after that is standing ink (s91) and earns nothing.
 SPECIES_EVENTS["level_join"] = ("at", "end")
+# P72 T53 (h): THE LEADER's arc TRAVELS too - it draws by length from its source to its target over the word (s99) - so
+# both edges are events, as the level join's are: it leaves on its word and lands (the head, the ring, the multiple)
+# at its end. What it does after that is standing ink (s91) and earns nothing.
+SPECIES_EVENTS["leader"] = ("at", "end")
 # P71 T20: THE DATUM BADGE springs in on its word (a list sweeps in over ~0.2 s, one landing) - ONE event; what it does
 # after that is a mark standing on the data (s91) and earns nothing.
 SPECIES_EVENTS["datum_badge"] = ("at",)
@@ -3836,9 +3840,9 @@ EMPTY_PLOT_EPS_S = 0.01    # two stretches of ink closer than this are one (the 
 # authoring/shapes.PLOT_MARKS less `undraw` (it takes ink, it lays none) - MIRRORED, since shapes imports this module
 PLOT_INK_MARKS = ("callout", "bracket", "figure", "spread", "relight", "peel", "span", "ring", "lit_stretch", "freeze",
                   "explode", "member", "level_join", "datum_badge", "glow",   # P71 T10: the join is ink on the plot; P71 T20: the badge on its datum; P71 T29: the edge on its bar
-                  "axis_tag", "lens")   # P72 T51b: P71 T9's pill + guide and P71 T32's glass, added to shapes.PLOT_MARKS (e96c6f6, d7cf74d) and never mirrored here
+                  "axis_tag", "lens", "leader")   # P72 T53 (h): the leader is ink on the plot; P72 T51b: P71 T9's pill + guide and P71 T32's glass, added to shapes.PLOT_MARKS (e96c6f6, d7cf74d) and never mirrored here
 PLOT_HELD_MARKS = ("lit_stretch", "level_join", "datum_badge", "glow",   # authoring/shapes.HELD_MARKS: a light that has landed stands to the page's end (P71 T10: and a join)
-                   "axis_tag")   # P72 T51b: P71 T9's tag stands after its word until its page leaves (shapes.HELD_MARKS since e96c6f6)
+                   "axis_tag", "leader")   # P72 T53 (h): a landed leader stands to the page's end; P72 T51b: P71 T9's tag stands after its word until its page leaves (shapes.HELD_MARKS since e96c6f6)
 NO_PLOT_BUILDERS = ("share", "treemap", "object")   # no axes: the engine's E64 axis hand-over has nothing to hand them
 LINE_INK_BUILDERS = ("dense-line", "story")         # the builders whose ink can be lines alone - capped, then undrawn
 STATELESS_VERBS = ("park", "compare")              # a transform on the standing chart, never a state change

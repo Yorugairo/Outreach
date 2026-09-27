@@ -28,11 +28,11 @@ THE BEATS (every one on its H row's own words):
                                    was for, the months it lasted), then the source card LAST in the same slot - the COO's
                                    record typed from `ev-doc-macdonald.html`, its own highlighted phrase landing as the
                                    narrator says it.
-  the-total-points-back            THE DISCOVERY BEAT (plan T35), NO RECIPE: row 16's three bars (T34's derived object), the
-                                   total written at its bar on "a hundred and fifty", then T50's bracket on "It is big
-                                   enough". NO card draws a leader - curved or straight - from a figure back to a bar: the
-                                   clothoid arrow is the flow's, between two of its own laid-out cards. Kept so the finding
-                                   re-plays.
+  the-total-points-back            ROW 16's three bars (T34's derived object): the total written at its bar on "a hundred and
+                                   fifty", then on "It is big enough" a LEADER (P72 T53 (h), R26-414 (a) - the species this
+                                   beat stopped for at the discovery) arcs from that figure back to the 2020-24 bar's printed
+                                   $28B, rings it, and the multiple the page computes ("5.4x", `multiple: true`) pops on the
+                                   arc - where T50's bracket wrote its 5.4x over the "$150B / the total" figure (R26-414 (g)).
 """
 from __future__ import annotations
 
@@ -208,7 +208,11 @@ def _doubt_strip(ws: list) -> list:
             (round(t_harder + 1.2, 2), "its own phrase highlighted as it is said")]
 
 
-# ---------------------------------------------------------------- R35: the total points back (row 16) - the discovery
+# ---------------------------------------------------------------- R35: the total points back (row 16)
+
+LEAD_S = 1.6             # the arc draws, its head lands, the ring closes and the multiple pops (species/leader.mjs LEADER's
+                         # windows over the word); the golden `leader-points-back`'s own clock
+
 
 def _total_times(ws: list) -> tuple:
     return T.at(ws, "twenty-eight billion"), T.at(ws, "a hundred and fifty"), T.at(ws, "It is big enough")
@@ -216,19 +220,20 @@ def _total_times(ws: list) -> tuple:
 
 def _total_row(ws: list, runtime: float) -> tuple:
     _t28, t150, t_big = _total_times(ws)
+    total = "$%dB" % T34.RATIO_2026
     species = [{"kind": "figure", "at": t150, "dur": 1.4, "target": {"kind": "datum", "index": 2},
-                "text": "$%dB" % T34.RATIO_2026, "sub": "the total"},
-               {"kind": "bracket", "at": t_big, "dur": T34.BRACKET_S, "from": 0, "to": 2, "label": T34.RATIO_MULT,
-                "sub": "2026E on the 2020-24 year"}]
+                "text": total, "sub": "the total"},
+               {"kind": "leader", "at": t_big, "dur": LEAD_S, "from": {"kind": "figure", "text": total},
+                "to": {"kind": "datum", "index": 0, "part": "value"}, "ring": True, "multiple": True}]   # the page writes 5.4x
     return (0.0, runtime, T34._bars(T34.RATIO_OID), (0, 0, 0), [], None, species)
 
 
 def _total_strip(ws: list) -> list:
     t28, t150, t_big = _total_times(ws)
-    return [(round(t28 + 0.6, 2), "the 28 bar - what the total must point back to"),
-            (round(t150 + 1.6, 2), "the total at its bar: nothing can lead from it"),
-            (round(t_big - 0.3, 2), "no leader card: figure -> bar has no join"),
-            (round(t_big + T34.BRACKET_S + 0.5, 2), "only the bracket: a vertical span, not a pointer")]
+    return [(round(t28 + 0.6, 2), "the 28 bar - what the total will point back to"),
+            (round(t150 + 1.6, 2), "the total written at its bar"),
+            (round(t_big + 0.5 * LEAD_S, 2), "the leader arcs back from the total"),
+            (round(t_big + LEAD_S + 0.5, 2), "landed: the 28 ringed, 5.4x on the arc")]
 
 
 # ---------------------------------------------------------------- the beats

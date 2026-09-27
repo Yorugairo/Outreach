@@ -636,6 +636,7 @@ PLOT_MARKS = ("callout", "bracket", "figure", "spread", "relight", "peel", "undr
               "member", "axis_tag",   # P69 T45: a membership tile lands INSIDE its bar, on the plot; P71 T9: the pill on the axis and its guide down the plot
               "level_join",   # P71 T10: the dashed level, its rings and its figure stand ON the plot
               "datum_badge",  # P71 T20: the tick / cross stands ON its datum
+              "leader",       # P72 T53 (h): the leader's arc, its head, its ring and its multiple stand ON the plot
               "lens",         # P71 T32: the magnifier glass stands ON the plot for its window (it leaves on its own clock: not held)
               "glow")         # P71 T29: the lit edge stands ON its bar (or its span) - held after its word, to the page's end
 # P69 T49: the freeze beat's ONE light comes on at a datum ON the plot, for the beat's own window (at .. at + dur) and
@@ -643,7 +644,7 @@ PLOT_MARKS = ("callout", "bracket", "figure", "spread", "relight", "peel", "undr
 # P69 T36: the lit stretch is a mark ON the line - and it HOLDS lit after its word until the page leaves (E99 s91: the
 # light that has landed is an annotation, and it is still on the data). Its `dur` is the word it travels over, not how
 # long it stands, so it is read as a mark with no readable end: it stands to the card's own exit.
-HELD_MARKS = ("lit_stretch", "axis_tag", "level_join", "datum_badge", "glow")   # P71 T29: a lit edge holds as the light does; P71 T9: the tag stands after its word until its page leaves (page-bound, R26-219); P71 T10: a join, once drawn, stands on the data to the page's end as the light does
+HELD_MARKS = ("lit_stretch", "axis_tag", "level_join", "datum_badge", "glow", "leader")   # P71 T29: a lit edge holds as the light does; P71 T9: the tag stands after its word until its page leaves (page-bound, R26-219); P71 T10: a join, once drawn, stands on the data to the page's end as the light does
 # ... and the QUIET ZONE is written in too: a `note` is *"a line of handwriting in the page's quiet
 # zone"* (`build_scene_timeline_f.SPECIES_WHEN`), which is the band a card sent out of the plot is
 # otherwise given. The first fifth-pass build measured exactly that: the cup, out of the plot, landed

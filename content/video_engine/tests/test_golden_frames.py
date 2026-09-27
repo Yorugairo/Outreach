@@ -143,7 +143,8 @@ SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pa
             "vecmap-place-singapore",   # P73 T5: SINGAPORE lit at the foot of the peninsula and HSINCHU in Taiwan, framed tight on Southeast Asia to Taiwan; a test-bed beat (Singapore's ping rides PROOF_FRAMES)
             "vecmap-pacific",   # P73 T6 (R26-406): A PACIFIC-CENTRED MAP - the transship row on `;meridian=150`: the United States at the right, the route WEST across the Pacific to Hong Kong and on to China, Russia whole across 180
             "vecmap-seam-split",   # P73 T6: a country the SEAM cuts renders clean - `vecmap;meridian=-90`, Russia lit as two halves at the two edges, no ring streaking across the frame
-            "box-the-last-move"]   # P72 T46g (R26-407; Bravos A56): THE BOX ROUND THE LAST MOVE - span-decade's page, a `span` in the BOX form round the memory-makers' fall from its peak (191-234): dashed, round that series' own ink over the stretch, its right edge short of the series' end tag, standing whole before its leave
+            "box-the-last-move",   # P72 T46g (R26-407; Bravos A56): THE BOX ROUND THE LAST MOVE - span-decade's page, a `span` in the BOX form round the memory-makers' fall from its peak (191-234): dashed, round that series' own ink over the stretch, its right edge short of the series' end tag, standing whole before its leave
+            "leader-points-back"]   # P72 T53 (h) / R26-414 (a): THE LEADER - H row 16's three bars, the $150B total written at its bar, a clothoid arc from that figure back to the 2020-24 year's printed $28B (ringed, an arrowhead at the ring) and the page's own multiple "5.4x" in the accent capsule on the arc - clear of the $121B (Bravos STK 0:08, R35)
 
 
 # P61 T9 (b): THE PAGES. A golden need not be a timeline - the effects gallery is a static review

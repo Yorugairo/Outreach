@@ -1067,6 +1067,35 @@ LEVEL_JOIN_PAD_PX, LEVEL_JOIN_CLEAR_PX, LEVEL_JOIN_FRAME_AIR_PX = 14, 10, 8
 LEVEL_JOIN_ASC, LEVEL_JOIN_DESC, LEVEL_JOIN_MID = 0.8, 0.22, 0.3
 LEVEL_JOIN_RING_PX = (54.0 * 0.55, 40.0 * 0.55)   # RING.MIN_RX / MIN_RY at LEVEL.RING_K: an end mark, not a callout
 LEVEL_JOIN_EM_W = 0.52   # [DERIVED: Kalam 700's mean advance, the figure's own estimate] - a WARN's width, never a place
+# P72 T53 (h) / R26-414 (a) - THE LEADER (the Bravos harvest v2's R35 "Flow -> the total -> a pointer back", STK
+# 0:02-0:10: a headline total arcs back to the bar it dwarfs, "10x" on the arc). A PAGE species: on its word a CLOTHOID
+# arc (the vector map's arc law) draws from a SOURCE - a `figure` the row has written (`{kind: figure, text}`), a datum,
+# or a point of the chart (fractions of its box) - to a TARGET datum (a line's point, a bar's top) or a bar's printed
+# VALUE (P72 T18's `part: "value"`), a head (an arrow, or a dot) at the target, the ring species' own dashed ring round
+# it on `ring: true` (E56: a number on a chart), and the multiple the page computes on the arc (`multiple: true`: the two
+# data's own ratio, never typed; a typed `label` with a number is the page's arithmetic or refused - level_join's
+# `_lj_truth`). Its law and painter are species/leader.mjs; this file owns its grammar (`_validate_leader`) and the page
+# it points on (`check_leader`: the ends the page has, the source figure written by the leader's word, the multiple, a
+# claim's mark - TRUTH, hard; an authored `bend` whose estimated arc runs through the page's words is a WARN with its
+# numbers, E99 s106). A dock is not a source: the page paints before the frame's docks are laid out (R26-367 / R26-373's
+# finding) and a card already joins its datum by `park_at` (P71 T23). It WRITES on its page, so it leaves with it.
+SPECIES_LEADER = "leader"
+SPECIES_KINDS += (SPECIES_LEADER,)
+PAGE_SPECIES += (SPECIES_LEADER,)
+PAGE_BOUND_SPECIES += (SPECIES_LEADER,)   # R26-219: a mark joining two things on the page leaves with the page
+SPECIES_WHEN[SPECIES_LEADER] = ("the sentence POINTS one number back at another ('a hundred and fifty' against the 28 it "
+                                "dwarfs) - a curved leader draws from the written total to the datum, the multiple on the "
+                                "arc; never at a thing the page does not draw")
+LEADER_KEYS = ("kind", "at", "dur", "from", "to", "label", "multiple", "ring", "head", "bend", "color", "keep",
+               *ROW_PATH_KEYS, "leave_at", "leave_s", "leave_clamped")   # the last three: stamp_page_leave's own record
+LEADER_FROM_KINDS = ("figure", "datum", "point")   # a written figure's box, a datum, a point of the chart's box (0..1)
+LEADER_TO_PARTS = ("value",)                       # P72 T18 (R26-288): a bar's printed number, not its top
+LEADER_HEADS = ("arrow", "dot")
+LEADER_MULT_WHOLE = 10.0   # a multiple of ten or more is written whole ("10x", Bravos STK 0:08); under it to one decimal
+                           # ("5.4x", P71 T34's RATIO_MULT) - the arithmetic the ratio recipe wrote by hand, now the compiler's
+# THE PLACEMENT ESTIMATE (an authored `bend` only - the engine's own side is chosen clear of the page's words): mirrored
+# from species/leader.mjs LEADER (BOW, ENTER_K, BEND_MAX) and the estimate's sample count. A WARN's geometry, never a place.
+LEADER_BOW, LEADER_ENTER_K, LEADER_BEND_MAX, LEADER_EST_SAMPLES = 0.5, 0.45, 1.1, 32
 # P71 T32 (was P69 T80; the Bravos harvest v2's A57 "magnifier lens over the chart", STK 9:16-9:18, BOOM 06:28) - THE LENS.
 # A PAGE species: a magnifier glass rises onto a LINE page on its word, TRAVELS the stretch `from` -> `to` of one drawn
 # series (or stands on `from`), and leaves; inside its ring it redraws the page's OWN points at `zoom` about the glass's
@@ -2354,6 +2383,7 @@ SPECIES_TARGETS[SPECIES_PANEL_FOCUS] = ()   # P69 T8b: a focus state names PANEL
 SPECIES_TARGETS[SPECIES_MEMBER] = ()   # P69 T45: a tile of a membership bar, by index - the page owns where it stands
 SPECIES_TARGETS[SPECIES_LIT_STRETCH] = ()   # P69 T36: like the span, a lit stretch names its two edges as DATA; the chart owns where they are
 SPECIES_TARGETS[SPECIES_LEVEL_JOIN] = ()   # P71 T10: a level join names its two ends as DATA; the chart owns where they are
+SPECIES_TARGETS[SPECIES_LEADER] = ()   # P72 T53 (h): a leader names its source and its target itself (`_validate_leader`)
 SPECIES_TARGETS[SPECIES_RULER] = ()   # P71 T14: the ruler is the stage's full width at its line - it points at nothing
 SPECIES_TARGETS[SPECIES_LENS] = ()   # P71 T32: a lens names its stands as DATA (`from`, `to`); the chart owns where they are
 SPECIES_TARGETS[SPECIES_DATUM_BADGE] = ()   # P71 T20: a badge names its datum or vertex itself (`_validate_datum_badge`); the chart owns where it is
@@ -5351,6 +5381,74 @@ def _validate_level_join(entry: dict) -> list[str]:
     return errs
 
 
+def _validate_leader_end(name: str, end, kinds: tuple) -> list[str]:
+    """P72 T53 (h): one end of a leader - `{kind: figure, text}`, `{kind: datum, index, series?, part?}` or `{kind:
+    point, x, y}` (0..1 of the chart's box), each field refused by name. A dock is refused with its reason. `part:
+    value` on either end is a bar's printed number (the arc leaves it, or lands at it) rather than its top."""
+    if not isinstance(end, dict):
+        return [f"leader: '{name}' must be {{kind: {'|'.join(kinds)}, ...}}, not {end!r}"]
+    kind = end.get("kind")
+    if kind == DOCK_TARGET and name == "from":
+        return ["leader: 'from' names a dock - a card is not a leader's source: the page paints before the frame's docks "
+                "are laid out (R26-367), and a card joins its datum by the dock option `park_at` (P71 T23)"]
+    if kind not in kinds:
+        return [f"leader: '{name}' kind {kind!r} must be one of {'|'.join(kinds)}"
+                + (" - a leader points at a DATUM the page draws (E56: a number on a chart)" if name == "to" else "")]
+    errs: list[str] = []
+    allowed = {"figure": ("kind", "text"), "datum": ("kind", "index", "series", "part"),
+               "point": ("kind", "x", "y")}[kind]
+    stray = sorted(k for k in end if k not in allowed)
+    if stray:
+        errs.append(f"leader: '{name}' {kind} takes only {'|'.join(allowed)}, not {stray}")
+    if kind == "figure" and not (isinstance(end.get("text"), str) and end["text"].strip()):
+        errs.append("leader: 'from' figure names the figure by its written `text` (the row's own `figure` species)")
+    if kind == "datum":
+        if not _is_index(end.get("index")):
+            errs.append(f"leader: '{name}' datum index must be a non-negative integer, not {end.get('index')!r}")
+        if "series" in end and not _is_index(end["series"]):
+            errs.append(f"leader: '{name}' datum series must be a non-negative integer")
+        if "part" in end and end["part"] not in LEADER_TO_PARTS:
+            errs.append(f"leader: '{name}' part must be one of {'|'.join(LEADER_TO_PARTS)} (a bar's printed number; absent = the datum)")
+    if kind == "point":
+        for f in ("x", "y"):
+            v = end.get(f)
+            if isinstance(v, bool) or not isinstance(v, (int, float)) or not 0.0 <= v <= 1.0:
+                errs.append(f"leader: 'from' point {f} must be a share of the chart's box, 0..1, not {v!r}")
+    return errs
+
+
+def _validate_leader(entry: dict) -> list[str]:
+    """P72 T53 (h): a `leader`'s own fields - `from` (a figure, a datum, a point), `to` (a datum, `part: value` its bar's
+    printed number), `label` (a string) and/or `multiple: true` (the compiler writes the page's own ratio), `ring` and
+    `keep` (booleans), `head` (arrow|dot), `bend` (-1..1: + lifts the arc toward the page's top, 0 is straight; absent =
+    the engine's first clear side), `color` (a bracket ink). Anything else is refused by name."""
+    errs = _validate_leader_end("from", entry.get("from"), LEADER_FROM_KINDS)
+    errs += _validate_leader_end("to", entry.get("to"), ("datum",))
+    a, b = entry.get("from"), entry.get("to")
+    if (isinstance(a, dict) and isinstance(b, dict) and a.get("kind") == "datum" and b.get("kind") == "datum"
+            and a.get("index") == b.get("index") and (a.get("series") or 0) == (b.get("series") or 0)):
+        errs.append(f"leader: from and to are both datum {b.get('index')} - a leader joins two things")
+    if "label" in entry and not (isinstance(entry["label"], str) and entry["label"].strip()):
+        errs.append("leader: label must be a non-empty string - the figure on the arc (or `multiple: true`: the page writes it)")
+    if "multiple" in entry and entry["multiple"] is not True:
+        errs.append(f"leader: multiple must be true (the page writes the two data's own ratio on the arc), not {entry['multiple']!r}")
+    for f in ("ring", "keep"):
+        if f in entry and not isinstance(entry[f], bool):
+            errs.append(f"leader: {f} must be true or false")
+    if "head" in entry and entry["head"] not in LEADER_HEADS:
+        errs.append(f"leader: head must be one of {'|'.join(LEADER_HEADS)}")
+    bend = entry.get("bend")
+    if "bend" in entry and (isinstance(bend, bool) or not isinstance(bend, (int, float)) or not -1.0 <= bend <= 1.0):
+        errs.append(f"leader: bend must be a number from -1 to 1 (+ lifts the arc toward the page's top, 0 is straight), not {bend!r}")
+    if "color" in entry and entry["color"] not in BRACKET_COLORS:
+        errs.append(f"leader: color must be one of {'|'.join(BRACKET_COLORS)} (absent = the page's chalk)")
+    extra = sorted(k for k in entry if k not in LEADER_KEYS)
+    if extra:
+        errs.append(f"leader: {', '.join(map(repr, extra))} - a leader takes only "
+                    f"{'|'.join(k for k in LEADER_KEYS if k not in ('kind', 'at', 'dur'))}")
+    return errs
+
+
 def _ruler_year(v) -> bool:
     return isinstance(v, int) and not isinstance(v, bool) and RULER_YEARS[0] <= v <= RULER_YEARS[1]
 
@@ -7082,6 +7180,8 @@ def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
         errs += _validate_axis_tag(entry)
     if kind == SPECIES_LEVEL_JOIN:    # P71 T10
         errs += _validate_level_join(entry)
+    if kind == SPECIES_LEADER:        # P72 T53 (h)
+        errs += _validate_leader(entry)
     if kind == SPECIES_LENS:          # P71 T32
         errs += _validate_lens(entry)
     if kind == SPECIES_DATUM_BADGE:   # P71 T20
@@ -8447,6 +8547,184 @@ def check_level_join(world: dict, row_species: list) -> list[str]:
     return notes
 
 
+def leader_multiple(a: float, b: float) -> str:
+    """P72 T53 (h): the multiple two data make, as the arc writes it - the larger over the smaller, whole from
+    LEADER_MULT_WHOLE ("10x"), else to one decimal ("5.4x"). Pure; the caller has refused a zero or a sign change."""
+    r = max(abs(a), abs(b)) / min(abs(a), abs(b))
+    return f"{r:.0f}x" if r >= LEADER_MULT_WHOLE else f"{r:.1f}x"
+
+
+def _leader_source(row_species: list, sp: dict, where: str) -> dict | None:
+    """The row's `figure` a leader leaves - by its written text, written at or before the leader's word - or None for a
+    datum / point source. ValueError names a figure the row does not write, or writes too late."""
+    src = sp.get("from") or {}
+    if src.get("kind") != "figure":
+        return None
+    text = str(src.get("text") or "").strip()
+    figs = [f for f in row_species or [] if isinstance(f, dict) and f.get("kind") == "figure"]
+    hit = [f for f in figs if str(f.get("text") or "").strip() == text]
+    if not hit:
+        said = ", ".join(repr(str(f.get("text"))) for f in figs) or "none"
+        raise ValueError(f"{where}: from figure {text!r} - no figure on this row writes it (the row's figures: {said}); a "
+                         "leader leaves a figure the page has WRITTEN (E50)")
+    early = [f for f in hit if _num(f.get("at")) and float(f["at"]) <= float(sp.get("at") or 0.0)]
+    if not early:
+        raise ValueError(f"{where}: from figure {text!r} is written at {hit[0].get('at')}, after the leader's word at "
+                         f"{sp.get('at')} - it would point from nothing")
+    return early[-1]
+
+
+def _leader_bar_pt(L: dict, i: int) -> tuple[float, float]:
+    q = L["bars"][i]
+    return q["x"] + q["w"] / 2, q["top"]
+
+
+def _leader_word_box(L: dict, i: int, text: str, fs: float) -> tuple:
+    """A word written over bar i's top as buildLedgerBars writes its value (centred, VAL_DY over the top), chart units."""
+    cx, top = _leader_bar_pt(L, i)
+    w, base = _bracket_text_u(text, fs), top - BARS_ROOM_U["VAL_DY"]
+    return (cx - w / 2, base - BRACKET_TYPE_ASC * fs, cx + w / 2, base + BRACKET_TYPE_DESC * fs)
+
+
+def _leader_arc_est(p0: tuple, p1: tuple, bend: float) -> list[tuple[float, float]]:
+    """The arc a `bend` draws, ESTIMATED: the quadratic through the two tangent rays species/leader.mjs fits its clothoid
+    to (the tail turned `bow` off the chord toward the page's top for a + bend, the tip `bow * ENTER_K` back) - a
+    WARN's geometry, never a place. LEADER_EST_SAMPLES - 1 interior points."""
+    chord = math.atan2(p1[1] - p0[1], p1[0] - p0[0])
+    up = -1 if p1[0] - p0[0] >= 0 else 1
+    s, bow = (up if bend >= 0 else -up), abs(bend) * LEADER_BEND_MAX
+    t0, t1 = chord + s * bow, chord - s * bow * LEADER_ENTER_K
+    d0, d1 = (math.cos(t0), math.sin(t0)), (math.cos(t1), math.sin(t1))
+    den = d0[0] * d1[1] - d0[1] * d1[0]
+    ctrl = ((p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2)
+    if abs(den) > 1e-9:   # the two tangent rays meet: the quadratic's control point
+        u = ((p1[0] - p0[0]) * d1[1] - (p1[1] - p0[1]) * d1[0]) / den
+        ctrl = (p0[0] + u * d0[0], p0[1] + u * d0[1])
+    out = []
+    for j in range(1, LEADER_EST_SAMPLES):
+        t = j / LEADER_EST_SAMPLES
+        out.append(((1 - t) ** 2 * p0[0] + 2 * (1 - t) * t * ctrl[0] + t * t * p1[0],
+                    (1 - t) ** 2 * p0[1] + 2 * (1 - t) * t * ctrl[1] + t * t * p1[1]))
+    return out
+
+
+def _leader_place_warn(page: dict, sp: dict, fig: dict | None, ends: tuple, where: str) -> list[str]:
+    """E99 s106: an AUTHORED `bend` whose estimated arc runs through the page's own words is REPORTED with its numbers,
+    never refused (the engine's own side is chosen clear of them). Estimated on a BARS page at 16:9 only: the bars'
+    layout (`_bars_layout`), each bar's printed value, the source figure's place over its bar, the arc `_leader_arc_est`."""
+    if "bend" not in sp or page.get("variant") != "bars" or page.get("panels") or (ASPECT or "16:9") != "16:9":
+        return []
+    try:
+        boxes = LPG.page_boxes(page, "16:9")
+    except Exception:   # a page page_boxes cannot lay out: no estimate, no finding
+        return []
+    k, ox, oy, vw = _bracket_frame(page, boxes)
+    L, vals = _bars_layout(page, k), list(page.get("values") or [])
+    strings = list(page.get("value_strings") or [None] * len(vals))
+    unit, suffix = str(page.get("unit") or ""), str(page.get(LPG.UNIT_SUFFIX_KEY) or "")
+    text = lambda i: LPG.with_unit(str(strings[i] if i < len(strings) and strings[i] else vals[i]), unit, suffix)   # noqa: E731
+    src_i, tgt_i, part = ends
+    fs = L["val_fs"]
+    words = {i: _leader_word_box(L, i, text(i), fs) for i in range(len(vals)) if i not in (src_i, tgt_i)}
+    if part != "value":   # the arc ends at the bar's top, under its printed value: the value is a word it may cross
+        words[tgt_i] = _leader_word_box(L, tgt_i, text(tgt_i), fs)
+    src = sp["from"]
+    if fig is not None and src_i is not None:
+        a = _leader_word_box(L, src_i, str(fig.get("text") or ""), fs)
+    elif src.get("kind") == "datum" and src_i is not None:
+        a = _leader_word_box(L, src_i, text(src_i), fs) if src.get("part") == "value" else _leader_bar_pt(L, src_i)
+    else:
+        a = (float(src.get("x", 0.5)) * vw, float(src.get("y", 0.5)) * LPG.LAND_VIEWBOX[1])
+    b = _leader_word_box(L, tgt_i, text(tgt_i), fs) if part == "value" else _leader_bar_pt(L, tgt_i)
+    centre = lambda q: ((q[0] + q[2]) / 2, (q[1] + q[3]) / 2) if len(q) == 4 else q   # noqa: E731
+    hits = []
+    for x, y in _leader_arc_est(centre(a), centre(b), float(sp["bend"])):
+        for i, w in words.items():
+            if w[0] <= x <= w[2] and w[1] <= y <= w[3] and i not in hits:
+                hits.append(i)
+    if not hits:
+        return []
+    named = "; ".join(f"bar {i}'s value {text(i)!a} ~"
+                      + _px_box(k, ox, oy, words[i][0], words[i][1], words[i][2] - words[i][0], words[i][3] - words[i][1])
+                      for i in hits)
+    return [f"WARN {where}: bend {float(sp['bend']):g} is the author's and it stands (E99 s106), but its estimated arc runs "
+            f"through the page's words - {named}; the engine's own side (no `bend`) is chosen clear of them. REPORTED, the "
+            "frame read decides (E99 s106)"]
+
+
+def _leader_label_truth(sp: dict, where: str, a: float | None, b: float, unit: str) -> None:
+    """The figure on the arc is the page's arithmetic (E28 / s109): `multiple: true` WRITES it (`leader_multiple`); a typed
+    label with a number is checked by level_join's `_lj_truth` - a multiple on the larger over the smaller, a difference
+    from the target to the source. A number on an arc from a POINT has no datum to be computed from, and is refused."""
+    label = sp.get("label")
+    if sp.get("multiple") is True:
+        if a is None:
+            raise ValueError(f"{where}: multiple - a leader from a point has no datum to divide; lead from the figure or the "
+                             "datum the number belongs to")
+        if a == 0 or b == 0 or (a > 0) != (b > 0):
+            raise ValueError(f"{where}: multiple of {a:g} and {b:g} - a ratio needs two data of one sign, neither zero")
+        if label is None:
+            sp["label"] = label = leader_multiple(a, b)   # the page writes it: the timeline carries the figure the player writes
+    m = _LJ_NUM.search(str(label or ""))
+    if label is None or m is None:
+        return
+    if a is None:
+        raise ValueError(f"{where}: label {label!r} writes a figure on an arc from a point - it has no datum, so the figure "
+                         "cannot be the page's arithmetic; write it as a `figure` and lead from that (E28)")
+    lo, hi = sorted((abs(a), abs(b))) if m.group(3) in ("x", "\u00d7") else (b, a)
+    _lj_truth({"label": label}, where, lo, hi, None, unit)
+
+
+def check_leader(world: dict, row_species: list) -> list[str]:
+    """P72 T53 (h): a row's `leader`s on the page they point on. Refused by name (ValueError, truth rules): a page with no
+    data marks (not a line or bars page, or a panels page), a target the chart does not have, a `part: value` off a bars
+    page, a source figure the row does not write by the leader's word, a multiple or a figure the page's arithmetic does
+    not give (`_leader_label_truth`), and a label computed from a CLAIM that does not say so (P73 T1). `multiple: true`
+    WRITES the label (the page's own ratio) as a lag's is written - the timeline carries the figure the player writes.
+    Returned as WARN lines (E99 s106): an authored `bend` whose estimated arc runs through the page's words."""
+    sps = [sp for sp in (row_species or []) if isinstance(sp, dict) and sp.get("kind") == SPECIES_LEADER
+           and not _validate_leader(sp)]   # a malformed leader is the grammar's to refuse (validate_species), by name
+    if not sps or not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER:
+        return []
+    notes: list[str] = []
+    for sp in sps:
+        where = f"leader at {sp.get('at')}"
+        page = _lj_state(world, row_species, sp)
+        if page.get("builder") == LPG.PANELS:
+            raise ValueError(f"{where}: a panels page - a leader points on a line or bars page of its own (its ends are one "
+                             "chart's data); give the two data one page")
+        field, chart, unit = _lj_marks(page, sp, where)
+        to, src = sp["to"], sp["from"]
+        t_i = int(to["index"])
+        b, _bu = _lj_value(chart, field, int(to.get("series") or 0), t_i, where, "to")
+        for end, e in (("to", to), ("from", src)):
+            if e.get("part") == "value" and field != "bar":
+                raise ValueError(f"{where}: {end} part 'value' names a bar's printed number, and a {field} page prints none "
+                                 "at a datum - point at the datum")
+        fig = _leader_source(row_species, sp, where)
+        a, src_i = None, None
+        if fig is not None:
+            tg = fig.get("target") if isinstance(fig.get("target"), dict) else {}
+            f_si = fig.get("series", fig.get("tier", tg.get("series"))) or 0
+            src_i = int(tg.get("index") or 0)
+            a, _au = _lj_value(chart, field, int(f_si), src_i, where, "from figure's datum")
+        elif src.get("kind") == "datum":
+            src_i = int(src["index"])
+            a, _au = _lj_value(chart, field, int(src.get("series") or 0), src_i, where, "from")
+        _leader_label_truth(sp, where, a, b, unit)
+        label = sp.get("label")
+        claims = (world.get("page") or {}).get("claims") if page is (world.get("page") or {}) else None
+        if label is not None and isinstance(claims, list) and any(claims):
+            hit = [claims[i] for i in (src_i, t_i) if isinstance(i, int) and 0 <= i < len(claims) and claims[i]]
+            if hit and not LPG.claim_label_marked(label, hit):
+                raise ValueError(f"{where}: an end stands on a claim ({hit[0]['text']}) and the label {label!r} does not say "
+                                 "so - a figure computed from a claim is marked as the claim's (\"36x on Patel's figure\") "
+                                 "(P73 T1)")
+        if field == "bar":
+            notes += _leader_place_warn(page, sp, fig, (src_i, t_i, to.get("part")), where)
+    return notes
+
+
 def _validate_lens(entry: dict) -> list[str]:
     """P71 T32: a `lens`'s own fields - `from` a datum index of its `series` (the glass's first stand), an optional `to`
     (another index: the stretch it travels), `series` (default 0) and `zoom` (LENS_ZOOM_DEFAULT .. LENS_ZOOM_MAX). It
@@ -9087,6 +9365,8 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     check_value_targets(world, row_species)   # P72 T18: a ring on a bar's value names a value the page prints (R26-288)
     for _lj_note in check_level_join(world, row_species):   # P71 T10: a join's ends, its unit, its truth; a WARN on the rule
         print(f"  [WARN] {_lj_note.removeprefix('WARN ')}")
+    for _ld_note in check_leader(world, row_species):   # P72 T53 (h): a leader's ends, its source figure, its multiple; a WARN on the words
+        print(f"  [WARN] {_ld_note.removeprefix('WARN ')}")
     check_lens(world, row_species)            # P71 T32: a lens magnifies a line the page draws, at data it has
     for _sp_note in check_spread_levels(world, row_species):   # P71 T21: a peak's level is its datum's; its time under water computed
         print(f"  [WARN] {_sp_note.removeprefix('WARN ')}")

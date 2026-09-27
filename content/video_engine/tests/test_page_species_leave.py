@@ -54,9 +54,10 @@ def _recast(at: float = 12.0, dur: float = 1.8) -> dict:
 def test_the_page_bound_species_are_the_eight_the_hand_writes_on_a_page():
     # the five the hand wrote first, then P71 T9's axis tag (a pill ON the page's axis), P71 T10's level join (a
     # rule and a figure ON its data) and P71 T20's datum badge (a tick / cross ON its datum) - each joins by its own
-    # `PAGE_BOUND_SPECIES +=` line (R26-219) and leaves with it; P71 T29's glow (an edge ON its bar or span) too
-    assert B.PAGE_BOUND_SPECIES == ("note", "figure", "retitle", "bracket", "spread", "axis_tag", "level_join", "datum_badge",
-                                    "glow")
+    # `PAGE_BOUND_SPECIES +=` line (R26-219) and leaves with it; P71 T29's glow (an edge ON its bar or span) too, and
+    # P72 T53 (h)'s leader (an arc from a written figure to its datum, the multiple on it)
+    assert B.PAGE_BOUND_SPECIES == ("note", "figure", "retitle", "bracket", "spread", "axis_tag", "level_join", "leader",
+                                    "datum_badge", "glow")
     assert set(B.PAGE_BOUND_SPECIES) <= set(B.PAGE_SPECIES), "each one is painted by the page's own perform layer"
 
 

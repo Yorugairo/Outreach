@@ -78,7 +78,7 @@ ACT_SPECIES = {
     "DIVIDES": ("share page", "peel", "treemap page", "cross", "explode", "member"),   # P50 T6: the census, and the X's on its named subset; P69 T45: who is in ONE total, a tile on each name
     "NAMES": ("trace", "light", "arc", "stamp"),   # P50 T5: the vector map ships - a country lights, an arc crosses, a figure stamps
     "EXPLAINS": ("note", "plate use=bridge", "chip", "flow", "equation"),   # P70 T6: the arithmetic IS the claim (A60)
-    "TURNS": ("figure", "spotlight", "callout", "note", "freeze", "lens", "unknown"),   # P71 T18: the open question IS the sentence - a large "?" lands in the room (A61)   # P71 T32: a glass travels to the small region the turn lands on (A57, moment: turn)   # P69 T49: the stage STOPS on the number the turn lands on (E99 s99)
+    "TURNS": ("figure", "spotlight", "callout", "note", "freeze", "lens", "unknown", "leader"),   # P72 T53 (h): the total points back at the number it dwarfs (R35)   # P71 T18: the open question IS the sentence - a large "?" lands in the room (A61)   # P71 T32: a glass travels to the small region the turn lands on (A57, moment: turn)   # P69 T49: the stage STOPS on the number the turn lands on (E99 s99)
     "BREAKS": ("burst", "stack", "burst:stop", "placeholder", "axis capsule"),
     "SPANS": ("bracket", "spread", "relight", "span", "lit_stretch", "level_join", "ruler"),   # P69 T36: a light that TRAVELS the stretch the sentence walks (E99 s99)
     "SETS": ("chart_to:park", "figure", "retitle", "chapter"),   # P70 T9: a long form's named act, one pill held over it (A34)
@@ -277,6 +277,8 @@ PROPOSE_FILL = {
     B.SPECIES_LIT_STRETCH: (("from", _EDGE + "; the light leaves here"), ("to", _EDGE + "; ... and lands here")),
     B.SPECIES_LEVEL_JOIN: (("from", "the datum index whose LEVEL the rule holds"), ("to", "the other datum index (or {y}: the axis)"),
                            ("label", "the gap the page's own numbers make, written off the rule")),   # P71 T10
+    B.SPECIES_LEADER: (("from", "{kind: figure, text} - the written total the pointer leaves (or a datum)"),
+                       ("to", "{kind: datum, index, part?: value} - the number it points back at")),   # P72 T53 (h)
     B.SPECIES_SOLO: (("series", "the ONE series the sentence names (a line page) - or `bar`, the ONE bar (a bars page)"),),
     B.SPECIES_AXIS_TAG: (("x", "the year the sentence names - a tick or a datum of the page (a bars page: the bar)"),),   # P71 T9
     B.SPECIES_RULER: (("from", "the strip's first year - the scroll passes it on the way"), ("to", "its last year"),

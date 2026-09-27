@@ -1,0 +1,59 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:the-total-points-back",
+ "title": "The total points back",
+ "aliases": [
+  {
+   "name": "R35 Flow -> the total -> a pointer back",
+   "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:837"
+  }
+ ],
+ "acts": [
+  "TURNS"
+ ],
+ "members": [
+  {
+   "card": "page_species:figure",
+   "offset_s": 0.0,
+   "options": {
+    "dur": 1.4
+   },
+   "role": "the headline total is written by the hand at its own bar on its word, the total named under it - the bar's printed number hands over in place (R26-284)"
+  },
+  {
+   "card": "page_species:leader",
+   "offset_s": 4.98,
+   "option": "multiple",
+   "options": {
+    "dur": 1.6,
+    "ring": true
+   },
+   "role": "on the sentence that says how big, a curved leader arcs from the written total back to the small bar's printed value, rings it, and the multiple the page computes pops on the arc"
+  }
+ ],
+ "window_s": 7.0,
+ "does": "A headline total is written at its bar, then a curved leader arcs from it back to the small number it dwarfs, rings that number and puts the page's own multiple on the arc.",
+ "use_when": {
+  "act": "TURNS - a total read against the number it dwarfs (BRAVOS-USE-WHEN R35)",
+  "moment": "hook / proof",
+  "shape": "series -> one number: two bars (or data) on one scale, one of them the total the sentence says, both sourced",
+  "use": "a headline total, then a leader back to the bar it dwarfs, then the multiple (H row 16: 'a hundred and fifty' written at 2026E's bar, then on 'It is big enough' the leader back to the 2020-24 year's $28B, 5.4x on the arc; the AMD RFSoC page: the list price back to the board it dwarfs)",
+  "dont": "the total competes with the data (P STK) - the arc and its multiple clear the page's words, and an authored bend through them is WARNed; a multiple typed rather than computed (E28); an end on a CLAIM bar with a label that does not say whose (P73 T1); a dock as the source (a card joins its datum by park_at)"
+ },
+ "doctrine": [
+  "E28",
+  "E50",
+  "E56",
+  "E77",
+  "E99 s60",
+  "E99 s70",
+  "E99 s106",
+  "E99 s109",
+  "P72 T18",
+  "P72 T53 (h)",
+  "P73 T1"
+ ],
+ "status": "candidate",
+ "source": "P72 T53 (h) (harvest v2 R35; STK 0:02-0:10: '$12,000,000,000' arcs to the ringed peak, then the peak arcs back to the small bar with '10x' on the arc); P71 T35 stopped it for want of a leader (R26-414 (a)); proved as a private test-bed beat by projects/_proofs/p71-recipes/proof_t35.py on Steel and Paper H row 16 ('Between 2020 and 2024 ... big enough to bend the bond market', take 256.48 s) on the dossier's own three bars (EVIDENCE-DOSSIER.md C1), every value read off ev-debt-issuance-line-v1 - the figure on 'a hundred and fifty' (267.32), the leader on 'It is big enough' (272.30), 150 / 28 -> 5.4x written by the compiler; no approved cut carries it",
+ "count": 0
+}

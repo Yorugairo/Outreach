@@ -2007,6 +2007,128 @@
         "today": true,
         "why": null
       }
+    },
+    {
+      "id": "page_species:leader",
+      "axis": "page_species",
+      "token": "leader",
+      "title": "The leader: a curved pointer from a figure back to the datum it dwarfs",
+      "aliases": [
+        {
+          "name": "Flow -> the total -> a pointer back (a curved leader, a multiple badge)",
+          "source": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md:224"
+        },
+        {
+          "name": "A headline total, then a leader back to the bar it dwarfs, then the multiple",
+          "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:837"
+        }
+      ],
+      "does": "On its word a clothoid arc draws by length from a written figure (or a datum) to a datum or a bar's printed value, a head lands at it, a dashed ring closes round it and the page's own multiple pops on the arc.",
+      "when": null,
+      "when_source": null,
+      "serves": [
+        "TURNS"
+      ],
+      "author": {
+        "key": "species[] {\"kind\": \"leader\", \"at\", \"dur\", \"from\": {kind: figure, text} | {kind: datum, index, series?, part?: value} | {kind: point, x, y}, \"to\": {kind: datum, index, series?, part?: value}, \"label\"?, \"multiple\"?, \"ring\"?, \"head\"?, \"bend\"?, \"color\"?, \"keep\"?} on a ledger row (a line or bars page)",
+        "example": "{\"kind\": \"leader\", \"at\": 11.0, \"dur\": 1.6, \"from\": {\"kind\": \"figure\", \"text\": \"$150B\"}, \"to\": {\"kind\": \"datum\", \"index\": 0, \"part\": \"value\"}, \"ring\": true, \"multiple\": true}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py (leader-points-back)",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "the arc travels",
+          "does": "the clothoid (the map arc's unequal tangents) draws by length from the source's edge toward the target on min-jerk; the head (an arrow, or a dot) lands as it arrives",
+          "trigger": "the species' `at`, over SHAFT / HEAD of `dur`",
+          "dials": {
+            "SHAFT": "0.0-0.6",
+            "HEAD": "0.55-0.7",
+            "GAP_PX": "12"
+          }
+        },
+        {
+          "name": "the ring and the multiple",
+          "does": "the ring species' own dashed ring closes round the target dash by dash (a dash on a word stays undrawn), then the multiple the page computes pops on the arc at half its length in the accent capsule; then it holds",
+          "trigger": "RING / LABEL of `dur`",
+          "dials": {
+            "RING": "0.45-0.85",
+            "LABEL": "0.62-1.0",
+            "RING_K": "0.8"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "Bravos harvest v2 R35 (STK 0:02-0:10): a headline figure arcs to the ringed peak, the peak arcs back to a small bar, '10x' on the arc",
+          "became": "the pointer, its ring and the multiple on the arc",
+          "record": "docs/research/bravos-style/BRAVOS-VOCABULARY-HARVEST-v2.md:224",
+          "tie": "recorded"
+        },
+        {
+          "source": "the vector map's arc (arcPath's clothoid with unequal tangents, arcHead)",
+          "became": "the arc and its arrowhead",
+          "record": "content/video_engine/scripts/species/vecmap.mjs",
+          "tie": "recorded"
+        },
+        {
+          "source": "the dashed ring's law (ringEllipse, ringDashes) and the level join's per-dash yield",
+          "became": "the ring round the target",
+          "record": "content/video_engine/scripts/species/level_join.mjs",
+          "tie": "recorded"
+        },
+        {
+          "source": "the axis tag's accent pill (axtagPillBox, its pop)",
+          "became": "the multiple's capsule on the arc",
+          "record": "content/video_engine/scripts/species/axis_tag.mjs",
+          "tie": "recorded"
+        }
+      ],
+      "options": [
+        {
+          "token": "from",
+          "means": "`{kind: figure, text}` a figure the row wrote by the word, `{kind: datum, index, series?, part?: value}` or `{kind: point, x, y}` (0..1 of the chart); a dock is refused: `park_at` joins a card.",
+          "source_set": null
+        },
+        {
+          "token": "multiple",
+          "means": "`multiple: true`: the compiler writes the two data's own ratio on the arc ('5.4x'; whole from 10x); a typed `label` with a number is the page's arithmetic or refused; off a claim it must say whose.",
+          "source_set": null
+        },
+        {
+          "token": "bend",
+          "means": "`bend: -1..1` (+ lifts toward the page's top, 0 straight): the author's arc, honoured; through the page's words it is a WARN with its numbers (E99 s106). Absent: the first bow clear of the words.",
+          "source_set": null
+        }
+      ],
+      "dials": {
+        "module": "content/video_engine/scripts/species/leader.mjs",
+        "object": "LEADER"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/leader.mjs",
+        "symbol": "paintLeader"
+      },
+      "doctrine": [
+        "P72 T53 (h)",
+        "R26-414",
+        "E56 (a ring circles a number on a chart)",
+        "E28",
+        "E99 s99",
+        "E99 s106",
+        "E99 s109",
+        "P73 T1"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "leader-points-back",
+        "test": "content/video_engine/tests/kinetics/leader.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
     }
   ]
 }

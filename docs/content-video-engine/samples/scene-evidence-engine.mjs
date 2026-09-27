@@ -18320,6 +18320,237 @@ async function mount(doc) {
   /* THE MODULE RULE, the page half of it: the last statement registers the painter, a plain guarded assignment. */
   if (typeof PAGE_PAINTERS !== "undefined") PAGE_PAINTERS.axis_tag = paintAxisTags;
   /* KINETICS:END */
+  /* KINETICS:BEGIN leader */
+  /* SPACE: page */
+  /* species/leader.mjs - THE LEADER (P72 T53 (h), R26-414 (a); the Bravos harvest v2's R35 "Flow -> the total -> a
+     pointer back", STK 0:02-0:10: "$12,000,000,000" arcs to the ringed peak, then the peak arcs back to the small bar it
+     dwarfs with "10x" on the arc). SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py between
+     KINETICS:BEGIN leader and KINETICS:END, AFTER ease, spring, clothoid, level_join and axis_tag (it reads their laws).
+     Its region sits with the page species', after axis_tag's and before buildPerform / paintPerform, for the reason
+     span.mjs gives.
+
+     WHEN (`SPECIES_WHEN["leader"]`, build_scene_timeline_f.py): the sentence POINTS one number back at another - a
+     headline total at the bar it dwarfs, a written figure at the datum it came from - and the pointer IS the claim. The
+     multiple rides the arc. Don't: point at a thing the page does not draw (the truth rule refuses it), or put a word
+     the author typed where the page's arithmetic belongs.
+
+     WHAT IT IS BUILT ON (nothing new is drawn by hand here):
+       the arc     - the vector map's ARC law (species/vecmap.mjs arcPath): a CLOTHOID (kinetics/clothoid.mjs) between the
+                     two ends, its tangents turned UNEQUALLY off the chord - `bow` at the tail, `bow * ENTER_K` at the tip -
+                     so the pen ramps out of the source and settles into the target. vecmap's region sits after
+                     paintPerform, so its dials are restated here BY VALUE (BOW, ENTER_K, SAMPLES, HEAD_PX, HEAD_A) and the
+                     node test pins them equal.
+       the head    - the flow / arc arrowhead (flowHead / arcHead: two strokes along the arriving tangent), in stage px
+                     carried into chart units; or a DOT.
+       the ends    - the SOURCE's own box (a written figure: species/figure.mjs figBox, handed in by the builder), a datum
+                     or a point; the TARGET a datum (a line's point, a bar's top) or a bar's printed VALUE (P72 T18's
+                     `part: "value"`, R26-288). The tail leaves the source's edge facing where the arc heads (the flow's
+                     edge law, flowAnchors, for a rectangle), the tip stops GAP_PX short of the target's outline.
+       the ring    - the ring species' OWN dashes (ring.mjs ringEllipse / ringDashes), handed in by the builder exactly as
+                     level_join's end rings are, drawn dash by dash on level_join's per-dash law; a dash on the page's words
+                     stays undrawn (levelDashYields). E56: it circles a number or a point on a chart, which a datum is.
+       the label   - ON the arc, at half its length: the page's accent capsule (axis_tag's pill box and pop, AXTAG), the
+                     multiple the compiler COMPUTED off the two data (never typed; a typed figure is checked against the
+                     page's arithmetic, level_join's `_lj_truth`).
+       the leave   - the page's own (the compiler's `leave_at`, a page-bound species, R26-219) and an undraw of the line
+                     or a verb that replaces the page, at or after the word, on its own clock (levelLeave).
+     THE SIDE (which way the arc bows, and how far) is decided ONCE, on the build's geometry: the author's `bend` when
+     there is one (E99 s106: the engine advises, the author decides), else the first of up / down x BOWS whose arc and
+     pill stay clear of the page's own words and the chart's box - least cost when none is. So a rescale moves the arc
+     with its ends and never flips it. Re-read every frame (R26-28): both ends come off the ACTIVE state, so an end the
+     window has dropped hides the leader rather than point at the wrong thing. The dials are ours to tune (42 s42.5). */
+
+  const LEADER = Object.freeze({
+    SHAFT: [0.0, 0.6],     /* the share of the word the arc draws over, by length, on min-jerk ... */
+    HEAD: [0.55, 0.7],     /* ... the head lands as the shaft arrives (the arc's HEAD_F, 0.74 of its own clock) ... */
+    RING: [0.45, 0.85],    /* ... the target's ring draws dash by dash round it as the tip approaches ... */
+    LABEL: [0.62, 1.0],    /* ... and the multiple's pill POPS on the arc once the arc is most of the way there */
+    BOW: 0.5,              /* vecmap ARC.BOW: the tail's turn off the chord, radians - a flight path lifts, it does not hoop */
+    ENTER_K: 0.45,         /* vecmap ARC.ENTER_K: the tip's turn as a share of it - unequal, so the fitter's ramp is used */
+    SAMPLES: 48,           /* vecmap ARC.SAMPLES: the clothoid's polyline */
+    HEAD_PX: 26,           /* vecmap ARC.HEAD: the arrowhead's stroke in stage px ... */
+    HEAD_A: 0.42,          /* ... and its half-angle (the flow's arrow: two arrows in one episode are one hand) */
+    DOT_PX: 7,             /* the DOT head's radius, stage px (Bravos STK 0:02's small disc at the ring's edge) */
+    GAP_PX: 12,            /* the air the tail leaves off its source and the tip stops short of its target, stage px */
+    RING_K: 0.8,           /* a ring round a POINT target: the ring species' own minimum ellipse at this scale (level_join's
+                              END ring is 0.55; the leader's ring is the answer the arc points at - Bravos's is a callout's) */
+    BEND_MAX: 1.1,         /* `bend: +-1` turns the tail this far off the chord (the widest of BOWS) */
+    BOWS: Object.freeze([0.5, 0.8, 1.1]),   /* the automatic candidates, each side: the arc's own bow first, then wider */
+    WORD_COST: 1000,       /* one arc sample (or the pill) on one of the page's words ... */
+    EDGE_COST: 10000,      /* ... off the chart's box ... */
+    INK_COST: 1,           /* ... on a mark's ink (a bar): allowed, but a clear arc over air is preferred */
+    PILL_PAD_PX: 6,        /* the air the pill keeps off a word, stage px */
+  });
+
+  const ld01 = (v) => Math.min(1, Math.max(0, v));
+  const ldWin = (u, w) => ld01((u - w[0]) / Math.max(1e-6, w[1] - w[0]));
+
+  /* THE CLOCK at t: each phase's share (0..1); `on` is false before the word. */
+  const leaderPose = (sp, t) => {
+    const dur = Math.max(0.001, +sp.dur || 1), u = (t - +sp.at) / dur;
+    return { on: u >= 0, shaft: minJerk(ldWin(u, LEADER.SHAFT)), head: ldWin(u, LEADER.HEAD), ring: ldWin(u, LEADER.RING),
+             label: ldWin(u, LEADER.LABEL) };
+  };
+
+  /* the pill's scale at t: axis_tag's pop (AXTAG.POP_S, POP_MP) from the label's window */
+  const leaderPillScale = (sp, t) => {
+    const dur = Math.max(0.001, +sp.dur || 1), d = t - (+sp.at + LEADER.LABEL[0] * dur);
+    if (!(d >= 0)) return 0;
+    return springPop(ld01(d / AXTAG.POP_S), AXTAG.POP_MP);
+  };
+
+  /* A SHAPE is where an end stands, in chart units: a box [x0, y0, x1, y1] (a written figure, a printed value), an ellipse
+     {cx, cy, rx, ry} (a ring round the target) or a point [x, y]. Its centre: */
+  const leaderCentre = (s) => (Array.isArray(s) && s.length === 4 ? [(s[0] + s[2]) / 2, (s[1] + s[3]) / 2]
+    : s && Number.isFinite(s.rx) ? [s.cx, s.cy] : s);
+
+  /* the point on a shape's OUTLINE in direction `th` from its centre, pushed `gap` further out - the flow's edge law
+     (flowAnchors: the ray leaves by whichever side it meets first) for a rectangle, the polar radius for an ellipse,
+     the point itself for a point */
+  const leaderOut = (s, th, gap) => {
+    const cs = Math.cos(th), sn = Math.sin(th), c = leaderCentre(s);
+    let r = 0;
+    if (Array.isArray(s) && s.length === 4) {
+      const hw = (s[2] - s[0]) / 2, hh = (s[3] - s[1]) / 2;
+      r = Math.min(Math.abs(cs) > 1e-9 ? hw / Math.abs(cs) : Infinity, Math.abs(sn) > 1e-9 ? hh / Math.abs(sn) : Infinity);
+    } else if (s && Number.isFinite(s.rx)) {
+      r = 1 / Math.sqrt((cs / s.rx) * (cs / s.rx) + (sn / s.ry) * (sn / s.ry));
+    }
+    return [c[0] + (r + gap) * cs, c[1] + (r + gap) * sn];
+  };
+
+  /* the turn that LIFTS the arc toward the page's top (svg y grows down): vecmap's arcBowSign with the north's w = -1 */
+  const leaderUp = (a, b) => (b[0] - a[0] >= 0 ? -1 : 1);
+
+  /* THE ARC from shape A to shape B: the tail on A's outline where the arc leaves, the tip on B's where it arrives (each
+     `gap` clear), the clothoid between them with vecmap's unequal tangents. `sign` is the turn (+-1), `bow` radians. */
+  const leaderArc = (A, B, bow, sign, gaps) => {
+    const ca = leaderCentre(A), cb = leaderCentre(B), chord = Math.atan2(cb[1] - ca[1], cb[0] - ca[0]);
+    const g = gaps || [0, 0], b = +bow || 0, s = sign < 0 ? -1 : 1;
+    const p0 = leaderOut(A, chord + s * b, g[0]), p1 = leaderOut(B, chord - s * b * LEADER.ENTER_K + Math.PI, g[1]);
+    const c2 = Math.atan2(p1[1] - p0[1], p1[0] - p0[0]);
+    return clothoid(p0, c2 + s * b, p1, c2 - s * b * LEADER.ENTER_K, LEADER.SAMPLES);
+  };
+
+  /* a point `f` of the way along the polyline BY LENGTH, with the heading there */
+  const leaderAlong = (pts, f) => {
+    const n = pts.length;
+    if (n < 2) return n ? { x: pts[0].x, y: pts[0].y, th: 0 } : null;
+    let L = 0;
+    const cum = [0];
+    for (let i = 1; i < n; i++) { L += Math.hypot(pts[i].x - pts[i - 1].x, pts[i].y - pts[i - 1].y); cum.push(L); }
+    const d = ld01(f) * L;
+    let i = 1;
+    while (i < n - 1 && cum[i] < d) i++;
+    const seg = cum[i] - cum[i - 1], u = seg > 0 ? (d - cum[i - 1]) / seg : 0;
+    return { x: pts[i - 1].x + (pts[i].x - pts[i - 1].x) * u, y: pts[i - 1].y + (pts[i].y - pts[i - 1].y) * u,
+             th: Math.atan2(pts[i].y - pts[i - 1].y, pts[i].x - pts[i - 1].x) };
+  };
+
+  /* the arrowhead's two strokes at the far end along the tangent it arrives on - arcHead / flowHead's law, its arm `len`
+     and half-angle `ang` handed in (chart units on a page) */
+  const leaderHead = (pts, len, ang) => {
+    const n = pts.length;
+    if (n < 2) return "";
+    const tip = pts[n - 1], prev = pts[n - 2], th = Math.atan2(tip.y - prev.y, tip.x - prev.x);
+    const arm = (s) => ({ x: tip.x - len * Math.cos(th + s * ang), y: tip.y - len * Math.sin(th + s * ang) });
+    const l = arm(1), r = arm(-1);
+    return "M" + l.x.toFixed(2) + " " + l.y.toFixed(2) + " L" + tip.x.toFixed(2) + " " + tip.y.toFixed(2)
+         + " L" + r.x.toFixed(2) + " " + r.y.toFixed(2);
+  };
+
+  const ldIn = (p, b, pad) => p.x >= b[0] - pad && p.x <= b[2] + pad && p.y >= b[1] - pad && p.y <= b[3] + pad;
+  const ldMeet = (a, b) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3];
+
+  /* the pill's box at the arc's middle ([w, h] its size), [x0, y0, x1, y1] */
+  const leaderPillBox = (pts, size) => {
+    const m = leaderAlong(pts, 0.5);
+    return m && size ? [m.x - size[0] / 2, m.y - size[1] / 2, m.x + size[0] / 2, m.y + size[1] / 2] : null;
+  };
+
+  /* THE COST of one arc: its samples on the page's WORDS dominate, then off the chart's box, then on a mark's ink; the
+     pill on a word or off the box costs as a word does. `g`: {words, ink ([x0, y0, x1, y1] each), W, H, pill: [w, h] |
+     null, pad (the pill's air, chart units)}. */
+  const leaderCost = (pts, g) => {
+    let c = 0;
+    const words = g.words || [], ink = g.ink || [], W = +g.W, H = +g.H, box = Number.isFinite(W) && Number.isFinite(H);
+    for (const p of pts) {
+      for (const w of words) if (ldIn(p, w, 0)) c += LEADER.WORD_COST;
+      for (const b of ink) if (ldIn(p, b, 0)) c += LEADER.INK_COST;
+      if (box && (p.x < 0 || p.x > W || p.y < 0 || p.y > H)) c += LEADER.EDGE_COST;
+    }
+    const pb = leaderPillBox(pts, g.pill), pad = +g.pad || 0;
+    if (pb) {
+      const grown = [pb[0] - pad, pb[1] - pad, pb[2] + pad, pb[3] + pad];
+      for (const w of words) if (ldMeet(grown, w)) c += LEADER.WORD_COST;
+      if (box && (pb[0] < 0 || pb[2] > W || pb[1] < 0 || pb[3] > H)) c += LEADER.EDGE_COST;
+    }
+    return c;
+  };
+
+  /* THE SIDE, decided once: the author's `bend` (+ lifts toward the page's top, - sags, 0 straight; |bend| x BEND_MAX
+     radians) when there is one, else the first of up x BOWS then down x BOWS whose cost is 0, else the cheapest. */
+  const leaderChoose = (A, B, g, bend) => {
+    const up = leaderUp(leaderCentre(A), leaderCentre(B)), gaps = g.gaps || [0, 0];
+    if (bend !== undefined && bend !== null && Number.isFinite(+bend)) {
+      const b = Math.max(-1, Math.min(1, +bend));
+      const pick = { sign: b >= 0 ? up : -up, bow: Math.abs(b) * LEADER.BEND_MAX, authored: true };
+      return Object.assign(pick, { cost: leaderCost(leaderArc(A, B, pick.bow, pick.sign, gaps), g) });
+    }
+    let best = null;
+    for (const s of [up, -up]) for (const bow of LEADER.BOWS) {
+      const c = leaderCost(leaderArc(A, B, bow, s, gaps), g);
+      if (c === 0) return { sign: s, bow, authored: false, cost: 0 };
+      if (!best || c < best.cost) best = { sign: s, bow, authored: false, cost: c };
+    }
+    return best;
+  };
+
+  /* THE PAINTER (P72 T53 (h)). `sd` is the perform layer's built leader: `g` (the group), `shaft` (a path, pathLength 1),
+     `head` ({kind: "arrow" | "dot", el}), `ring` ({g, dashes: [{p, t0, t1, box}], rx, ry} in stage px, or null), `pill`
+     ({g, box: {w, h}} or null), `fromShape(st)` / `toShape(st)` (the ends on the ACTIVE state, chart units, null when the
+     window dropped one), `pick` ({sign, bow} - the side chosen at build), `k` (stage px per chart unit), `words` (the
+     page's own label boxes, [x0, y0, x1, y1]) and `leave` (the verb that takes the line, or null). `ctx` is the PAGE
+     species context; this painter needs nothing from it but is handed it like every page painter. */
+  const paintLeader = (sd, t, st, ctx) => {
+    const sp = sd.sp, pose = leaderPose(sp, t), lv = levelLeave(sd.leave, t);
+    const hide = () => { sd.g.setAttribute("opacity", 0); };
+    if (!pose.on || lv >= 1) { hide(); return; }
+    const A = sd.fromShape(st), T = sd.toShape(st);
+    if (!A || !T) { hide(); return; }   /* R26-28: an end the window dropped points at nothing */
+    const k = sd.k > 0 ? sd.k : 1, c = leaderCentre(T);
+    const B = sd.ring ? { cx: c[0], cy: c[1], rx: sd.ring.rx / k, ry: sd.ring.ry / k } : T;   /* a ringed target: the arc ends at the ring */
+    const pts = leaderArc(A, B, sd.pick.bow, sd.pick.sign, [LEADER.GAP_PX / k, LEADER.GAP_PX / k]);
+    sd.g.setAttribute("opacity", (1 - lv).toFixed(3));
+    sd.shaft.setAttribute("d", clothoidPath(pts));
+    sd.shaft.setAttribute("stroke-dashoffset", (1 - pose.shaft).toFixed(4));
+    sd.shaft.setAttribute("opacity", pose.shaft > 0 ? 1 : 0);
+    const tip = pts[pts.length - 1];
+    if (sd.head.kind === "dot") {
+      sd.head.el.setAttribute("cx", tip.x.toFixed(2)); sd.head.el.setAttribute("cy", tip.y.toFixed(2));
+      sd.head.el.setAttribute("r", (LEADER.DOT_PX / k * pose.head).toFixed(3));
+    } else {
+      sd.head.el.setAttribute("d", leaderHead(pts, LEADER.HEAD_PX / k, LEADER.HEAD_A));
+    }
+    sd.head.el.setAttribute("opacity", pose.head.toFixed(3));
+    if (sd.ring) {
+      sd.ring.g.setAttribute("transform", "translate(" + c[0].toFixed(1) + " " + c[1].toFixed(1) + ") scale(" + (1 / k).toFixed(5) + ")");
+      for (const dh of sd.ring.dashes) {
+        const q = levelDashF(pose.ring, dh), off = dh.box && levelDashYields(dh.box, c, k, sd.words);   /* a dash on the page's words stays undrawn */
+        dh.p.setAttribute("stroke-dashoffset", (1 - q).toFixed(4));
+        dh.p.setAttribute("opacity", q > 0 && !off ? 1 : 0);
+      }
+    }
+    if (sd.pill) {
+      const s = leaderPillScale(sp, t), m = leaderAlong(pts, 0.5);
+      sd.pill.g.setAttribute("opacity", s > 0 ? 1 : 0);
+      sd.pill.g.setAttribute("transform", "translate(" + m.x.toFixed(1) + " " + m.y.toFixed(1) + ") scale(" + s.toFixed(4) + ")");
+    }
+  };
+
+  /* THE MODULE RULE, the page half of it: the last statement registers the painter, a plain guarded assignment. */
+  if (typeof PAGE_PAINTERS !== "undefined") PAGE_PAINTERS.leader = paintLeader;
+  /* KINETICS:END */
   /* T19: keep the surface projection as one affine layer around every chart-owned node. The
      state painters continue to own their data and transitions; this layer only carries their
      destination user-space into the native-wide surface viewBox (and carries the perform layer
@@ -18954,6 +19185,81 @@ async function mount(doc) {
     const w = clamp01((t - C.at - LP_CLAIM.WORDS_S) / LP_OVERLAY.FADE_S).toFixed(2);
     C.text.setAttribute("opacity", w); C.lead.setAttribute("opacity", w);
   };
+  /* P72 T53 (h) / R26-414 (a) - THE LEADER'S DOM, built once (species/leader.mjs owns the law and re-reads both ends on
+     the ACTIVE state every frame). The SOURCE is a figure the row wrote (its box as the hand wrote it: figure.mjs figBox
+     over the label and its sub, the record paintFigure keeps current), a datum (lpDatumNow) or a point of the chart's box;
+     the TARGET a datum or a bar's printed VALUE (P72 T18's `part: "value"`: the value's own box, lpLabelBox - the datum
+     when the page hides it). The ring is the ring species' OWN dashes round the target (ringEllipse / ringDashes, stage
+     px at the origin - the painter moves and scales them; ring.mjs is a stage module after paintPerform, so its law is
+     handed in here, as level_join's is): round a point at LEADER.RING_K of the ring's minimum, round a value its box. The
+     multiple is the page's accent capsule (axis_tag's pill box, the level join's axis-pill form). THE SIDE is chosen ONCE
+     here on the build's geometry (leaderChoose): the author's `bend`, else the first bow clear of the page's words (its
+     own ends' words excepted - the arc leaves one and lands at the other) and of the row's other figures. The leave is
+     the level join's rule (an undraw of the line, or a verb that replaces the page, at or after the word). */
+  const lpBuildLeaders = (st, scene, surf, figures, P, G) => pageSpecies(scene, "leader").map((sp) => {
+    const k = st.stagePx > 0 ? st.stagePx : 1, src = sp.from || {}, to = sp.to || {};
+    const act = (S0) => (S0.states && S0.states[S0.active | 0]) || S0, said = (v) => String(v == null ? "" : v).trim();
+    const fig = src.kind === "figure" ? figures.filter((f) => said(f.sp.text) === said(src.text) && f.sp.at <= sp.at).pop() : null;
+    if (src.kind === "figure" && !fig) return null;   /* the compiler refuses it by name; a hand-built timeline draws nothing */
+    const figShape = (f) => {   /* the hand's box: the label and its sub, as wide as the wider, at the anchor it was written on */
+      const a = f.label.getAttribute("text-anchor") || "start", w = Math.max(f.tw, f.sub ? figWidth(f.sub, f.sp.sub, f.fss) : 0);
+      const b = figBox(a === "middle" ? f.x - w / 2 : f.x, f.y, w, f.fs, a === "middle" ? "start" : a, f.subH || 0);
+      return [b[0], b[1], b[0] + b[2], b[1] + b[3]];
+    };
+    const valueBox = (S0, e) => { const rec = (act(S0).bars || [])[e.index | 0], el = rec && rec.val && rec.val.style.display !== "none" ? rec.val : null;
+      const b = el ? lpLabelBox(el) : null; return b ? [b[0], b[1], b[0] + b[2], b[1] + b[3]] : null; };
+    const datumShape = (e) => (S0) => (e.part === "value" && valueBox(S0, e)) || lpDatumNow(S0, e.series | 0, e.index | 0);   /* a bar's printed number, else the datum */
+    const fromShape = fig ? () => figShape(fig) : src.kind === "point" ? () => [(+src.x || 0) * G.W, (+src.y || 0) * G.H] : datumShape(src);
+    const toShape = datumShape(to);
+    const col = sp.color ? (PS_PAL[sp.color] || sp.color) : "var(--lp-chalk)";
+    const g = lpEl("g", "lp-leader", surf, { opacity: 0 });
+    const shaft = lpEl("path", "bk lp-leader-shaft", g, { d: "M0 0", stroke: col, fill: "none", pathLength: 1, "stroke-dasharray": "1 1", "stroke-dashoffset": 1, opacity: 0 });
+    shaft.style.strokeLinecap = "round"; shaft.style.strokeLinejoin = "round";
+    const sw = parseFloat(getComputedStyle(shaft).strokeWidth) || (P ? 5 : 3);
+    const head = sp.head === "dot" ? { kind: "dot", el: lpEl("circle", "lp-leader-dot", g, { cx: 0, cy: 0, r: 0, fill: col, opacity: 0 }) }
+      : { kind: "arrow", el: lpEl("path", "bk lp-leader-head", g, { d: "", stroke: col, fill: "none", opacity: 0 }) };
+    if (head.kind === "arrow") { head.el.style.strokeLinecap = "round"; head.el.style.strokeLinejoin = "round"; }
+    const T0 = toShape(st), A0 = fromShape(st);
+    let ring = null;
+    if (sp.ring && T0) {   /* the ring species' own ellipse and dashes, stage px round the origin */
+      const box = T0.length === 4 ? { x: 0, y: 0, w: (T0[2] - T0[0]) * k, h: (T0[3] - T0[1]) * k } : { x: 0, y: 0, w: 0, h: 0 };
+      const eR = ringEllipse(box), e0 = T0.length === 4 ? { cx: 0, cy: 0, rx: eR.rx, ry: eR.ry } : { cx: 0, cy: 0, rx: eR.rx * LEADER.RING_K, ry: eR.ry * LEADER.RING_K };
+      const rg = lpEl("g", "lp-leader-ring", g, {});
+      ring = { g: rg, rx: e0.rx, ry: e0.ry, dashes: ringDashes(e0).map((dh) => {
+        const p = lpEl("path", "bk", rg, { d: dh.d, stroke: col, fill: "none", pathLength: 1, "stroke-dasharray": "1 1", "stroke-dashoffset": 1, opacity: 0 });
+        p.style.strokeWidth = (sw * k).toFixed(2) + "px";   /* the shaft's own weight, drawn in the ring's stage px */
+        return { p, t0: dh.t0, t1: dh.t1, box: levelDashBox(dh.d) }; }) };
+    }
+    let pill = null;
+    if (said(sp.label)) {   /* the multiple ON the arc: the page's accent capsule, the level join's axis-pill form */
+      const pfs = (parseFloat(getComputedStyle((((st.marks || []).find((m) => m.role === "ylabel") || {}).el) || st.chart).fontSize) || (P ? 40 : 24)) * AXTAG.TYPE_K;
+      const pg0 = lpEl("g", "lp-leader-pill", g, { opacity: 0 });
+      const rect = lpEl("rect", "cpill", pg0, {});
+      const text = lpEl("text", "callout", pg0, { x: 0, y: (pfs * 0.35).toFixed(1), "text-anchor": "middle", style: "font-size:" + pfs.toFixed(1) + "px" });
+      text.textContent = said(sp.label);
+      const box = axtagPillBox(lpInkW(text), pfs);
+      rect.setAttribute("x", box.x.toFixed(1)); rect.setAttribute("y", box.y.toFixed(1));
+      rect.setAttribute("width", box.w.toFixed(1)); rect.setAttribute("height", box.h.toFixed(1)); rect.setAttribute("rx", box.r.toFixed(1));
+      pill = { g: pg0, rect, text, box: { w: box.w, h: box.h } };
+    }
+    /* the page's own words, [x0, y0, x1, y1]: the ends' own excepted (the arc leaves the one and lands at the other), the
+       row's other figures added - measured once, so the side is a function of the build and a cold seek lands on a play */
+    const meet = (a, b) => !!(a && b && b.length === 4) && a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3];
+    const own = [A0, T0].filter((q) => q && q.length === 4);
+    const words = [...(st.labBoxes || []).map((b) => [b[0], b[1], b[0] + b[2], b[1] + b[3]]),
+                   ...figures.filter((f) => f !== fig).map(figShape)].filter((w) => !own.some((o) => meet(w, o)));
+    const BM = st.markBy || {}, ink = [];
+    for (let i = 0; BM["b:" + i] && BM["b:" + i].geom; i++) { const q = BM["b:" + i].geom; ink.push([q.x, q.y, q.x + q.w, q.y + q.h]); }
+    const c = T0 ? leaderCentre(T0) : null, B0 = ring && c ? { cx: c[0], cy: c[1], rx: ring.rx / k, ry: ring.ry / k } : T0;
+    const pick = A0 && B0 ? leaderChoose(A0, B0, { words, ink, W: G.W, H: G.H, pill: pill ? [pill.box.w, pill.box.h] : null,
+                                                   pad: LEADER.PILL_PAD_PX / k, gaps: [LEADER.GAP_PX / k, LEADER.GAP_PX / k] }, sp.bend)
+      : { sign: -1, bow: LEADER.BOW };
+    const takes = [...pageSpecies(scene, "undraw").filter((u) => { const us = u.series ?? (u.target || {}).series; return us == null || (us | 0) === (to.series | 0); }),
+                   ...pageSpecies(scene, "chart_to").filter((v) => v.to === "recast" || v.to === "morph" || v.to === "remake")]
+      .filter((v) => v.at >= sp.at).sort((a, b) => a.at - b.at);
+    return { sp, g, shaft, head, ring, pill, k, words, pick, fromShape, toShape, fig,
+             leave: takes.length ? { at: takes[0].at, dur: takes[0].dur || 1 } : null };
+  }).filter(Boolean);
   const buildPerform = (st, scene, pg) => {
     const P = !!st.portrait, fs = P ? 40 : 26, fss = P ? 32 : 20, G = st.geom || { W: 1000, H: 560 };
     /* P48 T7: on a page with chart STATES the perform layer (brackets, figures, spreads) draws on its OWN svg above every
@@ -19424,7 +19730,8 @@ async function mount(doc) {
       return { sp, si: sp.series | 0, zoom: lensZoom(sp), r: LENS.R_PX / k, g, clip, disc, lines, ring, neck, handle,
                tagLayer: { g: tg, ring: tRing, neck: tNeck, handle: tHandle, tags } };
     });
-    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads, spans, crosses, lits, solo, axisTags, levelJoins, lenses, datumBadges, glows, schematicClaim };
+    const leaders = lpBuildLeaders(st, scene, surf, figures, P, G);   /* P72 T53 (h): the curved pointer from a written figure to a datum (species/leader.mjs) */
+    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads, spans, crosses, lits, solo, axisTags, levelJoins, lenses, datumBadges, glows, schematicClaim, leaders };
   };
   /* the X's two strokes over the named cells, the cells dimming under them, and the share written by
      the hand: every number is species/treemap.mjs's, this is the call */
@@ -19757,6 +20064,7 @@ async function mount(doc) {
        figures so the morph owns the glyphs its own clock is writing. */
     for (const sp of pageSpecies(scene, "chart_to")) if (sp.to === "compare" && PAGE_PAINTERS.compare) PAGE_PAINTERS.compare({ sp, figures: PF.figures || [] }, t, st, PAGE_CTX);
     lpPaintBarMorphs(st, scene, t, PF);   /* P69 T26a: ... and a bar whose figure the compare re-values moves to the comparator (E28) */
+    for (const ld of PF.leaders || []) if (PAGE_PAINTERS.leader) { PAGE_PAINTERS.leader(ld, t, st, PAGE_CTX); const lv = pageLeave(ld.sp, t); if (lv > 0) ld.g.setAttribute("opacity", ((+ld.g.getAttribute("opacity") || 0) * (1 - lv)).toFixed(3)); }   /* P72 T53 (h): the leader from the written figure to its datum (species/leader.mjs); R26-219: it leaves with its page */
     lpPaintGlowEdges(PF, t, st);   /* P71 T29: the glow outline on the bar (or span) as it is drawn NOW - after the grow, the morph and the solo */
     for (const cr of PF.crosses || []) paintCross(cr, t);        /* P50 T6: the census's X marks and the share they cross */
     for (const nt of PF.notes || []) { const lv = pageLeave(nt.sp, t);   /* R26-219: a note in the page's quiet zone is the page's */
