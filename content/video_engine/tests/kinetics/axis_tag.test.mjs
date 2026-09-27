@@ -213,3 +213,49 @@ test("the painter reaches the engine ONLY through ctx and its state - no clock, 
   assert.match(src.split(/\r?\n/)[0], /^\/\* SPACE: page \*\/$/);   // a Windows checkout is CRLF
   assert.match(src.trimEnd().split(/\r?\n/).pop(), /PAGE_PAINTERS\.axis_tag = paintAxisTags;$/);
 });
+
+// ---------------------------------------------------------------- P72 T53 (i): the dated rule, one print (R26-415)
+const ruleSetup = (o = {}) => {
+  const named = lab(1700), dupe = { el: rec({}), hid: false };
+  const td = { sp: sp(Object.assign({ x: 2026, guide: "rule" }, o.sp || {})), g: rec(), rect: rec(), text: rec(), guide: rec(),
+               pill: axtagPillBox(80, 30), dupes: o.noDupe ? [] : [dupe],
+               on: [{ si: 0, di: null, label: named, cy: 600, top: 100, bars: !!o.bars }] };
+  const at = { tags: [td], labels: [named], boxesOf: [o.boxes || []] };
+  return { td, at, st: { paths: [stroke(900)] }, named, dupe };
+};
+
+test("R26-415 THE DATED RULE: `guide: rule` drops the plot's FULL height at a date with no datum - dashed, top-down by length", () => {
+  assert.ok(AXTAG.RULE_S > AXTAG.GUIDE_S, "a full-height rule drops slower than a datum's short guide");
+  assert.equal(typeof AXTAG.RULE_DASH, "string");
+  assert.notEqual(AXTAG.RULE_DASH, AXTAG.GUIDE_DASH, "dashed like Bravos's (BOOM 18:00.5), not the leader's dots");
+  const { td, at, st } = ruleSetup();
+  const ctx = ctxAt(null);   /* NO datum at the date: the estimate's is refused (E77) */
+  paintAxisTags(at, 9.9, st, ctx);
+  assert.equal(td.guide.a.opacity, "0", "nothing before the word");
+  paintAxisTags(at, 10 + AXTAG.GUIDE_AT + AXTAG.RULE_S, st, ctx);
+  const y1 = 600 - td.pill.h / 2 - AXTAG.GUIDE_GAP;
+  assert.equal(td.guide.a.d, `M1700.0 100.0 L1700.0 ${y1.toFixed(1)}`, "from the plot's top to the pill's top");
+  assert.equal(td.guide.a.opacity, "1.000");
+  paintAxisTags(at, 10 + AXTAG.GUIDE_AT + AXTAG.RULE_S / 2, st, ctx);
+  assert.equal(td.guide.a.d, `M1700.0 100.0 L1700.0 ${(100 + (y1 - 100) / 2).toFixed(1)}`, "min-jerk: half the time, half the drop");
+  const cut = ruleSetup({ boxes: [[1650, 300, 100, 30]] });
+  paintAxisTags(cut.at, 13, cut.st, ctx);
+  assert.equal(cut.td.guide.a.d.split("M").length - 1, 2, "C14: cut round a label it would cross");
+  const bars = ruleSetup({ bars: true });
+  paintAxisTags(bars.at, 13, bars.st, ctx);
+  assert.equal(bars.td.guide.a.opacity, "0", "a bars page draws no rule (a seam down a bar)");
+});
+
+test("R26-415 ONE PRINT: a page label saying what the pill says yields while the pill's text stands, and comes back", () => {
+  const { td, at, st, dupe } = ruleSetup();
+  const ctx = ctxAt(null);
+  paintAxisTags(at, 9.9, st, ctx);
+  assert.equal(dupe.el.style.visibility, undefined, "before the word the end tag is the page's own");
+  paintAxisTags(at, 10.02, st, ctx);
+  assert.equal(td.text.a.opacity, "0.000");
+  assert.equal(dupe.el.style.visibility, undefined, "the pill has not said it yet: the end tag still does");
+  paintAxisTags(at, 10 + AXTAG.POP_S, st, ctx);
+  assert.equal(dupe.el.style.visibility, "hidden", "'2026E' prints once: on the axis");
+  paintAxisTags(at, 9, st, ctx);
+  assert.equal(dupe.el.style.visibility, "", "a seek back gives it back");
+});

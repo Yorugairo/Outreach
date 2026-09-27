@@ -11404,7 +11404,8 @@ async function mount(doc) {
                    lfType: st.lfType ? Object.assign({}, st.lfType, { form: ((pg2.axes || {}).tag_form) || st.lfType.form }) : st.lfType,   /* P69 T8: ... and the long form's same type; N2: the state's OWN fitted end-tag form */
                    keyPills: (lfStateKeys[st.states.length - 1] || {}).pills || null,   /* M1: this state's own key (null: none) */
                    readability: st.readability, barStyle: st.barStyle, cardK: st.cardK,   /* P69 T10b: the page's bars, drawn the page's way; T10c: a card's scale */
-                   bars: [], paths: [], labels: [], callout: null, cval: null, inlineBadges: {}, linePts: [],
+                   bars: [], paths: [], labels: [], callout: null, cval: null, linePts: [],
+                   inlineBadges: Object.fromEntries((pg2.badges || []).filter((bd) => bd && bd.inline).map((bd) => [LP_BADGE_COL[bd.accent], bd])),   /* P72 T53 (j) / R26-417 (e): the state's OWN inline badges ride its end names as chips, as its own page's do (the page's rule at the page's build) */
                    marks: [], markBy: {}, badges: [], inkEls: [],
                    vals: pg2.values || [], vstr: pg2.value_strings || [],
                    emph: Number.isInteger(pg2.emphasize) ? pg2.emphasize : -1, kind: pg2.builder || "story",
@@ -18313,6 +18314,8 @@ async function mount(doc) {
     GUIDE_DASH: BREAK.CAP_LEAD_DASH,   /* ... dotted */
     GUIDE_W: BREAK.CAP_LEAD_W,         /* ... at the leader's weight */
     LABEL_PAD: 6,       /* C14: the guide stops this far short of a label box it would cross */
+    RULE_S: 0.5,        /* P72 T53 (i) / R26-415: `guide: "rule"` - the DATED RULE drops the plot's full height over this ... */
+    RULE_DASH: "10 8",  /* ... DASHED, Bravos's projected-date rule (BOOM 18:00.5), not the datum leader's dots */
     MAX_STANDING: 3,    /* the don't (USE-WHEN :323): "more than 2-3 tags in one hold" - build_scene_timeline_f.AXIS_TAG_MAX, the compiler's copy */
   });
 
@@ -18324,7 +18327,8 @@ async function mount(doc) {
     const d = t - (Number.isFinite(t0) ? t0 : (+sp.at || 0));
     if (!(d >= 0)) return { on: false, s: 0, u: 0, guide: 0 };
     const u = ax01(d / AXTAG.POP_S);
-    return { on: true, u, s: springPop(u, AXTAG.POP_MP), guide: minJerk(ax01((d - AXTAG.GUIDE_AT) / AXTAG.GUIDE_S)) };
+    return { on: true, u, s: springPop(u, AXTAG.POP_MP), guide: minJerk(ax01((d - AXTAG.GUIDE_AT) / AXTAG.GUIDE_S)),
+             rule: minJerk(ax01((d - AXTAG.GUIDE_AT) / AXTAG.RULE_S)) };
   };
 
   /* WHEN THE POP STARTS: on its word - unless its word falls while the chart state it names is still ARRIVING. A state
@@ -18409,7 +18413,17 @@ async function mount(doc) {
     const named = on.label || null, nb = named ? axtagLabelBox(named) : null;
     const x = p ? p[0] : nb ? nb[0] + nb[2] / 2 : null;
     if (x == null || !Number.isFinite(on.cy)) return null;
-    return { x, y: on.bars || !p ? null : p[1], cy: on.cy, named, S, si: on.si, k };
+    return { x, y: on.bars || !p ? null : p[1], cy: on.cy, named, S, si: on.si, k, top: on.top, bars: !!on.bars };
+  };
+
+  /* P72 T53 (i) / R26-415 - THE DATED RULE (Bravos A56, BOOM 18:00.5: a full-height dashed rule at the projected date, its
+     pill on the axis). `guide: "rule"` drops from the PLOT's top (the state's own, `on.top`) to the pill's top - it hangs
+     from the date, not from a datum, so a date the page carries only as a tick (the estimate's, which E77 refuses as data)
+     gets its rule. Top-down by length on min-jerk over RULE_S, cut round the page's labels (C14). A bars page draws none. */
+  const axtagRuleD = (P, td, pose, boxes) => {
+    if (P.bars || !Number.isFinite(P.top)) return "";
+    const y1 = P.cy - td.pill.h / 2 - AXTAG.GUIDE_GAP;
+    return axtagGuideD(P.x, axtagGuideRuns(P.x, P.top, y1, boxes), P.top + (y1 - P.top) * pose.rule);
   };
 
   /* THE PAINTER (P71 T9). `at` is the perform layer's built set - `tags` (each: `sp`, the pill group `g`, `rect`,
@@ -18427,10 +18441,20 @@ async function mount(doc) {
       td.g.setAttribute("transform", "translate(" + P.x.toFixed(1) + " " + P.cy.toFixed(1) + ") scale(" + s.toFixed(4) + ")");
       td.g.setAttribute("opacity", (1 - lv).toFixed(3));
       const nb = P.named ? axtagLabelBox(P.named) : null, sc = axtagCoverScale(P.x, P.cy, td.pill, nb);
-      td.text.setAttribute("opacity", (pose.u >= 1 ? 1 : ax01((s - sc) / Math.max(1e-6, 1 - sc))).toFixed(3));
+      const said = pose.u >= 1 ? 1 : ax01((s - sc) / Math.max(1e-6, 1 - sc));
+      td.text.setAttribute("opacity", said.toFixed(3));
       for (const lab of at.labels || []) {
         const b = axtagLabelBox(lab);
         if (b && axtagHides(rect, b, lab === P.named)) hide.add(lab);
+      }
+      /* R26-415: ONE PRINT - a page label writing the pill's own string (an estimate's end tag "2026E") yields while the
+         pill's text stands: the date is said once, on the axis */
+      if (said > 0) for (const dp of td.dupes || []) hide.add(dp);
+      if (td.sp.guide === "rule") {
+        const d = axtagRuleD(P, td, pose, (at.boxesOf || [])[P.k] || []);
+        td.guide.setAttribute("d", d);
+        td.guide.setAttribute("opacity", d ? (1 - lv).toFixed(3) : 0);
+        continue;
       }
       /* the guide: a line page's, from the datum down to the pill's top, cut round the page's labels, never ahead of the ink */
       const drawn = P.y == null ? null : litDrawnX((P.S && P.S.paths) || [], P.si);
@@ -18442,7 +18466,7 @@ async function mount(doc) {
       td.guide.setAttribute("opacity", d ? (1 - lv).toFixed(3) : 0);
     }
     /* the covered labels, re-decided every frame from t alone: hidden while a pill covers them, given back after */
-    for (const lab of at.labels || []) {
+    for (const lab of [...(at.labels || []), ...(at.tags || []).flatMap((td) => td.dupes || [])]) {
       if (hide.has(lab)) { lab.el.style.visibility = "hidden"; lab.hid = true; }
       else if (lab.hid) { lab.el.style.visibility = ""; lab.hid = false; }
     }
@@ -18507,10 +18531,19 @@ async function mount(doc) {
                               END ring is 0.55; the leader's ring is the answer the arc points at - Bravos's is a callout's) */
     BEND_MAX: 1.1,         /* `bend: +-1` turns the tail this far off the chord (the widest of BOWS) */
     BOWS: Object.freeze([0.5, 0.8, 1.1]),   /* the automatic candidates, each side: the arc's own bow first, then wider */
+    WIDE: Object.freeze([1.4, 1.7]),        /* P72 T53 (k) / R26-418 (a): the wide LIFTS, tried only when no candidate above is
+                                               clear - over a tall word in the way (9:16: the $121B between the total and the
+                                               $28B), into the air above the chart (Bravos STK 0:08's high arc), never a sag */
     WORD_COST: 1000,       /* one arc sample (or the pill) on one of the page's words ... */
     EDGE_COST: 10000,      /* ... off the chart's box ... */
     INK_COST: 1,           /* ... on a mark's ink (a bar): allowed, but a clear arc over air is preferred */
     PILL_PAD_PX: 6,        /* the air the pill keeps off a word, stage px */
+    FRAME_COST: 0.25,      /* P72 T53 (k) / R26-418 (b): one arc sample ON the long form's plot-frame border - a quarter of a
+                              sample on a bar's ink: a clean crossing (one or two samples) is cheaper than a sag through the
+                              bars, an arc RIDING the border (many samples) is not; the chooser then takes the least of them */
+    FRAME_PILL_COST: 1000, /* ... and the multiple's pill straddling that border costs as a word does */
+    FRAME_PAD_PX: 6,       /* the border's reach either side of its line, stage px */
+    SKY_PAD_PX: 12,        /* R26-418 (a): the air an arc lifted into the room above the chart keeps under the page's words */
   });
 
   const ld01 = (v) => Math.min(1, Math.max(0, v));
@@ -18599,28 +18632,46 @@ async function mount(doc) {
     return m && size ? [m.x - size[0] / 2, m.y - size[1] / 2, m.x + size[0] / 2, m.y + size[1] / 2] : null;
   };
 
-  /* THE COST of one arc: its samples on the page's WORDS dominate, then off the chart's box, then on a mark's ink; the
-     pill on a word or off the box costs as a word does. `g`: {words, ink ([x0, y0, x1, y1] each), W, H, pill: [w, h] |
-     null, pad (the pill's air, chart units)}. */
+  /* P72 T53 (k) / R26-418 (b): is a point ON the plot frame's border ([x0, y0, x1, y1], reach `r` either side of a line)? */
+  const ldOnFrame = (p, f, r) => {
+    const inX = p.x >= f[0] - r && p.x <= f[2] + r, inY = p.y >= f[1] - r && p.y <= f[3] + r;
+    return (inX && (Math.abs(p.y - f[1]) <= r || Math.abs(p.y - f[3]) <= r)) || (inY && (Math.abs(p.x - f[0]) <= r || Math.abs(p.x - f[2]) <= r));
+  };
+  /* ... and does a box straddle one of its lines? */
+  const ldBoxOnFrame = (b, f) => {
+    const inX = b[2] > f[0] && b[0] < f[2], inY = b[3] > f[1] && b[1] < f[3];
+    return (inX && ((b[1] < f[1] && b[3] > f[1]) || (b[1] < f[3] && b[3] > f[3]))) || (inY && ((b[0] < f[0] && b[2] > f[0]) || (b[0] < f[2] && b[2] > f[2])));
+  };
+
+  /* THE COST of one arc: its samples on the page's WORDS dominate, then off the chart's box, then on a mark's ink, then
+     on the plot frame's border; the pill on a word, off the box or across the frame's border costs as a word does.
+     `g`: {words, ink ([x0, y0, x1, y1] each), W, H, pill: [w, h] | null, pad (the pill's air, chart units), top? (R26-418
+     (a): the free room above the chart's box the builder measured, a y <= 0 - the box's top edge moves up to it; absent,
+     0), frame? ([x0, y0, x1, y1] the long form's plot frame, R26-418 (b); absent, none), framePad? (its reach)}. */
   const leaderCost = (pts, g) => {
     let c = 0;
     const words = g.words || [], ink = g.ink || [], W = +g.W, H = +g.H, box = Number.isFinite(W) && Number.isFinite(H);
+    const top = Number.isFinite(+g.top) ? Math.min(0, +g.top) : 0, fr = Array.isArray(g.frame) && g.frame.length === 4 ? g.frame : null;
+    const fp = +g.framePad || 0;
     for (const p of pts) {
       for (const w of words) if (ldIn(p, w, 0)) c += LEADER.WORD_COST;
       for (const b of ink) if (ldIn(p, b, 0)) c += LEADER.INK_COST;
-      if (box && (p.x < 0 || p.x > W || p.y < 0 || p.y > H)) c += LEADER.EDGE_COST;
+      if (box && (p.x < 0 || p.x > W || p.y < top || p.y > H)) c += LEADER.EDGE_COST;
+      if (fr && ldOnFrame(p, fr, fp)) c += LEADER.FRAME_COST;
     }
     const pb = leaderPillBox(pts, g.pill), pad = +g.pad || 0;
     if (pb) {
       const grown = [pb[0] - pad, pb[1] - pad, pb[2] + pad, pb[3] + pad];
       for (const w of words) if (ldMeet(grown, w)) c += LEADER.WORD_COST;
-      if (box && (pb[0] < 0 || pb[2] > W || pb[1] < 0 || pb[3] > H)) c += LEADER.EDGE_COST;
+      if (box && (pb[0] < 0 || pb[2] > W || pb[1] < top || pb[3] > H)) c += LEADER.EDGE_COST;
+      if (fr && ldBoxOnFrame(grown, fr)) c += LEADER.FRAME_PILL_COST;
     }
     return c;
   };
 
   /* THE SIDE, decided once: the author's `bend` (+ lifts toward the page's top, - sags, 0 straight; |bend| x BEND_MAX
-     radians) when there is one, else the first of up x BOWS then down x BOWS whose cost is 0, else the cheapest. */
+     radians) when there is one, else the first of up x BOWS then down x BOWS - then (R26-418 (a)) up x WIDE - whose cost
+     is 0, else the cheapest. The wide lifts come LAST, so every page that had a clear candidate keeps it. */
   const leaderChoose = (A, B, g, bend) => {
     const up = leaderUp(leaderCentre(A), leaderCentre(B)), gaps = g.gaps || [0, 0];
     if (bend !== undefined && bend !== null && Number.isFinite(+bend)) {
@@ -18629,7 +18680,8 @@ async function mount(doc) {
       return Object.assign(pick, { cost: leaderCost(leaderArc(A, B, pick.bow, pick.sign, gaps), g) });
     }
     let best = null;
-    for (const s of [up, -up]) for (const bow of LEADER.BOWS) {
+    const cands = [...[up, -up].flatMap((s) => LEADER.BOWS.map((bow) => [s, bow])), ...LEADER.WIDE.map((bow) => [up, bow])];
+    for (const [s, bow] of cands) {
       const c = leaderCost(leaderArc(A, B, bow, s, gaps), g);
       if (c === 0) return { sign: s, bow, authored: false, cost: 0 };
       if (!best || c < best.cost) best = { sign: s, bow, authored: false, cost: c };
@@ -19327,6 +19379,29 @@ async function mount(doc) {
      here on the build's geometry (leaderChoose): the author's `bend`, else the first bow clear of the page's words (its
      own ends' words excepted - the arc leaves one and lands at the other) and of the row's other figures. The leave is
      the level join's rule (an undraw of the line, or a verb that replaces the page, at or after the word). */
+  /* P72 T53 (k) / R26-418 (a) - THE SKY OVER THE CHART'S BOX (9:16: no room above a top figure INSIDE the box, so every
+     lifted candidate left it and the chooser sagged through the bars). The free room above the chart's svg, in chart
+     units (a y <= 0): from its top up to the lowest of the page's own words standing above it (the title, the sub, a key
+     - any written element of the page outside its charts) or the page's own top, less LEADER.SKY_PAD_PX. Measured once
+     at build on the laid-out page (the ratio of two client boxes: the stage's scale cancels). 0 when nothing is free. */
+  const lpLeaderSky = (st, G, k) => {
+    const ch = st.chart, pg0 = st.page;
+    if (!ch || !pg0 || !ch.getBoundingClientRect) return 0;
+    const cr = ch.getBoundingClientRect(), pr = pg0.getBoundingClientRect();
+    if (!(cr.height > 0) || !(G.H > 0)) return 0;
+    let floor = pr.top;
+    for (const e of pg0.querySelectorAll("*")) {
+      if (e.closest("svg") || e.children.length || !(e.textContent || "").trim()) continue;
+      const r = e.getBoundingClientRect();
+      if (r.height > 0 && r.bottom <= cr.top + 1 && r.right > cr.left && r.left < cr.right) floor = Math.max(floor, r.bottom);
+    }
+    return -Math.max(0, (cr.top - floor) * (G.H / cr.height) - LEADER.SKY_PAD_PX / k);
+  };
+  /* R26-418 (b): the long form's plot frame (lpLongformPlot's panel) on the page's own state, [x0, y0, x1, y1] in chart
+     units - an obstacle to the chooser - or null (the default profile draws none) */
+  const lpPlotFrame = (st) => { const r = st.lfPanelEl; if (!r) return null;
+    const x = +r.getAttribute("x"), y = +r.getAttribute("y");
+    return [x, y, x + +r.getAttribute("width"), y + +r.getAttribute("height")]; };
   const lpBuildLeaders = (st, scene, surf, figures, P, G) => pageSpecies(scene, "leader").map((sp) => {
     const k = st.stagePx > 0 ? st.stagePx : 1, src = sp.from || {}, to = sp.to || {};
     const act = (S0) => (S0.states && S0.states[S0.active | 0]) || S0, said = (v) => String(v == null ? "" : v).trim();
@@ -19383,7 +19458,8 @@ async function mount(doc) {
     for (let i = 0; BM["b:" + i] && BM["b:" + i].geom; i++) { const q = BM["b:" + i].geom; ink.push([q.x, q.y, q.x + q.w, q.y + q.h]); }
     const c = T0 ? leaderCentre(T0) : null, B0 = ring && c ? { cx: c[0], cy: c[1], rx: ring.rx / k, ry: ring.ry / k } : T0;
     const pick = A0 && B0 ? leaderChoose(A0, B0, { words, ink, W: G.W, H: G.H, pill: pill ? [pill.box.w, pill.box.h] : null,
-                                                   pad: LEADER.PILL_PAD_PX / k, gaps: [LEADER.GAP_PX / k, LEADER.GAP_PX / k] }, sp.bend)
+                                                   pad: LEADER.PILL_PAD_PX / k, gaps: [LEADER.GAP_PX / k, LEADER.GAP_PX / k],
+                                                   top: lpLeaderSky(st, G, k), frame: lpPlotFrame(st), framePad: LEADER.FRAME_PAD_PX / k }, sp.bend)
       : { sign: -1, bow: LEADER.BOW };
     const takes = [...pageSpecies(scene, "undraw").filter((u) => { const us = u.series ?? (u.target || {}).series; return us == null || (us | 0) === (to.series | 0); }),
                    ...pageSpecies(scene, "chart_to").filter((v) => v.to === "recast" || v.to === "morph" || v.to === "remake")]
@@ -19465,6 +19541,22 @@ async function mount(doc) {
     });
     return { y, x0: q.x, x1, holes };
   };
+  /* P72 T53 (l) (R26-419 (c)) - THE BARS THIS FRAME, for the far bar's level on a page with chart states: each bar's box on
+     the ACTIVE state, lerped from the leaving state to the arriving one on lpDatumNow's own clock while an extend or a
+     rescale moves the scale ({x, y, w, h, cx, end, base} by index; a bar one side lacks is left out). The level re-reads
+     them every frame, so it runs at the far bar's level NOW and breaks behind the bars as they stand NOW. */
+  const lpBarTopsNow = (st) => {
+    const on = (S) => { const B = (S && S.markBy) || {}, out = []; for (let i = 0; B["b:" + i] && B["b:" + i].geom; i++) out.push(B["b:" + i].geom); return out; };
+    const xf = st.xfNow;
+    if (!(xf && !xf.keyed && !xf.morph && !xf.remake && st.states)) return on((st.states && st.states[st.active | 0]) || st);
+    const A = on(st.states[xf.from]), Z = on(st.states[xf.to]), u = xf.extend ? segEase(clamp01(xf.u / XF_EXTEND.RESCALE)) : xf.u;
+    const base = (q) => (q.base != null ? q.base : q.y + q.h), out = [];
+    for (let i = 0; i < Math.min(A.length, Z.length); i++) {
+      const a = A[i], z = Z[i], L = (k) => xfLerp(a[k], z[k], u);
+      out.push({ x: L("x"), y: L("y"), w: L("w"), h: L("h"), cx: L("cx"), end: L("end"), base: xfLerp(base(a), base(z), u) });
+    }
+    return out;
+  };
   const lpBracketLevelPath = (lv, p) => {   /* `p` of the way from the span to the far bar, the holes left open */
     if (!lv || !(p > 0)) return "";
     const xe = lv.x0 + (lv.x1 - lv.x0) * Math.min(1, p), a = Math.min(lv.x0, xe), z = Math.max(lv.x0, xe);
@@ -19525,7 +19617,7 @@ async function mount(doc) {
          read once here (landscape: a portrait page's names stand above the line's end). No span in a tag moves. */
       const tagBoxes = P || barSide ? [] : (st.paths || []).filter((pp) => pp && pp.name && !pp.muted && (pp.name.textContent || "").trim())
         .map((pp) => lpLabelBox(pp.name)).filter(Boolean);
-      const geomOf = (Ap, Bp, ptsNow) => {
+      const geomOf = (Ap, Bp, ptsNow, topsNow) => {   /* topsNow: the bars this frame (lpBarTopsNow) on a page with states - R26-419 (c) */
         const xr = barSide ? Math.max(Ap[0], Bp[0]) + barSide + PS.BRACKET_GAP : Math.max(Ap[0], Bp[0]) + PS.BRACKET_GAP;   /* R26-272: beside a bar's SIDE */
         const y0 = Math.min(Ap[1], Bp[1]), y1 = Math.max(Ap[1], Bp[1]), ym = (y0 + y1) / 2;
         const inMargin = xr <= G.W;
@@ -19541,7 +19633,8 @@ async function mount(doc) {
         const half = sp.form === "bar" ? PS.BRACKET_BAR_W / 2 : 0;   /* P50 T9: a bar has width, and its label is written clear of it, not on it */
         const lx = fits ? x + 12 + half : x - 4 - half, ly = fits ? ym + fs * 0.35 : yClear - (sp.sub ? fss * 1.3 : 0) - 10;   /* beside, or stacked above the whole line */
         const out = { x, dir, fits, anchor: fits ? "start" : "end", y0, y1, lx, ly, sy: fits ? ly + fss * 1.3 : yClear - 10, tw, stepped };
-        out.level = lpBracketLevel(out, ptsNow, barTops, Math.max(0, Math.min(ptsNow.length - 1, sp.from | 0)), Math.max(0, Math.min(ptsNow.length - 1, sp.to | 0)));   /* P72 T53 (e) */
+        const lvTops = barTops && topsNow && topsNow.length >= 2 ? topsNow : barTops, lvPts = lvTops === barTops ? ptsNow : lvTops.map((q) => [q.cx, q.end]);
+        out.level = lpBracketLevel(out, lvPts, lvTops, Math.max(0, Math.min(lvPts.length - 1, sp.from | 0)), Math.max(0, Math.min(lvPts.length - 1, sp.to | 0)));   /* P72 T53 (e); (l) R26-419 (c): the bars as they stand this frame */
         return out;
       };
       const g0 = geomOf(A, B, pts);
@@ -19573,7 +19666,7 @@ async function mount(doc) {
         return { g, line, len, t0, t1, label, lg, sub, sg, level };
       };
       const main = mk("main", col, 0), glow = mk("glow", PS.RELIGHT_COL, 0);   /* the sunflower twin ABOVE the base: at full it covers span and label alike */
-      return { sp, x: g0.x, y0: g0.y0, y1: g0.y1, A, B, fits: g0.fits, main, glow, bi, si: sp.series | 0, geomOf, applyGeom, key: "", lv: g0.level };
+      return { sp, x: g0.x, y0: g0.y0, y1: g0.y1, A, B, fits: g0.fits, main, glow, bi, si: sp.series | 0, geomOf, applyGeom, key: "", lv: g0.level, lv0: !!g0.level };
     }).filter(Boolean);
     const retitles = pageSpecies(scene, "retitle").map((sp, ri) => {
       const div = lpEl("div", "lp-ink lp-title lp-retitle", st.page);
@@ -19798,11 +19891,13 @@ async function mount(doc) {
           if (named && text == null) text = fullText(named.el);
           if (named && !fsBase) fsBase = parseFloat(getComputedStyle(named.el).fontSize) || 0;
           const row = named || mine[0] || null;
-          return { si: bars ? 0 : si, di, label: named, cy: row ? row.top + row.h / 2 : NaN, bars };
+          const top = S.lfPanel && Number.isFinite(S.lfPanel.y) ? S.lfPanel.y : (S.plot && Number.isFinite(S.plot.T) ? S.plot.T : NaN);   /* R26-415: the dated rule hangs from the state's own plot top */
+          return { si: bars ? 0 : si, di, label: named, cy: row ? row.top + row.h / 2 : NaN, bars, top };
         });
         const fs = (fsBase || (P ? 40 : 24)) * AXTAG.TYPE_K;   /* the tick's own size, bolder: .callout over .lab */
-        const guide = lpEl("path", "lp-axtag-guide", surf, { d: "", fill: "none", stroke: "var(--lp-acc)", opacity: 0,
-          "stroke-width": AXTAG.GUIDE_W, "stroke-linecap": "round", "stroke-dasharray": AXTAG.GUIDE_DASH });
+        const isRule = sp.guide === "rule";   /* P72 T53 (i) / R26-415: the dated rule - the page's chalk, dashed, butt ends */
+        const guide = lpEl("path", "lp-axtag-guide" + (isRule ? " lp-axtag-rule" : ""), surf, { d: "", fill: "none", stroke: isRule ? "var(--lp-chalk)" : "var(--lp-acc)", opacity: 0,
+          "stroke-width": AXTAG.GUIDE_W, "stroke-linecap": isRule ? "butt" : "round", "stroke-dasharray": isRule ? AXTAG.RULE_DASH : AXTAG.GUIDE_DASH });
         const g = lpEl("g", "lp-axtag", surf, { opacity: 0 });
         const rect = lpEl("rect", "cpill", g, {});   /* the page's own callout capsule: the sunflower accent */
         const tx = lpEl("text", "callout", g, { x: 0, y: (fs * 0.35).toFixed(1), "text-anchor": "middle", opacity: 0,
@@ -19811,7 +19906,11 @@ async function mount(doc) {
         const pill = axtagPillBox(lpInkW(tx), fs);
         rect.setAttribute("x", pill.x.toFixed(1)); rect.setAttribute("y", pill.y.toFixed(1));
         rect.setAttribute("width", pill.w.toFixed(1)); rect.setAttribute("height", pill.h.toFixed(1)); rect.setAttribute("rx", pill.r.toFixed(1));
-        return { sp, g, rect, text: tx, guide, pill, on, t0: axtagStart(sp, pageSpecies(scene, "chart_to"), KEYED_DATA.MIN_S) };   /* the pop waits for its page to have arrived */
+        /* R26-415: ONE PRINT - every page word (an end tag, a value) that writes the pill's own string on any state yields
+           while the pill says it (the estimate's "2026E" end tag beside the "2026E" pill) */
+        const said = String(text || "").trim(), dupes = !said ? [] : tagStates.flatMap((S) => [...((S.chart && S.chart.querySelectorAll) ? S.chart.querySelectorAll("text.sname, text.val") : [])])
+          .filter((e) => fullText(e).trim() === said).map((el) => ({ el, hid: false }));
+        return { sp, g, rect, text: tx, guide, pill, on, dupes, t0: axtagStart(sp, pageSpecies(scene, "chart_to"), KEYED_DATA.MIN_S) };   /* the pop waits for its page to have arrived */
       });
       const boxesOf = tagStates.map((S) => [...((S.chart && S.chart.querySelectorAll) ? S.chart.querySelectorAll("text.lab, text.sname, text.val") : [])]
         .map(fullBox).filter(Boolean));   /* lpLabelBoxes' own set, each on its whole string */
@@ -20146,7 +20245,7 @@ async function mount(doc) {
       const Ap = lpDatumNow(st, b.si, sp.from | 0), Bp = lpDatumNow(st, b.si, sp.to | 0);
       if (!Ap || !Bp) { b.main.g.setAttribute("opacity", 0); b.glow.g.setAttribute("opacity", 0); b.hidden = true; return; }   /* a datum the window dropped: nothing to measure */
       b.hidden = false;
-      const q = b.geomOf(Ap, Bp, lpPointsNow(st, b.si).map((e) => e.p)), key = [q.x, q.y0, q.y1, q.lx, q.ly, q.anchor].map((v) => typeof v === "number" ? v.toFixed(1) : v).join("|");
+      const q = b.geomOf(Ap, Bp, lpPointsNow(st, b.si).map((e) => e.p), b.lv0 ? lpBarTopsNow(st) : null), key = [q.x, q.y0, q.y1, q.lx, q.ly, q.anchor, q.level ? q.level.y : "", q.level ? q.level.x1 : ""].map((v) => typeof v === "number" ? v.toFixed(1) : v).join("|");
       if (key !== b.key) { b.applyGeom(b.main, q); b.applyGeom(b.glow, q); b.key = key; b.x = q.x; b.y0 = q.y0; b.y1 = q.y1; b.fits = q.fits; b.lv = q.level; }
     }
     let u = clamp01((t - sp.at) / dur);
@@ -21161,6 +21260,29 @@ async function mount(doc) {
     const d = pp.data[pp.data.length - 1], g = m.geom || {};
     return { x: sb.mx(d[0]) + (g.x - sa.mx(d[0])), y: sb.my(d[1]) + (g.y - sa.my(d[1])) };
   };
+  /* P72 T53 (j) / R26-417 (d) (T26's F6, the golden issuance page at 10.62: mid-extend "29 28.5 28 27.5 27" stacked at the
+     plot's foot over the arriving "50") - A Y LABEL YIELDS BEFORE IT PRINTS ON ANOTHER. A standing label inside the
+     target's domain travels to its place on the new scale at full ink (the eye follows the scale); a re-fit that ZOOMS OUT
+     packs the standing labels into a sliver of the new scale, onto each other and onto the target's own. Each standing
+     label's opacity is scaled by its clearance this frame to its nearest neighbour - another standing label or an arriving
+     one that shows (over SHOWS): whole at 1.5 label heights and more, gone at one. A pure function of the frame; a
+     rescale whose labels never close in (every golden one) writes nothing here. */
+  const YLABEL_YIELD = Object.freeze({ SHOWS: 0.15, CLEAR_K: 1, FADE_K: 0.5 });
+  const lpYLabelsYield = (A, Bs) => {
+    const labs = (S) => (S.marks || []).filter((m) => m.role === "ylabel" && m.el && (m.el.textContent || "").trim());
+    const rec = (m) => { const e = m.el;
+      if (!(e.__lh > 0) && e.getBBox) { const b = e.getBBox(); if (b && b.height > 0) e.__lh = b.height; }
+      const op = e.style.opacity === "" ? 1 : parseFloat(e.style.opacity);
+      return { e, y: parseFloat(e.getAttribute("y")), h: e.__lh || 0, op: Number.isFinite(op) ? op : 1 }; };
+    const stand = labs(A).map(rec), near = [...stand, ...labs(Bs).map(rec)].filter((o) => o.op > YLABEL_YIELD.SHOWS && Number.isFinite(o.y));
+    const ks = stand.map((q) => {
+      if (!(q.h > 0) || !(q.op > 0) || !Number.isFinite(q.y)) return 1;
+      let f = 1;
+      for (const o of near) if (o !== q) f = Math.min(f, clamp01((Math.abs(q.y - o.y) - YLABEL_YIELD.CLEAR_K * q.h) / (YLABEL_YIELD.FADE_K * q.h)));
+      return f;
+    });
+    stand.forEach((q, i) => { if (ks[i] < 1) q.e.style.opacity = (q.op * ks[i]).toFixed(3); });
+  };
   const lpPaintRescale = (states, xf, t3, scene, t) => {
     const A = states[xf.from], Bs = states[xf.to];
     let u = xf.u;
@@ -21261,6 +21383,7 @@ async function mount(doc) {
        same job (P71 T3b): the arriving panel stays down and the STANDING panel carries the plot's box to the target's on
        this clock, so at u = 1 the target's own panel stands exactly where the carried one ended. lpPaintStates hands
        both back every frame (lpPanelRestore), so a seek is the play. A page with no panel is untouched. */
+    lpYLabelsYield(A, Bs);   /* P72 T53 (j): R26-417 (d) */
     lpPanelHand(A, Bs, u, false);
     return u;   /* R26-233: the clock the frame was actually painted on - the caller's `xfNow` carries it to the perform layer */
   };
@@ -21975,7 +22098,7 @@ async function mount(doc) {
        swaps WHOLE on that instant (paintPerform's chain). Null when no plain recast is on. */
     st.recastNow = plain && plain.verb === "recast" && states[plain.from] && states[plain.to]
       ? { at: plain.at, empty: fedPlainRecast ? plainDataGone : lpPlotEmpty(states[plain.from]) } : null;
-    let ink = 0, ue = 0, uw = 1, titleHand = false, plainMeta = null;
+    let ink = 0, ue = 0, uw = 1, titleHand = false, plainMeta = null, standFrom = -1;
     for (const sp of pageSpecies(scene, "chart_to")) {
       if (t < sp.at) break;
       if (sp.to === "rescale" || sp.to === "extend" || sp.to === "park" || sp.to === "compare") continue;   /* P48 T2/T3/T2b + P57 T12: the words stay - it is the same chart */
@@ -21989,6 +22112,14 @@ async function mount(doc) {
       }
       ink = Math.max(0, Math.min(states.length - 1, sp.state | 0));
       if (fedPlainRecast && (sp.to === "recast" || (sp.to === "morph" && !kin("arap_morph"))) && !sp.keyed) plainMeta = { state: ink, end: sp.at + d };
+      /* P72 T53 (j) (R26-417 (a); H 81.5 / 663.7: the arriving sub half-written under the standing whole title) - ON A PLAIN
+         RECAST'S CLOCK THE SUB AND THE SOURCE HAND OVER WHOLE, as its title does (lpRetitleWhole): the standing state's
+         stand whole until the standing data are off the plot (st.recastNow.empty, the instant the axes change hands) and
+         the arriving state's stand whole from then on - the words on screen are always one chart's. */
+      if (plainWhole && (sp.to === "recast" || (sp.to === "morph" && !kin("arap_morph"))) && !sp.keyed && sp.at === plain.at && st.recastNow) {
+        const sw = st.recastNow.empty ? 1 : 0;
+        ue = plain.from === 0 ? sw : 1; uw = sw; standFrom = sw ? -1 : plain.from;   /* the page's own (state 0's) words stand only when the recast leaves state 0 */
+      }
       titleHand = sp.to === "remake";   /* P61 T2 / E99 s34: the title is part of the chart, and only the verb that transforms the WHOLE chart touches it */
     }
     for (let i = 1; i < states.length; i++) {
@@ -22000,7 +22131,7 @@ async function mount(doc) {
          transition has removed the old ink; keyed and other verbs retain uw. */
       const write = on && plainMeta && plainMeta.state === i
         ? clamp01((t - plainMeta.end) / (states[i].buildDur || LP.BUILD))
-        : (on ? uw : -1);
+        : (on ? uw : (i === standFrom ? 1 : -1));   /* R26-417 (a): the standing state's words stand whole until the swap */
       for (const r of [states[i].subInk, states[i].srcInk]) if (r) writeGlyphs(r.glyphs, write * (r.glyphs.length + 2), r.glyphs.length);
     }
     if (ink > 0) for (const r of [{ glyphs: st.subGlyphs || [] }, { glyphs: st.srcGlyphs || [] }]) {
@@ -28794,6 +28925,20 @@ async function mount(doc) {
     }
     cap.style.textShadow = box ? captionBacking(captionGround(sc, box)) : "";
   };
+  /* P72 T53 (l) / R26-419 (a) (the iceberg-tip golden: "the frame under test" written over the tip's $261B and the rule's
+     "the balance sheet") - THE CAPTION IN THE SKY OF A RAISED CAMERA. Until its word a row's pedestal holds the camera
+     raised by `by` of the stage, so the page stands `by * H` lower and the band above it is the page's own sky (T53 (a)'s
+     lpPedestalSky) - the one room on the frame nothing is written in. The caption (stage or quiet) stands centred in that band while
+     the camera is held raised, and takes its own place back on the pedestal's word (the camera leaves on it: a layout
+     move on the row's own clock, painted with no transition, as E62's band move is). A band too short for the caption
+     plus CAP_SKY_M above and below it leaves the caption where it was. Returns the caption's top (stage px) or null. */
+  const CAP_SKY_M = 24;
+  const captionSkyTop = (sc, t) => {
+    const ped = sc && sc.camera && sc.camera.pedestal, by = ped ? +ped.by : 0;
+    if (!ped || !(by > 0 && by < PEDESTAL.BY_MAX) || !Number.isFinite(+ped.at) || !(t < +ped.at)) return null;
+    const band = by * STAGE_H, h = cap.offsetHeight;
+    return band >= h + 2 * CAP_SKY_M ? Math.max(CAP_SKY_M, (band - h) / 2) : null;
+  };
   /* P72 T14 (R26-268): A PLATE'S CAPTION ROOM (`;caption_room=x,y,w,h`, fractions of the stage): the STAGE caption sits
      in the rectangle the plate declares, centred in it - off the host's collar (row 7), off the viaduct's paper edge
      (row 13) - as `;room=` places a card. Read only when the caption holds the stage with no card's band. */
@@ -29963,6 +30108,8 @@ async function mount(doc) {
     if (capBand) { cap.style.top = capBand.y + "px"; cap.style.bottom = "auto"; }
     else if (croom) captionInRoom(croom);
     else if (cap.style.top || cap.style.bottom) { cap.style.top = ""; cap.style.bottom = ""; }
+    const skyTop = sc.world.kind === "ledger" && !capBand && !croom ? captionSkyTop(sc, t) : null;   /* P72 T53 (l): R26-419 (a) - the caption the page shows, stage or quiet */
+    if (skyTop != null) { cap.style.top = skyTop.toFixed(1) + "px"; cap.style.bottom = "auto"; }
     paintCaptionBacking(sc, stage, PHRASE);   /* P72 T14: read under the words where the stage caption now sits */
 
     [...chips.children].forEach((c, i) => c.classList.toggle("on", i === si));

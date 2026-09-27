@@ -58,10 +58,19 @@ export const LEADER = Object.freeze({
                             END ring is 0.55; the leader's ring is the answer the arc points at - Bravos's is a callout's) */
   BEND_MAX: 1.1,         /* `bend: +-1` turns the tail this far off the chord (the widest of BOWS) */
   BOWS: Object.freeze([0.5, 0.8, 1.1]),   /* the automatic candidates, each side: the arc's own bow first, then wider */
+  WIDE: Object.freeze([1.4, 1.7]),        /* P72 T53 (k) / R26-418 (a): the wide LIFTS, tried only when no candidate above is
+                                             clear - over a tall word in the way (9:16: the $121B between the total and the
+                                             $28B), into the air above the chart (Bravos STK 0:08's high arc), never a sag */
   WORD_COST: 1000,       /* one arc sample (or the pill) on one of the page's words ... */
   EDGE_COST: 10000,      /* ... off the chart's box ... */
   INK_COST: 1,           /* ... on a mark's ink (a bar): allowed, but a clear arc over air is preferred */
   PILL_PAD_PX: 6,        /* the air the pill keeps off a word, stage px */
+  FRAME_COST: 0.25,      /* P72 T53 (k) / R26-418 (b): one arc sample ON the long form's plot-frame border - a quarter of a
+                            sample on a bar's ink: a clean crossing (one or two samples) is cheaper than a sag through the
+                            bars, an arc RIDING the border (many samples) is not; the chooser then takes the least of them */
+  FRAME_PILL_COST: 1000, /* ... and the multiple's pill straddling that border costs as a word does */
+  FRAME_PAD_PX: 6,       /* the border's reach either side of its line, stage px */
+  SKY_PAD_PX: 12,        /* R26-418 (a): the air an arc lifted into the room above the chart keeps under the page's words */
 });
 
 const ld01 = (v) => Math.min(1, Math.max(0, v));
@@ -150,28 +159,46 @@ export const leaderPillBox = (pts, size) => {
   return m && size ? [m.x - size[0] / 2, m.y - size[1] / 2, m.x + size[0] / 2, m.y + size[1] / 2] : null;
 };
 
-/* THE COST of one arc: its samples on the page's WORDS dominate, then off the chart's box, then on a mark's ink; the
-   pill on a word or off the box costs as a word does. `g`: {words, ink ([x0, y0, x1, y1] each), W, H, pill: [w, h] |
-   null, pad (the pill's air, chart units)}. */
+/* P72 T53 (k) / R26-418 (b): is a point ON the plot frame's border ([x0, y0, x1, y1], reach `r` either side of a line)? */
+const ldOnFrame = (p, f, r) => {
+  const inX = p.x >= f[0] - r && p.x <= f[2] + r, inY = p.y >= f[1] - r && p.y <= f[3] + r;
+  return (inX && (Math.abs(p.y - f[1]) <= r || Math.abs(p.y - f[3]) <= r)) || (inY && (Math.abs(p.x - f[0]) <= r || Math.abs(p.x - f[2]) <= r));
+};
+/* ... and does a box straddle one of its lines? */
+const ldBoxOnFrame = (b, f) => {
+  const inX = b[2] > f[0] && b[0] < f[2], inY = b[3] > f[1] && b[1] < f[3];
+  return (inX && ((b[1] < f[1] && b[3] > f[1]) || (b[1] < f[3] && b[3] > f[3]))) || (inY && ((b[0] < f[0] && b[2] > f[0]) || (b[0] < f[2] && b[2] > f[2])));
+};
+
+/* THE COST of one arc: its samples on the page's WORDS dominate, then off the chart's box, then on a mark's ink, then
+   on the plot frame's border; the pill on a word, off the box or across the frame's border costs as a word does.
+   `g`: {words, ink ([x0, y0, x1, y1] each), W, H, pill: [w, h] | null, pad (the pill's air, chart units), top? (R26-418
+   (a): the free room above the chart's box the builder measured, a y <= 0 - the box's top edge moves up to it; absent,
+   0), frame? ([x0, y0, x1, y1] the long form's plot frame, R26-418 (b); absent, none), framePad? (its reach)}. */
 export const leaderCost = (pts, g) => {
   let c = 0;
   const words = g.words || [], ink = g.ink || [], W = +g.W, H = +g.H, box = Number.isFinite(W) && Number.isFinite(H);
+  const top = Number.isFinite(+g.top) ? Math.min(0, +g.top) : 0, fr = Array.isArray(g.frame) && g.frame.length === 4 ? g.frame : null;
+  const fp = +g.framePad || 0;
   for (const p of pts) {
     for (const w of words) if (ldIn(p, w, 0)) c += LEADER.WORD_COST;
     for (const b of ink) if (ldIn(p, b, 0)) c += LEADER.INK_COST;
-    if (box && (p.x < 0 || p.x > W || p.y < 0 || p.y > H)) c += LEADER.EDGE_COST;
+    if (box && (p.x < 0 || p.x > W || p.y < top || p.y > H)) c += LEADER.EDGE_COST;
+    if (fr && ldOnFrame(p, fr, fp)) c += LEADER.FRAME_COST;
   }
   const pb = leaderPillBox(pts, g.pill), pad = +g.pad || 0;
   if (pb) {
     const grown = [pb[0] - pad, pb[1] - pad, pb[2] + pad, pb[3] + pad];
     for (const w of words) if (ldMeet(grown, w)) c += LEADER.WORD_COST;
-    if (box && (pb[0] < 0 || pb[2] > W || pb[1] < 0 || pb[3] > H)) c += LEADER.EDGE_COST;
+    if (box && (pb[0] < 0 || pb[2] > W || pb[1] < top || pb[3] > H)) c += LEADER.EDGE_COST;
+    if (fr && ldBoxOnFrame(grown, fr)) c += LEADER.FRAME_PILL_COST;
   }
   return c;
 };
 
 /* THE SIDE, decided once: the author's `bend` (+ lifts toward the page's top, - sags, 0 straight; |bend| x BEND_MAX
-   radians) when there is one, else the first of up x BOWS then down x BOWS whose cost is 0, else the cheapest. */
+   radians) when there is one, else the first of up x BOWS then down x BOWS - then (R26-418 (a)) up x WIDE - whose cost
+   is 0, else the cheapest. The wide lifts come LAST, so every page that had a clear candidate keeps it. */
 export const leaderChoose = (A, B, g, bend) => {
   const up = leaderUp(leaderCentre(A), leaderCentre(B)), gaps = g.gaps || [0, 0];
   if (bend !== undefined && bend !== null && Number.isFinite(+bend)) {
@@ -180,7 +207,8 @@ export const leaderChoose = (A, B, g, bend) => {
     return Object.assign(pick, { cost: leaderCost(leaderArc(A, B, pick.bow, pick.sign, gaps), g) });
   }
   let best = null;
-  for (const s of [up, -up]) for (const bow of LEADER.BOWS) {
+  const cands = [...[up, -up].flatMap((s) => LEADER.BOWS.map((bow) => [s, bow])), ...LEADER.WIDE.map((bow) => [up, bow])];
+  for (const [s, bow] of cands) {
     const c = leaderCost(leaderArc(A, B, bow, s, gaps), g);
     if (c === 0) return { sign: s, bow, authored: false, cost: 0 };
     if (!best || c < best.cost) best = { sign: s, bow, authored: false, cost: c };

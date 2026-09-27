@@ -1039,6 +1039,7 @@ SPECIES_WHEN[SPECIES_AXIS_TAG] = ("COMPARES, at the proof: the sentence NAMES a 
                                   "when the date is not spoken, or past 2-3 tags in one hold")
 AXIS_TAG_KEYS = (("kind", "at", "dur", "x", "label", "series", "guide", "panel", "keep")
                  + ROW_PATH_KEYS + ("leave_at", "leave_s", "leave_clamped"))   # + what the row path and R26-219 write
+AXIS_TAG_RULE = "rule"   # P72 T53 (i) / R26-415: `guide: "rule"` - a dated rule the plot's full height at x, hung from no datum
 AXIS_TAG_MAX = 3   # the don't (USE-WHEN :323): "more than 2-3 tags in one hold"; species/axis_tag.mjs AXTAG.MAX_STANDING
 AXIS_TAG_LINE = ("dense-line", LPG.PANEL_LINE)   # the pages whose x axis carries values: a line page, a line panel ...
 AXIS_TAG_BARS = ("story", LPG.PANEL_BARS)        # ... and the pages whose x axis is the bars' categories
@@ -5164,8 +5165,9 @@ def _validate_axis_tag(entry: dict) -> list[str]:
         errs.append("axis_tag: label must be a non-empty string (absent: the tick's own label)")
     if "series" in entry and not _is_index(entry["series"]):
         errs.append("axis_tag: series must be a non-negative integer series index (the line the guide drops from)")
-    if "guide" in entry and not isinstance(entry["guide"], bool):
-        errs.append("axis_tag: guide must be true or false (false: the pill alone, no drop guide)")
+    if "guide" in entry and not (isinstance(entry["guide"], bool) or entry["guide"] == AXIS_TAG_RULE):
+        errs.append(f"axis_tag: guide must be true or false, or {AXIS_TAG_RULE!r} - not {entry['guide']!r} (false: the pill "
+                    f"alone, no drop guide; {AXIS_TAG_RULE!r}: the dated rule, the plot's full height at the date - R26-415)")
     for k in sorted(k for k in entry if k not in AXIS_TAG_KEYS):
         errs.append(f"axis_tag: {k!r} is not one of its keys ({'|'.join(AXIS_TAG_KEYS[3:9])}) - a tag prints the page's "
                     "own x; the number the sentence turns on is a `figure`")
@@ -5234,7 +5236,7 @@ def _axis_tag_line(spec: dict, sp: dict, where: str) -> tuple[float, list[str]]:
     if not on_tick and not isinstance(label, str):
         warns.append(f"{where}: no tick stands at x={xv:g}, so the pill prints '{xv:g}' - name it with `label` (the "
                      "sentence's own words); REPORTED, the frame read decides (E99 s106)")
-    if not on_datum and sp.get("guide") is True:
+    if not on_datum and sp.get("guide") is True:   # the dated rule (`guide: "rule"`) hangs from the date, not a datum
         warns.append(f"{where}: x={xv:g} is a tick with no datum of series {si} - there is no point to drop a guide from, "
                      "so the pill stands alone; REPORTED (E99 s106)")
     return xv, warns
@@ -5262,7 +5264,7 @@ def _axis_tag_bars(spec: dict, sp: dict, where: str) -> tuple[float, list[str]]:
         raise ValueError(f"{where}: label {label!r} is not bar {i}'s category {cats[i]!r} - the pill names the bar it "
                          "stands under (s109 (5): a label no bar carries is refused)")
     warns = []
-    if sp.get("guide") is True:
+    if sp.get("guide") is True or sp.get("guide") == AXIS_TAG_RULE:
         warns.append(f"{where}: guide - a bars page draws no guide (a dotted rule down a bar is a seam in it; the "
                      "breakthrough capsule's measured finding): the pill stands under its bar; REPORTED (E99 s106)")
     return float(i), warns
@@ -5717,6 +5719,37 @@ BRACE_FIGURE = re.compile(r"(?<![A-Za-z0-9.])[-+\u2212]?\d[\d,]*(?:\.\d+)?")   #
                               # a digit inside a word ("Q1", "H2") is a name, not a figure; a year reads as one (write it in the sub)
 
 
+GROUP_FIGURE = re.compile(r"([+\-\u2212]?)\s*[$\u20ac\u00a3]?\s*(\d[\d,]*(?:\.\d+)?)\s*(x\b|\u00d7|%)?")   # a figure a group's label writes: sign, digits, a ratio / share suffix
+
+
+def _group_truth(sp: dict, where: str, vals: list) -> None:
+    """P72 T53 (l) / R26-419 (b) - A GROUP'S FIGURE IS ITS TOTAL (level_join's `_lj_truth`: a figure the page states is the
+    page's own arithmetic at the label's precision, and a written sign says the direction). The first figure the label
+    writes must be the sum of bars `from`..`to` - a ratio or a share (x, %) is not a group's total, and a year or a count
+    belongs in its sub (the brace's own rule). A label with no figure ("Decades", A16) names the group and is untouched.
+    ValueError names the label, the figure and the total."""
+    label = str(sp.get("label") or "")
+    m = GROUP_FIGURE.search(label)
+    if not m:
+        return
+    a, z = sorted((int(sp["from"]), int(sp["to"])))
+    total = float(sum(float(v) for v in vals[a:z + 1] if isinstance(v, (int, float)) and not isinstance(v, bool)))
+    sign, digits, suffix = m.group(1), m.group(2).replace(",", ""), m.group(3)
+    places = _lj_decimals(digits)
+    want = f"{total:g}" + ("" if round(total, places) == total else f" ({abs(total):,.{places}f} at the label's precision)")
+    if suffix:
+        raise ValueError(f"{where}: label {label!r} writes {digits}{suffix} - a group names the TOTAL of bars {a}..{z} "
+                         f"({want}); a ratio or a share is a bracket between two bars or a figure (E28 / E99 s109)")
+    fall = sign in ("-", "\u2212")
+    if sign and total != 0 and fall != (total < 0):
+        raise ValueError(f"{where}: label {label!r} writes a {'FALL' if fall else 'RISE'} ({sign!r}) but "
+                         f"bars {a}..{z} total {want} - a written sign says the direction (E28)")
+    if abs(abs(total) - float(digits)) > 0.5 * 10 ** -places + 1e-9:
+        raise ValueError(f"{where}: label {label!r} writes {digits} but bars {a}..{z} of the group total {want} - a figure the "
+                         "page states is the page's own arithmetic (E28 / E99 s109); a year or a count the label names "
+                         "belongs in its sub")
+
+
 def check_brace(page: dict | None, species: list, aspect: str | None = None) -> list[str]:
     """P70 T5 (E99 s109: the parts must sum to the total - T64's `segments` already refuse a stack that does not): a
     `form: "brace"` bracket on its page. It stands on a single BARS page, on a bar the page has, which carries T64's
@@ -5737,6 +5770,7 @@ def check_brace(page: dict | None, species: list, aspect: str | None = None) -> 
             v = sp.get(f)
             if not (isinstance(v, int) and not isinstance(v, bool) and 0 <= v < len(vals)):
                 raise ValueError(f"{where}: {f} is bar {v}, not a bar of this page (0..{len(vals) - 1})")
+        _group_truth(sp, where, vals)
     braces = [sp for sp in (species or []) if isinstance(sp, dict) and sp.get("kind") == "bracket"
               and sp.get("form") == BRACE_FORM]
     for sp in braces:

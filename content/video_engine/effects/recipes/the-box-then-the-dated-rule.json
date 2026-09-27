@@ -70,9 +70,10 @@
     14.5
    ],
    "options": {
-    "dur": 1.0
+    "dur": 1.0,
+    "guide": "rule"
    },
-   "role": "as the estimate lands, the dated rule: the projected year's tick springs into the accent pill - the rule names the date, as an estimate"
+   "role": "as the estimate lands, the dated rule: the year's tick springs into the accent pill and a dashed rule drops the plot's full height at the date - the date printed once, as an estimate"
   }
  ],
  "window_s": 16.0,

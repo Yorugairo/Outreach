@@ -176,3 +176,35 @@ test("the pill rides the arc's middle and pops; an end the window dropped hides 
   paintLeader(lv, 21.1, {}, {});
   assert.equal(lv.g.a.opacity, "0");
 });
+
+// ---- P72 T53 (k) / R26-418: the sky above the chart's box, the long form's plot frame ------------------------------------
+test("R26-418 (a) THE SKY: an arc may leave the chart's box UPWARD into the free room the builder measured above it", () => {
+  const up = leaderArc([900, 40], [100, 500], 1.1, leaderUp([900, 40], [100, 500]), [0, 0]);   // a wide lift: its top runs above y 0
+  assert.ok(Math.min(...up.map((p) => p.y)) < 0, "the fixture's arc does leave the box upward");
+  const g = { words: [], ink: [], W: 1000, H: 560, pill: null, pad: 0 };
+  assert.ok(leaderCost(up, g) >= LEADER.EDGE_COST, "no sky measured: the box's top is an edge, as before");
+  assert.equal(leaderCost(up, Object.assign({}, g, { top: -400 })), 0, "free room above: the lift is air, not an edge");
+  const low = Math.min(...up.map((p) => p.y));
+  assert.ok(leaderCost(up, Object.assign({}, g, { top: low + 20 })) >= LEADER.EDGE_COST, "past the free room: an edge again");
+  const sag = leaderArc([900, 40], [100, 500], 1.1, -leaderUp([900, 40], [100, 500]), [0, 0]);
+  assert.ok(Math.max(...sag.map((p) => p.y)) > 0, "sanity");
+  const W = 1000, H = 560, bars = [[150, 300, 250, 560], [450, 200, 550, 560]];
+  const pick = leaderChoose([850, 40, 950, 80], [200, 280], { words: [[430, 150, 570, 190]], ink: bars, W, H, pill: null, gaps: [0, 0], top: -300 });
+  assert.equal(pick.sign, leaderUp([900, 60], [200, 280]), "with sky over the chart it lifts over the words, never sags through the bars");
+  assert.equal(pick.cost, 0);
+});
+
+test("R26-418 (b) THE PLOT FRAME is an obstacle: an arc riding or re-crossing its border, or a pill on it, costs", () => {
+  const frame = [100, 100, 900, 500];
+  const g = { words: [], ink: [], W: 1000, H: 560, pill: null, pad: 0, frame, framePad: 4 };
+  const along = leaderArc([150, 100], [850, 100], 0, 1, [0, 0]);   // runs ON the top border
+  const across = leaderArc([500, 40], [500, 300], 0, 1, [0, 0]);   // crosses it once, square
+  assert.ok(leaderCost(along, g) > leaderCost(across, g), "riding the border costs more than crossing it once");
+  assert.ok(leaderCost(across, g) > 0 && leaderCost(across, g) < LEADER.WORD_COST, "a single crossing is a small cost, never a word's");
+  assert.equal(leaderCost(across, Object.assign({}, g, { frame: null })), 0, "no frame (the default profile): as before");
+  const inside = leaderArc([200, 200], [800, 400], 0.5, -1, [0, 0]);
+  assert.equal(leaderCost(inside, g), 0, "an arc inside the frame, clear of its border, costs nothing");
+  const pts = leaderArc([300, 60], [700, 140], 0, 1, [0, 0]);   // its middle sits on the top border
+  const pillOn = leaderCost(pts, Object.assign({}, g, { pill: [60, 30] }));
+  assert.ok(pillOn >= LEADER.FRAME_PILL_COST, "a pill straddling the border costs as a word does");
+});

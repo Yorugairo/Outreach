@@ -6760,6 +6760,62 @@ SURFACES.update({"iceberg-tip": iceberg_stage, "iceberg-base-lit": iceberg_stage
 FRAME_T.update({"iceberg-tip": 4.5, "iceberg-base-lit": 12.0})
 
 
+# ---- P72 T53 (i) / R26-415 (Bravos A56, BOOM 18:00.5): THE DATED RULE ------------------------------------------------------
+#   dated-rule  `project-issuance-2026e`'s own page (H row 16's issuance and its dashed 2026E, composed off the committed
+#               `ev-debt-issuance-line-v1`) with the committed object's own [2026, "2026E"] tick put back, so the axis
+#               carries the projected year labelled as the estimate it is. The extend draws the dashed estimate; as it
+#               lands the 2026E tick springs into the accent pill and a DASHED rule drops the plot's full height at 2026 -
+#               hung from the date, not from a datum (the estimate's is refused as data, E77) - and the estimate's own
+#               "2026E" end tag yields to the pill: the date is printed once. Judged with the rule landed.
+DATED_RULE_TICK = 2026
+
+
+def dated_rule_series() -> dict:
+    """projection_series() with the committed object's own estimate tick ([2026, '2026E'] - read, never typed)."""
+    obj = projection_series()
+    committed = json.loads(PROJ_OBJECT.read_text(encoding="utf-8"))
+    est = [t for t in committed["xticks"] if t[0] == DATED_RULE_TICK]
+    assert est and str(est[0][1]).endswith("E"), committed["xticks"]   # the committed tick names itself an estimate
+    obj["xticks"] = obj["xticks"] + est
+    return obj
+
+
+DATED_RULE_AT = round(PROJ_AT + PROJ_DUR, 2)   # the pill pops when the extended page stands
+DATED_RULE_SPECIES = [{"kind": "chart_to", "at": PROJ_AT, "dur": PROJ_DUR, "to": "extend", "series": 1},
+                      {"kind": "axis_tag", "at": DATED_RULE_AT, "dur": round(RUNTIME - DATED_RULE_AT - 1.0, 2),
+                       "x": DATED_RULE_TICK, "guide": "rule"}]
+
+
+def dated_rule(species: list | None = None) -> tuple[dict, dict]:
+    import tempfile
+    import build_scene_timeline_f as BST
+    series = dated_rule_series()
+    assert LPG.validate(series, "line") == [], LPG.validate(series, "line")
+    species = [dict(e) for e in (species if species is not None else DATED_RULE_SPECIES)]
+    assert not BST.validate_species(species, (0, 0, 0), PROJ_PLATE), BST.validate_species(species, (0, 0, 0), PROJ_PLATE)
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        with tempfile.TemporaryDirectory() as td:
+            objects = Path(td) / "evidence/objects"
+            objects.mkdir(parents=True)
+            (objects / f"{PROJ_ID}.series.json").write_text(json.dumps(series), encoding="utf-8")
+            world = BST.world_for_plate(PROJ_PLATE, (0, 0, 0), Path(td))
+            BST.stamp_full_stage(world["page"])
+            BST.derive_rescale_states(world, species, PROJ_PLATE, Path(td))
+            BST.check_axis_tags(world, species)   # the tag's truth: 2026 is a tick the page carries (s109)
+    finally:
+        BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    tl = _timeline("Golden: the dated rule at the projected year (A56)", scenes, {}, "16:9")
+    return tl, dict(_base_uris(), **BST.longform_assets(tl))
+
+
+SURFACES.update({"dated-rule": dated_rule})
+FRAME_T.update({"dated-rule": round(DATED_RULE_AT + 1.0, 2)})   # the pill popped, the rule landed (GUIDE_AT + RULE_S = 0.6 s)
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

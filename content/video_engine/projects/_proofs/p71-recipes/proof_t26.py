@@ -178,7 +178,7 @@ def _box_row(ws: list, runtime: float) -> tuple:
         # ... and the rule names the DATE as the forward draw lands on it (an axis tag pops when its page stands - the
         # extend's end; earlier it is WARNed and waits, P71 T9)
         {"kind": "axis_tag", "at": round(t_track + extend_dur, 2), "dur": round(runtime - t_track - extend_dur, 2),
-         "x": DEBT_2026},
+         "x": DEBT_2026, "guide": "rule"},   # P72 T53 (i) / R26-415: Bravos's full-height dated rule (BOOM 18:00.5)
     ]
     return (0.0, runtime, DEBT_PLATE, (0, 0, 0), [], None, species)
 

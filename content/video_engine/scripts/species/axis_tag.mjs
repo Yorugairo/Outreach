@@ -51,6 +51,8 @@ export const AXTAG = Object.freeze({
   GUIDE_DASH: BREAK.CAP_LEAD_DASH,   /* ... dotted */
   GUIDE_W: BREAK.CAP_LEAD_W,         /* ... at the leader's weight */
   LABEL_PAD: 6,       /* C14: the guide stops this far short of a label box it would cross */
+  RULE_S: 0.5,        /* P72 T53 (i) / R26-415: `guide: "rule"` - the DATED RULE drops the plot's full height over this ... */
+  RULE_DASH: "10 8",  /* ... DASHED, Bravos's projected-date rule (BOOM 18:00.5), not the datum leader's dots */
   MAX_STANDING: 3,    /* the don't (USE-WHEN :323): "more than 2-3 tags in one hold" - build_scene_timeline_f.AXIS_TAG_MAX, the compiler's copy */
 });
 
@@ -62,7 +64,8 @@ export const axtagPose = (sp, t, t0) => {
   const d = t - (Number.isFinite(t0) ? t0 : (+sp.at || 0));
   if (!(d >= 0)) return { on: false, s: 0, u: 0, guide: 0 };
   const u = ax01(d / AXTAG.POP_S);
-  return { on: true, u, s: springPop(u, AXTAG.POP_MP), guide: minJerk(ax01((d - AXTAG.GUIDE_AT) / AXTAG.GUIDE_S)) };
+  return { on: true, u, s: springPop(u, AXTAG.POP_MP), guide: minJerk(ax01((d - AXTAG.GUIDE_AT) / AXTAG.GUIDE_S)),
+           rule: minJerk(ax01((d - AXTAG.GUIDE_AT) / AXTAG.RULE_S)) };
 };
 
 /* WHEN THE POP STARTS: on its word - unless its word falls while the chart state it names is still ARRIVING. A state
@@ -147,7 +150,17 @@ export const axtagPlace = (td, st, ctx) => {
   const named = on.label || null, nb = named ? axtagLabelBox(named) : null;
   const x = p ? p[0] : nb ? nb[0] + nb[2] / 2 : null;
   if (x == null || !Number.isFinite(on.cy)) return null;
-  return { x, y: on.bars || !p ? null : p[1], cy: on.cy, named, S, si: on.si, k };
+  return { x, y: on.bars || !p ? null : p[1], cy: on.cy, named, S, si: on.si, k, top: on.top, bars: !!on.bars };
+};
+
+/* P72 T53 (i) / R26-415 - THE DATED RULE (Bravos A56, BOOM 18:00.5: a full-height dashed rule at the projected date, its
+   pill on the axis). `guide: "rule"` drops from the PLOT's top (the state's own, `on.top`) to the pill's top - it hangs
+   from the date, not from a datum, so a date the page carries only as a tick (the estimate's, which E77 refuses as data)
+   gets its rule. Top-down by length on min-jerk over RULE_S, cut round the page's labels (C14). A bars page draws none. */
+const axtagRuleD = (P, td, pose, boxes) => {
+  if (P.bars || !Number.isFinite(P.top)) return "";
+  const y1 = P.cy - td.pill.h / 2 - AXTAG.GUIDE_GAP;
+  return axtagGuideD(P.x, axtagGuideRuns(P.x, P.top, y1, boxes), P.top + (y1 - P.top) * pose.rule);
 };
 
 /* THE PAINTER (P71 T9). `at` is the perform layer's built set - `tags` (each: `sp`, the pill group `g`, `rect`,
@@ -165,10 +178,20 @@ export const paintAxisTags = (at, t, st, ctx) => {
     td.g.setAttribute("transform", "translate(" + P.x.toFixed(1) + " " + P.cy.toFixed(1) + ") scale(" + s.toFixed(4) + ")");
     td.g.setAttribute("opacity", (1 - lv).toFixed(3));
     const nb = P.named ? axtagLabelBox(P.named) : null, sc = axtagCoverScale(P.x, P.cy, td.pill, nb);
-    td.text.setAttribute("opacity", (pose.u >= 1 ? 1 : ax01((s - sc) / Math.max(1e-6, 1 - sc))).toFixed(3));
+    const said = pose.u >= 1 ? 1 : ax01((s - sc) / Math.max(1e-6, 1 - sc));
+    td.text.setAttribute("opacity", said.toFixed(3));
     for (const lab of at.labels || []) {
       const b = axtagLabelBox(lab);
       if (b && axtagHides(rect, b, lab === P.named)) hide.add(lab);
+    }
+    /* R26-415: ONE PRINT - a page label writing the pill's own string (an estimate's end tag "2026E") yields while the
+       pill's text stands: the date is said once, on the axis */
+    if (said > 0) for (const dp of td.dupes || []) hide.add(dp);
+    if (td.sp.guide === "rule") {
+      const d = axtagRuleD(P, td, pose, (at.boxesOf || [])[P.k] || []);
+      td.guide.setAttribute("d", d);
+      td.guide.setAttribute("opacity", d ? (1 - lv).toFixed(3) : 0);
+      continue;
     }
     /* the guide: a line page's, from the datum down to the pill's top, cut round the page's labels, never ahead of the ink */
     const drawn = P.y == null ? null : litDrawnX((P.S && P.S.paths) || [], P.si);
@@ -180,7 +203,7 @@ export const paintAxisTags = (at, t, st, ctx) => {
     td.guide.setAttribute("opacity", d ? (1 - lv).toFixed(3) : 0);
   }
   /* the covered labels, re-decided every frame from t alone: hidden while a pill covers them, given back after */
-  for (const lab of at.labels || []) {
+  for (const lab of [...(at.labels || []), ...(at.tags || []).flatMap((td) => td.dupes || [])]) {
     if (hide.has(lab)) { lab.el.style.visibility = "hidden"; lab.hid = true; }
     else if (lab.hid) { lab.el.style.visibility = ""; lab.hid = false; }
   }

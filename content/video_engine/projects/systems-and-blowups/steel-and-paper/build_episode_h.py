@@ -114,7 +114,7 @@ row names one), and HOST_CARD_DOOR records that a card CAN now stand on a pictur
 - Recall(rulings): docs/portable/OPERATOR-RULINGS.md:2342 "The hook opens on its axes" (E73 - row 1 is the page on its axes from the first frame)
 - Recall(rulings): docs/portable/OPERATOR-RULINGS.md:1494 "Nothing ever goes truly still" (E49 - `;idle=live` on every page row, `;idle=drift;drift=20` on the plate)
 - Recall(rulings): docs/portable/OPERATOR-RULINGS.md:3278 "A second card takes the outgoing card's slot" (E99 s80 - the certificate card hands its slot to the Bravos chart card)
-- Recall(rulings): docs/content-video-engine/CAPABILITIES.md:108 "The AUTHORING KIT - one door for both formats, WIRED" (R26-17 step 0 - this door imports the kit and nothing from the F door)
+- Recall(rulings): docs/content-video-engine/CAPABILITIES.md:109 "The AUTHORING KIT - one door for both formats, WIRED" (R26-17 step 0 - this door imports the kit and nothing from the F door)
 """
 from __future__ import annotations
 
