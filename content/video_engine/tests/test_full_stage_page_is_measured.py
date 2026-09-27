@@ -145,6 +145,13 @@ def test_the_fixture_measures_both_16x9_geometries_for_every_builder():
             assert fp["w"] == pp["w"] == GAUGE_SPAN_PX, (builder, fp, pp)
             assert fp["h"] > pp["h"] and fp["x"] != pp["x"], (
                 f"{builder}: the full-stage capsule is not taller than the column's - one of the two was not measured")
+        elif builder == MPB.STORY_AXES_NONE:
+            # P71 T31: the AXIS-LESS story page centres a plot as wide as its narrow bars need (LPBAR's 196 px cap, no
+            # tick column to widen past) - 891 = 891 at both geometries (measured 2026-09-26); on the full stage it is
+            # TALLER and moves with the stage's centre, like the gauge's capsule
+            assert fp["w"] == pp["w"], (builder, fp, pp)
+            assert fp["h"] > pp["h"] and fp["x"] != pp["x"], (
+                f"{builder}: the full-stage plot is not taller than the column's - one of the two was not measured")
         else:
             assert fp["w"] > pp["w"], (
                 f"{builder}: the full-stage plot is not wider than the column's - one of the two was not measured")
