@@ -130,6 +130,11 @@ GAUGE_SURFACE = "gauge-94"
 # not a series" under the axis, measured as its own box. The golden's own page (`schematic-hype-trough`, the hype cycle).
 SCHEMATIC_LINE = "dense-line" + LPG.REPRESENTATIVE_SEP + LPG.SCHEMATIC_KEY
 SCHEMATIC_SURFACE = "schematic-hype-trough"
+# P71 T39: a dense-line page's FOURTH representative - a schematic with a measured OVERLAY (E99 s125): the overlay's right
+# column comes out of the plot, the plot gives up one x-tick row to its dates, the tag keeps its place under them. The
+# golden's own page (`schematic-meets-the-data`, the railway index over the hype cycle), as DECLARED.
+OVERLAY_LINE = "dense-line" + LPG.REPRESENTATIVE_SEP + LPG.OVERLAY_KEY
+OVERLAY_SURFACE = "schematic-meets-the-data"
 # P71 T13: a dense-line page's THIRD representative - the SECOND AXIS (E99 s102): the right tick column comes out of the plot
 # and its words (the ticks and the axis's name) are measured as their own box. The golden's own page (`dual-axis-inverted`).
 DUAL_LINE = "dense-line" + LPG.REPRESENTATIVE_SEP + LPG.Y2_KEY
@@ -246,7 +251,7 @@ READ_BOXES = r"""
   /* P72 T40 (R26-337): a SCHEMATIC has no data - its PHASE NAMES carry the narrative and its TAG says what the page is
      (E99 s109 (1)) - so both are the data's ink here: a card in the plot's 'empty' room never covers either */
   const DATA = 'rect.bar, rect.bar-band, path.ser, path.wedge, text.val, text.callout, rect.cpill, .lp-cell, '   /* P69 T8d: a range's band is data */
-    + 'text.lp-phase, text.lp-schematic';
+    + 'text.lp-phase, text.lp-schematic, text.lp-claim-text, circle.lp-claim-ring, text.lp-ov-tick, text.lp-ov-date';   /* P71 T39: an overlay's claim (s125 (4)), its ticks and dates are the page's ink too */
   const SEG = 48;
   const dataBoxes = (el) => {
     const r = R(el);
@@ -279,7 +284,8 @@ READ_BOXES = r"""
   /* P70 T2: a schematic's tag (s109 (1): the page says it is a shape, not a series) - its own box, and part of the plot's
      furniture band as the x tick labels are (a card never covers what the page says it is) */
   const sch = wB.querySelector('.lp-schematic');
-  if (sch) { out.schematic = R(sch); if (out.plot) out.plot = U(out.plot, out.schematic); }
+  if (sch) { out.schematic = R(sch); if (out.plot) out.plot = U(out.plot, out.schematic);
+    if (out.axis && out.axis.x) out.axis.x = U(out.axis.x, out.schematic); }   /* P71 T39: an overlay's dates stand over the tag - its x band reaches down to it */
   /* P72 T15 (R26-253): the BASIS LABEL (`axes.ylabel` - "index - 100 = Aug 2025, log scale"), the engine's one
      `axislabel` mark keyed `axislabel` (lpYLabel; an era's label shares the role, never the key), as drawn */
   const shownEl = (el) => (el.textContent || '').trim() && +(el.getAttribute('opacity') || 1) > 0.05
@@ -449,6 +455,13 @@ def representative(builder: str) -> dict:
         if page.get("caption") == "anchor":
             page.pop("caption")
         return page
+    if builder == OVERLAY_LINE:   # P71 T39: the golden's own overlay page, as DECLARED (its full-stage stamp stripped)
+        tl = json.loads((RB.SOURCES / f"{OVERLAY_SURFACE}.timeline.json").read_text(encoding="utf-8"))
+        page = _strip(next(s["world"]["page"] for s in tl["scenes"] if (s.get("world") or {}).get("page")))
+        page.pop("full_stage", None)
+        if page.get("caption") == "anchor":
+            page.pop("caption")
+        return page
     if builder == SCHEMATIC_LINE:   # P70 T2: the golden's own schematic page, as DECLARED - the golden carries the
         tl = json.loads((RB.SOURCES / f"{SCHEMATIC_SURFACE}.timeline.json").read_text(encoding="utf-8"))   # compiler's
         page = _strip(next(s["world"]["page"] for s in tl["scenes"] if (s.get("world") or {}).get("page")))  # full-stage
@@ -465,7 +478,8 @@ def representative(builder: str) -> dict:
     return _strip(page)
 
 
-BUILDERS = tuple(sorted(set(GOLDEN_PAGES) | {"share", LPG.PANELS, PANELS_BARS, STORY_GAUGE, SCHEMATIC_LINE, DUAL_LINE, STORY_PROJECTED, STORY_AXES_NONE}))
+BUILDERS = tuple(sorted(set(GOLDEN_PAGES) | {"share", LPG.PANELS, PANELS_BARS, STORY_GAUGE, SCHEMATIC_LINE, DUAL_LINE, STORY_PROJECTED, STORY_AXES_NONE,
+                                             OVERLAY_LINE}))
 PROFILED = tuple(b for b in BUILDERS if b in LPG.READABILITY_BUILDERS[LPG.LONGFORM])   # N3: dense-line and story
 
 

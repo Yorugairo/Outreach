@@ -4718,6 +4718,71 @@ FRAME_T.update({"schematic-candles": round(CANDLES_WORD_AT + 0.125 * CANDLES_WOR
                 "schematic-motif": round(MOTIF_BADGE_AT + 1.25, 3)})                        # every X struck and settled: 10.8
 
 
+# ---- P71 T39 (was P69 T46 (3)) / E99 s125: THE SHAPE MEETS THE DATA - a real series laid over a schematic -----------------
+#   schematic-meets-the-data  A TEST-BED beat, labelled REFERENCE: H row 12's trough sentence ties no committed measured
+#                             series to the shape (SCRIPT-H-VO.txt :27 - its trough is the AI budgets, in words), so the
+#                             beat lays a SOURCED series from disk over P70 T2's own hype cycle (SCHEMATIC_OBJECT, read):
+#                             the Campbell & Turner railway index, 1843-1850 (ev-railway-index-v1 - its points, its source,
+#                             its ink, its unit's words and its dates READ from the committed object, never re-typed), on its
+#                             own right axis and its own dates. The claim sits at the shape's own TROUGH (read off the
+#                             generated curve, schematic_peak_trough) in the script's own words for the railway's fall
+#                             (SCRIPT-H-VO.txt :21, "crashed by nearly two-thirds"). The shape builds with the page; the
+#                             index draws on its word (8.0 s over 2.4 s, the T20 test bed's word) and the claim lands at
+#                             11.0 s. Judged 1.0 s after the claim: the shape tagged "a shape, not a series", its phases,
+#                             the measured line on its own labelled axis and dates, the ring on the trough with its words.
+MEETS_ID = "ev-hype-meets-railway"
+MEETS_PLATE = f"ledger:{MEETS_ID}:line::right;idle=live"
+MEETS_SERIES = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/objects/ev-railway-index-v1.series.json"
+MEETS_OVERLAY_AT, MEETS_OVERLAY_DUR = 8.0, 2.4   # the test bed's word: the measured line draws over the standing shape
+MEETS_CLAIM_AT = 11.0                            # ... and then the claim, on its own word
+MEETS_CLAIM_TEXT = "crashed by nearly two-thirds"   # SCRIPT-H-VO.txt :21 - the railway's own words
+MEETS_UNIT = "pts"                               # an index is read in points (the object's sub: "January 1843 = 1,000")
+MEETS_PHASES = ("Peak of inflated expectations", "Trough")   # the two phases the beat names (s120 (3): few words on the plot)
+
+
+def meets_object() -> dict:
+    """P70 T2's hype cycle with the railway index laid over it - the index's points, source, ink, label and dates read from
+    the committed object."""
+    rail = json.loads(MEETS_SERIES.read_text(encoding="utf-8"))
+    ser = rail["series"][0]
+    obj = json.loads(json.dumps(SCHEMATIC_OBJECT))
+    obj["sub"] = "A model of reputation, and the railway mania measured over it - a reference beat"
+    obj["schematic"]["phases"] = [p for p in obj["schematic"]["phases"] if p["name"] in MEETS_PHASES]   # s120 (3): the two it names
+    obj["schematic"]["overlay"] = {
+        "series": {"name": "Railway shares", "pts": ser["pts"], "src": rail["src"], "tier": "CONFIRMED", "color": ser["color"]},
+        "axis": {"unit": MEETS_UNIT, "label": rail["ylabel"]}, "xticks": rail["xticks"],
+        "at": MEETS_OVERLAY_AT, "dur": MEETS_OVERLAY_DUR,
+        "claim": {"at": MEETS_CLAIM_AT, "x": schematic_peak_trough()[1], "text": MEETS_CLAIM_TEXT}}
+    return obj
+
+
+def schematic_meets_the_data() -> tuple[dict, dict]:
+    """P71 T39: a measured series over the hype cycle on its own axes, and the claim of where it sits (s125)."""
+    import tempfile
+    import build_scene_timeline_f as BST
+    species: list = []
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        with tempfile.TemporaryDirectory() as td:
+            objects = Path(td) / "evidence/objects"
+            objects.mkdir(parents=True)
+            (objects / f"{MEETS_ID}.series.json").write_text(json.dumps(meets_object()), encoding="utf-8")
+            world = BST.world_for_plate(MEETS_PLATE, (0, 0, 0), Path(td))
+        BST.stamp_full_stage(world["page"])
+    finally:
+        BST.ASPECT = saved
+    BST.check_schematic(world, species)
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: a measured series laid over the hype cycle on its own axes, the claim at the trough (reference)",
+                     scenes, {}, "16:9"), _base_uris()
+
+
+SURFACES.update({"schematic-meets-the-data": schematic_meets_the_data})
+FRAME_T.update({"schematic-meets-the-data": round(MEETS_CLAIM_AT + 1.0, 3)})   # the claim landed and its words written: 12.0
+
+
 # ---- P70 T13: THE DRIFT-HOLD on a real held card -------------------------------------------------------------------
 #   drift-hold-tripwire  Steel and Paper H row 22's board (dock-h-tripwire-board) as the chart card it is: the committed
 #                        object's own checklist (ev-tripwire-board-v1 - read, never re-typed), thrown (paper) into the

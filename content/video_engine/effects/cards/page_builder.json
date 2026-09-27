@@ -514,13 +514,21 @@
         {
           "name": "Axis-free \"Market\" motif with X marks",
           "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:989"
+        },
+        {
+          "name": "the shape meets the data",
+          "source": "docs/portable/OPERATOR-RULINGS.md:3381"
+        },
+        {
+          "name": "we are here",
+          "source": "docs/portable/OPERATOR-RULINGS.md:3381"
         }
       ],
       "does": "A line page drawn from a named closed form, not from data: a phase model (hype, waves, debt cycle) or an illustration (candles along a ghost wave, an axis-free motif); no value on the page, the tag 'a shape, not a series'.",
       "when": "a phase model carrying the narrative, named as a model - 'the world's art carrying the narrative' (E99 s109 (1)); never with axis values, figures it cannot source, or without the mark that it is 'a shape, not a series'",
       "when_source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:565",
       "author": {
-        "key": "series object (evidence/objects/*.series.json) \"schematic\": {\"shape\": \"hype\"|\"waves\"|\"debt_cycle\"|\"candles\"|\"motif\", \"phases\": [{\"name\", \"from\", \"to\", \"side\"?}], \"n\"?, \"name\"?, \"color\"?} IN PLACE OF \"series\" on a line page (ledger:<series-id>:line)",
+        "key": "series object (evidence/objects/*.series.json) \"schematic\": {\"shape\": \"hype\"|\"waves\"|\"debt_cycle\"|\"candles\"|\"motif\", \"phases\": [{\"name\", \"from\", \"to\", \"side\"?}], \"n\"?, \"name\"?, \"color\"?} IN PLACE OF \"series\" on a line page (ledger:<series-id>:line) - and inside it `overlay`: {\"series\": {\"name\"?, \"pts\", \"src\", \"tier\"?, \"color\"?}, \"axis\": {\"unit\", \"label\"}, \"xticks\"?, \"at\", \"dur\"?, \"claim\": {\"at\", \"x\", \"text\"}}",
         "example": "{\"schematic\": {\"shape\": \"hype\", \"phases\": [{\"name\": \"Peak of inflated expectations\", \"from\": 0.12, \"to\": 0.3}, {\"name\": \"Trough of disillusionment\", \"from\": 0.3, \"to\": 0.48}]}}",
         "example_source": "content/video_engine/tests/golden/build_golden_sources.py",
         "check": "none"
@@ -555,6 +563,27 @@
             "WICK_PX": "3",
             "GHOST_A": "0.45"
           }
+        },
+        {
+          "name": "the measured series joins (overlay)",
+          "does": "on its word a real series draws over the standing shape on its OWN right axis (its data's range, its unit, its label, its ink) and its own dates (the plot gives up one tick row; the tag keeps its place); it blooms",
+          "trigger": "overlay.at, over overlay.dur (the page's pen law)",
+          "dials": {
+            "OVERLAY_DUR": "3.0",
+            "FADE_S": "0.3"
+          }
+        },
+        {
+          "name": "the claim lands (overlay)",
+          "does": "a ring and a dot ON the shape at claim.x pop in (the datum badge's spring), then the claim's words off the mark at the s90 floor, 1-3 lines, a leader to the ring, in the measured series' ink",
+          "trigger": "overlay.claim.at",
+          "dials": {
+            "R_PX": "30",
+            "W_PX": "5",
+            "DOT_PX": "7",
+            "WORDS_S": "0.15",
+            "LEAD_PX": "3"
+          }
         }
       ],
       "blends": [
@@ -575,6 +604,12 @@
           "became": "the two illustrations: generated candles, the axis-free wave",
           "record": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:571",
           "tie": "recorded"
+        },
+        {
+          "source": "E99 s125 a real series laid over a schematic, on its own axis, where it sits a claim",
+          "became": "the overlay: its own right axis and dates, the tag kept, the claim's ring and words (BOOM 15:28 -> 16:14 shows the shape, then the measured chart on two axes, in sequence)",
+          "record": "docs/portable/OPERATOR-RULINGS.md:3381",
+          "tie": "recorded"
         }
       ],
       "options": [
@@ -592,6 +627,11 @@
           "token": "motif",
           "means": "T46 (USE-WHEN :989, the close strips the chart to a symbol): an axis-free rising wave, its 8 turning points a `datum_badge` names by `vertex`; a `ylabel` refused; the title names it",
           "source_set": "SCHEMATIC_SHAPES"
+        },
+        {
+          "token": "overlay",
+          "means": "E99 s125 (P71 T39): a sourced series on its OWN right axis (unit + label) and dates, on its word; a fit key refused (s125 (2)); a claim's words required (s125 (4)); golden schematic-meets-the-data",
+          "source_set": "SCHEMATIC_FIELDS"
         }
       ],
       "dials": null,
@@ -604,7 +644,13 @@
           "lpPaintSchematic",
           "LP_SCHEMATIC",
           "lpSchematicCandles",
-          "lpSchematicVertices"
+          "lpSchematicVertices",
+          "lpOverlayPlan",
+          "lpOverlayDraw",
+          "LP_OVERLAY",
+          "lpBuildSchematicClaim",
+          "lpPaintSchematicOverlay",
+          "LP_CLAIM"
         ],
         "note": "buildLedgerLine behind pg.schematic; ledger_page.schematic_series / _validate_schematic / schematic_candles / schematic_vertices; build_scene_timeline_f.check_schematic"
       },
@@ -612,7 +658,8 @@
         "E99 s109",
         "E99 s90",
         "E99 s118",
-        "E99 s106"
+        "E99 s106",
+        "E99 s125"
       ],
       "status": "wired",
       "implicit": true,

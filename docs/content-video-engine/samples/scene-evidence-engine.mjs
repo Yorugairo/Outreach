@@ -14253,12 +14253,16 @@ async function mount(doc) {
     /* portrait (P41): stage px; no right margin for an inline name - it sits above the line's end.
        T17 changes only the closed phone profile's local face/box law; legacy values stay byte-stable. */
     const LFT = P ? null : st.lfType;   /* P69 T8: the long form's preset geometry (null keeps T17's and the legacy page's) */
-    const L = P ? 150 : LFT ? LFT.plot_l : PHONE ? LP_PHONE.PLOT_L : 70, T = P ? 90 : 40, B = P ? G.H - 80 : LFT ? LFT.line_b : (PHONE ? 458 : 470), W = G.W;
+    /* P71 T39 / E99 s125: a schematic's OVERLAY writes its dates in the x band, where the shape's tag already stands (P70 T2, at the s90 floor) - the plot gives up one x-tick row at its foot, so the dates sit over the tag and the tag keeps its place (0: every other page, to the byte) */
+    const OVROW = pg.schematic && typeof pg.schematic === "object" && pg.schematic.overlay ? (P ? 52 : LFT ? LFT.xtick_dy : 32) : 0;
+    const L = P ? 150 : LFT ? LFT.plot_l : PHONE ? LP_PHONE.PLOT_L : 70, T = P ? 90 : 40, B = (P ? G.H - 80 : LFT ? LFT.line_b : (PHONE ? 458 : 470)) - OVROW, W = G.W;
     /* P69 T10: a long form's linear axis steps as coarse as a short plot needs (5 divisions whenever it has the room) */
     const yDivs = LFT ? Math.max(1, Math.min(5, Math.floor((B - T) / (2 * LP_LONGFORM.TICK_SPACE * LFT.tick)))) : undefined;
     /* P71 T13 / E99 s102: the second axis, planned before the plot's right edge - its column comes out of the plot (null: today's page, to the byte) */
     const Y2 = lpY2Plan(st, pg, series, { T, B, divs: yDivs || 5, PAL });
-    const R = Math.max(P ? 70 : 220, st.panelTagR || 0) + (Y2 ? Y2.shift : 0);   /* P72 T47: a phone panel's margin holds its end tag (lpBuildPanel) */
+    /* P71 T39 / E99 s125: a schematic's OVERLAY - a measured series on its own right axis, planned here as a y2 is, so its column comes out of the plot (null: today's page, to the byte) */
+    const OV = pg.schematic && typeof pg.schematic === "object" && pg.schematic.overlay ? lpOverlayPlan(st, pg.schematic.overlay, { T, B, divs: yDivs || 5, PAL }) : null;
+    const R = Math.max(P ? 70 : 220, st.panelTagR || 0) + (Y2 ? Y2.shift : 0) + (OV ? OV.shift : 0);   /* P72 T47: a phone panel's margin holds its end tag (lpBuildPanel) */
     const Y = (v) => ax.log ? Math.log10(v) : v;
     /* REFERENCE RULES (the fifth watch, 2026-09-07). A POLICY rate is a constant, not a series: drawn as a line it is a step,
        and a step at this scale reads as a fault. `axes.hlines: [{y, label, color}]` draws it as what it is - a labelled rule
@@ -14478,6 +14482,7 @@ async function mount(doc) {
        pair draws together as the one line it is) - defensive rather than reachable through the compiler, which needs
        exactly ONE series for the highlight split and at least TWO for this mode. */
     if (SCH) lpSchematicTag(st, pg, SCH, { mx, my, L, R, T, B, W, P });   /* P70 T2: the tag and the phases, named; P71 T20: `my` for the candles */
+    if (SCH && OV) lpOverlayDraw(st, OV, SCH.overlay, { mx, L, R, T, B, W, P, LFT, row: OVROW });   /* P71 T39: the measured line on its own axes, its dates over the tag, the claim's point */
     if (BK) lpDrawBreak(st, BK, { T, B, W, R, L, P, fs: brkFs, tickY: B + (P ? 52 : LFT ? LFT.xtick_dy : 32),   /* P69 T66: the cut, its `//`, the gap written, the eras named */
                                   style: PHONE ? "font-size:" + brkFs + "px" : null });
     if (pgBuildLines(pg)) {
@@ -14968,6 +14973,87 @@ async function mount(doc) {
       cd.body.setAttribute("height", h.toFixed(1));
       cd.body.setAttribute("y", (cd.yc < cd.yo ? cd.yo - h : cd.yo).toFixed(1));
     }
+  };
+  /* ---- P71 T39 (was P69 T46 (3)) / E99 s125: THE SHAPE MEETS THE DATA - a real series laid over a schematic ----------
+     The schematic's `overlay` (ledger_page.overlay_block, validated there: s125's four conditions are truth rules) is a
+     MEASURED line drawn over the shape on ITS OWN axes: its values on the right axis through T13's lpY2Plan / lpRightAxis
+     (its own data's range with the page's ordinary 6 % air - nothing fits it to the curve, s125 (2)), its dates in the x
+     band under the plot, both in its ink. That band is the shape's TAG's (P70 T2 writes it there at the s90 floor, and at
+     16:9 the anchored caption's band starts under it), so the plot gives up one x-tick row at its foot (OVROW, in
+     buildLedgerLine) and the dates stand in it: the tag keeps its own place on the page, under them (s125 (3)). It is a
+     PRIMARY line (it blooms, s117); the shape keeps its stroke. It is not one of the page's paths - the build clock, the
+     species and the end tags never see it - and it draws on its OWN word (`at`, over `dur`), painted by
+     lpPaintSchematicOverlay; its words fade in with it. `claim` is where the script says it sits on the shape: its point
+     ON the curve is computed here (cx, cy: the shape's x-fraction through the shape's own mx), the ring and the words are
+     the perform layer's (lpBuildSchematicClaim, s125 (4)). */
+  const LP_OVERLAY = Object.freeze({
+    FADE_S: 0.3,   /* the overlay's axis words fade in from its word over this, s [the datum badge's disc fade, CHIP.FADE_S's scale] */
+  });
+  /* the right axis's plan - lpY2Plan asked of the overlay alone (one line, its unit and its header), so the scale, the ticks
+     in its ink and the column's width are T13's own */
+  const lpOverlayPlan = (st, ov, g) => {
+    const ser = ov.series || {}, ax = ov.axis || {};
+    const plan = lpY2Plan(st, { y2: { series: [0], unit: ax.unit, header: ax.header }, axes: {} }, [{ color: ser.color, pts: ser.pts || [] }], g);
+    return plan ? Object.assign(plan, { header: String(ax.header || ax.label || "") }) : null;
+  };
+  /* the dates that read: left to right, a date whose box would stand on the last one kept is dropped (its element
+     removed) - the first and the LAST always stay, so the axis states its range (E28); the last displaces the one
+     before it rather than go */
+  const lpOverlayDates = (all) => {
+    const box = (d) => lpSegBox(d.e), kept = [];
+    all.forEach((d, i) => {
+      const last = kept[kept.length - 1], b = box(d);
+      const hits = last && b && box(last) && lpSegMeets(box(last), b, LP_SCHEMATIC.PAD_U);
+      if (!hits) { kept.push(d); return; }
+      if (i === all.length - 1 && kept.length > 1) { kept.pop().e.remove(); kept.push(d); return; }
+      d.e.remove();
+    });
+    return kept;
+  };
+  /* g: {mx (the shape's), L, R, T, B, W, P, LFT, row (the x-tick row the plot gave up)}: the plot is fixed */
+  const lpOverlayDraw = (st, O, ov, g) => {
+    const S = st.schematic, data = ((ov.series || {}).pts || []).map(([x, v]) => [+x, +v]);
+    if (!S || data.length < 2) return;
+    const x0 = data[0][0], x1 = data[data.length - 1][0], col = O.col, phone = lpPhoneTypeOf(st);
+    const mx2 = (x) => g.L + (x - x0) / (x1 - x0 || 1) * (g.W - g.L - g.R);   /* its OWN dates across the plot */
+    const pts = data.map(([x, v]) => [mx2(x), O.my(v)]);
+    const d = pts.map(([qx, qy], k) => (k ? "L" : "M") + qx.toFixed(1) + " " + qy.toFixed(1)).join(" ");
+    const p = lpEl("path", "ser lp-overlay", st.chart, { d, stroke: col, opacity: 0 });
+    lpBloomRole(st, { p, hot: true }, col);   /* E99 s117: a measured primary line is emissive */
+    const len = p.getTotalLength ? p.getTotalLength() : 2000;
+    p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
+    lpMark(st, "ov", "overlay", p, { pts, vals: data.map((q) => q[1]), len, col });
+    const x = g.W - g.R + LP_Y2.GAP;   /* its values: T13's column, placed as lpY2Draw places it (the left axis is the shape's, untouched) */
+    O.ticks.forEach(({ el, v }, n) => { el.setAttribute("x", x.toFixed(1)); el.setAttribute("opacity", 0); el.classList.add("lp-ov-tick");   /* its own class: page_boxes reads it as the page's ink */
+      lpMark(st, "ovy:" + n, "y2label", el, { v, x, y: +el.getAttribute("y") }); });
+    const size = g.P ? 40 : (phone ? lpTypeU(st, "tick") : 22), hy = g.T - (g.LFT ? g.LFT.ylab_gap : 12);   /* lpY2Draw's own size and row */
+    /* its name over its own column, END-anchored at the column's right edge (a full-stage page's chart overhangs the stage
+       past it - a name written on from the column ran off the frame, the long form's read): it reaches left over the
+       plot's top row, the shape's name at the other end */
+    const head = lpText(st.chart, "lab lp-y2-name", x + O.colW, hy, "end", O.header, { opacity: 0, style: "font-size:" + size + "px;fill:" + col });
+    /* ... and where the stage is too narrow for the two axis names on one row (9:16), the measured series' name steps up
+       one line of its own over the shape's - the two names never overprint */
+    const yl = st.markBy && st.markBy.axislabel && st.markBy.axislabel.el, lb = yl ? lpSegBox(yl) : null, hb2 = lpSegBox(head);
+    const hy2 = lb && hb2 && lpSegMeets(lb, hb2, LP_SCHEMATIC.PAD_U) ? hy - LP_SCHEMATIC.LINE_H * size : hy;
+    if (hy2 !== hy) head.setAttribute("y", hy2.toFixed(1));
+    lpMark(st, "ovname", "y2name", head, { x: +head.getAttribute("x"), y: hy2 });
+    const dy = g.P ? 52 : g.LFT ? g.LFT.xtick_dy : 32, dstyle = "fill:" + col + (phone ? ";font-size:" + lpTypeU(st, "tick") + "px" : "");   /* the x ticks' own row and size */
+    const all = (ov.xticks || []).map(([dx, lab]) => ({ v: +dx, e: lpText(st.chart, "lab lp-ov-date", mx2(+dx), g.B + dy, "middle", String(lab), { opacity: 0, style: dstyle }) }));
+    const dates = lpOverlayDates(all).map(({ v, e }, i) => { lpMark(st, "ovx:" + i, "xtick", e, { v, x: mx2(v), y: g.B + dy }); return e; });
+    /* s125 (3): the shape's TAG keeps its own place - lpSchematicTag set it off the raised axis and the narrowed plot, so
+       it goes back down the row the plot gave up and out past the column: where a page with no overlay writes it (under
+       the dates, and under the right column's foot, which stands over the band) */
+    const fu = lpSchematicFontU(st);
+    if (S.tag) {
+      const ty = +S.tag.getAttribute("y") + g.row, tx = g.W - g.R + O.shift, txt = String(S.tag.textContent || "");
+      S.tag.setAttribute("x", tx.toFixed(1)); S.tag.setAttribute("y", ty.toFixed(1));
+      const m = st.markBy && st.markBy.schematic;
+      if (m && m.geom) Object.assign(m.geom, { x: tx, y: ty, box: lpSchematicBBox(S.tag, lpSchematicEst([txt], fu, tx, ty, "end")) });
+    }
+    const rec = (st.paths || []).find((pp) => (pp.si | 0) === (S.si | 0) && !pp.muted), cl = ov.claim || {};
+    const cx = g.mx(+cl.x), cy = rec ? lpSchematicYAt(rec.pts || [], cx) : null;   /* s125 (4): the claimed point ON the shape */
+    S.overlay = { p, len, col, pts, data, ticks: O.ticks, head, dates, at: +ov.at, dur: +ov.dur, x0, x1, lo: O.lo, hi: O.hi, my: O.my, mx: mx2,
+                  claim: { at: +cl.at, x: +cl.x, text: String(cl.text || ""), cx, cy } };
   };
   /* RACE (bar-chart-race): ranked horizontal bars per period. EVERYTHING is a smooth function of u (period units):
      a value eases (smoothstep) between consecutive period values over the WHOLE period - exact at every period,
@@ -18623,6 +18709,106 @@ async function mount(doc) {
       }
     }
   };
+  /* ---- P71 T39 / E99 s125 (4) - THE CLAIM: where the measured series sits on the shape is the script's claim, and the
+     page draws it as one - a RING on the curve at the claimed x-fraction, a dot at its point, and the claim's words beside
+     it, off the mark (C14) - never implied by alignment alone. It sits on the chart's perform surface (the layer of the
+     shape it annotates, 2026-09-08), lands on its word by the datum badge's pop (lpBadgePose: a ring is E56's mark ON a
+     chart's point) and its words follow; all in the measured series' ink (the claim is the series', laid on the shape).
+     The words are set on one, two or three lines (broken at the balanced spaces) and take the place round the ring - a
+     slot, slid along its side, stood off by up to OFF_EM of their own ems - that covers none of the words already on the
+     chart (the phase names, the tag, the measured series' ticks, name and dates) and stays in the plot; of those the
+     nearest, then the one crossing the fewest points of the two lines, then the fewest lines. None clear on a crowded
+     page: the place that covers least (the frame read decides). A thin LEADER in the same ink joins the ring's edge to
+     the words' nearest point, so words stood off still belong to their mark. */
+  const LP_CLAIM = Object.freeze({
+    R_PX: 30,       /* the ring's radius, stage px [DERIVED: LP_BADGE.D_PX 42's disc with air round the point it circles] */
+    W_PX: 5,        /* its stroke, stage px [DERIVED: the page's line at rest] */
+    DOT_PX: 7,      /* the point itself, stage px (radius) */
+    LEAD_PX: 3,     /* the leader's stroke, stage px (a hairline beside the ring's 5) */
+    WORDS_S: 0.15,  /* the words follow the ring by this, s (the mark lands, then what it says) */
+    SLOTS: Object.freeze([[1, 0], [-1, 0], [1, -1], [1, 1], [-1, -1], [-1, 1], [0, -1], [0, 1]]),   /* right, left, the four corners, over, under */
+    SLIDE: Object.freeze([0, -0.25, 0.25, -0.5, 0.5]),   /* along the slot's side, in the words' own width (the phases' SLIDE) */
+    OFF_EM: Object.freeze([0, 0.5, 1, 2, 3]),           /* stood off the ring by these of the words' ems, the leader joining them */
+    LINES: 3,       /* the most lines the words are set on */
+  });
+  /* the claim's words on n lines, broken at the spaces that make the longest line shortest (the phases' balanced break,
+     n-way); null when there are fewer words than lines */
+  const lpSchematicClaimLines = (text, n) => {
+    const w = String(text).split(" ");
+    if (n <= 1) return [String(text)];
+    if (w.length < n) return null;
+    const cuts = n === 2 ? w.slice(1).map((_, i) => [i + 1]) : w.slice(1).flatMap((_, i) => w.slice(i + 2).map((__, j) => [i + 1, i + j + 2]));
+    const split = (c) => [0, ...c].map((a, k) => w.slice(a, k < c.length ? c[k] : w.length).join(" "));
+    return cuts.map(split).reduce((a, b) => (Math.max(...b.map((l) => l.length)) < Math.max(...a.map((l) => l.length)) ? b : a));
+  };
+  /* one place's cost: [the area it covers of words and outside the plot, units^2; its stand-off in ems; the line points under it] */
+  const lpSchematicClaimCost = (box, e, P) => {
+    const inW = Math.max(0, Math.min(box.x + box.w, P.R0) - Math.max(box.x, P.pl.L)), inH = Math.max(0, Math.min(box.y + box.h, P.pl.B) - Math.max(box.y, P.pl.T));
+    const hit = P.words.reduce((c, q) => { const ox = Math.min(box.x + box.w, q.x + q.w) - Math.max(box.x, q.x), oy = Math.min(box.y + box.h, q.y + q.h) - Math.max(box.y, q.y);
+                                           return c + (ox > -LP_SCHEMATIC.PAD_U && oy > -LP_SCHEMATIC.PAD_U ? Math.max(ox, 1) * Math.max(oy, 1) : 0); }, 0);
+    const pts = P.ink.filter(([qx, qy]) => qx >= box.x && qx <= box.x + box.w && qy >= box.y && qy <= box.y + box.h).length;
+    return [Math.round(box.w * box.h - inW * inH + hit), e, pts];   /* whole units^2: a float's rounding never outranks the stand-off */
+  };
+  const lpBuildSchematicClaim = (st, surf) => {
+    const S = st.schematic, O = S && S.overlay, C = O && O.claim;
+    if (!C || !Number.isFinite(C.cx) || !Number.isFinite(C.cy)) return null;
+    const k = st.stagePx > 0 ? st.stagePx : 1, r = LP_CLAIM.R_PX / k, fu = lpSchematicFontU(st), pl = st.plot || {};
+    const g = lpEl("g", "lp-claim", surf, { opacity: 0, transform: "translate(" + C.cx.toFixed(2) + " " + C.cy.toFixed(2) + ") scale(0)" });
+    const ring = lpEl("circle", "lp-claim-ring", g, { cx: 0, cy: 0, r: r.toFixed(2), style: "fill:none;stroke:" + O.col + ";stroke-width:" + (LP_CLAIM.W_PX / k).toFixed(2) + "px" });
+    lpEl("circle", "lp-claim-dot", g, { cx: 0, cy: 0, r: (LP_CLAIM.DOT_PX / k).toFixed(2), style: "fill:" + O.col + ";stroke:none" });
+    const text = lpText(surf, "lab lp-claim-text", 0, 0, "start", "", { opacity: 0, style: LP_HALO + "fill:" + O.col + ";font-size:" + fu.toFixed(2) + "px;font-weight:700" });
+    const set = (lines) => { while (text.firstChild) text.removeChild(text.firstChild);
+      lines.forEach((ln, i) => { const ts = lpEl("tspan", "", text, { x: 0, ...(i ? { dy: (LP_SCHEMATIC.LINE_H * fu).toFixed(1) } : {}) }); ts.textContent = ln; });
+      return lpSchematicBBox(text, lpSchematicEst(lines, fu, 0, 0, "start")); };
+    const tagBox = ((st.markBy && st.markBy.schematic && st.markBy.schematic.geom) || {}).box;   /* every word as laid out NOW (the build's estimates stand in) */
+    const shape = ((st.paths || []).find((pp) => (pp.si | 0) === (S.si | 0) && !pp.muted) || {}).pts || [];
+    const P = { pl, R0: pl.W - pl.R, ink: [...shape, ...O.pts],
+                words: [...(S.phases || []).map((ph) => lpSchematicBBox(ph.el, ph.box)), S.tag ? lpSchematicBBox(S.tag, tagBox) : tagBox,
+                        ...[...O.ticks.map((q) => q.el), O.head, ...O.dates].map(lpSegBox)].filter(Boolean) };
+    const cands = [];
+    for (let n = 1; n <= LP_CLAIM.LINES; n++) {
+      const lines = lpSchematicClaimLines(C.text, n);
+      if (!lines) continue;
+      const bb = set(lines);
+      for (const e of LP_CLAIM.OFF_EM) for (const kk of LP_CLAIM.SLIDE) for (const [sx, sy] of LP_CLAIM.SLOTS) {
+        const gap = r + (LP_SCHEMATIC.GAP_EM + e) * fu;
+        const x = (sx > 0 ? C.cx + gap : sx < 0 ? C.cx - gap - bb.w : C.cx - bb.w / 2) + (sy ? kk * bb.w : 0);
+        const y = (sy < 0 ? C.cy - gap - bb.h : sy > 0 ? C.cy + gap : C.cy - bb.h / 2) + (sy ? 0 : kk * bb.h);
+        const box = { x, y, w: bb.w, h: bb.h };
+        cands.push({ lines, bb, box, cost: [...lpSchematicClaimCost(box, e, P), n] });
+      }
+    }
+    const less = (a, b) => { for (let i = 0; i < a.cost.length; i++) if (a.cost[i] !== b.cost[i]) return a.cost[i] - b.cost[i]; return 0; };
+    const best = cands.reduce((a, b) => (less(b, a) < 0 ? b : a));
+    set(best.lines);
+    const tx = (best.box.x - best.bb.x).toFixed(1);
+    text.setAttribute("x", tx); text.setAttribute("y", (best.box.y - best.bb.y).toFixed(1));
+    for (const ts of text.children) ts.setAttribute("x", tx);
+    const B0 = best.box, nx = Math.min(B0.x + B0.w, Math.max(B0.x, C.cx)), ny = Math.min(B0.y + B0.h, Math.max(B0.y, C.cy));   /* the words' nearest point */
+    const dd = Math.hypot(nx - C.cx, ny - C.cy) || 1, lx = C.cx + (nx - C.cx) * r / dd, ly = C.cy + (ny - C.cy) * r / dd;
+    const lead = lpEl("line", "lp-claim-lead", surf, { x1: lx.toFixed(1), y1: ly.toFixed(1), x2: nx.toFixed(1), y2: ny.toFixed(1), opacity: 0,
+      style: "stroke:" + O.col + ";stroke-width:" + (LP_CLAIM.LEAD_PX / k).toFixed(2) + "px;stroke-linecap:round" });
+    return { g, ring, text, lead, lines: best.lines, at: C.at, cx: C.cx, cy: C.cy, r, box: best.box, fits: best.cost[0] === 0 };
+  };
+  /* the overlay on its word (the pen's own law, the page's) and its words with it; then the claim on its own word */
+  const lpPaintSchematicOverlay = (PF, t, st) => {
+    const O = st.schematic && st.schematic.overlay;
+    if (!O) return;
+    const on = t >= O.at, u = clamp01((t - O.at) / Math.max(1e-3, O.dur)), f = on ? (strokeFrac(O.p, O.len, u) ?? expoOut(u)) : 0;
+    O.p.setAttribute("opacity", on ? 1 : 0);
+    O.p.setAttribute("stroke-dashoffset", (O.len * (1 - f)).toFixed(2));
+    const a = on ? clamp01((t - O.at) / LP_OVERLAY.FADE_S).toFixed(2) : "0";
+    for (const q of O.ticks) q.el.setAttribute("opacity", a);
+    O.head.setAttribute("opacity", a);
+    for (const e of O.dates) e.setAttribute("opacity", a);
+    const C = PF.schematicClaim;
+    if (!C) return;
+    const pose = lpBadgePose(C.at, t);
+    C.g.setAttribute("opacity", pose ? pose.fade.toFixed(3) : 0);
+    C.g.setAttribute("transform", "translate(" + C.cx.toFixed(2) + " " + C.cy.toFixed(2) + ") scale(" + (pose ? pose.scale : 0).toFixed(4) + ")");
+    const w = clamp01((t - C.at - LP_CLAIM.WORDS_S) / LP_OVERLAY.FADE_S).toFixed(2);
+    C.text.setAttribute("opacity", w); C.lead.setAttribute("opacity", w);
+  };
   const buildPerform = (st, scene, pg) => {
     const P = !!st.portrait, fs = P ? 40 : 26, fss = P ? 32 : 20, G = st.geom || { W: 1000, H: 560 };
     /* P48 T7: on a page with chart STATES the perform layer (brackets, figures, spreads) draws on its OWN svg above every
@@ -19047,6 +19233,7 @@ async function mount(doc) {
        ring, the neck and the handle in the reference's inks (LENS.RING_INK / HANDLE_INK). Its outer radius is LENS.R_PX
        stage px, carried into chart units by the page's rest scale. Built last, so the glass stands over the page's marks. */
     const datumBadges = lpBuildDatumBadges(st, scene, surf);   /* P71 T20: the tick / cross on its datum or turning point */
+    const schematicClaim = lpBuildSchematicClaim(st, surf);   /* P71 T39: the claim's ring and words on the shape (null: no overlay) */
     const glows = lpBuildGlowEdges(st, scene, surf);   /* P71 T29: the named bar's (or span's) glow outline */
     const lenses = pageSpecies(scene, "lens").map((sp) => {
       const k = st.stagePx > 0 ? st.stagePx : 1, S = (st.states && st.states[st.active | 0]) || st, id = "lp-lens-" + (++lpLensSeq);
@@ -19088,7 +19275,7 @@ async function mount(doc) {
       return { sp, si: sp.series | 0, zoom: lensZoom(sp), r: LENS.R_PX / k, g, clip, disc, lines, ring, neck, handle,
                tagLayer: { g: tg, ring: tRing, neck: tNeck, handle: tHandle, tags } };
     });
-    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads, spans, crosses, lits, solo, axisTags, levelJoins, lenses, datumBadges, glows };
+    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads, spans, crosses, lits, solo, axisTags, levelJoins, lenses, datumBadges, glows, schematicClaim };
   };
   /* the X's two strokes over the named cells, the cells dimming under them, and the share written by
      the hand: every number is species/treemap.mjs's, this is the call */
@@ -19382,6 +19569,7 @@ async function mount(doc) {
     for (const lj of PF.levelJoins || []) if (PAGE_PAINTERS.level_join) { PAGE_PAINTERS.level_join(lj, t, st, PAGE_CTX); const lv = pageLeave(lj.sp, t); if (lv > 0) lj.g.setAttribute("opacity", ((+lj.g.getAttribute("opacity") || 0) * (1 - lv)).toFixed(3)); }   /* P71 T10: the dashed level from one datum to another, its figure off the rule (species/level_join.mjs); R26-219: it leaves with its page */
     for (const ld of PF.lenses || []) if (PAGE_PAINTERS.lens) PAGE_PAINTERS.lens(ld, t, st, PAGE_CTX);   /* P71 T32: the magnifier glass travels a stretch of the line (species/lens.mjs) */
     lpPaintDatumBadges(PF, t, st);   /* P71 T20: the tick / cross springs in on its datum (A14); R26-219: it leaves with its page */
+    lpPaintSchematicOverlay(PF, t, st);   /* P71 T39: the measured line on its word, then the claim's ring and words (E99 s125) */
     if (PF.solo && PAGE_PAINTERS.solo) PAGE_PAINTERS.solo(PF.solo, t, st, PAGE_CTX);   /* P69 T37: the others mute on the word (species/solo.mjs) - after the lights, so a light on a muted series mutes with it */
     if (PF.solo) lpFillGlowSolo(PF.solo, t, st);   /* P72 T10: on its word the named bar takes the glow, a muted bar sheds it */
     for (const fg of PF.figures || []) if (PAGE_PAINTERS.figure) {

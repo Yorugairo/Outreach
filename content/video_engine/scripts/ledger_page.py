@@ -1308,7 +1308,7 @@ SCHEMATIC_N = 121                          # the generated points: x steps of 1/
 SCHEMATIC_N_RANGE = (STORY_MAX_VALUES + 1, 401)   # fewer than the story ceiling would read as a story page's values
 SCHEMATIC_PHASES_MAX = 6
 SCHEMATIC_NAME_MAX = 40
-SCHEMATIC_FIELDS = ("shape", "phases", "n", "name", "color")
+SCHEMATIC_FIELDS = ("shape", "phases", "n", "name", "color", "overlay")   # P71 T39: + the measured series laid over it (E99 s125)
 SCHEMATIC_PHASE_FIELDS = ("name", "from", "to", "side", "ink")   # P71 T20 / A55: + the phase's own ink (the comet paints it)
 SCHEMATIC_SIDES = ("above", "below")      # a phase's name over or under the curve (absent: the engine's concavity rule)
 SCHEMATIC_INKS = ("teal", "crimson", "cobalt", "amber")   # E67's electric inks (the engine's LP_CYCLE)
@@ -1477,6 +1477,8 @@ def schematic_block(schematic: dict) -> dict:
         block["candles"] = schematic_candles(schematic)
     if block["shape"] in SCHEMATIC_AXIS_FREE:   # P71 T20: the motif draws no axis rule (only on this shape)
         block["axis_free"] = True
+    if isinstance(schematic.get(OVERLAY_KEY), dict):   # P71 T39 / E99 s125: the measured series over it (absent: not one key)
+        block[OVERLAY_KEY] = overlay_block(schematic)
     return block
 
 
@@ -1562,6 +1564,7 @@ def _validate_schematic(series: dict, variant: str) -> list[str]:
     if "color" in sch and sch["color"] not in SCHEMATIC_INKS:
         errs.append(f"schematic: color must be one of {'|'.join(SCHEMATIC_INKS)} (absent = {SCHEMATIC_INK})")
     errs += _schematic_illustration_errors(series, sch)
+    errs += _validate_schematic_overlay(sch)   # P71 T39 / E99 s125: [] unless it names an overlay
     if sch.get("shape") in SCHEMATIC_ILLUSTRATIONS and "phases" not in sch:   # P71 T20: an illustration names no phases
         return errs
     return errs + _schematic_phase_errors(sch.get("phases"))
@@ -1609,6 +1612,216 @@ def schematic_tag_box(plot: dict) -> dict:
     return _box(plot["x"] + plot["w"] / 2.0, plot["y"] + plot["h"] - XTICK_H, plot["w"] / 2.0, XTICK_H)
 
 
+# ---- P71 T39 (was P69 T46 (3)) / E99 s125: THE SHAPE MEETS THE DATA - a real series laid over a schematic -------------
+# The ruling (OPERATOR-RULINGS.md:3381), four conditions, every one a TRUTH rule (hard, refused by name): (1) a real
+# series may be laid over a schematic on its word; (2) it keeps ITS OWN real, labelled axis (dates and values) and is
+# never rescaled or stretched to hug the curve - "a series fitted to a shape claims a fit the data never showed";
+# (3) the schematic keeps its "shape" tag, so the page reads as two kinds of thing; (4) where the series sits on the
+# shape is the script's CLAIM, drawn as one - a marker with the claim's words - never implied by alignment alone.
+#   The schematic object carries `overlay: {series: {name?, pts, src, tier?, color?}, axis: {unit, label}, xticks?, at,
+# dur?, claim: {at, x, text}}` - the ONE sanctioned way a measured line joins a shape (`series` beside `schematic` stays
+# refused). The player draws the shape with the page's build and the overlay on ITS word (`at`, over `dur`): its values on
+# the right axis (T13's lpRightAxis, through lpY2Plan: its own data's range, the page's ordinary 6 % air - no domain key
+# exists to fit it), its dates in the x band under the plot (the schematic writes none; the tag steps under them), both in
+# its ink; then, on `claim.at`, a ring ON the shape at `claim.x` with the claim's words beside it. No key here moves a
+# page that names no overlay.
+OVERLAY_KEY = "overlay"
+OVERLAY_FIELDS = ("series", "axis", "xticks", "at", "dur", "claim")
+OVERLAY_SERIES_FIELDS = ("name", "pts", "src", "tier", "color")
+OVERLAY_AXIS_FIELDS = ("unit", "label")
+OVERLAY_CLAIM_FIELDS = ("at", "x", "text")
+OVERLAY_FIT_KEYS = ("domain", "y_domain", "scale", "fit", "align", "stretch")   # s125 (2): each would fit it to the curve
+OVERLAY_TIERS = ("CONFIRMED", "PLAUSIBLE", "DERIVED")   # a MEASURED series: the research gate's two usable tiers, or ours
+OVERLAY_DUR = 3.0            # the line's draw on its word when the author names none: the page build's own seconds (LP.BUILD)
+OVERLAY_ROW_U = {"16:9": 32.0, "9:16": 52.0}   # the x-tick row the plot gives up for the dates, in chart units (the engine's OVROW)
+OVERLAY_CLAIM_MAX = SCHEMATIC_NAME_MAX   # the claim's words at the s90 floor: a phase name's length at most
+OVERLAY_RULING = "E99 s125"
+OVERLAY_AXIS_WHY = f"a series over a schematic keeps its own labelled axis, {OVERLAY_RULING} (2)"
+OVERLAY_FIT_WHY = f"never rescaled to hug the curve, {OVERLAY_RULING} (2) - its axis is its own data's"
+OVERLAY_CLAIM_WHY = f"where it sits is a claim, drawn with its words, {OVERLAY_RULING} (4)"
+
+
+def _num(value: Any) -> float | None:
+    """A number the file wrote (a token or a number), never a bool."""
+    return None if isinstance(value, bool) else to_number(value)
+
+
+def _overlay_pts(ser: dict) -> list[list[float]] | None:
+    """The overlay's points as numbers, or None when any is not a [date, value] pair of numbers."""
+    pts = ser.get("pts")
+    if not isinstance(pts, list):
+        return None
+    out = []
+    for p in pts:
+        if not (isinstance(p, (list, tuple)) and len(p) == 2) or _num(p[0]) is None or _num(p[1]) is None:
+            return None
+        out.append([float(_num(p[0])), float(_num(p[1]))])
+    return out
+
+
+def _overlay_fit_errors(ov: dict) -> list[str]:
+    hits = [(where, k) for where, d in (("", ov), (" axis", ov.get("axis")), (" series", ov.get("series")))
+            if isinstance(d, dict) for k in OVERLAY_FIT_KEYS if k in d]
+    return [f"overlay{where}: {k!r} - {OVERLAY_FIT_WHY}" for where, k in hits]
+
+
+def _overlay_key_errors(ov: dict) -> list[str]:
+    out = [f"overlay: {k!r} is not an overlay key ({'|'.join(OVERLAY_FIELDS)})" for k in sorted(ov)
+           if k not in OVERLAY_FIELDS and k not in OVERLAY_FIT_KEYS]
+    for part, fields in (("series", OVERLAY_SERIES_FIELDS), ("axis", OVERLAY_AXIS_FIELDS), ("claim", OVERLAY_CLAIM_FIELDS)):
+        d = ov.get(part)
+        if isinstance(d, dict):
+            out += [f"overlay: {k!r} is not an overlay {part} key ({'|'.join(fields)})" for k in sorted(d)
+                    if k not in fields and k not in OVERLAY_FIT_KEYS]
+    return out
+
+
+def _overlay_series_errors(ser: Any, shape_ink: str) -> list[str]:
+    if not isinstance(ser, dict):
+        return [f"overlay: series must be an object {{{', '.join(OVERLAY_SERIES_FIELDS)}}} - the measured series, its own "
+                f"points and its source ({OVERLAY_RULING} (1))"]
+    errs: list[str] = []
+    pts = _overlay_pts(ser)
+    if pts is None or len(pts) < 2:
+        errs.append("overlay: series needs at least 2 [date, value] points, each two numbers (a measured line)")
+    elif any(b[0] <= a[0] for a, b in zip(pts, pts[1:])):
+        errs.append("overlay: series - its dates must rise, point by point (a date twice or out of order draws the line "
+                    "back over itself)")
+    if not _text(ser.get("src")):
+        errs.append(f"overlay: series needs its src - a REAL series is a sourced one ({OVERLAY_RULING} (1))")
+    if "tier" in ser and ser["tier"] not in OVERLAY_TIERS:
+        errs.append(f"overlay: series tier must be one of {'|'.join(OVERLAY_TIERS)} - a measured series (absent: none named)")
+    if "name" in ser and not _text(ser["name"]):
+        errs.append("overlay: series name must be a non-empty string (absent: the axis's label)")
+    if "color" in ser and ser["color"] not in SCHEMATIC_INKS:
+        errs.append(f"overlay: series color must be one of {'|'.join(SCHEMATIC_INKS)} (absent: the first the shape does not wear)")
+    elif ser.get("color") == shape_ink:
+        errs.append(f"overlay: series color {shape_ink!r} is the shape's own ink - the page reads as two kinds of thing, "
+                    f"a drawn shape and a measured line ({OVERLAY_RULING} (3))")
+    return errs
+
+
+def _overlay_xtick_errors(ov: dict) -> list[str]:
+    if "xticks" not in ov:
+        return []
+    pts = _overlay_pts(ov["series"]) if isinstance(ov.get("series"), dict) else None
+    ticks = ov["xticks"]
+    ok = isinstance(ticks, list) and ticks and all(isinstance(t, (list, tuple)) and len(t) == 2 and _num(t[0]) is not None
+                                                  and _text(t[1]) for t in ticks)
+    if not ok:
+        return ["overlay: xticks must be a list of [date, label] - the measured series' own dates, written under the plot"]
+    if pts and len(pts) > 1 and any(not pts[0][0] <= _num(t[0]) <= pts[-1][0] for t in ticks):
+        return [f"overlay: xticks {[t[0] for t in ticks]} - each date inside the series' own ({pts[0][0]:g}..{pts[-1][0]:g})"]
+    return []
+
+
+def _overlay_claim_errors(claim: Any) -> list[str]:
+    if not isinstance(claim, dict) or not _text(claim.get("text")):
+        return [f"overlay: claim needs its words ({{at, x, text}}) - {OVERLAY_CLAIM_WHY}"]
+    errs: list[str] = []
+    if len(str(claim["text"])) > OVERLAY_CLAIM_MAX:
+        errs.append(f"overlay: claim: text is {len(str(claim['text']))} characters - at most {OVERLAY_CLAIM_MAX} (the claim's "
+                    "words at the s90 floor, off the mark)")
+    x = _num(claim.get("x"))
+    if x is None or not 0.0 <= x <= 1.0:
+        errs.append("overlay: claim: x must be an x-fraction of the shape (0..1) - where on the shape the series sits")
+    at = _num(claim.get("at"))
+    if at is None or at < 0:
+        errs.append("overlay: claim: at must be a time in seconds (the claim's word)")
+    return errs
+
+
+def _validate_schematic_overlay(sch: dict) -> list[str]:
+    """P71 T39 / E99 s125: a schematic's `overlay` - a measured series laid over the shape - whole and truthful, or refused
+    BY NAME. s125's four conditions are truth rules, so each refuses: (2) its own labelled axis and no key that fits it,
+    (3) never the shape's ink, (4) a claim with its words. [] when the schematic names no overlay."""
+    if OVERLAY_KEY not in sch:
+        return []
+    ov = sch[OVERLAY_KEY]
+    if not isinstance(ov, dict):
+        return [f"overlay must be an object {{{', '.join(OVERLAY_FIELDS)}}} - a measured series laid over the shape "
+                f"({OVERLAY_RULING})"]
+    errs = _overlay_key_errors(ov) + _overlay_fit_errors(ov)
+    axis = ov.get("axis")
+    if "axis" in ov and not isinstance(axis, dict):
+        errs.append(f"overlay: axis must be an object {{unit, label}} - {OVERLAY_AXIS_WHY}")
+    elif not isinstance(axis, dict) or not _text(axis.get("unit")) or not _text(axis.get("label")):
+        errs.append(f"overlay: axis needs its unit and its label - {OVERLAY_AXIS_WHY}")
+    errs += _overlay_series_errors(ov.get("series"), str(sch.get("color") or SCHEMATIC_INK))
+    errs += _overlay_xtick_errors(ov)
+    at = _num(ov.get("at"))
+    if at is None or at < 0:
+        errs.append(f"overlay: at must be a time in seconds - a real series joins the shape on its word ({OVERLAY_RULING} (1))")
+    if "dur" in ov and not ((_num(ov["dur"]) or 0) > 0):
+        errs.append(f"overlay: dur must be a positive number of seconds (the line's draw on its word; absent = {OVERLAY_DUR:g})")
+    return errs + _overlay_claim_errors(ov.get("claim"))
+
+
+def _overlay_misplaced_errors(series: dict) -> list[str]:
+    """R26-307's class (probed at the base: accepted and ignored): `overlay` at the PAGE's level is refused by name."""
+    if OVERLAY_KEY not in series:
+        return []
+    return [f"'overlay' at the page's level: an overlay belongs inside the schematic (`schematic: {{..., overlay: {{...}}}}`) "
+            f"- a real series joins a drawn SHAPE ({OVERLAY_RULING}); a data page draws its own series"]
+
+
+def _overlay_date(x: float) -> str:
+    """A default date label for the overlay's first or last x: the year's own label, a calendar year with its month
+    ("Mar 1850"), else the number."""
+    label = decimal_year_label(x)
+    if label:
+        return label
+    if 1000 <= x < 3000:
+        whole = int(x)
+        return str(whole) if x == whole else f"{MONTHS[min(11, int((x - whole) * 12 + 0.01))]} {whole}"
+    return f"{x:g}"
+
+
+def overlay_ink(sch: dict) -> str:
+    """The overlay's ink: its own `color`, else the first electric ink the shape does not wear (s125 (3))."""
+    ser = (sch.get(OVERLAY_KEY) or {}).get("series") or {}
+    if ser.get("color") in SCHEMATIC_INKS:
+        return ser["color"]
+    shape = str(sch.get("color") or SCHEMATIC_INK)
+    return next(c for c in SCHEMATIC_INKS if c != shape)
+
+
+def overlay_block(sch: dict) -> dict:
+    """The spec's `schematic.overlay`: the series as numbers in its ink, its axis (unit, label, the header it writes), its
+    dates (the author's, else its first and last), its word and the claim. Pure; the file is never mutated."""
+    ov = sch[OVERLAY_KEY]
+    ser, axis, claim = ov["series"], ov["axis"], ov["claim"]
+    pts = _overlay_pts(ser)
+    unit, label = str(axis["unit"]).strip(), str(axis["label"]).strip()
+    ticks = ([[float(_num(t[0])), str(t[1])] for t in ov["xticks"]] if isinstance(ov.get("xticks"), list)
+             else [[pts[0][0], _overlay_date(pts[0][0])], [pts[-1][0], _overlay_date(pts[-1][0])]])
+    return {"series": {"name": str(ser.get("name") or label), "color": overlay_ink(sch), "pts": pts},
+            "axis": {"unit": unit, "label": label, "header": y2_header({"unit": unit, "label": label})},
+            "xticks": ticks, "at": float(_num(ov["at"])), "dur": float(_num(ov.get("dur")) or OVERLAY_DUR),
+            "claim": {"at": float(_num(claim["at"])), "x": float(_num(claim["x"])), "text": str(claim["text"]).strip()}}
+
+
+def schematic_overlay(spec: dict) -> dict | None:
+    """The spec's overlay block, or None on a page that names none."""
+    sch = spec.get(SCHEMATIC_KEY)
+    return sch.get(OVERLAY_KEY) if isinstance(sch, dict) and isinstance(sch.get(OVERLAY_KEY), dict) else None
+
+
+def overlay_source(series: dict) -> str:
+    """The page's source line with the measured series named and sourced: `<src> · <name>: <series src>`."""
+    ov = series[SCHEMATIC_KEY][OVERLAY_KEY]
+    name = str(ov["series"].get("name") or ov["axis"]["label"]).strip()
+    src = str(series.get("src") or "")
+    return f"{src} · {name}: {ov['series']['src']}" if src else f"{name}: {ov['series']['src']}"
+
+
+def overlay_axis_spec(ov: dict) -> dict:
+    """The overlay's right axis as a y2 spec - the one shape `y2_axis_box` / `y2_extent` read (its unit, its header and
+    the one line it carries)."""
+    return {Y2_KEY: {"series": [0], "unit": ov["axis"]["unit"], "header": ov["axis"]["header"]},
+            "series": [{"pts": ov["series"]["pts"]}]}
+
+
 # ---- P71 T13 (was P69 T43b; R26-307, E99 s102): A SECOND AXIS, AND AN INVERTED ONE, FOR A CO-MOVEMENT CLAIM ---------
 # R26-307: a page's `y2` was ACCEPTED AND IGNORED - validate returned [] and build_spec dropped it (E99 s106: "a silent drop
 # is neither advice nor refusal"). It now DRAWS on the one builder with a draw path (a dense line page: the right axis in
@@ -1629,7 +1842,7 @@ Y2_AXES = ("left", "right")            # a y2 page's reference rule names the ax
 Y2_HELD = {                            # page keys a second axis cannot follow yet - each refused by name
     "log": "the left axis is a log scale and the right is linear: one page, two laws of the y - not built",
     "break": "a broken x cuts both lines where the right axis's scale was fitted over the whole run - not built",
-    SCHEMATIC_KEY: "a real series over a shape on its own axis is E99 s125's (P71 T39), through this slice's right axis",
+    SCHEMATIC_KEY: "a real series over a shape is the schematic's `overlay` (E99 s125, P71 T39), on its own right axis",
     "form": "a 2.5D form lays the plot on a plane the right tick column does not follow - drawn flat",
 }
 Y2_TICK_ADV_EM = 0.58   # the chart face's mean figure advance, for the right column's ESTIMATED width (page_boxes' estimate)
@@ -1720,7 +1933,9 @@ def _validate_y2(series: dict, variant: str) -> list[str]:
     if builder != Y2_BUILDER:
         return [f"y2 on a {builder} page: a second axis draws on a LINE page (dense-line) only (R26-307: a key nothing "
                 "draws is refused by name, never dropped)" + ("; a combo's line names its own right axis with "
-                                                              "`line_unit`" if builder == "combo" else "")]
+                                                              "`line_unit`" if builder == "combo" else "")
+                + ("; a real series over a shape is the schematic's `overlay`, on its own right axis (E99 s125, P71 T39)"
+                   if builder == SCHEMATIC_KEY else "")]
     errs = nested + [f"y2: {k!r} is not a y2 key ({'|'.join(Y2_FIELDS)})" for k in sorted(y2) if k not in Y2_FIELDS]
     errs += [f"y2 with {k!r}: {why}" for k, why in Y2_HELD.items() if series.get(k) not in (None, False)]
     if "invert" in series:
@@ -2639,7 +2854,7 @@ def validate(series: dict, variant: str) -> list[str]:
         if errs:
             return errs
         series = with_schematic(series)
-    errors: list[str] = []
+    errors: list[str] = _overlay_misplaced_errors(series)   # P71 T39: an overlay belongs inside a schematic ([] when none)
     errors += _validate_projected_bars(series, variant)   # P71 T25 / E77: a projected bar is labelled, tiered, sourced, and has a field to pass
     errors += _validate_opens_on(series, variant)         # P71 T25: the bar the page opens on, and its rank's phrase (the ordinal is computed)
     series = with_projected_values(series)                # ... and then its height is its projection's (the same object when none)
@@ -4904,6 +5119,8 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
         if isinstance(series.get(SCHEMATIC_KEY), dict):   # P70 T2: the shape, its phases and its tag (absent: not one key)
             spec[SCHEMATIC_KEY] = schematic_block(series[SCHEMATIC_KEY])
             spec["axes"]["domain"] = list(schematic_domain(series[SCHEMATIC_KEY]))   # the shape floats with its names' room; no tick writes it
+            if isinstance(series[SCHEMATIC_KEY].get(OVERLAY_KEY), dict):   # P71 T39: the source line names the measured series
+                spec["source"] = overlay_source(series)
         if isinstance(series.get(Y2_KEY), dict):   # P71 T13 / s102: the second axis (absent: not one key)
             spec[Y2_KEY] = y2_block(series)
             if y2_warnings(series):
@@ -6675,6 +6892,10 @@ def page_ink_key(spec: dict) -> str:
         ink["form"] = "gauge" + (":h" if (spec.get("form") or {}).get("dir") == "h" else "")   # P72 T6: a lying capsule's plot is its own
     if isinstance(spec.get(SCHEMATIC_KEY), dict):   # P70 T2: no tick column and the tag - keyed only on a schematic page
         ink[SCHEMATIC_KEY] = True
+    if schematic_overlay(spec) is not None:   # P71 T39: the overlay's right column, its words and its dates - keyed only on one
+        ov = schematic_overlay(spec)
+        ink[OVERLAY_KEY] = {"header": ov["axis"]["header"], "unit": ov["axis"]["unit"],
+                            "extent": y2_extent(overlay_axis_spec(ov)), "dates": [t[1] for t in ov["xticks"]]}
     if isinstance(spec.get(Y2_KEY), dict):   # P71 T13: the right column's words and the data that sizes it - keyed only on a y2 page
         ink[Y2_KEY] = {"header": spec[Y2_KEY].get("header"), "unit": spec[Y2_KEY].get("unit"), "extent": y2_extent(spec)}
     if spec.get(AXES_MODE_KEY):   # P71 T31: no tick column, the plot symmetric; its pills' headroom and its logos' row move the plot - keyed only when named
@@ -7053,6 +7274,13 @@ def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
             boxes[PANELS_KEY] = panel_boxes(spec, boxes["chart"], aspect, floor)
     if isinstance(spec.get(SCHEMATIC_KEY), dict) and not isinstance(boxes.get(SCHEMATIC_BOX), dict):
         boxes[SCHEMATIC_BOX] = schematic_tag_box(boxes["plot"])   # P70 T2: s109 (1)'s tag, estimated where it is not measured
+    ov = schematic_overlay(spec)   # P71 T39: None on every page that names no overlay; the tag above keeps the plain page's place
+    if ov is not None and not isinstance(boxes.get(Y2_BOX), dict):   # ... its right axis, estimated as a y2's: out of the plot,
+        row = OVERLAY_ROW_U[aspect] * STAGE_PX[aspect][0] / LAND_VIEWBOX[0]   # and the plot one x-tick row shorter at its foot
+        y2box = y2_axis_box(overlay_axis_spec(ov), boxes["plot"], aspect)
+        plot = boxes["plot"]
+        boxes["plot"] = _box(plot["x"], plot["y"], max(0.0, plot["w"] - y2box["w"]), max(0.0, plot["h"] - row))
+        boxes[Y2_BOX] = dict(y2box, x=boxes["plot"]["x"] + boxes["plot"]["w"])
     if isinstance(spec.get(Y2_KEY), dict) and not isinstance(boxes.get(Y2_BOX), dict):   # P71 T13: the right axis, estimated:
         y2box = y2_axis_box(spec, boxes["plot"], aspect)                                  # its column comes OUT of the plot
         plot = boxes["plot"]

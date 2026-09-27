@@ -2691,7 +2691,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T39: The shape meets the data - a real series laid over a schematic on its own labelled axis, where it sits drawn as the script's claim (was P69 T46 (3); E99 s125)
-- Status: pending
+- Status: done - lane B (the T39 commit): a schematic's `overlay` draws a measured series on its own right axis and dates, the claim ringed on the shape on its word; s125's four conditions refuse by name; golden `schematic-meets-the-data` (a reference test bed - H row 12 ties no committed series to the trough); `tests/test_schematic_overlay.py` (63)
 - Owner: implementation_luna (LANE B), then reviewer (s125's four conditions are truth rules)
 - Depends on: P70 T2 committed (the schematic: `SCHEMATIC_SHAPES`, `schematic_series`, `lpSchematicTag`, the
   `buildLedgerLine` value suppression behind `pg.schematic`); T13 (the shared right axis `lpRightAxis`, in its series'
