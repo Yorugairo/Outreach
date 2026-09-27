@@ -29319,6 +29319,15 @@ async function mount(doc) {
        does. It prepends to each world's own transform, the way the blur-zoom's scale and the suck's spin do, so the
        Ken Burns move underneath is untouched and the slide is applied last, in stage coordinates. No veil and no
        seam: under a push both worlds are the picture, and the docks and the caption keep the cut's own law. */
+    /* R26-397: THE SEAM. Each sliding world is clipped to its own stage rect, and a ledger page fills exactly that
+       rect - so the clip's edge and the page's edge are ONE line, and the world's cream ground lies under it. Through
+       the depth the world is scaled, that line falls between device pixels, and with the page no longer its own
+       compositor layer the two antialiased edges stack: the ground bleeds through as a 1-px light line where the
+       incoming page meets the outgoing one (slide-depth@proof-mid, x 619, (127,128,120) on a (34,46,57) board). While a
+       slide runs the ground is clear (`.world.ledger.sliding` in the template, the snapping page's own rule): inside
+       the clip the page covers every pixel, so only that edge pixel changes - it now blends with the world below. */
+    const slideLive = !!(slideOn && slideU < 1);
+    wA.classList.toggle("sliding", slideLive); wB.classList.toggle("sliding", slideLive);
     if (slideOn && slideU < 1) {
       const ax = SLIDE_AXES[slideOn.dir];
       const span = ax.axis === "x" ? STAGE_W : STAGE_H;

@@ -555,22 +555,22 @@ def test_the_first_stain_IS_the_landing_point() -> None:
 
 @pytest.mark.parametrize("name,sha", [
     # THE THREE NEW PROOFS, on the surface the operator watched (PROOF_FRAMES in render_baseline.py)
-    ("melt-gather@proof-pickup", "53fc710009c042c5a7fc468300d167d54d431801172a9b0788b00088f57d3abf"),
-    ("melt-gather@proof-flight", "2b07c94f026899392f9b2d6b5e38dd70b9586480b221866c8e25a912b67dcedf"),
-    ("melt-gather@proof-splat", "ef11563aa11841d5b27bc6f5dbb04008cdb785f5841c1a47a0274d4beba2f9cf"),
+    ("melt-gather@proof-pickup", "35c1a16ffa75d05370b3e5f5ff2632967080b9843611c8f1ff2b8af3439be9ad"),   # R26-397: .lp-page is no longer a will-change layer (raster: 40,511 px, max 101; was 53fc7100...)
+    ("melt-gather@proof-flight", "dc0a00a43870bef1ff536680b50f6290cc3f912357c4775bf24826223ddc5f66"),   # R26-397: .lp-page is no longer a will-change layer (raster: 40,511 px, max 101; was 2b07c94f...)
+    ("melt-gather@proof-splat", "f3e42ced8c6973d272907dc974b59a29b4bee478f00e714466bd166dc6b4556c"),   # R26-397: .lp-page is no longer a will-change layer (raster: 40,511 px, max 101; was ef11563a...)
     # ... and the two instants of the ending that moved with it, 0.77 s later
-    ("melt-gather@proof-splash", "5d65b3e991e67e88d994e060a66919ee7b32ff368d998e6973920a2aa473c996"),
-    ("melt-gather@proof-plate", "5032c025fd742eed20d0e2a4b8c14cef9aed2f95e47021ef9cbcb477f7f857ab"),
+    ("melt-gather@proof-splash", "022f7a155c89684bc97adf366cd8173c3b83a6ad5714c69bef96a9c9f21716ea"),   # R26-397: .lp-page is no longer a will-change layer (raster: 14,832 px, max 69; was 5d65b3e9...)
+    ("melt-gather@proof-plate", "2a11619f8a7a25973bfd066c9f42e7644ca8dac72eb04dbf5e51a26ed048b082"),   # R26-397: .lp-page is no longer a will-change layer (raster: 54,102 px, max 12; was 5032c025...)
     # THE TWO THAT MUST NOT MOVE: the gather's own midpoint and the point - the frames E99 s51 approved (their melt;
     # P72 T14 re-pinned all seven for the stage caption's backing only, inside the caption box x 630-1297 y 432-511;
     # P72 T23 / R26-139 re-pinned these two for the axes' hairlines only - curled with the series instead of swung as
     # sticks: the midpoint 35,245 px (max 109), the point 240 px (max 2) where the hairlines amass as tiny paths)
-    ("melt-gather", "f107d49104e1555b990f0edf657426831ad6787919b562caed5aa1b01330cef8"),
-    ("melt-gather@proof-point", "e17c4b0a76eb24f5ce68c3609e6c6c73cddf568f089832827e94c8c0608aa035"),
+    ("melt-gather", "1d1104fc5ec6c0f062996acaa677d7a4ae89905e3e465183f39f06ee98fc72cc"),   # R26-397: .lp-page is no longer a will-change layer (raster: 69,665 px, max 213; was f107d491...)
+    ("melt-gather@proof-point", "29a2f1c92b1eb150715de3516c6140fb27267c3caf9c0db02098cdb2657319d7"),   # R26-397: .lp-page is no longer a will-change layer (raster: 40,789 px, max 97; was e17c4b0a...)
     # ... and the melts that name no splash, which have no pitch at all
-    ("melt-page", "7c2a199da7ff00c3a27c64adf6503907fd9ebb9724a8462865331c654ac24455"),
+    ("melt-page", "6cabc4fdac87a8c9b97239304b77d19612849a426f439018b4b09a0ee3b98d0a"),   # R26-397: .lp-page is no longer a will-change layer (raster: 40,511 px, max 101; was 7c2a199d...)
     ("melt-morph", "47832a8548dcebe7e8e9b411ee97b7d24c1616effee6c0299d3dc719f841e18b"),
-    ("melt-ball-roll", "2186e64413f495c8f42f84b2b3c908d4c7001aa237728c797201981f54d0041b"),
+    ("melt-ball-roll", "d8e607604d5083eec104ea7abec39709e2981b3965751269d23346278a84c0a2"),   # R26-397: .lp-page is no longer a will-change layer (raster: 40,511 px, max 101; was 2186e644...)
     ("melt-depth", "0b0c145050461022c437b6f2b83e02113a81693d8cf41384e34c9cf030a549ee"),
 ])
 def test_the_pitchs_goldens_are_their_own_sha256(name: str, sha: str) -> None:

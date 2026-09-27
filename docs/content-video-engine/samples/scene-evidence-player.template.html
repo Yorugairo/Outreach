@@ -59,7 +59,11 @@
   .world video.clipv { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
   .lp { position: absolute; left: 4.545%; top: 4.545%; width: 90.91%; height: 90.91%; overflow: hidden;
         --lp-cream: #F4E6C7; --lp-char: #25313C; --lp-chalk: #F2F2F2; --lp-acc: #F5B72E; --lp-pos: #3DDC84; --lp-neg: #FF4D4D;   /* chart SIGN colours (operator, 2026-09-03): green up, red down - the sunflower callout is the only yellow. E67 (2026-09-12) made them electric so a line reads at thumbnail scale [DERIVED: WCAG vs #25313C] pos 7.4:1 (was 3.9), neg 4.1:1 (was 1.9 - invisible) */ --lp-brand: #1769C2; }
-  .lp-page { position: absolute; inset: 0; background: var(--lp-cream); will-change: transform; overflow: hidden; }
+  /* P72 T46a (R26-325 / R26-397): the PAGE is not promoted to its own compositor layer. With `will-change: transform` Chromium
+     kept the page's raster scale from an earlier, larger breath (the live idle's ~1.012), so a played frame differed from a
+     cold seek by ~66k px with an identical DOM (H row 12, 333.42). Unpromoted, the page is rastered at the scale it stands
+     at: played == cold (0 px), and the cold frames the goldens read are unchanged to 31 px. The world keeps its own layer. */
+  .lp-page { position: absolute; inset: 0; background: var(--lp-cream); overflow: hidden; }
   .world.ledger.surfaceworld { background-color: transparent !important; }
   .world.ledger.surfaceworld { background-image: var(--surface-world-image) !important; }
   .surface-page-cream { --lp-chalk: #25313C; }
@@ -135,6 +139,7 @@
   .lp-sub { font-size: 21px; font-weight: 400; line-height: 1.25; color: var(--lp-chalk); opacity: .8; white-space: normal; }
   .lp-note { opacity: 1; }   /* a note is the page's own ink at the sub's size, in the quiet zone */
   .world.ledger.snapping { background: transparent !important; }   /* a SNAPPING page grows over the world beneath it: no cream until it covers the stage */
+  .world.ledger.sliding { background: transparent !important; }   /* R26-397: a SLIDING world's clip edge IS its page's edge; a cream ground under it bleeds a 1-px line at the seam once the edge falls between pixels (the engine toggles it while the slide runs) */
   .page-contact { position: absolute; inset: 4% 3%; border-radius: 28px; pointer-events: none; transform-origin: 50% 62%;
                   background: radial-gradient(ellipse at 50% 60%, rgba(0,0,0,.88) 0%, rgba(0,0,0,.42) 55%, rgba(0,0,0,0) 100%); }   /* the thrown page's contact shadow on the world beneath */
   .lp-sub .w { display: inline-block; white-space: nowrap; }
