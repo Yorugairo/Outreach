@@ -150,7 +150,11 @@ def test_the_bars_layout_constants_match_the_engine():
     assert (B.BRACKET_TYPE_ASC, B.BRACKET_TYPE_DESC) == (val["ASC"], val["LAB_DESC"])
     src = ENGINE_SRC[ENGINE_SRC.index("const buildLedgerBars"):][:9000]
     assert "LF ? LF.gutter : 60" in src and U["GUTTER"] == 60
-    assert "LF ? LF.bars_b : 440, top = P ? 150 : PN ? LPBAR_PANEL.TOP : 90" in src and (U["BOTTOM"], U["TOP"]) == (440, 90)
+    # R26-416 (b): bee2b9d (P71 T31) wrapped the top in `( ... ) + (PILLS ? lpBarPillRoom(...) : 0)` - the pill room is
+    # added only on the axis-less story page (`PILLS = NOAX && ...`), so every page the estimate reads keeps 90 / 440
+    assert ("LF ? LF.bars_b : 440, top = (P ? 150 : PN ? LPBAR_PANEL.TOP : 90) + (PILLS ? lpBarPillRoom(st, pg, { P }) : 0)"
+            in src and (U["BOTTOM"], U["TOP"]) == (440, 90))
+    assert "const PILLS = NOAX && " in src, "the pill room is the axis-less page's alone"
     assert ": 980, gap = 0.34" in src and (U["X1"], U["GAP"]) == (980, 0.34)
     assert "(hi0 - lo0) * 0.14" in src and U["PAD"] == 0.14
     assert "x0 - 26," in src and U["TICK_DX"] == 26
@@ -159,7 +163,10 @@ def test_the_bars_layout_constants_match_the_engine():
 def test_the_line_scale_the_span_estimate_mirrors_is_the_engines():
     src = ENGINE_SRC[ENGINE_SRC.index("const buildLedgerLine"):][:6000]
     U = B.BRACKET_ROOM_U
-    assert "T = P ? 90 : 40, B = P ? G.H - 80 : LFT ? LFT.line_b : (PHONE ? 458 : 470)" in src
+    # R26-416 (b): a3ff1ac (P71 T39) wrapped B in `( ... ) - OVROW` - OVROW is 0 on every page but a schematic's
+    # overlay, so the flat page's 470 / 458 stand
+    assert "T = P ? 90 : 40, B = (P ? G.H - 80 : LFT ? LFT.line_b : (PHONE ? 458 : 470)) - OVROW" in src
+    assert "pg.schematic.overlay ? (P ? 52 : LFT ? LFT.xtick_dy : 32) : 0;" in src, "OVROW is 0 off a schematic overlay"
     assert (U["LINE_T"], U["LINE_B"], U["LINE_B_PHONE"]) == (40, 470, 458)
     assert "const pad = (y1 - y0) * 0.06 || 1" in src and U["LINE_PAD"] == 0.06
 

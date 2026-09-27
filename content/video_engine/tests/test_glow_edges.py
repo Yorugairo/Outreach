@@ -200,7 +200,10 @@ def test_the_edge_is_the_fill_glow_on_its_stroke_never_a_second_glow_system():
         assert prim not in _block() + paint, f"{prim}: the edge builds no filter of its own"
     assert src.index("const lpFillGlow = ") < src.index("const LP_GLOW_EDGE = ") < src.index("const buildPerform =")
     build = src[src.index("const buildPerform ="):src.index("const paintPerform =")]
-    assert "lpBuildGlowEdges(st, scene, surf)" in build and "datumBadges, glows }" in build
+    # R26-416 (a): the return object grew after `glows` (a3ff1ac `schematicClaim`, 9a90119 `leaders`), so the
+    # pin reads `glows` as a member of buildPerform's returned object, not as its last key.
+    assert "lpBuildGlowEdges(st, scene, surf)" in build
+    assert re.search(r"return \{[^}]*\bdatumBadges, glows\b[^}]*\};", build), "buildPerform returns the glows"
     perform = src[src.index("const paintPerform ="):]
     perform = perform[:perform.index("\n  };\n")]
     assert perform.index("lpPaintBarMorphs(st, scene, t, PF)") < perform.index("lpPaintGlowEdges(PF, t, st)"), \
