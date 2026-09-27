@@ -3547,6 +3547,12 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
     elif kind == "undraw":
         if "series" in entry and not is_idx(entry["series"]):
             errs.append("undraw: series must be a non-negative integer series index")
+        if "recede" in entry and entry["recede"] is not True:   # P72 T26 (R26-265): the page's chrome goes with its lines
+            errs.append(f"undraw: recede {entry['recede']!r} must be true - the page's axes, labels, panel and words recede "
+                        "to its ground on the undraw's clock (R26-265); leave it out to keep them")
+    if "recede" in entry and kind not in ("undraw", SPECIES_PANEL_FOCUS):   # a focus state's own `recede` is its grammar (P69 T8b)
+        errs.append(f"{kind}: 'recede' is an undraw's word - the page's chrome recedes with its lines, on the undraw's "
+                    "clock (R26-265)")
     if "tier" in entry:   # P50 T9: a TIER is a series index on a tiers page - the author's word for a band
         if not is_idx(entry.get("tier")):
             errs.append(f"{kind}: tier must be a non-negative integer band index (a tier IS a series index on a tiers page)")
@@ -7998,13 +8004,37 @@ def stamp_tip_marks(scenes: list[dict]) -> list[str]:
     return notes
 
 
-def _page_state(spec_id: str, ep_dir: Path, where: str) -> dict:
-    """`<series>:<variant>[:<emphasize>]` -> a second ledger_page.v1 spec, validated like the page's own."""
+# P72 T26 (R26-266): a `then=` state's OWN y scale, `:domain=<ymin>,<ymax>` after the state's variant (and its
+# emphasis) - the state's twin of the page's `;domain=` (R26-223), checked by the same `page_domain_spec` against the
+# STATE's builder. A rescale after a recast re-specifies the page's own object (`rescale_state` reads the plate id), so
+# no other door reaches a state's range: H row 5's divergence state stood in the bottom 40 % of its plot. The only
+# `key=value` a state names; any other is refused by name.
+STATE_OPTS = ("domain",)
+
+
+def _page_state_bits(spec_id: str, where: str) -> tuple[str, str, int | None, dict]:
+    """`<series>:<variant>[:<emphasize>][:domain=<ymin>,<ymax>]` -> (series, variant, emphasize, state options)."""
     bits = spec_id.split(":")
+    opts = {}
+    while len(bits) > 2 and "=" in bits[-1]:
+        k, v = bits.pop().split("=", 1)
+        if k not in STATE_OPTS or k in opts:
+            raise ValueError(f"{where}: then={spec_id!r}: {k!r} is not a chart state's option - a state names "
+                             f"{'|'.join(o + '=' for o in STATE_OPTS)} (once), after its variant (R26-266)")
+        opts[k] = v
     if not 2 <= len(bits) <= 3:
-        raise ValueError(f"{where}: then={spec_id!r} must be <series>:<variant>[:<emphasize>]")
-    series_id, variant = bits[0], bits[1]
-    emph = int(bits[2]) if len(bits) == 3 and bits[2] else None
+        raise ValueError(f"{where}: then={spec_id!r} must be <series>:<variant>[:<emphasize>][:domain=<ymin>,<ymax>]")
+    try:
+        emph = int(bits[2]) if len(bits) == 3 and bits[2] else None
+    except ValueError:
+        raise ValueError(f"{where}: then={spec_id!r}: the emphasis {bits[2]!r} is not a series index") from None
+    return bits[0], bits[1], emph, opts
+
+
+def _page_state(spec_id: str, ep_dir: Path, where: str) -> dict:
+    """`<series>:<variant>[:<emphasize>][:domain=<ymin>,<ymax>]` -> a second ledger_page.v1 spec, validated like the
+    page's own; a named domain is the y scale the state is drawn on (`axes.domain`, R26-266)."""
+    series_id, variant, emph, state_opts = _page_state_bits(spec_id, where)
     path = Path(ep_dir) / "evidence/objects" / f"{series_id}.series.json"
     if not path.exists():
         raise ValueError(f"{where}: then={spec_id!r}: series file missing: {path}")
@@ -8015,7 +8045,11 @@ def _page_state(spec_id: str, ep_dir: Path, where: str) -> dict:
     # R26-205: a chart STATE is drawn in the first state's own <svg> box (the engine copies its cssText),
     # so it is the same plate and carries the same stamp - otherwise `page_boxes` would read one geometry
     # for the page and another for the chart it becomes.
-    return stamp_full_stage(LPG.build_spec(series, variant, emph))
+    spec = LPG.build_spec(series, variant, emph)
+    if "domain" in state_opts:   # R26-266: the state's own range, on the builder the state is drawn by
+        spec.setdefault("axes", {})["domain"] = page_domain_spec(state_opts["domain"], str(spec.get("builder") or "?"),
+                                                                 f"{where}: then={spec_id!r}")
+    return stamp_full_stage(spec)
 
 
 def rescale_state(plate_id: str, ep_dir: Path, sp: dict, reveal: int | None = None) -> dict:

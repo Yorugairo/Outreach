@@ -10682,11 +10682,13 @@ async function mount(doc) {
      runs to the stage's safe right edge, as a dense-line page's does (lpLongformVW, less its tags); the bars stay capped
      and centred (E99 s96), the room is the key's and the names'. Every other preset keeps 1000 (the page it was).
      A `then=` LINE state shares the viewBox, so its widest end tag (`axes.tag_room`, the compiler's) keeps its room at
-     the right, as a dense-line page's own does. ledger_page.longform_bars_vw, line for line. */
+     the right, as a dense-line page's own does - at EVERY preset (P72 T26, R26-275: at `middle` the line state stood
+     in the legacy 1000 units, its plot 30 % narrower than its own page's). ledger_page.longform_bars_vw, line for line. */
   const lpLongformPhoneOf = (pg) => lpReadability(pg) === LP_READABILITY.LONGFORM && ((pg || {}).axes || {}).type_scale === "phone";
   const lpLongformBarsVW = (pg, scale) => {
-    if (!lpLongformPhoneOf(pg) || !(scale > 0)) return 1000;
-    const room = +((pg.axes || {}).tag_room) || 0, run = (LP_PHONE.SAFE_RIGHT - LP.FULL.X) * STAGE_W / scale;
+    const room = +((pg.axes || {}).tag_room) || 0;
+    if (!(scale > 0) || (!lpLongformPhoneOf(pg) && !(room > 0))) return 1000;   /* P72 T26 (R26-275): a line state's tag room widens every preset */
+    const run = (LP_PHONE.SAFE_RIGHT - LP.FULL.X) * STAGE_W / scale;
     return Math.max(1000, Math.round((room > 0 ? run + 220 - LP_PHONE.TAG_GAP - room / scale : run) * 1000) / 1000);
   };
   const lpLongformVW = (pg, T, scale) => {   /* N2: `axes.tag_room` - the widest end tag a `then=` state writes (the compiler's) */
@@ -11316,7 +11318,8 @@ async function mount(doc) {
                    vals: pg2.values || [], vstr: pg2.value_strings || [],
                    emph: Number.isInteger(pg2.emphasize) ? pg2.emphasize : -1, kind: pg2.builder || "story",
                    titleText: pg2.title == null ? null : String(pg2.title),   /* P61 T2: the state's own TITLE, as a string - its ink is built only if a verb re-writes it (lpStateTitle), so no page grows a hidden run it never uses */
-                   windowOffsets: pg2.window_offsets || null };   /* P48 T2: a derived (windowed) state maps the page's datum indices */
+                   windowOffsets: pg2.window_offsets || null,   /* P48 T2: a derived (windowed) state maps the page's datum indices */
+                   later: true };   /* P72 T26 (R26-332): a state the page BECOMES - its caps wait for its own build (lpPaintChart) */
       /* A surface/full-stage page owns one presentation profile.  State rows are source data,
          not a second authoring surface; give the builder a render-only presentation copy so a
          phone state keeps the native inset/type and the cream palette without mutating pg2. */
@@ -19654,6 +19657,26 @@ async function mount(doc) {
   const PAGE_CTX = { pointsNow: lpPointsNow, datumNow: lpDatumNow, markDatum: lpMarkDatum, clamp: clamp01, el: lpEl, PS,
                      bloom: lpSoloBloom, thin: lpSoloThin,   /* P69 T37b: the solo's lift and fade (E99 s117 (2)) */
                      xfClock: lpXfClock };   /* P72 T46g (R26-409): the re-fit's clock - a figure tweens its place on it */
+  /* P72 T26 (R26-261; the parent's frame read of P69 T17 at H 80.9: ": heir peak") - A RETITLE ON A RECAST'S CLOCK
+     REWRITES WHOLE. The chain's hand (erase glyph by glyph, then write) is the page's own on any other word; inside a
+     PLAIN recast's clock the title reads as ONE string at every instant: the standing title stands whole until the
+     standing data are off the plot - the instant the axes change hands (T3b) - and the arriving one stands whole from
+     then on, so the title and the axes on screen are always the same chart's. 1 = the arriving title whole, 0 = the
+     standing one whole, null = the hand's own clock (no plain recast holds this retitle, or it has not fired). */
+  const lpPlainRecastAt = (scene, at) => {   /* the plain recast whose clock holds the instant `at` - its start and end - or null */
+    for (const sp of pageSpecies(scene, "chart_to")) {
+      if (sp.keyed || !(sp.to === "recast" || (sp.to === "morph" && !kin("arap_morph")))) continue;
+      const end = sp.at + Math.max(0.001, sp.dur || 1);
+      if (at >= sp.at && at <= end) return { at: sp.at, end };
+    }
+    return null;
+  };
+  const lpRetitleWhole = (st, scene, at, t) => {
+    if (t < at) return null;
+    const rc = lpPlainRecastAt(scene, at);
+    if (!rc) return null;
+    return t >= rc.end || (st.recastNow && st.recastNow.at === rc.at && st.recastNow.empty) ? 1 : 0;
+  };
   /* R26-219 (2026-09-18, the Steel and Paper H unit: the railway page's two notes and its -64% figure were still
      standing on the GDP page eight seconds after the recast) - THE PAGE'S OWN LEAVE, for what the hand WROTE on it.
      A note, a figure, a retitle, a bracket and a spread belong to the page they were written on, and a `chart_to`
@@ -19772,12 +19795,13 @@ async function mount(doc) {
     }
     for (const b of PF.brackets) if (b.hidden) { b.main.g.setAttribute("opacity", 0); b.glow.g.setAttribute("opacity", 0); }   /* R26-28: a bracket whose data left the window stays hidden through the relight */
     if (PF.retitles.length) {
-      const chain = [{ glyphs: st.titleGlyphs || [], at: -Infinity }, ...PF.retitles.map((r) => ({ glyphs: r.glyphs, at: r.sp.at, dur: Math.max(PS.ERASE_S + 0.01, r.sp.dur || 1) }))];
+      const chain = [{ glyphs: st.titleGlyphs || [], at: -Infinity }, ...PF.retitles.map((r) => ({ glyphs: r.glyphs, at: r.sp.at, dur: Math.max(PS.ERASE_S + 0.01, r.sp.dur || 1),
+        whole: lpRetitleWhole(st, scene, r.sp.at, t) }))];
       chain.forEach((c, k) => {
         const next = chain[k + 1];
-        if (k > 0) writeGlyphs(c.glyphs, t - c.at - PS.ERASE_S, c.dur - PS.ERASE_S);   /* a retitle writes after its erase of the one before */
+        if (k > 0) writeGlyphs(c.glyphs, c.whole == null ? t - c.at - PS.ERASE_S : (c.whole ? c.glyphs.length + 2 : -1), c.whole == null ? c.dur - PS.ERASE_S : c.glyphs.length);   /* a retitle writes after its erase of the one before (R26-261: on a recast's clock, whole) */
         if (next && t >= next.at) {   /* and is erased, glyph by glyph, when the next one fires */
-          const ue = clamp01((t - next.at) / PS.ERASE_S), n = c.glyphs.length;
+          const ue = next.whole == null ? clamp01((t - next.at) / PS.ERASE_S) : next.whole, n = c.glyphs.length;
           /* the WRITTEN width times the erase factor - a function of t alone (R26-46) */
           c.glyphs.forEach((g, j) => g.style.setProperty("--w", ((g.__w != null ? g.__w : parseFloat(g.style.getPropertyValue("--w")) || 0) * eraseFactor(n, j, ue)).toFixed(3)));
         }
@@ -19791,7 +19815,14 @@ async function mount(doc) {
          what this frame wrote is still pure in t (paint the same instant twice, the same bits), where multiplying
          `__w` would throw the chain's erase away. R26-46's integrator is the case where the READ FEEDS ITSELF
          across frames; this factor never writes `__w`, so it cannot. */
-      for (const r of PF.retitles) { const lv = pageLeave(r.sp, t); if (lv <= 0) continue;
+      for (const r of PF.retitles) {
+        /* R26-261: a leave on a plain recast's clock is whole too (H 663.4: "r 7 of 8 weak prints, the paper fell") - and
+           never before the retitle the recast writes in its place, so no frame stands title-less (H 93.34-93.44) */
+        const rc = typeof r.sp.leave_at === "number" ? lpPlainRecastAt(scene, r.sp.leave_at) : null;
+        const heir = rc ? PF.retitles.find((q) => q !== r && q.sp.at >= rc.at && q.sp.at <= rc.end) : null;
+        let sw = rc ? lpRetitleWhole(st, scene, r.sp.leave_at, t) : null;
+        if (sw === 1 && heir && t < heir.sp.at) sw = 0;
+        const lv = sw == null ? pageLeave(r.sp, t) : sw; if (lv <= 0) continue;
         const n = r.glyphs.length;
         r.glyphs.forEach((g, j) => g.style.setProperty("--w", ((parseFloat(g.style.getPropertyValue("--w")) || 0) * eraseFactor(n, j, lv)).toFixed(3))); }
     }
@@ -20359,7 +20390,9 @@ async function mount(doc) {
         bb.bar.style.transform = "scaleY(" + k.toFixed(4) + ")";
         if (bb.band) bb.band.style.transform = bb.bar.style.transform;   /* P69 T8d: the range's band grows with its bar, about the same zero */
         if (bb.ex) bb.ex.set(k);   /* P58 T5: the prism grows WITH its face - the same u, one clock, no second state */
-        bb.lab.setAttribute("opacity", clamp01((cb - i * step - 0.3) / 0.2).toFixed(2));
+        /* P72 T26 (R26-331; E28): a LEAVING bar's name holds while its bar stands and goes WITH it - the build's own
+           label law run backwards faded it ahead of its bar (H 663.4: bars 5-8 stood with no month under them) */
+        bb.lab.setAttribute("opacity", (leaving ? clamp01(k) : clamp01((cb - i * step - 0.3) / 0.2)).toFixed(2));
         bb.val.setAttribute("opacity", clamp01((k - 0.9) / 0.1).toFixed(2));
       });
       if (cs.memberTiles) lpMemberPaint(cs, cb, cs.mbBase ? c * cs.buildDur - cs.mbBase : null, scene, t);   /* P69 T45 */
@@ -20439,6 +20472,12 @@ async function mount(doc) {
             f = ev.kind === "build" ? Math.max(Math.min(f, prev), lvl) : Math.min(f, lvl);
             if (u >= 1) prev = to;
           }
+          /* P72 T26 (R26-332; E21): the caps are the PAGE's, read by every state's series, and a build_to's level stands
+             whatever the build clock says - so a state the page BECOMES was drawn to the level the standing chart's caps
+             had reached before its own build began (H 80.49: the arriving GDP line at 66 % from the recast's first
+             frame, hidden only by the arriving-layer rule). A later state whose build has not started paints nothing;
+             from its build's first instant the page's caps are its own, as they always were. */
+          if (cs.later && !leaving && !(c > 0)) f = 0;
         }
         if (cs.extendCap && (!cs.extendCap.bySeries || cs.extendCap.grown || (pp.si | 0) === (cs.extendCap.si | 0))) {   /* P48 T3: a window that grows grows for EVERY series (the golden's four lines caught a cap on the first alone); a later series caps itself. The muted history and the highlighted tail alike are drawn to the pen: the shared part stands, the new part follows the nib */
           const ec = cs.extendCap, own = ec.bySeries && (pp.si | 0) === (ec.si | 0);
@@ -20582,6 +20621,19 @@ async function mount(doc) {
     if (!(Math.abs(den) > 1e-12)) return null;
     return clamp01((1 + C0 - needY * S0) / den);
   };
+  /* P72 T26 (R26-410, found by P72 T46f): AN EXTEND'S STANDING NAME RIDES ITS OWN INK. In an extend's rescale phase the
+     standing line's end name lerped to the TARGET's name place - the end of the line the pen has not drawn yet - so it
+     floated over no ink for the whole phase ("issuance" top-right at 10.80). It keeps the offset it stands at from its
+     own last datum, carried to that datum's place under the target's scale: at every u it sits where the moving line
+     ends. Null (the target's place, as before) when the name has no line of its own to ride. */
+  const lpNameOnOwnEnd = (A, m, sa, sb) => {
+    if (sa.kind !== "line" || sb.kind !== "line") return null;
+    const si = /^name:s(\d+)/.exec(String(m.key));
+    const pp = si ? (A.paths || []).filter((q) => (q.si | 0) === +si[1] && q.data && q.data.length).pop() : null;
+    if (!pp) return null;
+    const d = pp.data[pp.data.length - 1], g = m.geom || {};
+    return { x: sb.mx(d[0]) + (g.x - sa.mx(d[0])), y: sb.my(d[1]) + (g.y - sa.my(d[1])) };
+  };
   const lpPaintRescale = (states, xf, t3, scene, t) => {
     const A = states[xf.from], Bs = states[xf.to];
     let u = xf.u;
@@ -20621,6 +20673,12 @@ async function mount(doc) {
     const unchangedXTicks = aX.length > 0 && aX.length === bX.length
       && aX.every((a) => bX.some((b) => sameXTick(a, b)))
       && bX.every((b) => aX.some((a) => sameXTick(a, b)));
+    /* P72 T26 (R26-408, diagnosed by P72 T46f): THE X TWIN. A standing x tick inside the target's window travels to its
+       place at full opacity, so a target tick of the SAME value and text faded in beside it and the shared years printed
+       twice mid-rescale ("2023 2023"; H row 16's extend re-fit at 12.8). The y branch's law: the target's twin stays
+       hidden while the standing one carries the value there; a tick the target adds still arrives. */
+    const xTwinKey = (m) => String(+m.geom.v) + "|" + tickText(m);
+    const aXTwins = new Set(aX.filter((a) => xIn(a.geom.v)).map(xTwinKey));
     if (sa.kind === "line" && sb.kind === "line") {
       const mapA = (x, v) => [sa.mx(x), sa.my(v)], mapB = (x, v) => [sb.mx(x), sb.my(v)];
       for (const pp of A.paths || []) {
@@ -20647,7 +20705,7 @@ async function mount(doc) {
       if (m.role === "tick" || m.role === "rule") { const y = xfLerp(g.y, sb.my(g.v), u); e.setAttribute("y1", y.toFixed(1)); e.setAttribute("y2", y.toFixed(1)); e.style.opacity = fadeOut(g.v).toFixed(3); }
       else if (m.role === "ylabel" || m.role === "rulelabel") { const y = xfLerp(g.y, sb.my(g.v) + (g.y - sa.my(g.v)), u); e.setAttribute("y", y.toFixed(1)); e.style.opacity = fadeOut(g.v).toFixed(3); }
       else if (m.role === "xtick" && sb.mx) { const x = xfLerp(g.x, sb.mx(g.v), u); e.setAttribute("x", x.toFixed(1)); e.style.opacity = unchangedXTicks ? "" : xfFade(xIn(g.v), false, u).toFixed(3); }
-      else if (m.role === "name") { const nb = nameB(m.key); if (nb) { e.setAttribute("x", xfLerp(g.x, nb.geom.x, u).toFixed(1)); e.setAttribute("y", xfLerp(g.y, nb.geom.y, u).toFixed(1)); } }
+      else if (m.role === "name") { const nb = nameB(m.key), to = (xf.endName && lpNameOnOwnEnd(A, m, sa, sb)) || (nb ? nb.geom : null); if (to) { e.setAttribute("x", xfLerp(g.x, to.x, u).toFixed(1)); e.setAttribute("y", xfLerp(g.y, to.y, u).toFixed(1)); } }
       else if (m.role === "bar" && sa.kind === "bars") { const nb = nameB(m.key); if (nb) { const r = xfRect(g, nb.geom, u); e.setAttribute("x", r.x.toFixed(1)); e.setAttribute("y", r.y.toFixed(1)); e.setAttribute("width", r.w.toFixed(1)); e.setAttribute("height", r.h.toFixed(1)); e.style.transformOrigin = "0 " + xfLerp(g.base, nb.geom.base, u).toFixed(1) + "px"; } }
       else if ((m.role === "value" || m.role === "xlabel") && sa.kind === "bars") { const nb = nameB(m.key); if (nb) lpSetTextXY(e, xfLerp(g.x, nb.geom.x, u).toFixed(1), xfLerp(g.y, nb.geom.y, u).toFixed(1)); }
     }
@@ -20664,7 +20722,7 @@ async function mount(doc) {
     for (const m of Bs.marks || []) {
       const e = m.el; if (!e) continue;
       if (m.role === "tick" || m.role === "ylabel") e.style.opacity = xfFade(true, true, aVals.has(m.geom.v) ? 0 : u).toFixed(3);
-      else if (m.role === "xtick") e.style.opacity = unchangedXTicks ? "0" : xfFade(true, true, u).toFixed(3);
+      else if (m.role === "xtick") e.style.opacity = unchangedXTicks || aXTwins.has(xTwinKey(m)) ? "0" : xfFade(true, true, u).toFixed(3);
       else if (m.role === "rule" || m.role === "rulelabel" || m.role === "axislabel") e.style.opacity = xfFade(true, true, u).toFixed(3);
       else if (m.role === "name" || m.role === "line" || m.role === "bar" || m.role === "value" || m.role === "xlabel") e.style.opacity = "0";
     }
@@ -20701,7 +20759,7 @@ async function mount(doc) {
   const lpPaintExtend = (states, xf, t3, scene, t) => {
     if (((states[xf.from] || {}).scale || {}).kind === "bars" && xf.sp && (xf.sp.field != null || xf.sp.bar != null)) return lpPaintExtendBars(states, xf, t3, scene, t);   /* P71 T25: the field, or a projected bar */
     const A = states[xf.from], Bs = states[xf.to], R = XF_EXTEND.RESCALE;
-    if (xf.u < R) { lpPaintRescale(states, { from: xf.from, to: xf.to, u: segEase(xf.u / R) }, t3, scene, t); Bs.extendCap = null; return; }
+    if (xf.u < R) { lpPaintRescale(states, { from: xf.from, to: xf.to, u: segEase(xf.u / R), endName: true }, t3, scene, t); Bs.extendCap = null; return; }   /* R26-410: the standing name rides its own line */
     for (const S of states) lpRestoreState(S);
     const u2 = clamp01((xf.u - R) / (1 - R));
     const bySeries = xf.sp.from_series != null, si = bySeries ? xf.sp.from_series | 0 : 0;
@@ -21385,6 +21443,11 @@ async function mount(doc) {
       const off = parseFloat(pp.p.getAttribute("stroke-dashoffset"));
       return !Number.isFinite(off) || off >= (pp.len || 0) * 0.995;
     });
+    /* P72 T26 (R26-261): what the title hand reads of a PLAIN recast this frame - its clock's start and whether the
+       standing data are off the plot yet (the instant the axes change hands, T3b) - so a retitle on the recast's clock
+       swaps WHOLE on that instant (paintPerform's chain). Null when no plain recast is on. */
+    st.recastNow = plain && plain.verb === "recast" && states[plain.from] && states[plain.to]
+      ? { at: plain.at, empty: fedPlainRecast ? plainDataGone : lpPlotEmpty(states[plain.from]) } : null;
     let ink = 0, ue = 0, uw = 1, titleHand = false, plainMeta = null;
     for (const sp of pageSpecies(scene, "chart_to")) {
       if (t < sp.at) break;
@@ -21551,6 +21614,38 @@ async function mount(doc) {
     if (kin("stroke_width")) for (const S of lpBrushStates(st)) lpBrushSync(S);   /* P72 T46f (R26-106 (b)) */
     paintSurfaceFrame(st, frame);
     page.dataset.surfaceProgress = String(frame.progress);
+  };
+  /* P72 T26 (R26-265; P69 T19's gap: "`undraw` takes a page's LINES and never its axes") - THE PAGE RECEDES TO ITS
+     GROUND. An `undraw` that names `recede: true` takes the page's CHROME with its lines, on its own clock: every
+     state's axes, ticks, tick labels, axis names, rules and plot panel, and the page's words (title, sub, source, a
+     retitle, a state's sub and source, the key and the badge rail) dim to the ground, so a record or a card that lands
+     next owns a clean ground WITHOUT a world change (row 11's three records stood ~20 s over a bare chart skeleton, read
+     as a broken chart). A later `build_to`, or a chart_to that replaces the chart, brings the page back on ITS clock.
+     The dim rides CSS `filter: opacity()`, a channel no painter of these elements writes, so it composes with every
+     hand-over's own opacity; a pure function of t, and a page that names no recede writes nothing. */
+  const RECEDE_ROLES = Object.freeze(["axis", "tick", "ylabel", "xtick", "axislabel", "rule", "rulelabel", "y2label", "y2name"]);
+  const RECEDE_BACK = Object.freeze(["recast", "morph", "remake"]);   /* the chart_to verbs that REPLACE the chart: its arriving state brings its own chrome */
+  const lpRecedeLevel = (scene, t) => {   /* 0 = the page as built, 1 = receded to its ground; null = the page names no recede */
+    const evs = pageSpecies(scene, "undraw").filter((sp) => sp.recede === true).map((sp) => ({ sp, to: 1 }));
+    if (!evs.length) return null;
+    for (const sp of pageSpecies(scene, "build_to")) evs.push({ sp, to: 0 });
+    for (const sp of pageSpecies(scene, "chart_to")) if (RECEDE_BACK.includes(sp.to)) evs.push({ sp, to: 0 });
+    evs.sort((a, b) => a.sp.at - b.sp.at);
+    const at = (ev, from, s) => from + (ev.to - from) * segEase(clamp01((s - ev.sp.at) / Math.max(0.001, ev.sp.dur || 1)));
+    let prev = null, from = 0;
+    for (const ev of evs) { if (t < ev.sp.at) break; from = prev ? at(prev, from, ev.sp.at) : 0; prev = ev; }   /* each event starts from where the one before it stood at its start */
+    return prev ? at(prev, from, t) : 0;
+  };
+  const lpChromeRecede = (st, scene, t) => {
+    const r = lpRecedeLevel(scene, t);
+    if (r == null) return;
+    const f = r > 1e-4 ? "opacity(" + (1 - r).toFixed(3) + ")" : "";
+    const els = [...(st.inkEls || []), st.rail, lpKeyEl(st), ...((st.perform || {}).retitles || []).map((rt) => rt.div)];
+    for (const S of st.states || [st]) {
+      for (const m of S.marks || []) if (m.el && RECEDE_ROLES.includes(m.role)) els.push(m.el);
+      els.push(S.lfPanelEl, S.subInk && S.subInk.div, S.srcInk && S.srcInk.div, S !== st ? lpKeyEl(S) : null);
+    }
+    for (const e of els) if (e && e.style && e.style.filter !== f) e.style.filter = f;
   };
   const paintLedger = (el, scene, t) => {
     const st = ledgerState.get(el.id + "|" + scene.scene_id) || buildLedger(el, scene);
@@ -21792,6 +21887,7 @@ async function mount(doc) {
     else lpPaintStateKeys(st, scene, t, tb, pillAt);   /* M1: the key of the chart on screen; a recast's old key leaves */
     if (st.panels && (st.keyPills || []).length) lpPaintPanelKey(st, scene, t);   /* P69 T8e: ... and on a panels page it follows the focus */
     paintPerform(st, st.panels ? (lpPanelScenes(st, scene), st.panelPageScene) : scene, t, pg);   /* P47 T2: the bracket, the retitle, the relight - on the page, on the word (P69 T8b: a panels page's own; each panel's ride lpPaintPanels) */
+    lpChromeRecede(st, scene, t);   /* P72 T26 (R26-265): an undraw that names `recede` takes the page's chrome to its ground */
     lpPlateRecede(st, scene, t, pg);   /* P61 T4b: a two-plate page's field stands again the moment the drain opens - BEFORE it measures */
     lpSpiral(st, scene, t, pg);   /* the retract at the scene's end; the spiral entry at its start */
     lpShedPrisms(st, scene, t, pg);   /* P61 T4a: ... and the prisms come apart in that same drain - AFTER it, so the drain's particle cache is always taken from faces at home */

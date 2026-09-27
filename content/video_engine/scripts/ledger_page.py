@@ -5955,10 +5955,10 @@ def longform_bars_vw(spec: dict, scale: float, w_s: int = 1920) -> float:
     small scale, and 1000 units left the plot on the left 41 % of the stage: the key sat over the total). The engine's
     `lpLongformBarsVW`, line for line; a dense-line page has its own (`longform_page_vw`). A `then=` LINE state is drawn
     in the same viewBox, so its widest end tag (`axes.tag_room`, apply_longform_states) keeps its room at the right, as
-    a dense-line page's own does."""
-    if spec.get("builder") == "dense-line" or longform_preset(spec) != "phone" or not scale > 0:
-        return float(LAND_VIEWBOX[0])
+    a dense-line page's own does - at every preset (P72 T26, R26-275: the room widens a `bravos` or `middle` page too)."""
     room = float((spec.get("axes") or {}).get("tag_room") or 0)
+    if spec.get("builder") == "dense-line" or not scale > 0 or (longform_preset(spec) != "phone" and not room > 0):
+        return float(LAND_VIEWBOX[0])   # P72 T26 (R26-275): ... and at any preset, a line state's tag room
     vw = _longform_max_vw(room / scale, scale, w_s) if room > 0 else (LAND_PHONE_SAFE_RIGHT - LAND_FULL["X"]) * w_s / scale
     return max(float(LAND_VIEWBOX[0]), round(vw * 1000) / 1000)
 
@@ -6030,8 +6030,11 @@ def apply_longform_states(page: dict, states: list) -> str | None:
             room = max(room, longform_tag_px(state, t, state["axes"]["tag_form"]))
     if page.get("builder") == "dense-line" and room > longform_tag_px(page, t, axes.get("tag_form") or "full"):
         page["axes"]["tag_room"] = math.ceil(room * 10) / 10   # up to the tenth: the page's viewBox never grows past a state's fit
-    elif page.get("builder") != "dense-line" and preset == "phone" and room > 0:
-        page["axes"]["tag_room"] = math.ceil(room * 10) / 10   # P72 T12: a phone bars page's widened viewBox keeps a line state's tags on the stage
+    elif page.get("builder") != "dense-line" and room > 0:
+        # P72 T12: a phone bars page's widened viewBox keeps a line state's tags on the stage; P72 T26 (R26-275): at
+        # EVERY preset - at `middle` the line state stood in the bars page's legacy 1000 units, its plot 30 % narrower
+        # than its own page's and its tags cut to their values. One viewBox for every state, so each hand-over holds.
+        page["axes"]["tag_room"] = math.ceil(room * 10) / 10
     # ... and every key stands in ONE band over the chart (the recast swaps the key, never the chart's box): the page
     # reserves the tallest - written only when a state's key needs more than the page's own, so every other page is
     # the page it was

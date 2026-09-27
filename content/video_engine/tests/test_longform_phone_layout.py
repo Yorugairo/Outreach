@@ -203,21 +203,20 @@ def _line_state() -> dict:
 
 def test_a_line_state_keeps_its_end_tags_room_in_the_phone_bars_viewbox() -> None:
     """A `then=` LINE state is drawn in the bars page's viewBox (the suite's `bars-to-line-phone` caught the first cut
-    running its tags off the stage): at `phone` the compiler writes the state's widest tag as the bars page's
-    `tag_room`, and the widened viewBox keeps exactly that room at the right; at every other preset nothing is written."""
-    for preset, wants in (("phone", True), ("middle", False), ("bravos", False)):
+    running its tags off the stage): the compiler writes the state's widest tag as the bars page's `tag_room`, and the
+    widened viewBox keeps exactly that room at the right - at `phone` (P72 T12) and, since P72 T26 (R26-275), at every
+    preset (at `middle` the line state stood in the legacy 1000 units: its plot 30 % narrower than its own page's)."""
+    for preset in ("phone", "middle", "bravos"):
         tl, _u = _one_bar(preset, False)
         page = copy.deepcopy(tl["scenes"][0]["world"]["page"])
         assert LPG.apply_longform_states(page, [_line_state()]) is None
-        assert ("tag_room" in page["axes"]) is wants, (preset, page["axes"].get("tag_room"))
-        if not wants:
-            assert LPG.longform_bars_vw(page, 0.795) == 1000.0
-            continue
+        assert "tag_room" in page["axes"], (preset, page["axes"])
         s, room = 0.795, page["axes"]["tag_room"]
         vw = LPG.longform_bars_vw(page, s)
         tag_right = LPG.LAND_FULL["X"] * 1920 + (vw - LPG.LAND_PLOT["R"] * 1000 + LPG.LAND_TAG_GAP) * s + room
-        assert tag_right == pytest.approx(SAFE_RIGHT, abs=0.01), (vw, room, tag_right)
-        assert 1000 < vw < LPG.longform_bars_vw(dict(page, axes={k: v for k, v in page["axes"].items() if k != "tag_room"}), s)
+        assert tag_right == pytest.approx(SAFE_RIGHT, abs=0.01), (preset, vw, room, tag_right)
+        bare = LPG.longform_bars_vw(dict(page, axes={k: v for k, v in page["axes"].items() if k != "tag_room"}), s)
+        assert 1000 < vw < bare if preset == "phone" else (vw > 1000 and bare == 1000.0), (preset, vw, bare)
 
 
 # ---- round 2: R26-316 - a panels page at `longform:phone` is WARNED by name, never refused (D1; E99 s106) ------------
