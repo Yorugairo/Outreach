@@ -12333,6 +12333,70 @@ def _card_w_for(height: float) -> int:
     return int((height - DOCK_CARD_CHROME_H) * 16 / 9) + DOCK_CARD_CHROME_W
 
 
+# R26-348 (P72 T46f (6)): A CARD IS PLACED AT THE ASPECT IT IS DRAWN AT. The player draws a still card's picture at its
+# own aspect (`.slide-frame img { width: 100%; height: auto }`) and a live chart at its canvas's, inside the slide-frame's
+# 2 px border and the card's chrome; `place.h` is only the compiler's prediction (engine: "never a forced box"). The
+# placer sized every card with no authored `card_aspect` as a 16:9 frame (`dock_card_h`), so a square listing or a tall
+# post was drawn up to ~150 % taller than the box E45 / E63 / E65 checked (P71 T5 bed b: 100 x 80 placed, 100 x 102
+# drawn). Measured on the H door (the player's offsetWidth / offsetHeight at 28 docks): h = round((w - 42) * a) + 49.
+DOCK_FRAME_BORDER = 2                    # `.slide-frame { border: 2px }` - the picture sits inside it (border-box)
+DOCK_PIC_INSET_W = DOCK_CARD_CHROME_W + 2 * DOCK_FRAME_BORDER   # card width - picture width
+DOCK_PIC_CHROME_H = DOCK_CARD_CHROME_H + 2 * DOCK_FRAME_BORDER  # card height - picture height (the empty rail's foot incl.)
+LIVE_CHART_CANVAS = (1056, 480)          # the engine's live-chart svg viewBox (CW, CH) - `.chartbox { height: auto }`
+
+
+class PictureAspect(float):
+    """The PICTURE's h / w - a still or a live chart drawn inside the card's chrome - as opposed to an authored
+    `card_aspect`, the whole card's h / w. `card_h` / `card_w_for` read the difference; everywhere else it is a float."""
+
+
+def card_h(width: float, card_aspect: float | None = None) -> int:
+    """A card's stage height at `width`: a picture inside the chrome (`PictureAspect`), the whole card at an authored
+    `card_aspect`, or - neither - the default 16:9 frame plus chrome (`dock_card_h`, exactly as before)."""
+    if isinstance(card_aspect, PictureAspect):
+        return round((width - DOCK_PIC_INSET_W) * card_aspect) + DOCK_PIC_CHROME_H
+    return round(width * card_aspect) if card_aspect else dock_card_h(width)
+
+
+def card_w_for(height: float, card_aspect: float | None = None) -> float:
+    """The widest card `card_h` fits in `height` (the inverse, unrounded; the default keeps `_card_w_for`)."""
+    if isinstance(card_aspect, PictureAspect):
+        return (height - DOCK_PIC_CHROME_H) / card_aspect + DOCK_PIC_INSET_W
+    return (height / card_aspect) if card_aspect else float(_card_w_for(height))
+
+
+def drawn_card_aspect(src: Path | None, meta: dict, dopt: dict) -> float | None:
+    """The aspect the player DRAWS this card at, for a row that names no `card_aspect` (R26-348): a still's picture
+    (`PictureAspect`), a live chart's canvas when the dock carries a `.series.json` (the evidence map's own test), a
+    CUTOUT's picture bare (no chrome, no rail: a plain float). None - the default, as before - for a card whose box is not
+    its picture: a clip, a record (its paper is its words' height), a stack, a press card, an embed, a prop (its painted
+    box is `painted_box`'s), or a file the compiler cannot read (the row's own error is raised later, where it was)."""
+    if src is None or (meta or {}).get("record") or (meta or {}).get("stack") \
+            or any((dopt or {}).get(k) for k in ("press", "stack", "prop", EMBED_KEY)):
+        return None
+    try:
+        if Path(src).with_suffix(".series.json").exists() and not (dopt or {}).get("cutout"):
+            return PictureAspect(LIVE_CHART_CANVAS[1] / LIVE_CHART_CANVAS[0])
+    except (OSError, ValueError):
+        return None
+    a = image_aspect(Path(src))
+    if not a:
+        return None
+    return float(a) if (dopt or {}).get("cutout") else PictureAspect(a)
+
+
+def dock_card_aspect(aid: str, ep_dir: Path, meta: dict, dopt: dict) -> float | None:
+    """The shape the row loop places a dock at (R26-348): the row's own `card_aspect` (the whole card, as authored), else
+    the one the player draws it at (`drawn_card_aspect`), else None - the default card."""
+    if (dopt or {}).get("card_aspect"):
+        return dopt["card_aspect"]
+    try:
+        src = dock_asset_path(aid, ep_dir)
+    except ValueError:
+        return None
+    return drawn_card_aspect(src, meta, dopt)
+
+
 def free_bands(boxes: dict, reserve: list[dict] | None = None) -> list[dict]:
     """The rectangles inside the safe box that the page's own ink leaves free (E45).
 
@@ -12416,9 +12480,9 @@ def _fit_in(room: dict, want_w: float, floor_h: int, card_aspect: float | None =
     room_w, room_h = room["w"] - 2 * DOCK_PLACE_PAD, room["h"] - 2 * DOCK_PLACE_PAD
     if room_w <= 0 or room_h <= 0:
         return None
-    w = min(float(want_w), room_w, (room_h / card_aspect) if card_aspect else float(_card_w_for(room_h)))
+    w = min(float(want_w), room_w, card_w_for(room_h, card_aspect))   # R26-348: at the aspect the card is drawn at
     w = int(w)
-    h = round(w * card_aspect) if card_aspect else dock_card_h(w)
+    h = card_h(w, card_aspect)
     if w < 1 or h > room_h or h < floor_h:
         return None
     return w, h
@@ -12562,14 +12626,16 @@ def _pieces_clear_of(room: dict, taken: list[dict]) -> list[dict]:
     return pieces
 
 
-def _outside_place(bands: list[dict], want: int, quiet: str | None, min_w: int) -> dict | None:
+def _outside_place(bands: list[dict], want: int, quiet: str | None, min_w: int,
+                   card_aspect: float | None = None) -> dict | None:
     """E45 §1's OUTSIDE room: the widest card no narrower than `min_w` that one of `bands` holds, parked against the plot
-    at the quiet end (a side column hugs the page's margin), with `room: outside` - or None when no band holds it."""
+    at the quiet end (a side column hugs the page's margin), with `room: outside` - or None when no band holds it.
+    R26-348: the card is `card_h` tall at its `card_aspect` (None: the default 16:9 card, as before)."""
     best = None
     for band in bands:
         room_w, room_h = band["w"] - 2 * DOCK_PLACE_PAD, band["h"] - 2 * DOCK_PLACE_PAD
-        width = max(min_w, min(want, room_w, _card_w_for(room_h)))
-        if width > band["w"] - 2 or dock_card_h(width) > band["h"] - 2:
+        width = max(min_w, min(want, room_w, int(card_w_for(room_h, card_aspect))))
+        if width > band["w"] - 2 or card_h(width, card_aspect) > band["h"] - 2:
             continue                       # even the floor card does not fit this band
         key = (width, band["band"] == quiet, -DOCK_BAND_ORDER.index(band["band"]))
         if best is None or key > best[0]:
@@ -12577,7 +12643,7 @@ def _outside_place(bands: list[dict], want: int, quiet: str | None, min_w: int) 
     if best is None:
         return None
     _, band, width = best
-    height = dock_card_h(width)
+    height = card_h(width, card_aspect)
     if band["band"] in ("left", "right"):   # a side column: hug the page's margin, centre vertically
         x = band["x"] + DOCK_PLACE_PAD if band["band"] == "left" else band["x"] + band["w"] - DOCK_PLACE_PAD - width
         y = band["y"] + (band["h"] - height) / 2
@@ -12709,25 +12775,26 @@ def park_full_note(where: str, box: dict | None, page: dict | None, aspect: str 
 
 
 def page_place(page: dict, aspect: str, reserve: list[dict] | None = None, clear_of: list[dict] | None = None,
-               words: bool = True) -> dict | None:
+               words: bool = True, card_aspect: float | None = None) -> dict | None:
     """The parked rectangle for a dock on this ledger page, in stage pixels (E45 s1, E65) - `_page_place_search`, with
     P71 T5's rule round it: `clear_of` (the row's stamps and chip seals) and the page's words (`page_text_boxes`) are
     obstacles, and a card is never placed below its DEFAULT PARK (the search with nothing in the way). The search's
     own answer is kept when it is at least that size and clear; else the default park when IT is clear; else the
     least-overlap spot at the park size (`_least_overlap_park`, words > ink > seals, `room: "overlap"`). With no stamp and no word, exactly
     the search. `words=False`: the search round `clear_of` alone, as before T5 - a STAMP's E65 tie-break
-    (`stamp_dock_place`). P72 T40: None for a page `page_refused_at` refuses at `aspect`, as the search returns."""
+    (`stamp_dock_place`). P72 T40: None for a page `page_refused_at` refuses at `aspect`, as the search returns.
+    R26-348: `card_aspect` - the card's drawn shape (`card_h`); None sizes the default 16:9 card, to the byte as before."""
     if page_refused_at(page, aspect):   # P72 T40: a page no build draws at `aspect` has no placement - None, as the search says
         return None
     stamps = [t for t in (clear_of or []) if isinstance(t, dict)]
     if not words:   # P72 T15: the stamp's tie-break reads the room as it always did (the stamp itself is fitted off every word)
-        return _page_place_search(page, aspect, reserve, stamps, room_words=False)
+        return _page_place_search(page, aspect, reserve, stamps, room_words=False, card_aspect=card_aspect)
     text = [r for _n, r in page_text_boxes(page, aspect)]
     blocked = stamps + text
-    got = _page_place_search(page, aspect, reserve, blocked)
+    got = _page_place_search(page, aspect, reserve, blocked, card_aspect=card_aspect)
     if not blocked:
         return got
-    park = _page_place_search(page, aspect, reserve, [], room_words=False)   # P72 T15: the default park, as P71 T5 r4 sized it
+    park = _page_place_search(page, aspect, reserve, [], room_words=False, card_aspect=card_aspect)   # P72 T15: the default park, as P71 T5 r4 sized it
     if got["w"] >= park["w"] and not any(_overlap_area(got, r) > 0 for r in blocked):
         return got
     if not any(_overlap_area(park, r) > 0 for r in blocked):
@@ -12736,7 +12803,8 @@ def page_place(page: dict, aspect: str, reserve: list[dict] | None = None, clear
 
 
 def _page_place_search(page: dict, aspect: str, reserve: list[dict] | None = None,
-                       clear_of: list[dict] | None = None, room_words: bool = True) -> dict | None:
+                       clear_of: list[dict] | None = None, room_words: bool = True,
+                       card_aspect: float | None = None) -> dict | None:
     """E65's search for the parked rectangle for a dock on this ledger page, in stage pixels (E45 §1, E65) - the
     search P71 T5's `page_place` wraps (`clear_of` is every rectangle the rooms are cut round).
 
@@ -12767,7 +12835,7 @@ def _page_place_search(page: dict, aspect: str, reserve: list[dict] | None = Non
 
     # (1) OUTSIDE: a band the page's ink leaves free - E45 §1, unchanged
     outside = cut(free_bands(boxes, reserve))   # P52 T6: `reserve` keeps the card out of a newsreel band's strip
-    got = _outside_place(outside, want, quiet, DOCK_ON_PAGE_MIN_W)
+    got = _outside_place(outside, want, quiet, DOCK_ON_PAGE_MIN_W, card_aspect)   # R26-348: every room sizes the drawn card
     if got is not None:
         return got
     plot = boxes["plot"]
@@ -12776,7 +12844,7 @@ def _page_place_search(page: dict, aspect: str, reserve: list[dict] | None = Non
     words = [r for r in plot_words(page, aspect) if r not in taken] if room_words else []
     cands = []
     for room in cut([p for r in mask_rooms(boxes) for p in _pieces_clear_of(r, words)]):
-        fit = _fit_in(room, want, floor_h)
+        fit = _fit_in(room, want, floor_h, card_aspect)
         if fit is None:
             continue
         w, h = fit
@@ -12792,7 +12860,7 @@ def _page_place_search(page: dict, aspect: str, reserve: list[dict] | None = Non
     # (3) AXIS: underneath, over the x tick labels - never on the data
     under = axis_room(boxes)
     for piece in (cut([under]) if under else []):
-        fit = _fit_in(piece, want, floor_h)
+        fit = _fit_in(piece, want, floor_h, card_aspect)
         if fit:
             w, h = fit
             box = _corner_box(piece, w, h, quiet, centre)
@@ -12800,13 +12868,14 @@ def _page_place_search(page: dict, aspect: str, reserve: list[dict] | None = Non
                 return {**box, "room": "axis"}
     # (3b) P72 T40 (R26-337): OUTSIDE AT THE FLOOR - the card's scale gives ground before its place does (E65): a band
     # outside the plot that holds a card no smaller than the legibility floor is never on the data; the corner may be
-    got = _outside_place(outside, want, quiet, _card_w_for(floor_h)) if aspect in FLOOR_BAND_ASPECTS else None
+    got = (_outside_place(outside, want, quiet, int(card_w_for(floor_h, card_aspect)), card_aspect)
+           if aspect in FLOOR_BAND_ASPECTS else None)
     if got is not None:
         return got
     # (4) THE CORNER, at the floor - and the build warns (the caller reads `room`)
     corner = emptiest_corner(boxes)
-    w = _card_w_for(floor_h)
-    h = dock_card_h(w)
+    w = int(card_w_for(floor_h, card_aspect))
+    h = card_h(w, card_aspect)
     held = [p for p in cut([corner]) if p["w"] >= w and p["h"] >= h]   # P69 T5: the corner's clear pieces, the largest first
     if held:
         corner = max(held, key=lambda p: p["w"] * p["h"])
@@ -12814,15 +12883,16 @@ def _page_place_search(page: dict, aspect: str, reserve: list[dict] | None = Non
 
 
 def dock_place(world: dict, aspect: str | None, reserve: list[dict] | None = None,
-               clear_of: list[dict] | None = None, words: bool = True) -> dict | None:
+               clear_of: list[dict] | None = None, words: bool = True, card_aspect: float | None = None) -> dict | None:
     """The placement every dock on this scene takes, or None on a plain plate (E45: "a dock on a
     plain plate keeps the solo card"). One rectangle per scene, from the page's geometry alone -
     and on a ledger page there is ALWAYS one (E65; P72 T40: None on a page no build draws at this aspect,
     `page_refused_at`); the rectangle carries the `room` it came from.
-    `clear_of`: the row's stamps' fitted boxes, which the card is placed round (P69 T5, `page_place`)."""
+    `clear_of`: the row's stamps' fitted boxes, which the card is placed round (P69 T5, `page_place`).
+    `card_aspect` (R26-348): the card's drawn shape, which every room sizes it by (None: the default card)."""
     if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER or not world.get("page"):
         return None
-    return page_place(world["page"], aspect or "16:9", reserve, clear_of, words)
+    return page_place(world["page"], aspect or "16:9", reserve, clear_of, words, card_aspect)
 
 
 # R26-258 (P72 T17): A THROWN OR SPRUNG PROP KEEPS ITS RESTING SHADOW INSIDE ITS ROOM. The prop's hatch (E99 s92,
@@ -13462,7 +13532,7 @@ def painted_box(src: Path | None, card_aspect: float | None = None) -> dict:
             _PAINTED[key] = {"aspect": H / W, "x0": bb[0] / W, "y0": bb[1] / H, "x1": bb[2] / W, "y1": bb[3] / H,
                              "canvas": [W, H], "painted": [bb[2] - bb[0], bb[3] - bb[1]]}
         return dict(_PAINTED[key])
-    a = card_aspect or dock_card_h(1000) / 1000
+    a = card_h(1000, card_aspect) / 1000 if isinstance(card_aspect, PictureAspect) else (card_aspect or dock_card_h(1000) / 1000)   # R26-348
     return {"aspect": a, "x0": 0.0, "y0": 0.0, "x1": 1.0, "y1": 1.0}
 
 
@@ -15080,7 +15150,8 @@ def plate_room_px(room: list | None, aspect: str | None) -> dict | None:
     return {"x": round(x * sw), "y": round(y * sh), "w": round(w * sw), "h": round(h * sh)}
 
 
-def plate_dock_place(room: dict | None, aspect: str | None, dopt: dict, where: str = "dock") -> dict | None:
+def plate_dock_place(room: dict | None, aspect: str | None, dopt: dict, where: str = "dock",
+                     card_aspect: float | None = None) -> dict | None:
     """The parked rectangle for a card on a PICTURE PLATE, in stage px, or None when nothing placed it (R26-221).
 
     `{"x", "y", "w", "h", "room"}` - `room` is which of the two placed it (`plate-box` | `plate-room`), the way a
@@ -15092,11 +15163,12 @@ def plate_dock_place(room: dict | None, aspect: str | None, dopt: dict, where: s
     the plate's declared room, INCLUDING a bare `centre: True`, which is the stage's own centre and not the room's.
     E99 s80: the author names the slot, and a room is where the compiler is asked to FIND one. `centre_w` and
     `card_aspect` name no place - they SIZE a card - so on a room-declaring plate they are honoured inside the room,
-    and on a plate without one they size the stage-centred box."""
+    and on a plate without one they size the stage-centred box. `card_aspect` (R26-348): the shape the row loop resolved
+    (`dock_card_aspect` - the authored one, else the drawn one); None reads the row's own `card_aspect`, as before."""
     authored = any(dopt.get(k) is not None for k in PLATE_PLACE_FIELDS)
     if not room and not authored:
         return None
-    card_aspect = dopt.get("card_aspect")
+    card_aspect = card_aspect if card_aspect is not None else dopt.get("card_aspect")
     named_place = any(dopt.get(k) is not None for k in PLATE_PLACE_POINT)
     if not room or named_place:
         # the row placed the card itself: the page's own door, with no page - `centred_place` falls through to the
@@ -15127,9 +15199,9 @@ def centred_place(place: dict, aspect: str | None, card_aspect: float | None = N
     card lands on the plot. The card is centred in the tallest band the page's ink leaves (`free_bands`: below the plot, or
     the foot), and falls back to the caption-band centre only when the page reports no room."""
     sw, sh = (1080, 1920) if (aspect or "16:9") == "9:16" else (1920, 1080)
-    w = round((centre_w or CENTRE_W) * sw); h = round(w * card_aspect) if card_aspect else dock_card_h(w)   # the READING width unless the row names a smaller card
+    w = round((centre_w or CENTRE_W) * sw); h = card_h(w, card_aspect)   # the READING width unless the row names a smaller card (R26-348: at its drawn aspect)
     if h > CENTRE_MAX_H * sh:
-        h = round(CENTRE_MAX_H * sh); w = round(h / card_aspect) if card_aspect else w
+        h = round(CENTRE_MAX_H * sh); w = round(card_w_for(h, card_aspect)) if card_aspect else w
     if centre_y is not None or centre_x is not None:   # the row places the card itself: page_boxes models a page's bands, and
         # on a portrait page with a tall chart its model and the player's layout disagree (R26-27) - an author may name it
         cx = centre_x * sw if centre_x is not None else sw / 2
@@ -15144,16 +15216,16 @@ def centred_place(place: dict, aspect: str | None, card_aspect: float | None = N
     floor_h = _floor_h(aspect)
     if room and room["h"] >= max(40, floor_h):
         if h > room["h"]:                                     # a tall card shrinks to the band rather than covering the page
-            h = round(room["h"]); w = round(h / card_aspect) if card_aspect else w
+            h = round(room["h"]); w = round(card_w_for(h, card_aspect)) if card_aspect else w
         return {"x": round((sw - w) / 2), "y": round(room["y"] + (room["h"] - h) / 2), "w": w, "h": h}
     # E65: no band outside the plot is tall enough to read a card in - take the page's own room
     # (the plot's empty rectangle, the axis band, the corner) rather than the stage's middle, which
     # is the chart. The card keeps the centred WIDTH it can, and the room decides where it sits.
-    got = page_place(page, aspect or "16:9", reserve) if page else None   # P72 T40: None on a page no build draws here
+    got = page_place(page, aspect or "16:9", reserve, card_aspect=card_aspect) if page else None   # P72 T40: None on a page no build draws here
     if got is not None:
         if got.get("room") != "corner" or not room:
             gw = min(w, got["w"]) if card_aspect else got["w"]
-            gh = round(gw * card_aspect) if card_aspect else dock_card_h(gw)
+            gh = card_h(gw, card_aspect)
             return {"x": got["x"], "y": got["y"], "w": gw, "h": gh}
     band = CENTRE_BAND * sh if (aspect or "16:9") == "9:16" else sh   # portrait: the caption strip is below the band
     return {"x": round((sw - w) / 2), "y": round(max(0, (band - h) / 2)), "w": w, "h": h}
@@ -15213,7 +15285,7 @@ def dock_read_box(aspect: str | None, read_place: dict | None = None, card_aspec
     if read_place:
         return {k: read_place[k] for k in ("x", "y", "w", "h")}
     css = DOCK_READ_CSS.get(aspect or "16:9", DOCK_READ_CSS["16:9"])
-    h = round(css["w"] * card_aspect) if card_aspect else dock_card_h(css["w"])
+    h = card_h(css["w"], card_aspect)   # R26-348: the card's drawn shape
     return {"x": css["x"], "y": css["y"], "w": css["w"], "h": h}
 
 
@@ -15249,7 +15321,7 @@ def page_build_windows(world: dict | None, species: list[dict] | None, scene_sta
 def _read_card_h(w: float, card_aspect: float | None) -> int:
     """A card of width `w` is this tall: the row's own aspect when it named one, else the card's own
     build - a 16:9 slide frame plus the chrome (`dock_card_h`), which does NOT scale with the width."""
-    return round(w * card_aspect) if card_aspect else dock_card_h(round(w))
+    return card_h(w, card_aspect) if card_aspect else dock_card_h(round(w))   # R26-348: a picture inside the chrome too
 
 
 def _read_fit(band: dict, box: dict, floor_w: float, aspect: str | None, card_aspect: float | None,
@@ -15262,8 +15334,7 @@ def _read_fit(band: dict, box: dict, floor_w: float, aspect: str | None, card_as
     already is and the park is a short slide away."""
     pad = DOCK_PLACE_PAD
     room_w, room_h = band["w"] - 2 * pad, band["h"] - 2 * pad
-    w = min(float(box["w"]), room_w,
-            (room_h / card_aspect) if card_aspect else float(_card_w_for(room_h)))
+    w = min(float(box["w"]), room_w, card_w_for(room_h, card_aspect))
     if w < max(floor_w, DOCK_ON_PAGE_MIN_W) - 0.5:
         return None
     w = round(w)
@@ -17308,7 +17379,7 @@ def main() -> int:
         for aid, _slot, _enter, _exitt, *dextra in ds:   # P47 T1: an optional 5th element names how the card arrives
             try:
                 _dopt = dock_opts(dextra[0] if dextra else None)
-                _paint = ((painted_box(dock_asset_path(aid, EP)) if _dopt.get("prop") else painted_box(None, _dopt.get("card_aspect")))
+                _paint = ((painted_box(dock_asset_path(aid, EP)) if _dopt.get("prop") else painted_box(None, dock_card_aspect(aid, EP, META.get(aid) or {}, _dopt)))
                           if (_dopt.get("arrive") == "stamp" or any(k in _dopt for k in PROP_POSE_OPTS)) else None)   # the PAINTED mark: a prop's alpha box, a card's whole box (P69 T26d: and any posed prop's)
             except ValueError as exc:
                 raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s) dock {aid}: {exc}") from exc
@@ -17351,16 +17422,21 @@ def main() -> int:
                 raise SystemExit(f"FAIL: {exc}") from exc
             row_species = _chip_rows
         place = dock_place(world, ASPECT, (newsreel_boxes(row_species, ASPECT) + _chapter_reserve), clear_of=stamp_boxes)   # P52 T6: the band's strip is reserved - a card parks ABOVE the crawl
+        row_place = place
         for n_dock, (aid, slot, enter, exitt, *dextra) in enumerate(ds):
             dopt = row_opts[n_dock][1]
             d = META.get(aid, {"title": aid, "source": "", "species": "deck",
                                "badges": []})
+            c_aspect = dock_card_aspect(aid, EP, META.get(aid) or {}, dopt)   # R26-348: the shape the card is DRAWN at (or authored)
+            place = (dock_place(world, ASPECT, (newsreel_boxes(row_species, ASPECT) + _chapter_reserve), clear_of=stamp_boxes,
+                                card_aspect=c_aspect) if (row_place and c_aspect) else row_place)   # ... every room sizes that card
             auto_centre = solo_centre_by_clock(world, ASPECT, len(ds), slot, enter, a, dopt)   # R26-22: E50's clock centres a solo card on a MEASURED page
             centred = bool(dopt.get("centre")) or auto_centre
-            dplace = centred_place(place, ASPECT, dopt.get("card_aspect"), (world or {}).get("page"), dopt.get("centre_w"), dopt.get("centre_band"), dopt.get("centre_y"), dopt.get("centre_x"), (newsreel_boxes(row_species, ASPECT) + _chapter_reserve)) if (place and centred) else place   # the third watch: a card centred on the page
+            dplace = centred_place(place, ASPECT, c_aspect, (world or {}).get("page"), dopt.get("centre_w"), dopt.get("centre_band"), dopt.get("centre_y"), dopt.get("centre_x"), (newsreel_boxes(row_species, ASPECT) + _chapter_reserve)) if (place and centred) else place   # the third watch: a card centred on the page
             if place is None:   # R26-221: a PICTURE PLATE - the row's own box, or the room the plate declared (None = E45's solo card)
                 try:
-                    dplace = plate_dock_place(plate_room, ASPECT, dopt, f"shot row {i + 1} ({a}-{b}s) dock {aid}")
+                    dplace = plate_dock_place(plate_room, ASPECT, dopt, f"shot row {i + 1} ({a}-{b}s) dock {aid}",
+                                              card_aspect=c_aspect)   # R26-348: the card's drawn shape
                 except ValueError as exc:
                     raise SystemExit(f"FAIL: {exc}") from exc
             stamp_fit = stamp_fits.get(n_dock)   # fitted above, before the row's other docks, whatever its slot
@@ -17408,7 +17484,7 @@ def main() -> int:
             rd = dopt.get("read") or {}   # the box a centred card POPS at before it parks to dplace (2026-09-10)
             # R26-221: `dplace` rather than `place` is the test - a card on a picture plate is placed by its own box
             # (the page's `place` is None there), and a read the compiler drops is a card that never pops
-            rplace = None if (stamp_fit or prop_fit) else centred_place(place, ASPECT, rd.get("card_aspect", dopt.get("card_aspect")), (world or {}).get("page"), rd.get("centre_w"), None, rd.get("centre_y"), rd.get("centre_x"), (newsreel_boxes(row_species, ASPECT) + _chapter_reserve)) if (dplace and rd) else None
+            rplace = None if (stamp_fit or prop_fit) else centred_place(place, ASPECT, rd.get("card_aspect", c_aspect), (world or {}).get("page"), rd.get("centre_w"), None, rd.get("centre_y"), rd.get("centre_x"), (newsreel_boxes(row_species, ASPECT) + _chapter_reserve)) if (dplace and rd) else None
             # E63 (widened): a card never READS over the page's plot, drawing or finished. The read box is the row's
             # own when it named one, the card's solo CSS box otherwise; a centred card with no `read` has no pop at all
             # (it takes its parked box from its first frame), so there is nothing to move and the entry is untouched.
@@ -17419,7 +17495,7 @@ def main() -> int:
             _pk = None   # P71 T23: a card joined to its date parks to a chip AT its datum (A19) - the chip IS its park
             if dopt.get("park_at") is not None:
                 try:
-                    _pk = park_at_place(world, dopt["park_at"], ASPECT, dopt.get("card_aspect"),
+                    _pk = park_at_place(world, dopt["park_at"], ASPECT, c_aspect,
                                         [_d["place"] for _d in docks if _d.get("park_at") and float(_d["exit"]) > float(enter)])
                 except ValueError as exc:
                     raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s) dock {aid}: {exc}") from exc
@@ -17433,7 +17509,7 @@ def main() -> int:
                     prop_warns.append(f"row {i + 1} {aid}")
             _rs = float(dopt["read_s"]) if dopt.get("read_s") else DOCK_READ_S
             _ps = float(dopt["park_s"]) if dopt.get("park_s") else DOCK_PARK_S
-            _aspect_of_card = rd.get("card_aspect", dopt.get("card_aspect")) if rd else dopt.get("card_aspect")
+            _aspect_of_card = rd.get("card_aspect", c_aspect) if rd else c_aspect
             _read_box = (dock_read_box(ASPECT, rplace, _aspect_of_card)
                          if (rplace or not centred) else None)
             e63 = read_over_build(eplace, _read_box, (world or {}).get("page"), ASPECT, float(enter),

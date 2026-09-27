@@ -429,16 +429,24 @@ def test_7d_the_last_resort_and_a_read_no_larger_than_its_park_are_WARNs_with_nu
 # ---- (8) round 4: never trade legibility for clearance (E99 s106; the parent's ruling) ----------------------------------
 
 
-def _default_park(page: dict) -> dict:
-    """The card's DEFAULT PARK: where the compiler parks it with nothing in the way (no stamp, no word)."""
-    return B.page_place(page, "16:9", [], None, words=False)
+def _default_park(page: dict, card_aspect: float | None = None) -> dict:
+    """The card's DEFAULT PARK: where the compiler parks it with nothing in the way (no stamp, no word) - at the card's
+    own shape (R26-348: the shape it is drawn at; None, the default 16:9 card)."""
+    return B.page_place(page, "16:9", [], None, words=False, card_aspect=card_aspect)
+
+
+# R26-348: bed b's card is the Fed cutout's picture (`_bed_read`), which the placer now sizes at the shape the player draws
+# (0.918, inside the card's chrome). Round 5's room-full case was read on the default 16:9 card (382 x 239): 8a docks a
+# card of THAT shape (an authored whole-card `card_aspect`), so its ruling is still tested on the bed it was made on.
+BED_CARD_ASPECT = B.drawn_card_aspect(BGS.PROP_CUTOUT, {}, {})
+BED_B_WIDE = (BED_B[0], [("ev-a-card", 0, 11.5, 20.0, {"card_aspect": 239 / 382}), BED_B[1][1]])
 
 
 def test_8_a_card_is_NEVER_placed_below_its_default_park_size(tmp_path, monkeypatch, capsys):
     """Round 3 kept bed b's card clear by shrinking it into E65's corner at the floor (100 x 80, illegible). The park
     and the read are never smaller than the park the card takes when nothing is in the way."""
     seen = _bed_read(tmp_path, monkeypatch, *BED_B)
-    card, park = seen["card"], _default_park(seen["page"])
+    card, park = seen["card"], _default_park(seen["page"], BED_CARD_ASPECT)
     assert card["place"]["w"] >= park["w"] and card["place"]["h"] >= park["h"], \
         f"the card {card['place']} is below its default park {park}"
     if card.get("read_place"):
@@ -450,7 +458,7 @@ def test_8a_where_the_room_is_full_the_card_keeps_off_the_CHART_and_takes_the_se
     """Round 5 (the parent's order): page words > plot ink > seals. E45: a dock never covers the chart - the data ink is
     the evidence; a seal is a stamp drawn over the world (s128), the lesser fault. On this bed no spot at the park size
     is clear, so the card keeps its size OFF the plot's ink and takes the seal overlap - and says so."""
-    seen = _bed_read(tmp_path, monkeypatch, *BED_B)
+    seen = _bed_read(tmp_path, monkeypatch, *BED_B_WIDE)
     card, boxes = seen["card"]["place"], seen["stamps"][-1][1]
     out = capsys.readouterr().out
     ink = [r for _n, r in B.prop_obstacle_groups(seen["page"], "16:9")[0]["data"]]
