@@ -1,0 +1,121 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:inset-echo-then-the-question",
+ "title": "The inset echo, then the question",
+ "aliases": [
+  {
+   "name": "R36 Inset echo, then \"?\"",
+   "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:399"
+  },
+  {
+   "name": "T40 Inset echo: a historical twin dropped into the plot's room",
+   "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:293"
+  }
+ ],
+ "acts": [
+  "COMPARES",
+  "TURNS"
+ ],
+ "members": [
+  {
+   "card": "page_builder:line",
+   "offset_s": 0.0,
+   "role": "the host lands BUILT: today's series, the era the argument is about, read before it makes room"
+  },
+  {
+   "card": "chart_to:park",
+   "offset_s": [
+    1.5,
+    2.5
+   ],
+   "options": {
+    "dur": 1.0,
+    "scale": 0.5,
+    "anchor": "left"
+   },
+   "role": "on the general claim the host parks left by one affine transform (0.50, the hand-off form): the right column is freed, the host never covered"
+  },
+  {
+   "card": "dock_kind:image",
+   "offset_s": [
+    4.0,
+    5.0
+   ],
+   "role": "twin 1 on its era's word: a chart card drawn for its size (T10c) from the twin's OWN sourced series, titled with its era, on its own axis"
+  },
+  {
+   "card": "dock_option:centre",
+   "offset_s": [
+    4.0,
+    5.0
+   ],
+   "options": {
+    "centre_w": 0.45,
+    "centre_x": 0.745,
+    "centre_y": 0.47
+   },
+   "role": "ONE slot in the freed column (hand-off, the default): at 0.45 of the stage the card keeps its source; BOOM's stack (0.35 twins) drops it - R26-413"
+  },
+  {
+   "card": "arrival:throw",
+   "offset_s": [
+    4.0,
+    5.0
+   ],
+   "role": "each twin is thrown in on its word (paper mass) - a named thing arrives (E99 s71)"
+  },
+  {
+   "card": "dock_kind:image",
+   "offset_s": [
+    11.0,
+    12.0
+   ],
+   "role": "twin 2 on its era's word takes twin 1's slot (the hand-off, s80); twin 1 leaves as it lands, inside E25's 10 s (M12)"
+  },
+  {
+   "card": "chart_to:park",
+   "offset_s": [
+    16.5,
+    17.0
+   ],
+   "options": {
+    "dur": 1.0,
+    "scale": 1.0
+   },
+   "role": "the twins leave and the host UN-PARKS (scale 1.0) on the sentence that returns to today"
+  },
+  {
+   "card": "species:unknown",
+   "offset_s": [
+    19.0,
+    20.0
+   ],
+   "options": {
+    "size": 122
+   },
+   "role": "~2.5 s after the restore a '?' lands beside the plot by the right axis, past today's tip and clear of its end tag, and holds (BOOM 08:52.5)"
+  }
+ ],
+ "window_s": 22.4,
+ "does": "The host parks to free a column, the historical twins land beside it on their eras' words - each its own sourced series on its own axis - then leave as the host restores, and a '?' lands beside the plot.",
+ "use_when": {
+  "act": "COMPARES / TURNS - today's shape set beside past episodes of the same shape, then left open (BRAVOS-USE-WHEN T40 C16, R36)",
+  "moment": "turn",
+  "shape": "a series whose last datum is today, plus one or two past episodes each with a committed sourced series of its own (series x2: then / now)",
+  "use": "the shape rhymes, and the rhyme is the argument; the rhyme is shown, then the open question ('Railways ... then crashed. In two thousand ... then the tower came down. AI spending just crossed eight.')",
+  "dont": "over drawn ink (E63) - the twin stands BESIDE the parked plot, never in it; without the twin's own source; a twin on the host's axis - an unrelated measure keeps its own scale, the SAME measure shares the host's domain (E79); the '?' standing in for a claim we could make"
+ },
+ "doctrine": [
+  "E25",
+  "E63",
+  "E79",
+  "E99 s60",
+  "E99 s70",
+  "E99 s71",
+  "E99 s80",
+  "P71 T18"
+ ],
+ "status": "candidate",
+ "source": "P71 T33 (harvest v2 T40 + R36; BOOM 08:44-08:55, VERIFY.md corrected: the twins stack BESIDE the parked plot, then the crimson '?' by the right axis); proved as a private test-bed beat by projects/_proofs/p71-recipes/proof_t33.py (two forms; the hand-off is the default - the stack drops both cards' sources below ~860 px, R26-413) on Steel and Paper H row 9 ('Every transformative technology overshoots ... AI spending just crossed eight.', take 68.08 s) - host ev-equip-ipp-gdp-v2 read 2015-today, twins ev-railway-index-v1 and ev-equip-ipp-gdp-v2 read 1995-2005 - no approved cut carries it",
+ "count": 0
+}
