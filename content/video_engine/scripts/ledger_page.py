@@ -506,7 +506,10 @@ SEGMENT_BUILDERS = ("story", "combo")
 # `x` is P47 T9's combo bar on the lines' time axis (buildLedgerCombo reads a bar's own x)
 PROJECTED_KEY = "projected"   # P71 T25: a bar whose height is a sourced PROJECTION (E77) - `projected: {value, label, tier, src}`
 CLAIM_KEY = "claim"           # P73 T1: a bar whose figure is SOMEONE'S CLAIM - `claim: {by, said, evidence, src, standing?}`
-BAR_FIELDS = ("label", "value", "color", "note", "value_string", "x", MEMBERS_KEY, SEGMENTS_KEY, PROJECTED_KEY, CLAIM_KEY)
+PILL_KEY = "pill"             # P71 T31: a bar whose label is written in its CATEGORY PILL over it (an axis-less page's)
+LOGO_KEY = "logo"             # P71 T31: a bar (or a line series) labelled by its CATALOGUED logo, its name kept
+BAR_FIELDS = ("label", "value", "color", "note", "value_string", "x", MEMBERS_KEY, SEGMENTS_KEY, PROJECTED_KEY, CLAIM_KEY,
+              PILL_KEY, LOGO_KEY)
 # the figure's box in the ENGINE's units (LPSEG, `lpSegBuild`): the value type, a line of it, the padding inside a segment
 SEGMENT_FIG = {"story": 26.0, "story_p": 44.0, "combo": 24.0, "combo_p": 30.0, "line": 1.25, "pad": 6.0,
                "min": 0.8}   # a figure a little too wide for its part shrinks to fit it, never under 0.8 of its size (LPSEG.FIG_MIN)
@@ -530,6 +533,153 @@ def _validate_bar_fields(series: dict) -> list[str]:
                 errors.append(f"{where}bars[{j}]: unknown key(s) {unknown} - a bar takes {', '.join(BAR_FIELDS)} "
                               "(a key the form does not know would be dropped, and its page drawn without it)")
     return errors
+
+
+# ---- P71 T31 (was P69 T79; the Bravos harvest v2 S5, S6 and R2) - LABELS: THE AXIS-LESS STORY PAGE, ITS CATEGORY PILLS,
+# AND LOGOS AS DATA LABELS ---------------------------------------------------------------------------------------------
+# S5 (BUB 0:48-1:36, HIS 11:04-11:16, STK 1:54; E99 s97 asks for the look): a story bars page may be drawn with NO AXIS -
+# `axes: "none"` on the series file - no tick column, no gridlines, no framed plot; the written values state the scale.
+# It stays true (s109's honesty test, the slice's hard rule): the bars still stand from zero in true proportion (the
+# builder's own law, unchanged) and EVERY value is written - the engine never thins a value off an axis-less page. So
+# `axes: "none"` is refused by name beside anything that is an axis's (a stated `domain`, `log`, `ymin`/`ymax`, a
+# `ylabel`, the breakthrough's `overflow` and its furniture - E60's scale IS its device), beside `left_gutter` (it
+# reserves the y-axis column this page does not draw: the slice's stop condition, the pair refused by name) and off a
+# story bars page (a line, a race or a panel reads on its axis). A bar on it may carry `pill: true`: its own `label` is
+# written in a CATEGORY PILL over it, in the bar's own ink (BUB's red capsule over the value badge) - the pill IS the
+# name, so no name is written under the floor. S6 (BUB 0:48; BOOM carries none - VERIFY.md): a bar may carry `logo`, a
+# catalogue id as a membership tile's is (T45's MEMBER_LOGO_RE: one grammar for a logo on a page), drawn UNDER the bar
+# with its name kept (in its pill, or written under the logo); a dense line's series may carry `logo`, drawn at the
+# LINE'S END as its end tag's label, its name kept in the key (the long form's key rail; a page with no key keeps the
+# name in the tag beside the logo). 11-ARCHIVAL s4 ("Logos and organization marks require recorded permission;
+# otherwise use text") is the compiler's: a logo that is not an operator-approved, render-eligible catalogue cutout is
+# DROPPED with a WARN and the name stands (`build_scene_timeline_f.resolve_label_logos`) - never an invented mark.
+AXES_KEY = "axes"
+AXES_NONE = "none"
+AXES_MODE_KEY = "axes_mode"   # the spec's record of it (absent: the page with its axes, to the byte)
+PILLS_KEY = "pills"           # the spec's per-bar pill flags (absent when no bar names one)
+LOGOS_KEY = "logos"           # the spec's per-bar logo ids (absent when no bar names one)
+AXES_NONE_CLASHES = ("left_gutter", "domain", "log", "ymin", "ymax", "yfmt", "yunit", "ylabel", "xticks", "break",
+                     "overflow", "overflow_placeholder", "overflow_capsule", "break_cadence", "form", "opens_on")
+# the logo at a line's end, in ems of the end tag's own size (the engine's LP_LABEL_LOGO.TAG_EM / TAG_GAP_EM): a mark a
+# little taller than the tag's capitals, so it reads beside the tag's figure as one label
+LABEL_LOGO_TAG_EM = 1.25
+LABEL_LOGO_TAG_GAP_EM = 0.3
+
+
+def axes_none(series: dict) -> bool:
+    """P71 T31: the story page drawn with no axis (`axes: "none"`)."""
+    return series.get(AXES_KEY) == AXES_NONE
+
+
+def _axes_dict(series: dict) -> dict:
+    """A series file's legacy `axes` OBJECT (its `readability`), or {} - `axes: "none"` is a string, and carries none."""
+    return series[AXES_KEY] if isinstance(series.get(AXES_KEY), dict) else {}
+
+
+def _is_story_bars(series: dict, variant: str) -> bool:
+    return variant == "bars" and bool(_bars(series)) and pick_builder(series, variant) == "story"
+
+
+def _logo_error(where: str, logo: Any) -> str | None:
+    if isinstance(logo, str) and MEMBER_LOGO_RE.match(logo):
+        return None
+    return (f"{where}: logo {logo!r} is not a catalogue id - a logo is one of the operator's catalogued cutouts "
+            "(assets/icons, E94), never a file or an invented mark (11-ARCHIVAL s4)")
+
+
+def _names_a_label(series: dict) -> bool:
+    """Any bar (the page's own, a panel's, a tier's) naming a pill or a logo, or any series naming a logo."""
+    bars = _bars(series) + [b for _, bs in _nested_bars(series) for b in bs]
+    lines = [s for s in series.get("series") or [] if isinstance(s, dict)]
+    lines += [s for p in list(series.get("panels") or []) + _tier_entries(series) if isinstance(p, dict)
+              for s in p.get("series") or [] if isinstance(s, dict)]
+    return any(PILL_KEY in b or LOGO_KEY in b for b in bars) or any(LOGO_KEY in s for s in lines)
+
+
+def _validate_labels(series: dict, variant: str) -> list[str]:
+    """P71 T31: `axes: "none"`, a bar's `pill` and `logo`, a line series' `logo` - each refused by name when malformed or
+    misplaced (s106: a silent drop is neither advice nor refusal). A page naming none of them is untouched."""
+    errors: list[str] = []
+    if not (AXES_KEY in series and not isinstance(series[AXES_KEY], dict)) and not _names_a_label(series):
+        return errors
+    story = _is_story_bars(series, variant)
+    drawn = pick_builder(series, variant) if (_bars(series) or dense_series(series)) else variant
+    if AXES_KEY in series and not isinstance(series[AXES_KEY], dict):   # an object is the legacy readability holder
+        if series[AXES_KEY] != AXES_NONE:
+            errors.append(f"axes {series[AXES_KEY]!r}: a series file's `axes` is \"none\" - a story page drawn with no "
+                          "axis, every value written (P71 T31, harvest S5)")
+        elif not story:
+            errors.append(f"axes: none is a STORY bars page's (harvest S5: no axis, a category pill over each bar) - this "
+                          f"page draws {variant!r} as {drawn!r}; a line, a race or a panel is read on its axis")
+        clash = [k for k in AXES_NONE_CLASHES if series.get(k) is not None]
+        if series[AXES_KEY] == AXES_NONE and clash:
+            errors.append(f"axes: none beside {', '.join(clash)}: an axis-less page states its scale by its written values "
+                          "- `left_gutter` reserves the y-axis column it does not draw, and a stated domain, a log scale, a "
+                          "y label or the breakthrough's scale (E60) is an axis's (P71 T31: the pair refused by name)")
+    for j, b in enumerate(_bars(series)):
+        w = f"bars[{j}]"
+        if PILL_KEY in b:
+            if b[PILL_KEY] is not True:
+                errors.append(f"{w}: pill {b[PILL_KEY]!r} - `pill: true` writes the bar's own label in its category pill "
+                              "(absent: no pill)")
+            elif not axes_none(series):
+                errors.append(f"{w}: a category pill names a bar on an AXIS-LESS page (`axes: \"none\"`, harvest S5) - on "
+                              "a page with its axes the name stands under the bar")
+            elif not _text(b.get("label")):
+                errors.append(f"{w}: a pill writes the bar's label, and this bar has none")
+        if LOGO_KEY in b:
+            err = _logo_error(w, b[LOGO_KEY])
+            if err:
+                errors.append(err)
+            elif not story:
+                errors.append(f"{w}: a logo labels a STORY bars page's bar (under it, harvest S6) - this page draws "
+                              f"{variant!r} as {drawn!r}")
+            elif not _text(b.get("label")):
+                errors.append(f"{w}: a logo labels a NAMED bar - its name is kept beside it (11-ARCHIVAL s4: a mark "
+                              "never stands for a name alone), and this bar has none")
+    for where, bars in _nested_bars(series):
+        for j, b in enumerate(bars):
+            named = [k for k in (PILL_KEY, LOGO_KEY) if k in b]
+            if named:
+                errors.append(f"{where} bars[{j}]: {', '.join(named)} - a category pill and a logo label a story page's "
+                              "own bars (P71 T31: not built on a panel or a tier)")
+    for i, s in enumerate(series.get("series") or []):
+        if not (isinstance(s, dict) and LOGO_KEY in s):
+            continue
+        w = f"series[{i}]"
+        err = _logo_error(w, s[LOGO_KEY])
+        if err:
+            errors.append(err)
+        elif variant != "line" or drawn != "dense-line":
+            errors.append(f"{w}: a series logo labels a LINE's end (its end tag, harvest S6) - this page draws {variant!r} "
+                          f"as {drawn!r}")
+        elif s.get(PROJECTION_KEY) is not None:
+            errors.append(f"{w}: a logo beside `projection` - an estimate's tag is its label (E77), never a mark")
+        elif s.get("muted"):
+            errors.append(f"{w}: a logo on a muted history - the history carries no tag to label")
+        elif not _text(s.get("name") or s.get("label")):
+            errors.append(f"{w}: a logo labels a NAMED series - its name is kept in the key (11-ARCHIVAL s4), and this "
+                          "series has none")
+    nested = [f"panels[{k}] series[{i}]" for k, p in enumerate(series.get("panels") or []) if isinstance(p, dict)
+              for i, s in enumerate(p.get("series") or []) if isinstance(s, dict) and LOGO_KEY in s]
+    nested += [f"tiers[{k}] series[{i}]" for k, t in enumerate(_tier_entries(series)) if isinstance(t, dict)
+               for i, s in enumerate(t.get("series") or []) if isinstance(s, dict) and LOGO_KEY in s]
+    errors += [f"{w}: logo - a series logo labels a line page's own end tag (P71 T31: not built on a panel or a tier)"
+               for w in nested]
+    return errors
+
+
+def _with_labels(block: dict, series: dict) -> dict:
+    """P71 T31: a story block with its axis-less mode (`axes_mode`), its pills and its bar logos - each only when the file
+    names it (absent: the block untouched, the page to the byte)."""
+    bars = _bars(series)
+    if axes_none(series):
+        block[AXES_MODE_KEY] = AXES_NONE
+    if any(PILL_KEY in b for b in bars):
+        block[PILLS_KEY] = [b.get(PILL_KEY) is True for b in bars]
+    if any(LOGO_KEY in b for b in bars):
+        block[LOGOS_KEY] = [b.get(LOGO_KEY) for b in bars]
+    return block
 
 
 # ---- P72 T13 (R26-274, R26-287; E28: an axis states its unit) - THE UNIT AS THE PAGE WRITES IT ------------------------
@@ -2348,7 +2498,7 @@ def _validate_longform_chrome(series: dict) -> list[str]:
     if TITLE_STYLE_KEY in series and series[TITLE_STYLE_KEY] not in TITLE_STYLES:
         errors.append(f"{TITLE_STYLE_KEY} {series[TITLE_STYLE_KEY]!r} is not one of {'|'.join(TITLE_STYLES)} "
                       "(the title in the page's accent capsule, P71 T30)")
-    if (series.get("readability") or (series.get("axes") or {}).get("readability")) is None:
+    if (series.get("readability") or _axes_dict(series).get("readability")) is None:   # P71 T31: `axes: "none"` is a string
         errors.append(f"{', '.join(named)}: the long form's chrome (P71 T30) - this series file names no profile; give "
                       f"it readability '{LONGFORM}' (a long form page) or drop the key")
     return errors
@@ -2497,6 +2647,7 @@ def validate(series: dict, variant: str) -> list[str]:
     errors += _validate_break(series, variant)   # P69 T66: [] unless the object names a `break`
     errors += _validate_members(series, variant)   # P69 T45: a membership is a bars page's, and a tile carries no value
     errors += _validate_bar_fields(series)          # P69 T64 / R26-307: a bar key the form does not know is refused by name
+    errors += _validate_labels(series, variant)     # P71 T31: `axes: none`, a bar's pill and logo, a series' logo - refused by name when malformed or misplaced
     errors += _validate_claims(series, variant)     # P73 T1: a claimed figure is attributed, on a page that can draw it
     errors += _validate_segments(series, variant)   # P69 T64: a stack of values is true to its total, one key per page
     errors += _validate_unit_suffix(series, variant)   # P72 T13 / R26-287: a prefix AND a suffix ($...B), refused by name when malformed
@@ -4872,7 +5023,8 @@ def _story_block(series: dict) -> dict:
     block = {"labels": list(labels), "values": [to_number(v) for v in raw],
              "value_strings": [value_string(v) for v in raw], "colors": list(colors),
              **({"axes": axes} if axes else {})}
-    return _with_segments(_with_member_tiles(_with_ranges(block, _bars(series)), series), series)   # P69 T45 / T64: absent members and segments, untouched
+    block = _with_segments(_with_member_tiles(_with_ranges(block, _bars(series)), series), series)   # P69 T45 / T64: absent members and segments, untouched
+    return _with_labels(block, series)   # P71 T31: the axis-less mode, the pills, the bar logos (absent: untouched)
 
 
 def _with_ranges(block: dict, bars: list[dict]) -> dict:
@@ -5403,16 +5555,18 @@ def longform_key(spec: dict) -> list[dict]:
     """The key rail's pills for a longform dense-line page: ``[{"series": i, "name": full name}]`` in the series' own
     order - every live series whose end tag gave up its name (`tag_form` badge or value, a label AND a name), then, if
     that is an odd count, the first other live series that names itself (the even pill count, E99 s84). ``[]`` when the
-    tags keep their names."""
+    tags keep their names. P71 T31: a series whose end tag is its LOGO gave its name up too - it is keyed at any tag form."""
     axes = spec.get("axes") or {}
-    if spec.get("builder") != "dense-line" or axes.get("tag_form") in (None, "full"):
-        return []
     live = [(i, s) for i, s in enumerate(spec.get("series") or []) if isinstance(s, dict) and not s.get("muted")]
+    logos = {i for i, s in live if s.get(LOGO_KEY)} if spec.get("builder") == "dense-line" else set()
+    if spec.get("builder") != "dense-line" or (axes.get("tag_form") in (None, "full") and not logos):
+        return []
 
     def text(s: dict) -> str:
         return str(s.get("name") or s.get("label") or "").strip()
 
-    keyed = {i for i, s in live if str(s.get("label") or "").strip() and str(s.get("name") or "").strip()}
+    keyed = logos | ({i for i, s in live if str(s.get("label") or "").strip() and str(s.get("name") or "").strip()}
+                     if axes.get("tag_form") not in (None, "full") else set())
     if len(keyed) % 2:
         extra = next((i for i, s in live if i not in keyed and text(s)), None)
         if extra is not None:
@@ -5533,7 +5687,11 @@ def longform_tag_px(spec: dict, t: dict, form: str) -> float:
             continue
         label, name = str(s.get("label") or ""), str(s.get("name") or "")
         text = (label + " " + name).strip() if form == "full" else (label or name)
+        if s.get(LOGO_KEY):   # P71 T31: the logo IS the tag's name (the key keeps it) - the mark, then the label if any
+            text = label
         px = len(text) * LONGFORM_TAG_EM["name"] * t["tag"]
+        if s.get(LOGO_KEY):
+            px += (LABEL_LOGO_TAG_EM + (LABEL_LOGO_TAG_GAP_EM if text else 0.0)) * t["tag"]
         chip = rides.get(str(s.get("color")), "")
         if chip and form != "value":
             px += LONGFORM_CHIP_DX_PX + len(chip) * LONGFORM_TAG_EM["chip"] * t["chip"]
@@ -6222,7 +6380,7 @@ def _profile_tag_units(spec: dict, profile: str | None = None) -> float:
 
 def _readability_fit_error(series: dict) -> str | None:
     """Refuse a profile whose enlarged end tags cannot fit without stage clipping."""
-    value = series.get("readability") or (series.get("axes") or {}).get("readability")
+    value = series.get("readability") or _axes_dict(series).get("readability")   # P71 T31: `axes: "none"` is a string
     if value != "landscape-phone":
         return None
     stage_w, stage_h = STAGE_PX["16:9"]
@@ -6519,6 +6677,11 @@ def page_ink_key(spec: dict) -> str:
         ink[SCHEMATIC_KEY] = True
     if isinstance(spec.get(Y2_KEY), dict):   # P71 T13: the right column's words and the data that sizes it - keyed only on a y2 page
         ink[Y2_KEY] = {"header": spec[Y2_KEY].get("header"), "unit": spec[Y2_KEY].get("unit"), "extent": y2_extent(spec)}
+    if spec.get(AXES_MODE_KEY):   # P71 T31: no tick column, the plot symmetric; its pills' headroom and its logos' row move the plot - keyed only when named
+        ink[AXES_MODE_KEY] = spec[AXES_MODE_KEY]
+    for k in (PILLS_KEY, LOGOS_KEY):
+        if any(spec.get(k) or []):
+            ink[k] = True
     blob = json.dumps(ink, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:16]
 

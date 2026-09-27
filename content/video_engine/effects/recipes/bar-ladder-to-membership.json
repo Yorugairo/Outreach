@@ -1,0 +1,66 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:bar-ladder-to-membership",
+  "title": "The bar ladder that ends on a membership bar",
+  "aliases": [
+    {
+      "name": "R2 Bar ladder with a membership bar",
+      "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:207"
+    }
+  ],
+  "acts": [
+    "RANKS"
+  ],
+  "members": [
+    {
+      "card": "page_builder:bars",
+      "offset_s": 0.0,
+      "role": "the ladder: then against now as axis-less story bars (`axes: \"none\"`), each name in its category pill over its written value, the now bar the emphasised one (BUB 0:48-1:12)"
+    },
+    {
+      "card": "page_species:member",
+      "offset_s": [
+        3.5,
+        9.0
+      ],
+      "options": {
+        "tile": "each member's index, on its name's word",
+        "dur": 0.45
+      },
+      "role": "the NOW bar fills with its members, one equal tile on each name's word (T45): who is in the one value, the total still written over it"
+    },
+    {
+      "card": "page_species:member",
+      "offset_s": [
+        9.5,
+        12.0
+      ],
+      "optional": true,
+      "options": {
+        "tile": "the named member",
+        "light": true
+      },
+      "role": "the member the sentence names is lit and the bar's other tiles dim to E67's 0.45"
+    }
+  ],
+  "window_s": 12.5,
+  "does": "Then against now as axis-less bars, each named in its pill over its written value; the now bar then fills with the equal tiles of who is in it, one on each name's word.",
+  "use_when": {
+    "act": "RANKS - then vs now, and the now bar is made of named members (BRAVOS-USE-WHEN R2)",
+    "moment": "proof",
+    "shape": "two numbers + a named set",
+    "use": "then vs now, and the \"now\" bar is made of named members (BRAVOS-USE-WHEN.md:209; BUB 01:24 'the total amount of AI related debt from just these few companies')",
+    "dont": "the tiles carry values or differ in size, or the bar's total is unwritten (E99 s101; BRAVOS-USE-WHEN.md:210); an axis-less page with a value left unwritten (P71 T31: its values are its scale)"
+  },
+  "doctrine": [
+    "E99 s101",
+    "E99 s109",
+    "E99 s97",
+    "E28",
+    "P69 T45",
+    "P71 T31"
+  ],
+  "status": "candidate",
+  "source": "P71 T31 (harvest v2 R2 = T2 + A25 + T3): BUB 0:48-1:36 read off its frames (frame_0005-0008: the lone $3 trillion bar with its members' marks under it, then the ladder of pilled bars); proved as a private test-bed beat by projects/_proofs/p71-recipes/proof_t31.py on H row 19's two clocks and T45's five-builders bar - no approved cut carries it",
+  "count": 0
+}

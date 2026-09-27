@@ -106,6 +106,21 @@
           "token": "claim_audit",
           "means": "true adds \"no evidence attached\" under a claim with evidence \"none\" and on the source line; off by default (the label credits the speaker)",
           "source_set": "CLAIM_AUDIT_KEY"
+        },
+        {
+          "token": "axes_none",
+          "means": "a story page's `axes: \"none\"` (P71 T31, S5): no axis, gridline or framed plot, one zero rule; every value written, the bars from zero; refused beside left_gutter or an axis key",
+          "source_set": "AXES_NONE_CLASHES"
+        },
+        {
+          "token": "pill",
+          "means": "a bar's `pill: true` on an axis-less page: its label written in a capsule of the bar's own ink over its value and counting pill (BUB 0:48-1:12)",
+          "source_set": "PILL_KEY"
+        },
+        {
+          "token": "logo",
+          "means": "a bar's or a line series' `logo` (a catalogue id): the approved cutout under the bar, or heading the end tag (the name in the key); else dropped with a WARN (11-ARCHIVAL s4)",
+          "source_set": "LOGO_KEY"
         }
       ],
       "dials": null,
@@ -117,7 +132,11 @@
           "paintLedgerCombo",
           "lpBarGlow",
           "lpFillGlowSolo",
-          "LP_FILL_GLOW"
+          "LP_FILL_GLOW",
+          "lpBarPills",
+          "lpBarLogos",
+          "lpLineTagLogo",
+          "LP_LABEL"
         ],
         "note": "buildLedger / builder \"story\" / \"combo\" (pick_builder); paintLedgerCombo for bars + a line"
       },

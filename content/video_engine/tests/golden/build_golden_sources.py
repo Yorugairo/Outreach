@@ -6333,6 +6333,54 @@ FRAME_T.update({"vecmap-pacific": 9.4,      # the transship's instant: both legs
                 "vecmap-seam-split": 5.0})  # Russia's two halves lit, one at each edge
 
 
+# ---- P71 T31 (was P69 T79; the Bravos harvest v2 S5): THE AXIS-LESS STORY PAGE AND ITS CATEGORY PILLS ------------------
+#   story-bars-pills   Steel and Paper H row 19's two clocks - the COMMITTED `ev-two-clocks-bars-v1` object, read in place
+#                      (1840s railways 20 years, today's compute 5; never re-typed) - drawn with NO AXIS (`axes: "none"`)
+#                      and each bar's name in its CATEGORY PILL over it (`pill: true`), as H draws the page: the long
+#                      form, live, full stage, compute the emphasised bar ("about five years", its counting pill). BUB
+#                      0:48-1:12: the red capsule over the value badge, no tick, no gridline, one rule under the row.
+#                      Judged at rest (6.0 s, the build landed): the twenty stands four times the five from one zero, both
+#                      values written, each name in its bar's own ink over its stack.
+PILLS_OBJECT = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/objects/ev-two-clocks-bars-v1.series.json"
+PILLS_PLATE = "ledger:ref-two-clocks-pills:bars:1:right:axes:cut;idle=live;readability=longform"
+
+
+def clocks_axisless() -> dict:
+    """The committed two-clocks object with `axes: "none"` and every bar's `pill` - nothing else moves."""
+    obj = json.loads(PILLS_OBJECT.read_text(encoding="utf-8"))
+    assert [b["value"] for b in obj["bars"]] == [20, 5], obj["bars"]
+    obj["axes"] = "none"
+    for b in obj["bars"]:
+        b["pill"] = True
+    return obj
+
+
+def story_bars_pills() -> tuple[dict, dict]:
+    import tempfile
+    import build_scene_timeline_f as BST
+    obj = clocks_axisless()
+    assert LPG.validate(obj, "bars") == [], LPG.validate(obj, "bars")
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        with tempfile.TemporaryDirectory() as td:
+            objects = Path(td) / "evidence/objects"
+            objects.mkdir(parents=True)
+            (objects / f"{PILLS_PLATE.split(':')[1]}.series.json").write_text(json.dumps(obj), encoding="utf-8")
+            world = BST.world_for_plate(PILLS_PLATE, (0, 0, 0), Path(td))
+            BST.stamp_full_stage(world["page"])
+    finally:
+        BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": []}]
+    tl = _timeline("Golden: the axis-less story page and its category pills (H row 19's two clocks)", scenes, {}, "16:9")
+    return tl, dict(_base_uris(), **BST.longform_assets(tl))
+
+
+SURFACES.update({"story-bars-pills": story_bars_pills})
+FRAME_T.update({"story-bars-pills": 6.0})   # at rest: the build (3.0 s) landed, both names in their pills
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

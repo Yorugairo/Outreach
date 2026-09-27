@@ -6011,6 +6011,71 @@ def member_assets(timeline: dict) -> dict:
     return out
 
 
+def _label_logo_sites(page: dict) -> list[tuple[str, dict, str]]:
+    """P71 T31: every data-label logo a compiled page carries - (where, the dict holding it, its key): a bar's in the
+    page's `logos` list (the key is the bar's index, as a string), a line series' `logo` on its series entry."""
+    out = []
+    for i, logo in enumerate((page or {}).get(LPG.LOGOS_KEY) or []):
+        if logo:
+            out.append((f"bar {i}", page, str(i)))
+    for i, s in enumerate((page or {}).get("series") or []):
+        if isinstance(s, dict) and s.get(LPG.LOGO_KEY):
+            out.append((f"series {i}", s, LPG.LOGO_KEY))
+    return out
+
+
+def resolve_label_logos(page: dict, aspect: str = "16:9") -> list[str]:
+    """P71 T31 (S6): a bar's or a line series' `logo` is drawn only when it is a render-eligible, operator-approved
+    cutout of the icon catalogue (E93 / E94 - the recorded permission 11-ARCHIVAL s4 asks of a logo; T45's own test).
+    One that is not is DROPPED, so the bar or the line keeps its NAME ("otherwise use text") - never an invented mark -
+    and the returned WARN says so. A series logo on a PORTRAIT page is dropped with a WARN too: the portrait's end tag is
+    written leftward over the line's end, where a mark has no room (the landscape tag is the form built). Mutates
+    `page` (the compiled spec, not the object on disk)."""
+    notes = []
+    for where, holder, key in _label_logo_sites(page):
+        if key == LPG.LOGO_KEY:
+            logo, name = holder[key], holder.get("name") or holder.get("label")
+        else:
+            logo, name = page[LPG.LOGOS_KEY][int(key)], (page.get("labels") or [None] * (int(key) + 1))[int(key)]
+        why = None
+        try:
+            catalogue_icon(logo)
+        except ValueError as exc:
+            why = (f"is not a render-eligible catalogued cutout ({exc}) - the {where.split()[0]} keeps its NAME "
+                   "(11-ARCHIVAL s4: 'otherwise use text'; never an invented mark)")
+        if why is None and key == LPG.LOGO_KEY and aspect == "9:16":
+            why = "is a landscape line end's label - the portrait's end tag keeps the name alone (P71 T31: not built)"
+        if why is None:
+            continue
+        if key == LPG.LOGO_KEY:
+            holder.pop(key)
+        else:
+            page[LPG.LOGOS_KEY][int(key)] = None
+        notes.append(f"WARN label: {name!r} ({where}): its logo {logo!r} {why}")
+    if LPG.LOGOS_KEY in page and not any(page[LPG.LOGOS_KEY]):
+        page.pop(LPG.LOGOS_KEY)   # every bar logo dropped: the page carries no logo list at all
+    return notes
+
+
+def label_logo_assets(timeline: dict) -> dict:
+    """P71 T31: ``{prop:<asset_id>: data uri}`` for every data-label logo a page (or a page state) carries - the file on
+    disk, byte for byte (`catalogue_icon_uri`, the membership tile's route) - else ``{}``, so a build with no logo label
+    is byte-identical. A state's logo the catalogue does not carry is left out: the engine then writes the name."""
+    out: dict = {}
+    for sc in timeline.get("scenes") or []:
+        world = sc.get("world") or {}
+        for pg in [world.get("page")] + list(world.get("page_states") or []):
+            for _, holder, key in _label_logo_sites(pg if isinstance(pg, dict) else {}):
+                logo = holder[LPG.LOGOS_KEY][int(key)] if key != LPG.LOGO_KEY else holder[key]
+                if PROP_PREFIX + logo in out:
+                    continue
+                try:
+                    out[PROP_PREFIX + logo] = catalogue_icon_uri(logo)
+                except ValueError:
+                    continue
+    return out
+
+
 def _validate_freeze(entry: dict) -> list[str]:
     """P69 T49 (E99 s99): the beat's length is its dial, 0.4-1.2 s, and it WRITES nothing: its light is the page's one
     light colour, held still as part of the stopped frame - no label (a `figure` names the number, before the beat), no
@@ -9266,6 +9331,10 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
     stamp_full_stage(page)
     if page.get(LPG.MEMBERS_KEY):   # P69 T45: a logo the catalogue does not carry becomes its name; a name too wide WARNs
         notes = resolve_member_logos(page) + LPG.member_fit_warnings(page, ASPECT or "16:9")
+        if notes:
+            page["warnings"] = list(page.get("warnings") or []) + notes
+    if page.get(LPG.LOGOS_KEY) or any(isinstance(s, dict) and s.get(LPG.LOGO_KEY) for s in page.get("series") or []):
+        notes = resolve_label_logos(page, ASPECT or "16:9")   # P71 T31: a logo without its catalogue's permission becomes its name
         if notes:
             page["warnings"] = list(page.get("warnings") or []) + notes
     if page.get(LPG.SEGMENTS_KEY):   # P69 T64 (s106): a segment too thin for its figure WARNs - the figure takes a leader
@@ -17322,6 +17391,7 @@ def main() -> int:
     import render_baseline as _RB
     uris = {**uris, **longform_assets(timeline)}   # P69 T8: the long form's face, only when a page asks for it
     uris = {**uris, **member_assets(timeline)}     # P69 T45: a membership tile's catalogued logo, only when one carries it
+    uris = {**uris, **label_logo_assets(timeline)}   # P71 T31: a data label's catalogued logo, only when a page carries one
     out = _RB.write_split(BUILD, timeline, uris, TIMELINE_NAME, template=TEMPLATE)
 
     dur = float(subprocess.run(

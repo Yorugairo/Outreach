@@ -12702,6 +12702,160 @@ async function mount(doc) {
     st.ruleFit = [];
     for (const r of st.hlines || []) { const f = place(r); if (f) st.ruleFit.push(Object.assign({ rule: r.h.label }, f)); }
   };
+  /* P71 T31 (was P69 T79; the Bravos harvest v2 S5, S6, R2) - LABELS. Every piece is OFF unless the page names it
+     (ledger_page `_with_labels`), so a page that names none builds to the byte.
+       THE AXIS-LESS PAGE (`axes_mode: "none"`, S5 - BUB 0:48-1:36, HIS 11:04-11:16): no tick column, no gridlines, no
+         framed plot - the bars stand on a zero rule under their own span, the plot symmetric in its box. The written
+         values state the scale, so EVERY value is written: a value R26-191 or the rule law thinned is restored
+         (`st.noAxis.restored` counts them - the honesty rule is the page's, not the fit's).
+       THE CATEGORY PILL (`pills[i]`, S5): the bar's own name, in a capsule of the bar's own ink over its stack (the
+         bar's end, its value, the counting pill when it is the emphasised bar) - BUB's red capsule over the value badge.
+         The name's ink is whichever of the board's two inks reads on the fill (lfOnInk, the value-in-a-bar rule). A name
+         wider than its slot wraps to two lines at the balanced space; a pill that still meets another pill, the
+         counting pill or the chart's top is REPORTED on `st.pillFit` (s106), never moved off its bar.
+       THE LOGO UNDER A BAR (`logos[i]`, S6 - BUB 0:48): the catalogued cutout the compiler resolved (`prop:<id>` in the
+         asset map; absent, the name alone - never a stand-in), LOGO_PX square under the floor, the name kept: in its
+         pill, or written under the logo (the floor rises by the logo's room first, as a two-line name's does).
+       THE LOGO AT A LINE'S END (a series' `logo`, S6): the cutout at the end tag's head, TAG_EM of the tag's own size,
+         the tag's text after it; on a page whose key rail carries the series' name (the long form, `longform_key`) the
+         tag writes the series' label only - the name is in the key.
+     A pill and a logo FOLLOW the element that names them (`st.labelFollow`: its opacity, its display, its move since the
+     build) - lpPaintChart's one line after the builder's own paint, so they arrive and leave with the name. */
+  const LP_LABEL = Object.freeze({
+    PILL_PAD_H_EM: 0.6,   /* the capsule's side pad, in ems of the name [DERIVED: BUB 1:12, the "2008 Global Financial Crisis" pill: ~0.6 em each side] */
+    PILL_PAD_V_EM: 0.3,   /* its top and bottom pad [DERIVED: the same pill, ~1.6 em tall round 1 em of type] */
+    PILL_GAP_PX: 12,      /* stage px from the pill's foot to the top of its bar's stack [DERIVED: BUB 1:12, ~12 px at 1080p] */
+    LOGO_PX: 64,          /* a bar's logo, stage px square [DERIVED: BUB 0:48's member marks, ~50 px at 1080p; over LPMEMBER.LOGO_MIN_PX 48] */
+    LOGO_SLOT: 0.8,       /* ... never wider than this share of its slot */
+    LOGO_GAP_PX: 10,      /* stage px between the floor and the logo, and the logo and the name under it */
+    TAG_EM: 1.25,         /* the line-end logo, in ems of its tag's size (ledger_page LABEL_LOGO_TAG_EM) */
+    TAG_GAP_EM: 0.3,      /* ... and its gap to the tag's text (LABEL_LOGO_TAG_GAP_EM) */
+  });
+  const lpLabelUnit = (st, px) => px / (st.stagePx > 0 ? st.stagePx : 1);
+  const lpLabelFollowOn = (st, el, owner) => {   /* el arrives, leaves and moves with owner */
+    (st.labelFollow || (st.labelFollow = [])).push({ el, owner, x0: +owner.getAttribute("x"), y0: +owner.getAttribute("y") });
+  };
+  const lpLabelFollow = (cs) => {
+    for (const f of cs.labelFollow) {
+      const o = f.owner, dx = +o.getAttribute("x") - f.x0, dy = +o.getAttribute("y") - f.y0;
+      f.el.setAttribute("opacity", o.getAttribute("opacity") == null ? 1 : o.getAttribute("opacity"));
+      f.el.style.display = o.style.display === "none" ? "none" : "";
+      const tr = (dx || dy) && Number.isFinite(dx) && Number.isFinite(dy) ? "translate(" + dx.toFixed(1) + " " + dy.toFixed(1) + ")" : "";
+      if ((f.el.getAttribute("transform") || "") !== tr) { if (tr) f.el.setAttribute("transform", tr); else f.el.removeAttribute("transform"); }
+    }
+  };
+  /* the axis-less page's zero rule, under the bars' own span (BUB's stroke under each bar, drawn once across the row) */
+  const lpBarsNoAxisRule = (st, g) => {
+    const x0 = g.lead - g.pitch * 0.1, x1 = g.lead + g.pitch * (g.n - 0.1);
+    const ax = lpEl("line", "ax", st.chart, { x1: x0.toFixed(1), x2: x1.toFixed(1), y1: g.base.toFixed(1), y2: g.base.toFixed(1) });
+    if (st.lfType) {   /* the long form hides a rule that is not its panel's zero (CSS): this page has no panel, and this IS its zero */
+      ax.classList.add("lf-zero"); ax.style.stroke = LP_LONGFORM.ZERO;
+      ax.style.strokeWidth = (LP_LONGFORM.ZERO_PX / ((st.stagePx > 0 ? st.stagePx : 1) / (st.cardK || 1))).toFixed(4);
+    }
+    lpMark(st, "axis", "axis", ax, { v: 0, y: g.base, x1: x0, x2: x1 });
+    return [ax];
+  };
+  /* every value written: what a fit thinned is restored on an axis-less page (its values ARE its scale) */
+  const lpBarsNoAxisValues = (st) => {
+    let restored = 0;
+    for (const b of st.bars) if (b.thin && b.val) { b.val.style.display = ""; b.thin = false; restored++; }
+    st.noAxis = { restored };
+  };
+  /* the headroom a row of pills takes over the plot: one line of the name at its size, its pads and its gap */
+  const lpBarPillRoom = (st, pg, g) => {
+    const probe = lpEl("text", "lab", st.chart, { x: 0, y: 0, opacity: 0 });
+    probe.textContent = "Hg";
+    const fs = parseFloat(getComputedStyle(probe).fontSize) || (g.P ? 40 : 24);
+    probe.remove();
+    return fs * (1 + 2 * LP_LABEL.PILL_PAD_V_EM) + lpLabelUnit(st, LP_LABEL.PILL_GAP_PX);
+  };
+  /* the logo row's room under the floor, in chart units (0: no bar names a logo the asset map carries) */
+  const lpBarLogoRoom = (st, pg, pitch) => {
+    const ids = Array.isArray(pg.logos) ? pg.logos : [];
+    if (!ids.some((id) => id && A && A["prop:" + id])) return 0;
+    return Math.min(lpLabelUnit(st, LP_LABEL.LOGO_PX), pitch * LP_LABEL.LOGO_SLOT) + lpLabelUnit(st, LP_LABEL.LOGO_GAP_PX);
+  };
+  const lpBarPills = (st, pg, g) => {
+    const L = LP_LABEL, gap = lpLabelUnit(st, L.PILL_GAP_PX);
+    const inks = [lpVarOn(st.chart, "--lp-char"), lpVarOn(st.chart, "--lp-cream")];
+    const cp = st.callout ? st.callout.querySelector("rect.cpill") : null;
+    const cpBox = cp ? [+cp.getAttribute("x"), +cp.getAttribute("y"), +cp.getAttribute("width"), +cp.getAttribute("height")] : null;
+    const eBar = cp ? (st.bars.find((b) => b.i === st.emph) || st.bars[Math.min(st.emph, st.bars.length - 1)]) : null;   /* the counting pill's bar, by the page's index */
+    const shown = (el) => el && el.style.display !== "none" && (el.textContent || "").length;
+    const boxes = [];
+    st.pillFit = [];
+    for (const b of st.bars) {
+      if (!(pg.pills || [])[b.i] || !b.lab || !(b.lab.textContent || "").trim()) continue;
+      const lab = b.lab, fs = parseFloat(getComputedStyle(lab).fontSize) || (g.P ? 40 : 24);
+      const padH = L.PILL_PAD_H_EM * fs, padV = L.PILL_PAD_V_EM * fs;
+      lpWrapBarLabel(lab, g.slot - 2 * padH - gap);   /* a name wider than its slot takes two lines (a one-line name that fits: untouched) */
+      let stack = b.neg ? g.base : Math.min(b.end, g.base);
+      if (shown(b.val)) { const vb = lpLabelBox(b.val); if (vb) stack = Math.min(stack, vb[1]); }
+      if (b === eBar && cpBox) stack = Math.min(stack, cpBox[1]);
+      const lines = lab.__wrapLines ? lab.__wrapLines.length : 1, dy = lab.__wrapDy || 0;
+      const bot = stack - gap, hIn = fs * 1.0 + dy * (lines - 1);   /* the ink's band: one em a line, the wrap's own leading between */
+      const y1 = bot - padV - 0.22 * fs - dy * (lines - 1);          /* the first baseline: the descender's share of the em under the last line */
+      lpSetTextXY(lab, b.x.toFixed(1), y1.toFixed(1));
+      lab.setAttribute("text-anchor", "middle");
+      const fill = lpVarHex(lpFillOf(b.bar) || (b.neg ? "var(--lp-neg)" : "var(--lp-pos)"));
+      const on = lfOnInk(fill, inks);
+      lab.style.fill = on ? on.ink : (inks[0] || "");
+      lab.style.fontWeight = "700";
+      const w = lpInkW(lab) + 2 * padH, h = hIn + 2 * padV, x = b.x - w / 2, y = bot - h;
+      const pill = lpEl("rect", "lp-catpill", st.chart, { x: x.toFixed(1), y: y.toFixed(1), width: w.toFixed(1), height: h.toFixed(1),
+        rx: (Math.min(h, fs * (1 + 2 * L.PILL_PAD_V_EM)) / 2).toFixed(1), opacity: 0 });
+      pill.style.fill = fill;
+      st.chart.insertBefore(pill, lab);   /* the name is written ON its pill */
+      b.pill = pill;
+      lpLabelFollowOn(st, pill, lab);
+      const m = (st.markBy || {})["xlab:" + b.i];
+      if (m) { m.geom.y = y1; m.geom.pill = { x, y, w, h }; }
+      const fit = { i: b.i, w: +w.toFixed(1), slot: +g.slot.toFixed(1), top: +y.toFixed(1) };
+      const meets = (a, c) => a[0] < c[0] + c[2] && c[0] < a[0] + a[2] && a[1] < c[1] + c[3] && c[1] < a[1] + a[3];
+      const me = [x, y, w, h];
+      if (y < 0) fit.offTop = true;
+      if (boxes.some((o) => meets(o, me))) fit.meetsPill = true;
+      if (cpBox && b !== eBar && meets(cpBox, me)) fit.meetsCallout = true;
+      boxes.push(me);
+      if (fit.offTop || fit.meetsPill || fit.meetsCallout) st.pillFit.push(fit);
+    }
+  };
+  const lpBarLogos = (st, pg, g) => {
+    const L = LP_LABEL, s = Math.min(lpLabelUnit(st, L.LOGO_PX), g.pitch * L.LOGO_SLOT), gap = lpLabelUnit(st, L.LOGO_GAP_PX);
+    st.barLogos = [];
+    for (const b of st.bars) {
+      const id = (pg.logos || [])[b.i], src = id && A ? A["prop:" + id] : null;   /* the catalogue's own cutout, or nothing - never a stand-in */
+      if (!src) continue;
+      const y = g.bottom + gap;
+      const img = lpEl("image", "lp-label-logo", st.chart, { x: (b.x - s / 2).toFixed(2), y: y.toFixed(2), width: s.toFixed(2), height: s.toFixed(2),
+        href: src, preserveAspectRatio: "xMidYMid meet", opacity: 0 });
+      if (!b.pill) {   /* the name is kept, written under its logo */
+        const ly = +b.lab.getAttribute("y") + s + gap;
+        lpSetTextXY(b.lab, b.lab.getAttribute("x"), ly.toFixed(1));
+        const m = (st.markBy || {})["xlab:" + b.i];
+        if (m) m.geom.y = ly;
+      }
+      lpLabelFollowOn(st, img, b.lab);
+      st.barLogos.push({ i: b.i, logo: id, x: b.x - s / 2, y, s });
+    }
+  };
+  /* a series' logo at its line's end: the mark at the tag's head, the tag's text after it - on a page whose key rail
+     carries the series' name (ledger_page `longform_key` keys every logo series) the tag writes the label alone */
+  const lpLineTagLogo = (st, pg, s, name, src) => {
+    if (((pg.axes || {}).key || []).length) name.textContent = s.label || "";
+    const fs = parseFloat(name.style.fontSize) || parseFloat(getComputedStyle(name).fontSize) || 24;
+    const sz = LP_LABEL.TAG_EM * fs, x = +name.getAttribute("x");
+    const img = lpEl("image", "lp-label-logo lp-tag-logo", st.chart, { x: x.toFixed(2), y: 0, width: sz.toFixed(2), height: sz.toFixed(2),
+      href: src, preserveAspectRatio: "xMidYMid meet", opacity: 0 });
+    if ((name.textContent || "").length) lpSetTextXY(name, (x + sz + LP_LABEL.TAG_GAP_EM * fs).toFixed(1), name.getAttribute("y"));
+    return { img, sz, fs, id: s.logo };
+  };
+  const lpLineTagLogoPlace = (st, pp) => {
+    const L = pp.logo;
+    L.img.setAttribute("y", (pp.ny - 0.35 * L.fs - L.sz / 2).toFixed(2));   /* centred on the tag's x-height, on its settled line */
+    lpLabelFollowOn(st, L.img, pp.name);
+    (st.tagLogos || (st.tagLogos = [])).push({ si: pp.si | 0, logo: L.id, x: +L.img.getAttribute("x"), y: +L.img.getAttribute("y"), s: L.sz });
+  };
   const buildLedgerBars = (st, pg) => {
     /* E28 (operator, 2026-09-03): a chart reads right at a glance - a drop is a bar going DOWN from a
        zero baseline. Values are SIGNED; the baseline sits at zero wherever the range puts it, bars hang
@@ -12711,6 +12865,8 @@ async function mount(doc) {
     if (GA && GA.dir === "h") return lpBuildGaugeH(st, pg, GA);   /* P72 T6 (R26-319): the capsule on its side */
     const SOFT = st.barStyle === "soft" ? LPBAR_SOFT.SHOULDER_PX / (st.stagePx > 0 ? st.stagePx : 1) : 0;   /* P69 T10b: the shoulder, in this chart's units (0: the page as it was) */
     const OUT = GA ? null : lpBarsOut(st, pg);   /* P71 T25: a page born on ONE bar, or carrying a projected bar - null on every other page, which builds to the byte */
+    const NOAX = !GA && pg.axes_mode === "none";   /* P71 T31 (S5): the axis-less story page - false on every other page, which builds to the byte */
+    const PILLS = NOAX && Array.isArray(pg.pills) && pg.pills.some(Boolean);   /* ... its category pills over the bars */
     const LAID = OUT ? OUT.laid : st.vals;       /* ... the values this state lays out: the subject alone, or the field without the projection it has not drawn yet */
     const n = Math.max(1, LAID.length);
     const RNG = Array.isArray(pg.ranges) ? pg.ranges : null;   /* P69 T8d: [lo, hi] per bar (null: a single value) */
@@ -12746,8 +12902,8 @@ async function mount(doc) {
     const requestedGutter = Number((pg.axes || {}).left_gutter);
     const leftGutter = Number.isFinite(requestedGutter) ? Math.max(defaultGutter, requestedGutter) : defaultGutter;
     const PN = st.panel != null && !P;   /* P69 T8d: a landscape bars PANEL - its plot starts where a line panel's does, its ticks thinned by room */
-    const floor0 = P ? G.H - 70 : LF ? LF.bars_b : 440, top = P ? 150 : PN ? LPBAR_PANEL.TOP : 90, x0g = leftGutter, x1 = P ? G.W - 30 : st.panel != null || PH ? G.W - 20 : 980, gap = 0.34, unit = lpUnitOf(pg);   /* P69 T8d: a panel's viewBox is its box's width. P72 T13: the unit as lpWithUnit takes it (a string, or $...B) */
-    const x0 = GA || st.panel != null ? x0g : lpTickColX0(st, x0g, lo, hi, unit);   /* P72 T13 (R26-274): the tick column stays on the stage (a gauge's ticks and a panel's are their own) */
+    const floor0 = P ? G.H - 70 : LF ? LF.bars_b : 440, top = (P ? 150 : PN ? LPBAR_PANEL.TOP : 90) + (PILLS ? lpBarPillRoom(st, pg, { P }) : 0), x0g = leftGutter, x1 = P ? G.W - 30 : st.panel != null || PH ? G.W - 20 : 980, gap = 0.34, unit = lpUnitOf(pg);   /* P69 T8d: a panel's viewBox is its box's width. P72 T13: the unit as lpWithUnit takes it (a string, or $...B) */
+    const x0 = GA || st.panel != null ? x0g : NOAX ? G.W - x1 : lpTickColX0(st, x0g, lo, hi, unit);   /* P72 T13 (R26-274): the tick column stays on the stage (a gauge's ticks and a panel's are their own). P71 T31: no column, the plot symmetric */
     /* THE CAP (P69 T6c, E99 s96): W_PX on the stage, in this chart's units; a row whose natural bar is wider narrows to
        it, at the measured bar/pitch ratio unless that row would leave the plot, and stands centred */
     const nat = (x1 - x0) / n, capU = (GA ? LPGAUGE.W_PX : LPBAR.W_PX) * (st.cardK || 1) / (st.stagePx > 0 ? st.stagePx : 1);   /* T10c: a card's bar is the cap at the card's own size */
@@ -12756,7 +12912,8 @@ async function mount(doc) {
     const lead = capped ? x0 + ((x1 - x0) - n * pitch) / 2 : x0;   /* ... and the group stands centred in the plot */
     const bw = capped ? capU : pitch * (1 - gap);
     const air = capped ? 1 - bw / pitch : gap;   /* the pitch's share left as air, half each side of its bar */
-    const bottom = floor0 - lpBarNameRoom(st, pg, { P, LF, capped, slot: PH ? pitch - LPBAR_NAME_GAP * LF.tick : bw, skip: OUT ? OUT.hid : -1 });   /* P72 T51b (R26-380 (a)) */
+    const bottom = floor0 - lpBarNameRoom(st, pg, { P, LF, capped, slot: PH ? pitch - LPBAR_NAME_GAP * LF.tick : bw, skip: OUT ? OUT.hid : -1 })   /* P72 T51b (R26-380 (a)) */
+      - (Array.isArray(pg.logos) ? lpBarLogoRoom(st, pg, pitch) : 0);   /* P71 T31 (S6): the logo row under the floor */
     const my = (v) => bottom - (v - lo) / (hi - lo || 1) * (bottom - top);
     const base = my(0);
     st.scale = { kind: "bars", my, yv: (v) => v, y0: lo, y1: hi, x0, x1 };   /* P48 T2 */
@@ -12768,9 +12925,9 @@ async function mount(doc) {
     /* six divisions, not the default five: lpNiceStep's 1-2-5 ladder rounds 21.8 up to 50, which left the tariff
        short's monthly page with only two tick labels ($0 and -$50) and NO reference above zero for its one
        positive bar. Asking for six lands step 20 and five labelled ticks. */
-    const ticks0 = GA ? lpGaugeTicks(st, my, hi, GS.caps, GS.ov, unit, GS.x0 - 6) : lpYTicks(st, lo, hi, my, x0 - 20, x1 + 20, unit, x0 - 26,
+    const ticks0 = GA ? lpGaugeTicks(st, my, hi, GS.caps, GS.ov, unit, GS.x0 - 6) : NOAX ? lpBarsNoAxisRule(st, { lead, pitch, n, base }) : lpYTicks(st, lo, hi, my, x0 - 20, x1 + 20, unit, x0 - 26,
       PN ? Math.max(2, Math.min(6, Math.floor((bottom - top) / ((LF ? LF.tick : LPBAR_PANEL.TICK_U) * LPBAR_PANEL.TICK_ROOM)))) : 6);
-    if (LF && !GA) st.lfPanel = { x: x0 - 20, y: top, w: x1 - x0 + 40, h: bottom - top };   /* P70 T3: a gauge stands on the ground, unframed (Bravos D40) */   /* P69 T8: the panel spans the tick rules' own extent, the scale's top to its floor */
+    if (LF && !GA && !NOAX) st.lfPanel = { x: x0 - 20, y: top, w: x1 - x0 + 40, h: bottom - top };   /* P71 T31: an axis-less page draws no framed plot (BUB, HIS) */   /* P70 T3: a gauge stands on the ground, unframed (Bravos D40) */   /* P69 T8: the panel spans the tick rules' own extent, the scale's top to its floor */
     /* the comparator: the tallest bar the stated scale holds - the breaking bar first stands at ITS level, a bar like the others */
     const honest = st.vals.filter((v) => !(brk && v > hi)), comp = honest.length ? Math.max(...honest) : hi;
     st.vals.forEach((v, i) => {
@@ -12885,6 +13042,7 @@ async function mount(doc) {
     });
     if (!GA) lpRuleLabelsClear(st, base, x0, x1);   /* P72 T13 (R26-250): a rule's label clears the bars and their values - before the values clear the rules */
     if (!GA) lpValsClearRules(st);   /* P70 T3: a gauge's figure stands beside its capsule, off every rule. P69 T6: a value is never struck through by a comparator rule - BEFORE the pill reads the values' boxes */
+    if (NOAX) lpBarsNoAxisValues(st);   /* P71 T31: the values ARE the scale - none thinned */
     const e = GA ? null : OUT ? (st.bars.find((b) => b.i === st.emph) || null) : st.bars[Math.min(st.emph, st.bars.length - 1)];   /* P70 T3: no counting pill on a gauge - the figure is the fill's. P71 T25: a state that skips a bar finds its emphasis by the page's index */
     if (e) {
       const cg = lpEl("g", "", st.chart, { opacity: 0 });
@@ -12979,7 +13137,9 @@ async function mount(doc) {
     /* P69 T6c: a name wider than its capped bar takes two lines. P72 T12 (R26-339): at `phone` the rule is its SLOT - the
        pitch, less LPBAR_NAME_GAP of its own size - so a name wraps only where it would run into its neighbour's column
        (a second 61.4 px line costs the plot 70 px; "Q1 2026" on one bar's page wrapped with the whole row free) */
-    if (capped) for (const b of st.bars) lpWrapBarLabel(b.lab, PH ? pitch - LPBAR_NAME_GAP * LF.tick : b.bw);
+    if (PILLS) lpBarPills(st, pg, { P, base, slot: pitch });   /* P71 T31 (S5): each named bar's category pill over its stack */
+    if (capped) for (const b of st.bars) if (!b.pill) lpWrapBarLabel(b.lab, PH ? pitch - LPBAR_NAME_GAP * LF.tick : b.bw);
+    if (Array.isArray(pg.logos)) lpBarLogos(st, pg, { bottom, pitch });   /* P71 T31 (S6): a logo under its bar, the name kept */
     st.tickFit = lpFitTicks(st);   /* R26-191b law 3, last: the callout's axis mount may have moved a month */
     if (Array.isArray(pg.members)) lpMemberBuild(st, pg, { base, P, LF, x0, x1 });   /* P69 T45: the membership tiles, in their bars */
     if (st.bars.some((b) => b.segs)) lpSegBuild(st, pg, { base, top, x0, xr: x1 + 20, toPage: true, unit, floorU: PH ? LP_CARD.TYPE_PX / (st.stagePx > 0 ? st.stagePx : 1) : 0, below: bottom + XLAB + (P ? 40 : LF ? LF.tick : 26) * 0.6, fs: LF ? LF.value : P ? 44 : 26, fs0: LF ? LF.tick : P ? 40 : 22,
@@ -14224,12 +14384,14 @@ async function mount(doc) {
                                                      : { x: ((PJ ? PE[0] : mx(last[0])) + 12 + tipClr + y2dx).toFixed(1), y: ((PJ ? PE[1] : myS(last[1])) + 8).toFixed(1), fill: col, opacity: 0, ...(nameSt ? { style: nameSt } : {}) });
       st.linePts.push(PT.map((q) => [q[0], q[1]]));   /* the exact datum positions, for the species' targets */
       name.textContent = s.muted ? "" : LFT && LFT.form !== "full" ? (s.label || s.name || "") : (s.label ? s.label + " " : "") + (s.name || "");   /* P69 T8: a tag the stage cannot hold keeps its value (T10's key takes the name) */   /* the muted history carries no name */
+      const tagLogo = !P && !s.muted && s.logo && A ? A["prop:" + s.logo] : null;   /* P71 T31 (S6): the series' catalogued logo heads its end tag (absent: not one element) */
+      const logo = tagLogo ? lpLineTagLogo(st, pg, s, name, tagLogo) : null;
       /* DYNAMIC LABEL: the badge that keys this line rides its inline name as the tag, in the accent - one
          reveal, one real estate (operator, 2026-09-03) */
       const ib = s.projection ? null : (st.inlineBadges || {})[s.color], chipT = s.projection ? "" : (ib && ib.tag) || s.card_name || "";   /* P71 T16: a projection's tag is its label alone - never its line's badge value (E77) */   /* a card's short name rides where a badge's tag would */
       if (chipT && !(LFT && LFT.form === "value")) { const tg = lpEl("tspan", "tagchip", name, { dx: LFT ? (LP_LONGFORM.CHIP_DX_PX / LFT.scale).toFixed(2) : 12, fill: col,
         ...(PHONE ? { style: "font-size:" + lpTypeU(st, "chip") + "px" } : {}) }); tg.textContent = chipT; }
-      const rec = { p, len, tip, name, ...(badge ? { badge } : {}), stagger: i / Math.max(1, drawn.length), ny: P ? nameY : (PJ ? PE[1] : myS(last[1])) + 8,
+      const rec = { p, len, tip, name, ...(badge ? { badge } : {}), ...(logo ? { logo } : {}), stagger: i / Math.max(1, drawn.length), ny: P ? nameY : (PJ ? PE[1] : myS(last[1])) + 8,
                      pts: PT.map((q) => [q[0], q[1]]), si: s.si | 0, k0: s.k0 | 0, muted: !!s.muted, hot: role.hot, context: role.context,
                      data: s.pts.map(([x, v]) => [+x, +v]), d0: d, len0: len };   /* P47 T2: the path knows its data, so a build_to can cap it at a datum; P48 T2: and its DATA, so a rescale re-projects it */
       if (ax.name_clear && !nameBelow) rec.ny = Math.min(rec.ny, clearY - (P ? 34 : 20));
@@ -14257,6 +14419,7 @@ async function mount(doc) {
     if (over > 0) for (const pp of order) pp.ny -= over;
     for (const pp of order) { pp.name.setAttribute("y", pp.ny.toFixed(1));
       lpMark(st, "name:s" + pp.si + (pp.muted ? ":h" : ""), "name", pp.name, { x: +pp.name.getAttribute("x"), y: pp.ny }, pp); }   /* the name's geom is its SETTLED y, after the push-apart */
+    for (const pp of order) if (pp.logo) lpLineTagLogoPlace(st, pp);   /* P71 T31: the logo on its tag's settled line, following the tag */
     /* R26-226: the page's SERIES, in its own order, resolved once at load - which of them take a turn is the paint's
        (`lineBuildNow`: a series a `build_to` holds at index 0 takes none). A slot is a SERIES, not a path: a
        highlighted page splits one series into a muted history and a live tail (two paths, one si, one slot, so the
@@ -19925,6 +20088,7 @@ async function mount(doc) {
          handed back ("") and the template's .9 stands, exactly as before; the attribute keeps its value for its readers. */
       for (const hr of cs.hlines || []) { const k = clamp01(c / 0.25); hr.line.setAttribute("opacity", (0.9 * k).toFixed(3)); { const v = k < 1 ? (0.9 * k).toFixed(3) : ""; if (hr.line.style.opacity !== v) hr.line.style.opacity = v; } if (hr.lab) hr.lab.setAttribute("opacity", clamp01((c - 0.25) / 0.2).toFixed(2)); }
       if (cs.paint) cs.paint(cs, c, t3, scene, t);   /* the builder's own build step (race / decline / combo / share); P73 T2: the timeline's events land on the row's words, so it reads the scene and t (every other painter ignores them) */
+      if (cs.labelFollow) lpLabelFollow(cs);   /* P71 T31: a category pill and a logo arrive, leave and move with the name they label */
       if (cs.share) {   /* P48 T4: the piece the sentence is about leaves the pie on its word */
         let pu = 0;
         for (const sp of pageSpecies(scene, "peel")) pu = Math.max(pu, (t - sp.at) / Math.max(0.001, sp.dur || 1));

@@ -381,6 +381,12 @@ def test_the_axis_bands_sit_under_and_beside_the_plot_never_on_it():
     partially overlap them, which is only safe because they are not the data."""
     for name, _aspect, entry in entries():
         plot, axis = entry["boxes"]["plot"], entry["axis"]
+        if axis["x"] and "+axes_none" in name:
+            # P71 T31: the AXIS-LESS story page (Bravos BUB 0:48 / HIS 11:12) writes each bar's name as a category pill
+            # OVER its bar - the names are the page's labels, not tick furniture under a plot; they stand above the
+            # floor, never below it.
+            assert axis["x"]["y"] < plot["y"] + plot["h"], f"{name}: the category pills are not over the bars"
+            continue
         if axis["x"]:
             assert axis["x"]["y"] + axis["x"]["h"] >= plot["y"] + plot["h"] - 2, f"{name}: the x labels are not under the plot"
         if axis["y"]:

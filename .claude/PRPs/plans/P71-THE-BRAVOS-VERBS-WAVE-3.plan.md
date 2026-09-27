@@ -2322,7 +2322,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T31: Labels - a category pill over axis-less story bars, logos as data labels, the bar ladder that ends on a membership bar (was P69 T79)
-- Status: pending
+- Status: done - lane B (the T31 commit): `axes: none` on a story bars page (refused beside `left_gutter`), a bar's category `pill` over it, a bar's / a series' `logo` (a bare catalogue id, T45's grammar); `recipe:bar-ladder-to-membership` (candidate); golden `story-bars-pills`; `tests/test_story_bar_labels.py` (48). Limits: series logos landscape only; the even-pill rule can repeat a full-named tag in the key rail; a pill or logo follows its name only while `lpPaintChart` runs
 - Owner: implementation_luna (LANE B)
 - Depends on: T25 (`buildLedgerBars`, wave 6); P70 T2 (it owns `buildLedgerLine`'s end-tag writes, where the line-end
   logo goes). Done: T45 (the membership stack), T10 (the key rail).

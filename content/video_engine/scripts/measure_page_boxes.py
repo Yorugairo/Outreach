@@ -138,6 +138,10 @@ DUAL_SURFACE = "dual-axis-inverted"
 # projection, s93, so its ink is its own). The golden's own page (`projected-overtake`, H row 16's capex), as DECLARED.
 STORY_PROJECTED = "story" + LPG.REPRESENTATIVE_SEP + LPG.PROJECTED_KEY
 PROJECTED_SURFACE = "projected-overtake"
+# P71 T31: the story builder's FOURTH representative - the AXIS-LESS page (S5): no tick column, the plot symmetric in its
+# box, its pills' headroom over the bars. The golden's own page (`story-bars-pills`, H row 19's two clocks), as DECLARED.
+STORY_AXES_NONE = "story" + LPG.REPRESENTATIVE_SEP + "axes_none"
+AXES_NONE_SURFACE = "story-bars-pills"
 
 
 def _panels_bars_series() -> dict:
@@ -438,6 +442,13 @@ def representative(builder: str) -> dict:
         if page.get("caption") == "anchor":
             page.pop("caption")
         return page
+    if builder == STORY_AXES_NONE:   # P71 T31: the golden's own axis-less page with its pills, as DECLARED (stamp stripped)
+        tl = json.loads((RB.SOURCES / f"{AXES_NONE_SURFACE}.timeline.json").read_text(encoding="utf-8"))
+        page = _strip(next(s["world"]["page"] for s in tl["scenes"] if (s.get("world") or {}).get("page")))
+        page.pop("full_stage", None)
+        if page.get("caption") == "anchor":
+            page.pop("caption")
+        return page
     if builder == SCHEMATIC_LINE:   # P70 T2: the golden's own schematic page, as DECLARED - the golden carries the
         tl = json.loads((RB.SOURCES / f"{SCHEMATIC_SURFACE}.timeline.json").read_text(encoding="utf-8"))   # compiler's
         page = _strip(next(s["world"]["page"] for s in tl["scenes"] if (s.get("world") or {}).get("page")))  # full-stage
@@ -454,7 +465,7 @@ def representative(builder: str) -> dict:
     return _strip(page)
 
 
-BUILDERS = tuple(sorted(set(GOLDEN_PAGES) | {"share", LPG.PANELS, PANELS_BARS, STORY_GAUGE, SCHEMATIC_LINE, DUAL_LINE, STORY_PROJECTED}))
+BUILDERS = tuple(sorted(set(GOLDEN_PAGES) | {"share", LPG.PANELS, PANELS_BARS, STORY_GAUGE, SCHEMATIC_LINE, DUAL_LINE, STORY_PROJECTED, STORY_AXES_NONE}))
 PROFILED = tuple(b for b in BUILDERS if b in LPG.READABILITY_BUILDERS[LPG.LONGFORM])   # N3: dense-line and story
 
 

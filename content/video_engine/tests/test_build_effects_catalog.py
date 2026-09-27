@@ -438,8 +438,7 @@ def test_every_wired_card_is_in_a_recipe():
     # tested alone in test_share_pie_3d.py and pinned by the share-pie-3d goldens; no committed beat plays it yet.
     # P69 T66's broken cross-era axis (page_builder:line+break) is tested alone in test_broken_axis.py and pinned by
     # the broken-axis-two-eras golden; no committed beat plays it until a railway-era series is sourced (H rows 9 / 14).
-    # P69 T45's membership tile (page_species:member) is tested alone in test_membership_stack.py and pinned by the
-    # membership-* goldens; its recipe is P69 T79's `bar-ladder-to-membership` (harvest R2), not invented here.
+    # P69 T45's membership tile (page_species:member) is in P71 T31's `bar-ladder-to-membership` (harvest R2, P69 T79's).
     # P69 T64's stacked bar of values and its combo (page_builder:bars+segments, page_builder:combo+segments) are
     # tested alone in test_stacked_combo.py and pinned by the stacked-outlays / stacked-combo-funding goldens; no
     # committed beat plays them until H row 17 ("the arithmetic") is re-authored on a stacked object, so no recipe is
@@ -487,7 +486,7 @@ def test_every_wired_card_is_in_a_recipe():
                          "page_builder:combo+segments", "page_builder:line+break", "page_builder:line+schematic",
                          "page_builder:progress", "page_builder:timeline",
                          "page_enter:surface", "page_enter:trace",
-                         "page_species:datum_badge", "page_species:explode", "page_species:glow", "page_species:lens", "page_species:member",
+                         "page_species:datum_badge", "page_species:explode", "page_species:glow", "page_species:lens",
                          "plate_option:bar_style",
                          "plate_option:build", "plate_option:caption_room", "plate_option:domain", "plate_option:fit",
                          "plate_option:meridian",
