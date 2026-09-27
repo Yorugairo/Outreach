@@ -454,16 +454,20 @@ def test_every_wired_card_is_in_a_recipe():
     # no recipe is invented for it here.
     # P70 T2's schematic (page_builder:line+schematic) is tested alone in test_schematic_page.py and pinned by the
     # schematic-hype-trough golden (H row 12's sentence); no committed beat plays it until P70-HG1, so no recipe is invented.
-    # P70 T6's equation row (species:equation) is tested alone in test_equation_row.py and pinned by the equation-halving
-    # golden (H row 18's arithmetic); its recipe is the harvest's R25 "formula by spoken order" (P69 T44), not invented here.
+    # P70 T6's equation row (species:equation) and P71 T29's glow edge (page_species:glow) are composed by P71 T34's
+    # candidate recipe:the-formula-by-its-words (the 20 bar lit as its term is written, then the row in spoken order -
+    # harvest R25), proved as a private test-bed beat on H row 18 (projects/_proofs/p71-recipes/proof_t34.py), so they are
+    # no longer excepted.
     # P70 T7's balance scale (species:balance) is tested alone in test_balance_scale.py and pinned by the balance-level
     # golden (H row 18's "Both are true at once"); no committed beat plays it yet, so no recipe is invented for it here.
     # P70 T9's chapter pill (species:chapter) is tested alone in test_chapter_pill.py and pinned by the chapter-held golden
     # (H's act "The turn", held across the cut into row 15); no H body row adopts act markers before P70-HG1 (harvest v2
     # :274), so no recipe is invented for it here.
     # P71 T32's pedestal (camera:pedestal) and lens (page_species:lens) are tested alone in test_pedestal_and_lens.py (the
-    # lens pinned by the lens-over-the-line golden, H row 22's soft June); the pedestal's recipe is P71 T34's
-    # `the-hidden-base` (the plan breaks the P69 T80 <-> T44 circle there), and no body row adopts either before P71-HG1.
+    # lens pinned by the lens-over-the-line golden, H row 22's soft June); the pedestal's recipe was to be P71 T34's
+    # `the-hidden-base`, STOPPED by that slice's discovery (on a full-stage ledger page the raised camera shows the void
+    # above the page, and the base is not below the frame - the iceberg needs a taller stage, a form slice), and no body
+    # row adopts either before P71-HG1.
     # P71 T20's datum badge (page_species:datum_badge) is tested alone in test_schematic_illustrations.py and pinned by the
     # schematic-motif golden (H row 24's "not a house of cards", the X on the motif's troughs); no committed beat plays it
     # and no recipe composes it before P71-HG1 (its candidate recipes are R14's two verdict panels and R19, P71 T34 / T35).
@@ -473,8 +477,6 @@ def test_every_wired_card_is_in_a_recipe():
     # excepted; P71 T33's inset echo may compose it too.
     # P71 T28's trace enter (page_enter:trace) is tested alone in test_line_painter.py and pinned by the enter-trace golden
     # (H's railway page entering by its shape); no body row adopts it before P71-HG1 (E73 still opens row 1 on its axes).
-    # P71 T29's glow edge (page_species:glow) is tested alone in test_glow_edges.py and pinned by the glow-outline-bar
-    # golden (H row 18b's 20 bar lit on "twenty percent"); no body row adopts it and no recipe composes it before P71-HG1.
     # P72 T46d's tight map framing (plate_option:fit) is tested alone in test_wave3_page_marks.py; no recipe composes it
     # before P72-HG1 (the AMD RFSoC episode's route map is its first use).
     # P73 T6's central meridian (plate_option:meridian) is tested alone in test_pacific_map.py and pinned by the
@@ -486,12 +488,12 @@ def test_every_wired_card_is_in_a_recipe():
                          "page_builder:combo+segments", "page_builder:line+break", "page_builder:line+schematic",
                          "page_builder:progress", "page_builder:timeline",
                          "page_enter:surface", "page_enter:trace",
-                         "page_species:datum_badge", "page_species:explode", "page_species:glow", "page_species:lens",
+                         "page_species:datum_badge", "page_species:explode", "page_species:lens",
                          "plate_option:bar_style",
                          "plate_option:build", "plate_option:caption_room", "plate_option:domain", "plate_option:fit",
                          "plate_option:meridian",
                          "plate_option:readability",
-                         "plate_option:room", "species:balance", "species:chapter", "species:equation", "species:freeze"], uncovered
+                         "plate_option:room", "species:balance", "species:chapter", "species:freeze"], uncovered
     assert excluded == ["kinetics:arap", "kinetics:camera", "kinetics:chartxf", "kinetics:clothoid", "kinetics:contour",
                         "kinetics:ease", "kinetics:homography", "kinetics:ink", "kinetics:labelfit",
                         "kinetics:morph_a", "kinetics:page_surface", "kinetics:spring", "kinetics:squash",

@@ -1,0 +1,68 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:the-epoch-walk",
+ "title": "The epoch walk",
+ "aliases": [
+  {
+   "name": "R22 Epoch walk",
+   "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:943"
+  }
+ ],
+ "acts": [
+  "SPANS"
+ ],
+ "members": [
+  {
+   "card": "page_species:span",
+   "offset_s": 0.0,
+   "options": {
+    "dur": 2.0
+   },
+   "role": "the first era is shaded behind the line and named on the word that names it"
+  },
+  {
+   "card": "page_species:lit_stretch",
+   "offset_s": 3.55,
+   "options": {
+    "dur": 1.2
+   },
+   "role": "what the first era did is lit on its own words - the fall out of it"
+  },
+  {
+   "card": "page_species:build_to",
+   "offset_s": 6.69,
+   "options": {
+    "dur": 2.0
+   },
+   "role": "the line is carried on to the next era as the sentence reaches it"
+  },
+  {
+   "card": "page_species:span",
+   "offset_s": 7.8,
+   "options": {
+    "dur": 2.0
+   },
+   "role": "the second era is shaded and named on its word - after the first, never with it"
+  }
+ ],
+ "window_s": 10.0,
+ "does": "One long line walks its named eras in turn: the first shaded and named, its fall lit, the line carried on, then the next era shaded and named - never two at once.",
+ "use_when": {
+  "act": "SPANS - named periods on one long series (BRAVOS-USE-WHEN R22)",
+  "moment": "proof",
+  "shape": "series + named periods: one long line whose eras the sentence names one after another",
+  "use": "a sentence that walks eras ('In two thousand the internet ... then the tower came down ... AI spending just crossed'): each era shaded and named on its word, in turn",
+  "dont": "eras lit at once (the guide's don't); an era's name that carries a number the page does not draw (E77 - H row 9's 7 / 8 are not on the object); a period renamed in place is A44's swap, not a new span"
+ },
+ "doctrine": [
+  "E77",
+  "E99 s60",
+  "E99 s70",
+  "E99 s99",
+  "P52 T5",
+  "P69 T36"
+ ],
+ "status": "candidate",
+ "source": "P71 T34 (harvest v2 R22; DOM 06:11-06:38, BOOM 02:22.5-03:14 per VERIFY.md - its two dashed boxes land in sequence); proved as a private test-bed beat by projects/_proofs/p71-recipes/proof_t34.py on Steel and Paper H row 9 ('In two thousand the internet crossed ... AI spending just crossed eight', take 79.04 s) on ev-equip-ipp-gdp-v2 - no approved cut carries it",
+ "count": 0
+}

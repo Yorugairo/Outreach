@@ -1,0 +1,55 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:the-bar-halves-its-number",
+ "title": "The bar halves its number",
+ "aliases": [
+  {
+   "name": "The halving bar",
+   "source": ".claude/PRPs/plans/P69-THE-STAMP-LANDS-THE-PAGE-BANDS-AND-THE-BODY.plan.md:1078"
+  }
+ ],
+ "acts": [
+  "TURNS",
+  "DIVIDES"
+ ],
+ "members": [
+  {
+   "card": "page_species:figure",
+   "offset_s": 0.0,
+   "options": {
+    "dur": 1.2
+   },
+   "role": "the bar's number is written as the bar lands - the figure the compare will re-value, printed once (R26-284)"
+  },
+  {
+   "card": "chart_to:compare",
+   "offset_s": 2.8,
+   "option": "melt",
+   "options": {
+    "dur": 2.0
+   },
+   "role": "on the halving's word the BAR itself falls to the comparator (T26a, E76), its number melting into the new one, the old top kept as a ghost"
+  }
+ ],
+ "window_s": 6.0,
+ "does": "A bar lands with its number, and on the word that halves it the bar itself falls to half, the number melting into the new one and the old top left as a ghost.",
+ "use_when": {
+  "act": "TURNS - one number re-read at a scenario's value (the P69 T35 proposal: row 18's 20 -> 10)",
+  "moment": "turn",
+  "shape": "one bar and a comparator the sentence computes from it (a scenario - 'if ... fall by half'), on one scale",
+  "use": "a sentence that halves (or doubles) the number on the page ('if the AI names fall by half, that erases ten percent'): the bar moves, not only its number",
+  "dont": "the comparator is another thing, not the same bar at another value (a second bar or a bracket); the scenario is not spoken (E77); a figure beside the bar restating its value (R26-284)"
+ },
+ "doctrine": [
+  "E28",
+  "E76",
+  "E77",
+  "E99 s60",
+  "E99 s70",
+  "P69 T26a",
+  "R26-273"
+ ],
+ "status": "candidate",
+ "source": "P71 T34 (P69 T35's withdrawn candidate, buildable after T26a closed R26-273); proved as a private test-bed beat by projects/_proofs/p71-recipes/proof_t34.py on Steel and Paper H row 18 ('At a fifth of the index ... erases ten percent', take 399.57 s) with H's own CONC_COMPARE on ev-index-concentration-bars-v1 - no approved cut carries it",
+ "count": 0
+}

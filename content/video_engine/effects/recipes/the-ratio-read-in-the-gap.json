@@ -1,0 +1,51 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:the-ratio-read-in-the-gap",
+ "title": "The ratio read in the gap",
+ "aliases": [
+  {
+   "name": "R20 Raw values -> hold -> bracket -> multiple",
+   "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:937"
+  }
+ ],
+ "acts": [
+  "SPANS",
+  "COMPARES"
+ ],
+ "members": [
+  {
+   "card": "page_builder:bars",
+   "offset_s": 0.0,
+   "role": "the bars land with their raw values printed at their tops - each value the page's own, never a restating figure (R26-284)"
+  },
+  {
+   "card": "page_species:bracket",
+   "offset_s": 15.82,
+   "options": {
+    "dur": 1.8
+   },
+   "role": "after the raw values have been read and HELD, a bracket beside the bars spans the gap from the low top to the high one, the multiple (computed) its label"
+  }
+ ],
+ "window_s": 18.0,
+ "does": "The bars land with their raw values and are held while the sentence reads them; only then a bracket spans the gap between the two tops and writes the multiple.",
+ "use_when": {
+  "act": "SPANS - two numbers read as a ratio (BRAVOS-USE-WHEN R20)",
+  "moment": "proof",
+  "shape": "two numbers -> a ratio: two bars on one scale (a third between them may stand), both sourced",
+  "use": "land both raw values, HOLD while they are said, then bracket and write the multiple (H row 16: the 2020-24 year's $28B -> 2026E's $150B, 5.4x)",
+  "dont": "land the multiple before the raw values are read (STK held 14-16 s); an end on a CLAIM bar with a label that does not say whose (P73 T1: '36x on Patel's figure'); two data on different scales"
+ },
+ "doctrine": [
+  "E28",
+  "E77",
+  "E99 s60",
+  "E99 s70",
+  "E99 s109",
+  "P69 T50",
+  "P73 T1"
+ ],
+ "status": "candidate",
+ "source": "P71 T34 (harvest v2 R20; STK 1:54-2:18 '6x', HIS 11:01 '5x'; A15's bracket on bars, P69 T50 closing R26-272); proved as a private test-bed beat by projects/_proofs/p71-recipes/proof_t34.py on Steel and Paper H row 16 ('Between 2020 and 2024 ... big enough to bend the bond market', take 256.48 s) on the dossier's own three bars (EVIDENCE-DOSSIER.md C1), every value read off ev-debt-issuance-line-v1 - no approved cut carries it",
+ "count": 0
+}

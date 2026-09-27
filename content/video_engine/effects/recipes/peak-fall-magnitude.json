@@ -1,0 +1,71 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:peak-fall-magnitude",
+ "title": "Peak, fall, magnitude",
+ "aliases": [
+  {
+   "name": "R18 Peak -> fall -> magnitude",
+   "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:813"
+  }
+ ],
+ "acts": [
+  "TURNS"
+ ],
+ "members": [
+  {
+   "card": "species:ring",
+   "offset_s": 0.0,
+   "options": {
+    "form": "dashed"
+   },
+   "role": "a dashed ring lands on the peak as the climb reaches it and holds (E56: a ring on a chart circles a datum)"
+  },
+  {
+   "card": "page_species:build_to",
+   "offset_s": 3.05,
+   "options": {
+    "dur": 1.2
+   },
+   "role": "on the fall's verb the line draws on from the peak to the trough"
+  },
+  {
+   "card": "page_species:lit_stretch",
+   "offset_s": 3.66,
+   "option": "comet",
+   "options": {
+    "dur": 1.56
+   },
+   "role": "a light runs the fall from the peak to the trough, its comet head leading, as the size of the fall is said"
+  },
+  {
+   "card": "page_species:figure",
+   "offset_s": 4.91,
+   "options": {
+    "dur": 1.4,
+    "color": "neg"
+   },
+   "role": "the fall's size is written at the trough, in neg ink below the point, as the light arrives - the page's own arithmetic"
+  }
+ ],
+ "window_s": 6.0,
+ "does": "The peak is ringed as the line reaches it, the crash draws on its verb, a light runs the fall, and the drop's size lands at the trough as the light arrives.",
+ "use_when": {
+  "act": "TURNS - a series read down to one number, the size of its fall (BRAVOS-USE-WHEN R18)",
+  "moment": "proof / turn",
+  "shape": "series -> one number: a line with a clear prior peak and the trough it fell to, both on the page",
+  "use": "a sentence that names a crash and its size ('then crashed by nearly two-thirds'): ring the peak, light the fall, land the % at the trough",
+  "dont": "the fall is not spoken as a number (the guide's don't); the % the voice says is not the page's own arithmetic (E77 - write the object's, -64%, never the treatment's -66)"
+ },
+ "doctrine": [
+  "E56",
+  "E77",
+  "E28",
+  "E99 s60",
+  "E99 s70",
+  "E99 s99",
+  "P69 T36"
+ ],
+ "status": "candidate",
+ "source": "P71 T34 (harvest v2 R18; STK 0:12-0:18, HIS 05:58-06:02, BOOM 14:16-14:23 per VERIFY.md); proved as a private test-bed beat by projects/_proofs/p71-recipes/proof_t34.py on Steel and Paper H row 9 ('Railways in the 1840s ... then crashed by nearly two-thirds', take 70.94 s) on ev-railway-index-v1 - no approved cut carries it",
+ "count": 0
+}

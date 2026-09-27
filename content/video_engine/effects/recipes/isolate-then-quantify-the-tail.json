@@ -1,0 +1,63 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:isolate-then-quantify-the-tail",
+ "title": "Isolate, then quantify the tail",
+ "aliases": [
+  {
+   "name": "R24 Isolate, then quantify the tail",
+   "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:825"
+  }
+ ],
+ "acts": [
+  "TURNS"
+ ],
+ "members": [
+  {
+   "card": "page_species:solo",
+   "offset_s": 0.0,
+   "options": {
+    "dur": 0.7
+   },
+   "role": "on the word that narrows to ONE series the peers mute; on the long form its key pill and end badge take the accent - the one badge"
+  },
+  {
+   "card": "page_species:lit_stretch",
+   "offset_s": 0.29,
+   "option": "comet",
+   "options": {
+    "dur": 1.6
+   },
+   "role": "a light runs the isolated series' recent stretch - the tail - into its badge"
+  },
+  {
+   "card": "species:ring",
+   "offset_s": 1.19,
+   "options": {
+    "form": "dashed"
+   },
+   "role": "a dashed ring lands on the tip the badge quantifies (E56: a datum)"
+  }
+ ],
+ "window_s": 3.0,
+ "does": "The peers mute on the word that picks one series, a light runs that series' tail into its accent badge, and a ring lands on the tip the badge names.",
+ "use_when": {
+  "act": "TURNS - one series of several, read down to its latest number (BRAVOS-USE-WHEN R24)",
+  "moment": "reveal",
+  "shape": "series x2+ -> one number: the named series ends on the number the sentence says (its end badge)",
+  "use": "mute the peers, push to the end, land one badge ('Today it's twenty-eight, the most it has ever been')",
+  "dont": "the peers matter to the claim (the guide's don't); a page with ONE mark - nothing to isolate (H row 18's concentration bar); a badge the page does not print (E77)"
+ },
+ "doctrine": [
+  "E56",
+  "E67",
+  "E99 s60",
+  "E99 s70",
+  "E99 s99",
+  "P69 T37",
+  "P71 T30",
+  "P72 T46d"
+ ],
+ "status": "candidate",
+ "source": "P71 T34 (harvest v2 R24; JPN 05:25-05:45, STK 4:10-4:14, BOOM 16:36-16:42 per VERIFY.md); proved as a private test-bed beat by projects/_proofs/p71-recipes/proof_t34.py on Steel and Paper H row 14 ('At the dot-com peak ... Today it's twenty-eight, the most it has ever been', take 176.29 s) on ev-capital-formation-v1 in the long form - no approved cut carries it",
+ "count": 0
+}

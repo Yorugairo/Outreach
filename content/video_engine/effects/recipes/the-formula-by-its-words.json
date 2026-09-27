@@ -1,0 +1,53 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:the-formula-by-its-words",
+ "title": "The formula by its words",
+ "aliases": [
+  {
+   "name": "R25 Formula by spoken order",
+   "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:727"
+  }
+ ],
+ "acts": [
+  "EXPLAINS"
+ ],
+ "members": [
+  {
+   "card": "page_species:glow",
+   "offset_s": 0.0,
+   "options": {
+    "dur": 0.68
+   },
+   "role": "the bar the first input is read off is lit as its term is written - the input's source on the page"
+  },
+  {
+   "card": "species:equation",
+   "offset_s": 0.0,
+   "options": {
+    "dur": 6.0
+   },
+   "role": "the row in spoken order: each input on its own word, the operator just before the next, '=' and the signed result on the word that says it (P70 T6)"
+  }
+ ],
+ "window_s": 6.0,
+ "does": "The bar an input comes from is lit as the hand writes it, and the arithmetic is built in the order it is spoken - each input on its word, the signed result on its own.",
+ "use_when": {
+  "act": "EXPLAINS - the arithmetic IS the claim (BRAVOS-USE-WHEN R25)",
+  "moment": "proof",
+  "shape": "two numbers -> one: sourced inputs (or a named scenario) and a result the voice says",
+  "use": "H row 18's 'At a fifth of the index, if the AI names fall by half, that erases ten percent' - 20% x -1/2 = -10%, each on its word, the 20 lit on its bar",
+  "dont": "the arithmetic is not the claim (the guide's don't); an input unsourced or the result unspoken (species:equation's when); a term read off a CLAIM unmarked (P73 T1)"
+ },
+ "doctrine": [
+  "E28",
+  "E77",
+  "E99 s60",
+  "E99 s70",
+  "P70 T6",
+  "P71 T29",
+  "P73 T1"
+ ],
+ "status": "candidate",
+ "source": "P71 T34 (harvest v2 R25; DOM 09:30-09:39, the 'Real Yield' tiles in spoken order); proved as a private test-bed beat by projects/_proofs/p71-recipes/proof_t34.py on Steel and Paper H row 18 ('Run the arithmetic. At a fifth of the index ... erases ten percent', take 398.14 s) on ev-index-concentration-bars-v1 in the long form, the terms P70 T6's golden's - no approved cut carries it",
+ "count": 0
+}
