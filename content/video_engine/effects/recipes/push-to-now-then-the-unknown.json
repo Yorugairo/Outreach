@@ -1,0 +1,63 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:push-to-now-then-the-unknown",
+ "title": "The push to now, then the unknown",
+ "aliases": [
+  {
+   "name": "R5 Push to now, then the unknown",
+   "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:427"
+  }
+ ],
+ "acts": [
+  "COMPARES",
+  "TURNS"
+ ],
+ "members": [
+  {
+   "card": "page_builder:line",
+   "offset_s": 0.0,
+   "role": "the page lands BUILT: the whole history is the evidence, read before anything moves"
+  },
+  {
+   "card": "chart_to:rescale",
+   "offset_s": [
+    3.0,
+    6.0
+   ],
+   "options": {
+    "dur": 1.4
+   },
+   "role": "ONE move lands on today: the axes retarget to the last stretch, today's datum at the plot's right edge (E59: a push lands on a named datum)"
+  },
+  {
+   "card": "species:unknown",
+   "offset_s": [
+    10.0,
+    17.0
+   ],
+   "options": {
+    "size": 122
+   },
+   "role": "on the word that names the condition a '?' lands PAST the plot's right edge beside today's tip, clear of the end tags, and holds (BOOM 03:19)"
+  }
+ ],
+ "window_s": 21.0,
+ "does": "The history lands whole, one rescale lands the view on today's datum at the plot's edge, and on the sentence that turns to what comes next a '?' lands past the edge beside the tip - the future named as a question, never drawn as a number.",
+ "use_when": {
+  "act": "COMPARES (projecting) / TURNS - today read against its history, then the open future (BRAVOS-USE-WHEN R5)",
+  "moment": "close",
+  "shape": "a series whose last datum is today; the future is a condition ('if memory breaks') the sources give no figure for",
+  "use": "the camera or a rescale lands on today, then a '?' runs off the edge ('The flip: if memory breaks while the buildout holds...'); where the sources DO give a scenario, T16's labelled dashed path takes the '?''s place (recipe:evidence-then-the-conditional-future)",
+  "dont": "a continuous push (E59); the lens as decoration; a drawn path the sources do not give (E77) - the '?' is the honest form; a '?' on a datum or over the end tags"
+ },
+ "doctrine": [
+  "E59",
+  "E77",
+  "E99 s60",
+  "E99 s70",
+  "P71 T18"
+ ],
+ "status": "candidate",
+ "source": "P71 T26 (harvest v2 R5; BUB 8:22, STK 9:01 the rescale out then the dashed path off the edge, BOOM 03:19 the '?' past the plot's edge); proved as a private test-bed beat by projects/_proofs/p71-recipes/proof_t26.py on Steel and Paper H row 22 ('That's the July release ... The flip: if memory breaks ... and so am I', take 647.11 s) on ev-memory-monitor-row22-v1 - no approved cut carries it",
+ "count": 0
+}

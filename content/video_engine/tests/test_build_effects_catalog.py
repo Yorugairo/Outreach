@@ -468,9 +468,10 @@ def test_every_wired_card_is_in_a_recipe():
     # P71 T20's datum badge (page_species:datum_badge) is tested alone in test_schematic_illustrations.py and pinned by the
     # schematic-motif golden (H row 24's "not a house of cards", the X on the motif's troughs); no committed beat plays it
     # and no recipe composes it before P71-HG1 (its candidate recipes are R14's two verdict panels and R19, P71 T34 / T35).
-    # P71 T18's unknown (species:unknown, the large "?") is tested alone in test_unknown_prompt.py and pinned by the
-    # unknown-decide golden (H row 23's "Decide for yourself"); no committed beat plays it before P71-HG1, and its recipe
-    # is P71 T33's inset echo (the plot parks, the twins stack, then the "?"), not invented here.
+    # P71 T18's unknown (species:unknown, the large "?") is composed by P71 T26's candidate
+    # recipe:push-to-now-then-the-unknown (a rescale lands on today, then the "?" past the plot's edge - harvest R5),
+    # proved as a private test-bed beat on H row 22 (projects/_proofs/p71-recipes/proof_t26.py), so it is no longer
+    # excepted; P71 T33's inset echo may compose it too.
     # P71 T28's trace enter (page_enter:trace) is tested alone in test_line_painter.py and pinned by the enter-trace golden
     # (H's railway page entering by its shape); no body row adopts it before P71-HG1 (E73 still opens row 1 on its axes).
     # P71 T29's glow edge (page_species:glow) is tested alone in test_glow_edges.py and pinned by the glow-outline-bar
@@ -488,8 +489,7 @@ def test_every_wired_card_is_in_a_recipe():
                          "plate_option:bar_style",
                          "plate_option:build", "plate_option:caption_room", "plate_option:domain", "plate_option:fit",
                          "plate_option:readability",
-                         "plate_option:room", "species:balance", "species:chapter", "species:equation", "species:freeze",
-                         "species:unknown"], uncovered
+                         "plate_option:room", "species:balance", "species:chapter", "species:equation", "species:freeze"], uncovered
     assert excluded == ["kinetics:arap", "kinetics:camera", "kinetics:chartxf", "kinetics:clothoid", "kinetics:contour",
                         "kinetics:ease", "kinetics:homography", "kinetics:ink", "kinetics:labelfit",
                         "kinetics:morph_a", "kinetics:page_surface", "kinetics:spring", "kinetics:squash",

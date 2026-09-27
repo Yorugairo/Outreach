@@ -2076,7 +2076,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T26: The push to now then the unknown, and the evidence then the conditional future; A56 rescoped - a box round the last actual move, then the projection to a dated rule (was P69 T68)
-- Status: pending
+- Status: done except A56 - lane B (the T26 commit): R5 `recipe:push-to-now-then-the-unknown` and R26 `recipe:evidence-then-the-conditional-future`, candidates, each proved as a beat on H's own sentences (rows 22 and 16); A56 (the box round the last move, then the dated rule) needs an engine form - carried as R26-407 (a `span` box form, and `span` refusing an unknown `form` by name)
 - Owner: implementation_luna (LANE B)
 - Depends on: T16 (`project`); T18 (the "?" / "???"); T9 (the dated axis pill). Done: T26f (the camera free) and T36
   (the now lit).

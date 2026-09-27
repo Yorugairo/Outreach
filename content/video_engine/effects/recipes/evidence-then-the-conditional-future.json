@@ -1,0 +1,75 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:evidence-then-the-conditional-future",
+ "title": "The evidence, then the conditional future",
+ "aliases": [
+  {
+   "name": "R26 Evidence, then the conditional future",
+   "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:433"
+  }
+ ],
+ "acts": [
+  "COMPARES"
+ ],
+ "members": [
+  {
+   "card": "page_builder:line",
+   "offset_s": 0.0,
+   "role": "the page lands on its axes; nothing projected is drawn yet"
+  },
+  {
+   "card": "page_species:build_to",
+   "offset_s": [
+    2.0,
+    9.0
+   ],
+   "options": {
+    "dur": 1.2
+   },
+   "role": "the actuals draw on their own words, the last actual landing on the number the sentence says"
+  },
+  {
+   "card": "page_species:figure",
+   "offset_s": [
+    6.0,
+    10.0
+   ],
+   "options": {
+    "dur": 1.5
+   },
+   "optional": true,
+   "role": "the evidence is WRITTEN - the figures the claim turns on, off their own data, so the page is read before anything is projected"
+  },
+  {
+   "card": "chart_to:extend",
+   "offset_s": [
+    10.0,
+    14.0
+   ],
+   "options": {
+    "dur": 1.7
+   },
+   "role": "about ten to fourteen seconds on, on the projection's word, T16's dashed unbloomed continuation draws from the last actual, tagged with its label and tier"
+  }
+ ],
+ "window_s": 16.0,
+ "does": "The actuals draw and are written on their words and the page holds ten to fourteen seconds, then on the projection's word a dashed, unbloomed continuation draws from the last actual, tagged as an estimate with its tier.",
+ "use_when": {
+  "act": "COMPARES (projecting) - the evidence, then the conditional future (BRAVOS-USE-WHEN R26)",
+  "moment": "turn",
+  "shape": "a series of actuals (+ named averages), then ONE sourced projected point from the last actual",
+  "use": "hold the evidence ~10-14 s, then a projection in a visibly new grammar ('Last year: a hundred and twenty-one billion. This year they're tracking toward a hundred and fifty.')",
+  "dont": "the projection arrives before the evidence is read (STK held ~10-14 s); a projection with no label or tier (E77, refused); a projection its sources give as a RANGE (recipe:estimate-opens-as-a-wedge is the form)"
+ },
+ "doctrine": [
+  "E77",
+  "E53",
+  "E99 s60",
+  "E99 s70",
+  "E99 s117",
+  "P71 T16"
+ ],
+ "status": "candidate",
+ "source": "P71 T26 (harvest v2 R26; STK 7:50-8:24, JPN 04:05-04:17, BOOM 16:14-18:01); proved as a private test-bed beat by projects/_proofs/p71-recipes/proof_t26.py on Steel and Paper H row 16 ('Then the bills got bigger than the cash ... tracking toward a hundred and fifty', take 254.41 s) on P71 T16's golden composition of ev-debt-issuance-line-v1 (its $150B edge as the labelled 2026E projection, the top of the $130-150B range) - no approved cut carries it",
+ "count": 0
+}
