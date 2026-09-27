@@ -6572,6 +6572,194 @@ def leader_points_back(extra: list | None = None, aspect: str = "16:9", species:
 SURFACES.update({"leader-points-back": leader_points_back})
 FRAME_T.update({"leader-points-back": round(LEADER_AT + LEADER_DUR + 0.6, 2)})   # landed: the arc, its head, the ring, the 5.4x
 
+
+# ---- P72 T53 (b) + (e) (R26-412 (b), (e); P71 T34's ratio beat): THE GROUP BRACKET AND THE LEVEL TO A FAR BAR -------
+#   bracket-level-across  Steel and Paper H row 16's issuance as the dossier's own three bars (C1: 2020-24 a year, 2025,
+#                         2026E the top of the range), every value READ off the committed `ev-debt-issuance-line-v1`
+#                         (REVALUE_SERIES). On "It is big enough" the bracket from the 2020-24 bar to 2026E writes the
+#                         multiple, COMPUTED (150 / 28 -> 5.4x). The span stands beside the 2026E bar; the 28 bar is two
+#                         bars away, so its level runs DASHED from the span's foot across to the 28 bar's side, broken
+#                         behind the 2025 and 2026E bars it passes (Bravos STK 2:16). Judged whole: 8.0 + 1.8 + 0.4.
+#   bracket-group         The same page; on "Last year ... This year" ONE span over the 2025 and 2026E bars under one
+#                         label - the sentence's own words - its ticks dropping toward the group, clear over the two
+#                         printed values (A16, CHN 18:18 "Decades"). Judged whole at the same instant.
+GROUP_AT, GROUP_S = 8.0, 1.8
+
+
+def issuance_three_bars() -> dict:
+    """The dossier's three bars (EVIDENCE-DOSSIER C1), every value READ off the committed issuance series."""
+    debt = json.loads(REVALUE_SERIES.read_text(encoding="utf-8"))
+    by = {s["label"]: s["pts"] for s in debt["series"]}
+    return {"title": debt["title"],
+            "sub": "Hyperscaler bond issuance, US$ billions a year - 2020-24 an average; 2026E the top of the $130-150B range",
+            "src": debt["src"], "unit": "$", "unit_suffix": "B",
+            "bars": [{"label": "2020-24, a year", "value": by["issuance"][0][1], "color": "deemph"},
+                     {"label": "2025", "value": by["issuance"][-1][1], "color": "deemph"},
+                     {"label": "2026E, top of range", "value": by["$150B"][-1][1], "color": "crimson"}]}
+
+
+def _issuance_bars_timeline(title: str, species: list[dict]) -> tuple[dict, dict]:
+    import tempfile
+    import build_scene_timeline_f as BST
+    plate = "ledger:fx-issuance-three-bars:bars"
+    assert not BST.validate_species([dict(e) for e in species], (0, 0, 0), plate)
+    with tempfile.TemporaryDirectory() as td:
+        ep = Path(td)
+        (ep / "evidence/objects").mkdir(parents=True)
+        (ep / "evidence/objects/fx-issuance-three-bars.series.json").write_text(json.dumps(issuance_three_bars()), encoding="utf-8")
+        saved = BST.ASPECT
+        BST.ASPECT = "16:9"
+        try:
+            world = BST.world_for_plate(plate, (0, 0, 0), ep)
+            BST.stamp_full_stage(world["page"])
+            BST.check_brace(world["page"], [dict(e) for e in species], "16:9")   # the group's page check
+        finally:
+            BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": [dict(e) for e in species]}]
+    return _timeline(title, scenes, {}, "16:9"), _base_uris()
+
+
+def bracket_level_across() -> tuple[dict, dict]:
+    bars = issuance_three_bars()["bars"]
+    mult = "%.1fx" % (bars[2]["value"] / bars[0]["value"])   # computed off the two bars, never typed
+    return _issuance_bars_timeline("Golden: the bracket's far level runs across to its bar (STK 2:16)",
+                                   [{"kind": "bracket", "at": GROUP_AT, "dur": GROUP_S, "from": 0, "to": 2, "label": mult,
+                                     "sub": "2026E on the 2020-24 year"}])
+
+
+def bracket_group() -> tuple[dict, dict]:
+    return _issuance_bars_timeline("Golden: one span over a group of bars under one label (A16)",
+                                   [{"kind": "bracket", "form": "group", "at": GROUP_AT, "dur": GROUP_S, "from": 1, "to": 2,
+                                     "label": "last year and this"}])
+
+
+SURFACES.update({"bracket-level-across": bracket_level_across, "bracket-group": bracket_group})
+FRAME_T.update({"bracket-level-across": round(GROUP_AT + GROUP_S + 0.4, 2),   # 10.2: drawn whole, the level across
+                "bracket-group": round(GROUP_AT + GROUP_S + 0.4, 2)})         # 10.2: drawn whole, the label written
+
+
+# ---- P72 T53 (c) (R26-412 (c); P71 T34's epoch walk): A SPAN'S NAME CLEARS THE PAGE'S PEAK RULE -----------------------
+#   span-clears-the-rule  Steel and Paper H row 9's GDP page - the COMMITTED `ev-equip-ipp-gdp-v2` (equipment and IP
+#                         investment, % of GDP, its own "Q2 2000 peak - 11.54%" rule), full stage, live - and T34's two
+#                         eras, their edges READ off the data (1998-2003, 2020-today): "DOT-COM" and "AI". The chart fills
+#                         its box, so each name is written inside its band's top - where the peak rule stands: before T53
+#                         both names sat ON its dashes (the base frame, 10.86 s). "DOT-COM" now stands just above the rule
+#                         (clear of its label); "AI", whose "above" is the rule's label, just below it. Judged with both
+#                         written: 9.0.
+SPAN_RULE_PLATE = "ledger:ev-equip-ipp-gdp-v2:line:225:right:axes:cut;idle=live"
+SPAN_RULE_OBJECT = LIT_PROJECT / "evidence/objects/ev-equip-ipp-gdp-v2.series.json"
+
+
+def span_clears_the_rule() -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    obj = json.loads(SPAN_RULE_OBJECT.read_text(encoding="utf-8"))
+    assert obj.get("hline", {}).get("label", "").startswith("Q2 2000 peak"), obj.get("hline")
+    pts = obj["series"][0]["pts"]
+    near = lambda x: min(range(len(pts)), key=lambda k: abs(pts[k][0] - x))   # noqa: E731
+    species = [{"kind": "span", "at": 4.0, "dur": 2.0, "from": near(1998.0), "to": near(2003.0), "label": "DOT-COM"},
+               {"kind": "span", "at": 6.5, "dur": 2.0, "from": near(2020.0), "to": len(pts) - 1, "label": "AI"}]
+    assert not BST.validate_species([dict(e) for e in species], (0, 0, 0), SPAN_RULE_PLATE)
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        world = BST.world_for_plate(SPAN_RULE_PLATE, (0, 0, 0), LIT_PROJECT)
+        BST.stamp_full_stage(world["page"])
+    finally:
+        BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: a span's name clears the page's peak rule (T34's epoch walk)", scenes, {}, "16:9"), _base_uris()
+
+
+SURFACES.update({"span-clears-the-rule": span_clears_the_rule})
+FRAME_T.update({"span-clears-the-rule": 9.0})   # both eras shaded and named (6.5 + 0.45 + 1.0 written)
+
+
+# ---- P72 T53 (d) (R26-412 (d); P71 T34's isolate beat, draft 1): THE SOLO'S BADGE BOX WAITS FOR ITS TAG --------------
+#   solo-badge-waits  Steel and Paper H row 14's capital-formation page - the COMMITTED `ev-capital-formation-v1`, the
+#                     long form (T46d's end-badge box) - built to the dot-com high the page's own mark names (2001, the
+#                     cap READ off the data; T34's `build_to` at 0), then T34's draft-1 order: the tech line's solo on "Today" (4.0) and the
+#                     lines carried on to today after it (build_to the last print, 6.0 over 2.0 s). While the tech tag
+#                     waits for its line the accent box is NOT drawn (before T53 it stood filled and EMPTY at the plot's
+#                     right - logs/base-badge-timeline.log); it fills round the tag as the tag arrives with the carry.
+#                     Judged after the solo, the tag not yet on the page: SOLO_WAIT_T's first instant (5.0); the second
+#                     (8.6) is the tag landed, read by test_span_name_and_solo_badge.
+SOLO_WAIT_OBJECT = LIT_PROJECT / "evidence/objects/ev-capital-formation-v1.series.json"
+SOLO_WAIT_T = (5.0, 8.6)
+SOLO_WAIT_SERIES = next(i for i, s in enumerate(json.loads(SOLO_WAIT_OBJECT.read_text(encoding="utf-8"))["series"])
+                        if (s.get("name") or s.get("label") or "").startswith("COMPUTERS"))   # the tech line, by its own name
+
+
+def solo_badge_waits() -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    obj = json.loads(SOLO_WAIT_OBJECT.read_text(encoding="utf-8"))
+    tech = SOLO_WAIT_SERIES
+    pts = obj["series"][tech]["pts"]
+    high = min(range(len(pts)), key=lambda k: abs(pts[k][0] - obj["marks"][0]["x"]))   # the dot-com high, the page's own mark
+    plate = f"ledger:ev-capital-formation-v1:line:{high}:right:axes:cut;idle=live;readability=longform"
+    species = [{"kind": "build_to", "at": 0.0, "dur": 0.4, "series": si, "target": {"kind": "datum", "index": high}}
+               for si in range(len(obj["series"]))] + [{"kind": "solo", "at": 4.0, "dur": 0.7, "series": tech}] + [
+        {"kind": "build_to", "at": 6.0, "dur": 2.0, "series": si, "target": {"kind": "datum", "index": len(s["pts"]) - 1}}
+        for si, s in enumerate(obj["series"])]
+    assert not BST.validate_species([dict(e) for e in species], (0, 0, 0), plate), BST.validate_species(species, (0, 0, 0), plate)
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        world = BST.world_for_plate(plate, (0, 0, 0), LIT_PROJECT)
+        BST.stamp_full_stage(world["page"])
+    finally:
+        BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}),
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    tl = _timeline("Golden: the solo's end-badge box waits for its tag (long form)", scenes, {}, "16:9")
+    return tl, dict(_base_uris(), **BST.longform_assets(tl))
+
+
+SURFACES.update({"solo-badge-waits": solo_badge_waits})
+FRAME_T.update({"solo-badge-waits": SOLO_WAIT_T[0]})
+
+
+# ---- P72 T53 (a) (R26-412 (a); Bravos BUB 0:00-0:48, harvest T1 / A33 / R1): THE ICEBERG STAGE ----------------------------
+#   iceberg-tip       Steel and Paper H row 16's two stocks as the COMMITTED `ev-leases-iceberg-v1` (derive_iceberg.py: $261B of
+#                     bonds, the issuance series' 2020-25 points summed, over $822B of lease commitments, the leases record's
+#                     "Latest filings" row), the long form, full stage: ONE stacked bar, the leases at the base under the
+#                     water rule "the balance sheet" (`water: true`). The camera stands RAISED by ICE_BY until ICE_AT: the
+#                     frame opens on the page's own sky (before T53: the stage's navy void and the world's cream mount), the
+#                     tip - the bonds, $261B - over the waterline, the base under the water. Judged raised: 4.5.
+#   iceberg-base-lit  The same page after the pedestal (ICE_AT over ICE_S, one move down to the identity): the base in true
+#                     proportion under the water, "$822B" written on it, and on ICE_GLOW_AT the light on the HIDDEN part only
+#                     (`glow {bar: 0, segment: 0}`) - before T53 the glow edged the whole bar. Judged lit and held: 12.0.
+ICE_OBJECT_ID = "ev-leases-iceberg-v1"
+ICE_PLATE = f"ledger:{ICE_OBJECT_ID}:bars::right:axes:cut;idle=live;readability=longform"
+ICE_AT, ICE_S, ICE_BY, ICE_GLOW_AT = 6.0, 2.4, 0.45, 10.0
+
+
+def iceberg_stage() -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    species = [{"kind": "glow", "at": ICE_GLOW_AT, "dur": 0.68, "bar": 0, "segment": 0}]
+    camera = {"keys": [], "pedestal": {"at": ICE_AT, "dur": ICE_S, "by": ICE_BY}}
+    assert not BST.validate_species([dict(e) for e in species], (0, 0, 0), ICE_PLATE)
+    assert not BST.validate_camera_row(camera, [dict(e) for e in species], "iceberg"), BST.validate_camera_row(camera, species, "iceberg")
+    saved = BST.ASPECT
+    BST.ASPECT = "16:9"
+    try:
+        world = BST.world_for_plate(ICE_PLATE, (0, 0, 0), LIT_PROJECT)
+        BST.stamp_full_stage(world["page"])
+        assert BST.check_glow(world, [dict(e) for e in species]) == []   # the part it lights is the bar's own
+    finally:
+        BST.ASPECT = saved
+    scenes = [{"scene_id": "s01", "world": dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}), "camera": camera,
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    tl = _timeline("Golden: the iceberg stage - the tip over the water, the base below, the hidden part lit", scenes, {}, "16:9")
+    tl["kinetics"] = {"camera": True}   # the persistent camera, ON for every compiled timeline (the pedestal rides it)
+    return tl, dict(_base_uris(), **BST.longform_assets(tl))
+
+
+SURFACES.update({"iceberg-tip": iceberg_stage, "iceberg-base-lit": iceberg_stage})
+FRAME_T.update({"iceberg-tip": 4.5, "iceberg-base-lit": 12.0})
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

@@ -1,0 +1,105 @@
+{
+ "title": "The borrowing you can see - and what sits under it",
+ "sub": "US$ billions: bonds the builders issued 2020-25, over lease commitments not yet on a balance sheet",
+ "src": "Bonds: Morgan Stanley IM; Mellon; Investing.com/LPL; PIMCO (via the evidence dossier) - 2020-2025 summed (our arithmetic); leases: hyperscaler 10-Q filings, latest",
+ "unit": "$",
+ "unit_suffix": "B",
+ "hlines": [
+  {
+   "y": 822,
+   "label": "the balance sheet",
+   "color": "deemph",
+   "water": true
+  }
+ ],
+ "bars": [
+  {
+   "label": "What they owe",
+   "value": 1083,
+   "color": "deemph",
+   "segments": [
+    {
+     "name": "Lease commitments",
+     "value": 822,
+     "color": "crimson"
+    },
+    {
+     "name": "Bonds issued",
+     "value": 261,
+     "color": "deemph"
+    }
+   ]
+  }
+ ],
+ "pair": {
+  "hidden": {
+   "value": 822,
+   "name": "Lease commitments",
+   "basis": "the filings' latest row - not yet on a balance sheet"
+  },
+  "visible": {
+   "value": 261,
+   "name": "Bonds issued",
+   "basis": "2020-2025 issuance, summed - on the balance sheet"
+  }
+ },
+ "derived_from": [
+  "ev-debt-issuance-line-v1",
+  "ev-doc-leases"
+ ],
+ "basis": [
+  {
+   "figure": "$261B",
+   "says": "the issuance series' 6 yearly points 2020-2025 summed: 28 + 28 + 28 + 28 + 28 + 121",
+   "from": [
+    [
+     2020,
+     28
+    ],
+    [
+     2021,
+     28
+    ],
+    [
+     2022,
+     28
+    ],
+    [
+     2023,
+     28
+    ],
+    [
+     2024,
+     28
+    ],
+    [
+     2025,
+     121
+    ]
+   ]
+  },
+  {
+   "figure": "$822B",
+   "says": "the leases record's 'Latest filings' row, read as written"
+  },
+  {
+   "figure": "$1083B",
+   "says": "the two parts, the bar's whole"
+  }
+ ],
+ "proof": [
+  {
+   "kind": "object",
+   "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/objects/ev-debt-issuance-line-v1.series.json",
+   "locator": "series[label=issuance].pts",
+   "quote": "\"label\": \"issuance\""
+  },
+  {
+   "kind": "html",
+   "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/ev-doc-leases.html",
+   "locator": "the 'Latest filings' row",
+   "quote": "Latest filings $822 billion"
+  }
+ ],
+ "provenance_note": "P72 T53 (a), 2026-09-27: derived by content/video_engine/projects/_proofs/p72-t53/derive_iceberg.py from the two committed records named in derived_from - every value read, none typed; the two sources are unchanged. The visible total is our sum of the series' yearly points (the 2020-24 years carry the dossier's $28B a-year average), named on the page's source line."
+}

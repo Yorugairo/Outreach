@@ -181,6 +181,86 @@ export const spanBand = (entries, lists, from, to, H, labels, clear) => {
 export const spanLabelY = (band, fs) => { const y = band.yTop != null ? band.yTop : band.y;
   return y >= fs * SPAN.LABEL_ROOM ? y - SPAN.LABEL_DY : y + fs * SPAN.LABEL_IN; };
 
+/* P72 T53 (c) (R26-412 (c); P71 T34's epoch walk, the base frame at 10.86 s) - THE NAME CLEARS THE PAGE'S RULES. A chart
+   that fills its box writes the name INSIDE the band's top (spanLabelY), and the page's own "Q2 2000 peak - 11.54%" rule
+   stood exactly there: "DOT-COM" and "AI" were both written ON its dashes. A rule is the page's own ink (`rule` in the
+   MARK MODEL: a horizontal line at `y` across x1..x2), so a name whose box would cross one steps off it - ABOVE the rule
+   first (a peak rule stands over its data), else BELOW it - to whichever candidate meets least of the page's own words
+   (the rule's label, the series' tags and printed values: `spanInkBoxes`, their measured boxes) and the drawn points,
+   and stays inside the chart's box. A name that crosses no rule stands exactly where the law put it (every golden).
+   The name's box is an ESTIMATE, never a measurement: n glyphs at GLYPH_EM of its size, the hand's box above and under
+   its line - so a seek is the play and the math runs under `node --test`. */
+export const SPAN_NAME = Object.freeze({
+  ASC: 1.08,      /* the hand's box above its line, in its own size [DERIVED: Kalam bold at 26 boxes 42 px, 14 of them under the line - the served probe (the brace's LPBRACE.HAND_DESC 0.54)] */
+  DESC: 0.54,     /* ... and under it */
+  GLYPH_EM: 0.62, /* a glyph's advance in its own size, an upper estimate: "DOT-COM" at 26 measures 113.6 = 7 x 0.62 (the base frame's probe) */
+  AIR: 4,         /* the air kept between the name's box and a rule's ink, viewBox units */
+  RULE_W: 3,      /* a rule's ink as a box this tall round its y (the template's .hrule stroke, with the dash's round caps) */
+  INK_R: 3,       /* a drawn point's ink as a box this far round it */
+});
+const spanArea = (a, b) => Math.max(0, Math.min(a[0] + a[2], b[0] + b[2]) - Math.max(a[0], b[0]))
+  * Math.max(0, Math.min(a[1] + a[3], b[1] + b[3]) - Math.max(a[1], b[1]));
+/* the name's box [x, y, w, h] at baseline `y`, centred on `cx`: `n` glyphs at size `fs` */
+export const spanNameBox = (cx, y, fs, n) => {
+  const w = Math.max(1, n | 0) * fs * SPAN_NAME.GLYPH_EM;
+  return [cx - w / 2, y - SPAN_NAME.ASC * fs, w, (SPAN_NAME.ASC + SPAN_NAME.DESC) * fs];
+};
+/* the page's RULES on the active state, as ink boxes: a horizontal rule's y across its x1..x2 (a rule with no y - an
+   x rule on a horizontal bars page - is not a line a name can be written on) */
+export const spanRuleBoxes = (st) => {
+  const S = spanActiveState(st), out = [];
+  for (const m of (S && S.marks) || []) {
+    if (!m || m.role !== "rule") continue;
+    const g = m.geom || {}, y = +g.y, x1 = +g.x1, x2 = +g.x2;
+    if (Number.isFinite(y) && Number.isFinite(x1) && Number.isFinite(x2))
+      out.push([Math.min(x1, x2), y - SPAN_NAME.RULE_W / 2, Math.abs(x2 - x1), SPAN_NAME.RULE_W]);
+  }
+  return out;
+};
+/* the page's own WORDS a moved name must not land on: a rule's label, a series' tag, a printed value - their measured
+   boxes (the element's own getBBox, read where there is one; a word with no text names nothing) */
+export const SPAN_INK_ROLES = Object.freeze(["rulelabel", "name", "value"]);
+export const spanInkBoxes = (st) => {
+  const S = spanActiveState(st), out = [];
+  for (const m of (S && S.marks) || []) {
+    if (!m || SPAN_INK_ROLES.indexOf(m.role) < 0 || !m.el || typeof m.el.getBBox !== "function") continue;
+    if (typeof m.el.textContent === "string" && !m.el.textContent.trim()) continue;
+    const b = m.el.getBBox();
+    if (b && b.width > 0 && b.height > 0) out.push([b.x, b.y, b.width, b.height]);
+  }
+  return out;
+};
+/* the name's baseline: `y0` (the law's) when its box meets no rule; else, per rule it meets, the baseline just above that
+   rule and the one just below it - the first of the least cost (the rules, the page's words `ink`, the drawn points
+   `pts` [[x, y]], and any reach past the chart's box [0, H]). Pure. */
+export const spanNameY = (y0, cx, fs, n, rules, ink, pts, H) => {
+  const meets = (y, set) => set.reduce((c, o) => c + spanArea(spanNameBox(cx, y, fs, n), o), 0);
+  if (!(rules || []).length || meets(y0, rules) <= 0) return y0;
+  const cost = (y) => {
+    const b = spanNameBox(cx, y, fs, n), r = SPAN_NAME.INK_R;
+    let c = meets(y, rules) + meets(y, ink || []);
+    for (const p of pts || []) c += spanArea(b, [p[0] - r, p[1] - r, 2 * r, 2 * r]);
+    if (Number.isFinite(H)) c += b[2] * (Math.max(0, -b[1]) + Math.max(0, b[1] + b[3] - H));
+    return c;
+  };
+  const cands = [];
+  for (const q of rules) {
+    if (spanArea(spanNameBox(cx, y0, fs, n), q) <= 0) continue;
+    cands.push(q[1] - SPAN_NAME.AIR - SPAN_NAME.DESC * fs, q[1] + q[3] + SPAN_NAME.AIR + SPAN_NAME.ASC * fs);
+  }
+  let best = y0, bc = cost(y0);
+  for (const y of cands) { const c = cost(y); if (c < bc - 1e-9) { best = y; bc = c; } }
+  return best;
+};
+/* the painter's read: the page's rules, words and every drawn series' points, this frame */
+const spanNameClear = (st, lists, cx, y0, fs, n) => {
+  const rules = spanRuleBoxes(st);
+  if (!rules.length) return y0;
+  const pts = [];
+  for (const l of lists || []) for (const q of l || []) if (q && q.p) pts.push(q.p);
+  return spanNameY(y0, cx, fs, n, rules, spanInkBoxes(st), pts, (st && st.geom || {}).H);
+};
+
 /* THE TONE a span is grounded in (E99 s7 -> s46). ONE PLACE, and this is it: the `span_tone` dial names `dark`
    (SPAN.DARK under the span's own name) or `light` (the span's own colour, the chalk); anything else, and ABSENCE,
    is SPAN.TONE - and E99 s46 made that DARK. The engine hands the dial's raw value straight in, so a timeline that
@@ -298,7 +378,8 @@ export const paintSpanBox = (sd, t, st, ctx) => {
   if (!sd.lg.length) { sd.label.setAttribute("opacity", 0); return; }
   sd.label.setAttribute("opacity", pose.fade.toFixed(3));
   sd.label.setAttribute("x", (r.x + r.w / 2).toFixed(1));
-  sd.label.setAttribute("y", spanLabelY({ yTop: r.y, y: r.y }, sd.fs).toFixed(1));
+  sd.label.setAttribute("y", spanNameClear(st, [ctx.pointsNow(st, sd.si) || []], r.x + r.w / 2,
+                                           spanLabelY({ yTop: r.y, y: r.y }, sd.fs), sd.fs, sd.lg.length).toFixed(1));   /* P72 T53 (c) */
   sd.lg.forEach((ts, j) => ts.setAttribute("opacity", spanGlyph(pose.write, j, sd.lg.length).toFixed(3)));
 };
 
@@ -324,7 +405,7 @@ export const paintSpan = (sd, t, st, ctx) => {
   sd.rect.setAttribute("fill-opacity", (spanAlphaOf(sd) * pose.shade).toFixed(3));   /* E99 s7: the SETTLED depth is the build's (span_alpha) or the law's; the fade-in is the pose's either way */
   sd.label.setAttribute("opacity", 1);
   sd.label.setAttribute("x", band.cx.toFixed(1));
-  sd.label.setAttribute("y", spanLabelY(band, sd.fs).toFixed(1));
+  sd.label.setAttribute("y", spanNameClear(st, lists, band.cx, spanLabelY(band, sd.fs), sd.fs, sd.lg.length).toFixed(1));   /* P72 T53 (c): off the page's rules */
   sd.lg.forEach((ts, j) => ts.setAttribute("opacity", spanGlyph(pose.write, j, sd.lg.length).toFixed(3)));
 };
 

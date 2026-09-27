@@ -1015,6 +1015,86 @@ async function mount(doc) {
   const spanLabelY = (band, fs) => { const y = band.yTop != null ? band.yTop : band.y;
     return y >= fs * SPAN.LABEL_ROOM ? y - SPAN.LABEL_DY : y + fs * SPAN.LABEL_IN; };
 
+  /* P72 T53 (c) (R26-412 (c); P71 T34's epoch walk, the base frame at 10.86 s) - THE NAME CLEARS THE PAGE'S RULES. A chart
+     that fills its box writes the name INSIDE the band's top (spanLabelY), and the page's own "Q2 2000 peak - 11.54%" rule
+     stood exactly there: "DOT-COM" and "AI" were both written ON its dashes. A rule is the page's own ink (`rule` in the
+     MARK MODEL: a horizontal line at `y` across x1..x2), so a name whose box would cross one steps off it - ABOVE the rule
+     first (a peak rule stands over its data), else BELOW it - to whichever candidate meets least of the page's own words
+     (the rule's label, the series' tags and printed values: `spanInkBoxes`, their measured boxes) and the drawn points,
+     and stays inside the chart's box. A name that crosses no rule stands exactly where the law put it (every golden).
+     The name's box is an ESTIMATE, never a measurement: n glyphs at GLYPH_EM of its size, the hand's box above and under
+     its line - so a seek is the play and the math runs under `node --test`. */
+  const SPAN_NAME = Object.freeze({
+    ASC: 1.08,      /* the hand's box above its line, in its own size [DERIVED: Kalam bold at 26 boxes 42 px, 14 of them under the line - the served probe (the brace's LPBRACE.HAND_DESC 0.54)] */
+    DESC: 0.54,     /* ... and under it */
+    GLYPH_EM: 0.62, /* a glyph's advance in its own size, an upper estimate: "DOT-COM" at 26 measures 113.6 = 7 x 0.62 (the base frame's probe) */
+    AIR: 4,         /* the air kept between the name's box and a rule's ink, viewBox units */
+    RULE_W: 3,      /* a rule's ink as a box this tall round its y (the template's .hrule stroke, with the dash's round caps) */
+    INK_R: 3,       /* a drawn point's ink as a box this far round it */
+  });
+  const spanArea = (a, b) => Math.max(0, Math.min(a[0] + a[2], b[0] + b[2]) - Math.max(a[0], b[0]))
+    * Math.max(0, Math.min(a[1] + a[3], b[1] + b[3]) - Math.max(a[1], b[1]));
+  /* the name's box [x, y, w, h] at baseline `y`, centred on `cx`: `n` glyphs at size `fs` */
+  const spanNameBox = (cx, y, fs, n) => {
+    const w = Math.max(1, n | 0) * fs * SPAN_NAME.GLYPH_EM;
+    return [cx - w / 2, y - SPAN_NAME.ASC * fs, w, (SPAN_NAME.ASC + SPAN_NAME.DESC) * fs];
+  };
+  /* the page's RULES on the active state, as ink boxes: a horizontal rule's y across its x1..x2 (a rule with no y - an
+     x rule on a horizontal bars page - is not a line a name can be written on) */
+  const spanRuleBoxes = (st) => {
+    const S = spanActiveState(st), out = [];
+    for (const m of (S && S.marks) || []) {
+      if (!m || m.role !== "rule") continue;
+      const g = m.geom || {}, y = +g.y, x1 = +g.x1, x2 = +g.x2;
+      if (Number.isFinite(y) && Number.isFinite(x1) && Number.isFinite(x2))
+        out.push([Math.min(x1, x2), y - SPAN_NAME.RULE_W / 2, Math.abs(x2 - x1), SPAN_NAME.RULE_W]);
+    }
+    return out;
+  };
+  /* the page's own WORDS a moved name must not land on: a rule's label, a series' tag, a printed value - their measured
+     boxes (the element's own getBBox, read where there is one; a word with no text names nothing) */
+  const SPAN_INK_ROLES = Object.freeze(["rulelabel", "name", "value"]);
+  const spanInkBoxes = (st) => {
+    const S = spanActiveState(st), out = [];
+    for (const m of (S && S.marks) || []) {
+      if (!m || SPAN_INK_ROLES.indexOf(m.role) < 0 || !m.el || typeof m.el.getBBox !== "function") continue;
+      if (typeof m.el.textContent === "string" && !m.el.textContent.trim()) continue;
+      const b = m.el.getBBox();
+      if (b && b.width > 0 && b.height > 0) out.push([b.x, b.y, b.width, b.height]);
+    }
+    return out;
+  };
+  /* the name's baseline: `y0` (the law's) when its box meets no rule; else, per rule it meets, the baseline just above that
+     rule and the one just below it - the first of the least cost (the rules, the page's words `ink`, the drawn points
+     `pts` [[x, y]], and any reach past the chart's box [0, H]). Pure. */
+  const spanNameY = (y0, cx, fs, n, rules, ink, pts, H) => {
+    const meets = (y, set) => set.reduce((c, o) => c + spanArea(spanNameBox(cx, y, fs, n), o), 0);
+    if (!(rules || []).length || meets(y0, rules) <= 0) return y0;
+    const cost = (y) => {
+      const b = spanNameBox(cx, y, fs, n), r = SPAN_NAME.INK_R;
+      let c = meets(y, rules) + meets(y, ink || []);
+      for (const p of pts || []) c += spanArea(b, [p[0] - r, p[1] - r, 2 * r, 2 * r]);
+      if (Number.isFinite(H)) c += b[2] * (Math.max(0, -b[1]) + Math.max(0, b[1] + b[3] - H));
+      return c;
+    };
+    const cands = [];
+    for (const q of rules) {
+      if (spanArea(spanNameBox(cx, y0, fs, n), q) <= 0) continue;
+      cands.push(q[1] - SPAN_NAME.AIR - SPAN_NAME.DESC * fs, q[1] + q[3] + SPAN_NAME.AIR + SPAN_NAME.ASC * fs);
+    }
+    let best = y0, bc = cost(y0);
+    for (const y of cands) { const c = cost(y); if (c < bc - 1e-9) { best = y; bc = c; } }
+    return best;
+  };
+  /* the painter's read: the page's rules, words and every drawn series' points, this frame */
+  const spanNameClear = (st, lists, cx, y0, fs, n) => {
+    const rules = spanRuleBoxes(st);
+    if (!rules.length) return y0;
+    const pts = [];
+    for (const l of lists || []) for (const q of l || []) if (q && q.p) pts.push(q.p);
+    return spanNameY(y0, cx, fs, n, rules, spanInkBoxes(st), pts, (st && st.geom || {}).H);
+  };
+
   /* THE TONE a span is grounded in (E99 s7 -> s46). ONE PLACE, and this is it: the `span_tone` dial names `dark`
      (SPAN.DARK under the span's own name) or `light` (the span's own colour, the chalk); anything else, and ABSENCE,
      is SPAN.TONE - and E99 s46 made that DARK. The engine hands the dial's raw value straight in, so a timeline that
@@ -1132,7 +1212,8 @@ async function mount(doc) {
     if (!sd.lg.length) { sd.label.setAttribute("opacity", 0); return; }
     sd.label.setAttribute("opacity", pose.fade.toFixed(3));
     sd.label.setAttribute("x", (r.x + r.w / 2).toFixed(1));
-    sd.label.setAttribute("y", spanLabelY({ yTop: r.y, y: r.y }, sd.fs).toFixed(1));
+    sd.label.setAttribute("y", spanNameClear(st, [ctx.pointsNow(st, sd.si) || []], r.x + r.w / 2,
+                                             spanLabelY({ yTop: r.y, y: r.y }, sd.fs), sd.fs, sd.lg.length).toFixed(1));   /* P72 T53 (c) */
     sd.lg.forEach((ts, j) => ts.setAttribute("opacity", spanGlyph(pose.write, j, sd.lg.length).toFixed(3)));
   };
 
@@ -1158,7 +1239,7 @@ async function mount(doc) {
     sd.rect.setAttribute("fill-opacity", (spanAlphaOf(sd) * pose.shade).toFixed(3));   /* E99 s7: the SETTLED depth is the build's (span_alpha) or the law's; the fade-in is the pose's either way */
     sd.label.setAttribute("opacity", 1);
     sd.label.setAttribute("x", band.cx.toFixed(1));
-    sd.label.setAttribute("y", spanLabelY(band, sd.fs).toFixed(1));
+    sd.label.setAttribute("y", spanNameClear(st, lists, band.cx, spanLabelY(band, sd.fs), sd.fs, sd.lg.length).toFixed(1));   /* P72 T53 (c): off the page's rules */
     sd.lg.forEach((ts, j) => ts.setAttribute("opacity", spanGlyph(pose.write, j, sd.lg.length).toFixed(3)));
   };
 
@@ -1534,6 +1615,16 @@ async function mount(doc) {
     for (const [k, v] of props) el.style.setProperty(k, v);
   };
 
+  /* P72 T53 (d) (R26-412 (d); P71 T34's isolate beat, draft 1 - the golden `solo-badge-waits`): how much of the TAG is on
+     the page this frame - its own opacity attribute (the line builder's: 0 until its line arrives) times its style's (a
+     transition's hand-over writes that one); absent, whole. The box is drawn at no more than this: a filled accent box
+     with no tag in it read as an empty yellow bar at the plot's right while the tag waited for the line. */
+  const soloTagShown = (nm) => {
+    if (!nm) return 0;
+    const num = (v) => { const n = v === null || v === undefined || v === "" ? 1 : +v; return Number.isFinite(n) ? Math.min(1, Math.max(0, n)) : 1; };
+    return num(nm.getAttribute ? nm.getAttribute("opacity") : null) * num(nm.style ? nm.style.opacity : null);
+  };
+
   /* ... the END BADGE at lift `u`: its words (the value and its chip's) ease from their series' ink to the accent - or,
      P72 T46d (R26-396), where the line builder drew the badge its BOX (`pp.badge`, buildLedgerLine's rect under the tag,
      long form only), the box fills with the accent round the tag's measured box and the type eases to the key's charcoal
@@ -1556,7 +1647,7 @@ async function mount(doc) {
       const r = nm.getBBox(), q = soloBadgeBox([r.x, r.y, r.width, r.height]);
       for (const [k, v] of [["x", q.x], ["y", q.y], ["width", q.w], ["height", q.h], ["rx", q.rx]]) bx.setAttribute(k, v.toFixed(2));
       bx.setAttribute("style", "fill:" + SOLO_ACCENT.FILL);   /* the style, not the attribute: the chart's class rules outrank a presentation fill */
-      bx.setAttribute("opacity", Math.min(1, u).toFixed(3));
+      bx.setAttribute("opacity", (Math.min(1, u) * soloTagShown(nm)).toFixed(3));   /* P72 T53 (d): never ahead of its tag */
     }
   };
 
@@ -13197,7 +13288,8 @@ async function mount(doc) {
         const lift = nb.x < tb.x + tb.width ? nb.y + nb.height + LPGAUGE.NAME_GAP_PX / GS.k - tb.y : 0;
         if (lift > 0) lab.setAttribute("y", (+lab.getAttribute("y") - lift).toFixed(1));
       }
-      return { h, y: hy, line, lab, col };
+      const water = h.water === true && !GA ? lpWaterBuild(st, hy) : null;   /* P72 T53 (a): the region under the waterline */
+      return { h, y: hy, line, lab, col, water };
     });
     if (!GA) lpRuleLabelsClear(st, base, x0, x1);   /* P72 T13 (R26-250): a rule's label clears the bars and their values - before the values clear the rules */
     if (!GA) lpValsClearRules(st);   /* P70 T3: a gauge's figure stands beside its capsule, off every rule. P69 T6: a value is never struck through by a comparator rule - BEFORE the pill reads the values' boxes */
@@ -13956,6 +14048,7 @@ async function mount(doc) {
     }
     const S = (st.states && st.states[st.active | 0]) || st, rec = (S.bars || [])[g.bar], b = rec && rec.bar;
     if (!b || b.style.display === "none" || b.style.visibility === "hidden") return null;
+    if (g.segment != null) return lpGlowSegBox(rec, g.segment, b);   /* P72 T53 (a): the hidden part, not the whole bar */
     const x = +b.getAttribute("x"), w = +b.getAttribute("width"), y = +b.getAttribute("y"), h = +b.getAttribute("height");
     const km = /scaleY\(([-\d.e]+)\)/.exec(b.style.transform || ""), k = km ? +km[1] : 1;
     const om = /([-\d.e]+)px\s*$/.exec(b.style.transformOrigin || ""), base = om ? +om[1] : (rec.neg ? y : y + h);
@@ -13977,8 +14070,46 @@ async function mount(doc) {
   /* the DOM, built once: one stroked path per glow, in the perform surface until its mark is drawn; each frame stands it
      directly over its mark (above the bar's glow group, under the page's words and figures - a mark sits on the layer of
      what it annotates, 2026-09-08) */
+  /* P72 T53 (a) (R26-412 (a); BUB 0:00-0:48, BRAVOS-USE-WHEN T1 - the iceberg at its waterline) - THE WATER. A bars page's
+     rule named `water: true` (ledger_page.water_errors: one, on a bars page) is the SURFACE: the region under it, across
+     the page's whole width (the page's edge clips it) and down past its foot, is tinted LP_WATER.INK at ALPHA - over the bars and their parts, under
+     every word the page writes - so what stands under the rule reads SUBMERGED and never erased (the figures written on
+     the hidden part stay legible, s100 (b)). It arrives with its rule (the rule's own reveal, lpPaintChart's hline loop).
+     `st.water` names it for the probe. BUB's water is its brand pink; ours is the page's own cobalt, the rule's default
+     ink - water, not a second crimson over the crimson part. */
+  const LP_WATER = Object.freeze({ INK: "#3E7CB1", ALPHA: 0.24, FOOT: 400 });
+  const lpWaterBuild = (st, hy) => {
+    const G = st.geom || { W: 1000, H: 560 }, marks = [...st.chart.querySelectorAll("rect.bar, rect.lp-seg")], last = marks[marks.length - 1];
+    const el = lpEl("rect", "lp-water", st.chart, { x: -G.W, y: hy.toFixed(1), width: 3 * G.W, height: (G.H - hy + LP_WATER.FOOT).toFixed(1),
+                                                    fill: LP_WATER.INK, "fill-opacity": 0 });
+    el.style.pointerEvents = "none";
+    st.chart.style.overflow = "visible";   /* the sea runs to the PAGE's edges (the page clips it), not the chart's box - BUB's water is the frame's width */
+    if (last && last.nextSibling) st.chart.insertBefore(el, last.nextSibling);   /* over the bars, under their words */
+    st.water = { el, y: hy };
+    return el;
+  };
+  /* P72 T53 (a) (R26-412 (a); BUB #3 00:24-00:36 - the light falls on the HIDDEN block, the tip stays unlit): a glow's
+     `segment` names ONE part of its stacked bar (T64's `segments`, bottom-up), and the edge is drawn round that part as it
+     is drawn NOW - its rect under the BAR's grow (scaleY about the base; lpSegPaint mirrors it onto the parts), its
+     own ink, square where it meets the next part and rounded only at the bar's own top. The bar's opacity (a solo) still
+     rides it. null: the part is not drawn. */
+  const lpGlowSegBox = (rec, j, b) => {
+    const sg = (rec.segs || [])[j], el = sg && sg.el;
+    if (!el) return null;
+    const y = +el.getAttribute("y"), h = +el.getAttribute("height"), x = +el.getAttribute("x"), w = +el.getAttribute("width");
+    /* the BAR's grow, read as it is drawn NOW: lpSegPaint copies it onto the parts only after the perform layer has painted,
+       so the part's own transform is the previous frame's (a cold seek read scaleY(0) there) */
+    const km = /scaleY\(([-\d.e]+)\)/.exec(b.style.transform || ""), k = km ? +km[1] : 1;
+    const om = /([-\d.e]+)px\s*$/.exec(b.style.transformOrigin || ""), base = om ? +om[1] : y + h;
+    const ya = base + (y - base) * k, yb = base + (y + h - base) * k;
+    if (!(Math.abs(yb - ya) > 0.5)) return null;
+    const top = j === rec.segs.length - 1, opA = b.getAttribute("opacity"), vis = (b.style.opacity === "" ? 1 : +b.style.opacity) * (opA == null ? 1 : +opA);
+    return { x, y: Math.min(ya, yb), w, h: Math.abs(yb - ya), r: top ? +el.getAttribute("rx") || 0 : 0, sq: top ? "b" : "",
+             ink: el.style.fill || b.style.fill || "var(--lp-pos)", at: el, vis };
+  };
   const lpBuildGlowEdges = (st, scene, surf) => pageSpecies(scene, "glow").map((sp) => ({
     sp, bar: Number.isInteger(sp.bar) ? sp.bar : null, span: Number.isInteger(sp.span) ? sp.span : null,
+    segment: Number.isInteger(sp.bar) && Number.isInteger(sp.segment) ? sp.segment : null,
     path: lpEl("path", "lp-glow-edge", surf, { d: "", fill: "none", opacity: 0, "stroke-linejoin": "round" }) }));
   const lpPaintGlowEdges = (PF, t, st) => {
     for (const g of PF.glows || []) {
@@ -19260,6 +19391,87 @@ async function mount(doc) {
     return { sp, g, shaft, head, ring, pill, k, words, pick, fromShape, toShape, fig,
              leave: takes.length ? { at: takes[0].at, dur: takes[0].dur || 1 } : null };
   }).filter(Boolean);
+  /* P72 T53 (b) (R26-412 (b); the Bravos harvest's A16 - CHN 18:18 "take decades to play out": ONE span over the whole
+     group, its ends reaching down to it, "Decades" over it) - THE GROUP BRACKET: `form: "group"` on a BARS page, `from`
+     .. `to` two bars and every bar between them inside. One horizontal span over the group - from the first bar's left
+     edge to the last bar's right edge - LPGROUP.AIR over the group's highest ink (a bar's top or its printed value), a
+     tick dropping LPGROUP.TICK from each end toward the group, and the label centred above the span (its sub between
+     them). On the bracket's own clock and shares: the span draws from its left end by length over BRACKET_DRAW, the
+     ticks drop over BRACKET_TICK, the label writes from BRACKET_LABEL, the sub after it. It names the group; it measures
+     nothing (the compiler's check_brace refuses it off a bars page). Built once: a group stands on the page it named. */
+  const LPGROUP = Object.freeze({ AIR: 16, TICK: 14, LABEL_GAP: 12 });
+  const lpGroupBuild = (st, sp, bi, surf, o) => {
+    const BM = st.markBy || {}, a = Math.min(sp.from | 0, sp.to | 0), z = Math.max(sp.from | 0, sp.to | 0), qs = [];
+    for (let i = a; i <= z; i++) { const m = BM["b:" + i]; if (!m || !m.geom) return null; qs.push({ i, q: m.geom }); }
+    if (qs.length < 2) return null;   /* the compiler refuses it: one bar is not a group */
+    let top = Infinity, x0 = Infinity, x1 = -Infinity;
+    for (const { i, q } of qs) {
+      x0 = Math.min(x0, q.x); x1 = Math.max(x1, q.x + q.w); top = Math.min(top, q.y, q.end != null ? q.end : q.y);
+      const rec = (st.bars || []).find((b) => b && b.i === i) || (st.bars || [])[i];
+      const vb = rec && rec.val && rec.val.style.display !== "none" ? lpLabelBox(rec.val) : null;
+      if (vb) top = Math.min(top, vb[1]);   /* the group's printed values are its ink too */
+    }
+    const y = top - LPGROUP.AIR, cx = (x0 + x1) / 2, foot = y - LPGROUP.LABEL_GAP - LPBRACE.HAND_DESC * (sp.sub ? o.fss : o.fs);   /* the hand's box reaches HAND_DESC under its line */
+    const sy = foot, ly = foot - (sp.sub ? o.fss * 1.3 : 0);
+    const col = sp.color ? (PS_PAL[sp.color] || sp.color) : "var(--lp-chalk)", f = (v) => v.toFixed(1);
+    const glyphs = (el, text) => [...String(text)].map((ch) => { const ts = lpEl("tspan", "", el, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; });
+    const mk = (cls, stroke) => {
+      const g = lpEl("g", "lp-bracket lp-group " + cls, surf, { opacity: 0 });
+      const line = lpEl("path", "bk", g, { d: "M" + f(x0) + " " + f(y) + " L" + f(x1) + " " + f(y), stroke });
+      const len = x1 - x0;
+      line.setAttribute("stroke-dasharray", len); line.setAttribute("stroke-dashoffset", len);
+      const tick = (x) => lpEl("path", "bk", g, { d: "M" + f(x) + " " + f(y) + " l0 " + f(LPGROUP.TICK), stroke, "transform-origin": f(x) + "px " + f(y) + "px", transform: "scale(1 0)" });
+      const t0 = tick(x0), t1 = tick(x1);
+      const label = lpEl("text", "bklab", g, { x: f(cx), y: f(ly), "text-anchor": "middle", style: "font-size:" + o.fs + "px;fill:" + stroke });
+      const lg = glyphs(label, sp.label || "");
+      const sub = sp.sub ? lpEl("text", "bksub", g, { x: f(cx), y: f(sy), "text-anchor": "middle", style: "font-size:" + o.fss + "px;fill:" + stroke }) : null;
+      return { g, line, len, t0, t1, label, lg, sub, sg: sub ? glyphs(sub, sp.sub) : [] };
+    };
+    return { sp, group: true, x: x0, y0: y, y1: y, A: [x0, y], B: [x1, y], fits: true, bi, si: 0,
+             main: mk("main", col), glow: mk("glow", PS.RELIGHT_COL), key: "" };
+  };
+  const paintGroup = (b, t, ud) => {
+    const sp = b.sp, dur = Math.max(0.001, sp.dur || 1);
+    let u = clamp01((t - sp.at) / dur);
+    if (ud && t >= ud.at && ud.at >= sp.at) u = Math.min(u, 1 - segEase(clamp01((t - ud.at) / Math.max(0.001, ud.dur || 1))));
+    const pop = kin("analytic_spring") ? springPop : stagePop;
+    for (const side of [b.main, b.glow]) {
+      side.line.setAttribute("stroke-dashoffset", (side.len * (1 - segEase(u / PS.BRACKET_DRAW))).toFixed(1));
+      const tk = pop(clamp01((u - PS.BRACKET_DRAW) / PS.BRACKET_TICK));
+      for (const tp of [side.t0, side.t1]) tp.setAttribute("transform", "scale(1 " + tk.toFixed(4) + ")");
+      const nl = Math.max(1, side.lg.length), perL = (1 - PS.BRACKET_LABEL) * 0.7 / nl, uL = u - PS.BRACKET_LABEL;
+      side.lg.forEach((ts, j) => ts.setAttribute("opacity", clamp01((uL - j * perL) / (perL * 1.6)).toFixed(3)));
+      const ns = Math.max(1, side.sg.length), perS = (1 - PS.BRACKET_LABEL) * 0.3 / ns, uS = u - PS.BRACKET_LABEL - (1 - PS.BRACKET_LABEL) * 0.7;
+      side.sg.forEach((ts, j) => ts.setAttribute("opacity", clamp01((uS - j * perS) / (perS * 1.6)).toFixed(3)));
+    }
+    b.main.g.setAttribute("opacity", t >= sp.at ? 1 : 0);
+  };
+  /* P72 T53 (e) (R26-412 (e); Bravos STK 2:16 - the tall bar's level runs dashed across to the low one) - THE LEVEL TO A FAR
+     BAR. A bars bracket stands beside the nearer of its two bars; when the other is NOT its neighbour (two bars or more
+     apart) the tick at that bar's level joined nothing (T34's ratio beat: the foot tick at the 28 level, the 28 bar two
+     bars away). The far bar's level is drawn DASHED from the span across to that bar's own side, after the span has
+     drawn (over LEVEL.SHARE of the bracket's dur), and BROKEN where a bar between stands through the level - it passes
+     behind the bars, never across their ink. Adjacent bars draw none: R26-272's layout, to the byte. */
+  const BRACKET_LEVEL = Object.freeze({ AIR: 6, DASH: "10 7", SHARE: 0.3 });
+  const lpBracketLevel = (q, pts, tops, f, g) => {
+    if (!tops || Math.abs(f - g) < 2 || !pts[f] || !pts[g]) return null;
+    const far = Math.abs(pts[f][0] - q.x) >= Math.abs(pts[g][0] - q.x) ? f : g, fq = tops[far], y = pts[far][1];
+    const x1 = pts[far][0] < q.x ? fq.x + fq.w + BRACKET_LEVEL.AIR : fq.x - BRACKET_LEVEL.AIR;
+    const lo = Math.min(q.x, x1), hi = Math.max(q.x, x1), holes = [];
+    tops.forEach((b, k) => {
+      if (k === far || !pts[k]) return;
+      const top = pts[k][1], base = b.base != null ? b.base : b.y + b.h;
+      if (y >= Math.min(top, base) && y <= Math.max(top, base) && b.x + b.w > lo && b.x < hi) holes.push([b.x - BRACKET_LEVEL.AIR, b.x + b.w + BRACKET_LEVEL.AIR]);
+    });
+    return { y, x0: q.x, x1, holes };
+  };
+  const lpBracketLevelPath = (lv, p) => {   /* `p` of the way from the span to the far bar, the holes left open */
+    if (!lv || !(p > 0)) return "";
+    const xe = lv.x0 + (lv.x1 - lv.x0) * Math.min(1, p), a = Math.min(lv.x0, xe), z = Math.max(lv.x0, xe);
+    let runs = [[a, z]];
+    for (const [h0, h1] of lv.holes) runs = runs.flatMap(([r0, r1]) => (h1 <= r0 || h0 >= r1 ? [[r0, r1]] : [[r0, h0], [h1, r1]].filter(([s, e]) => e - s > 0.5)));
+    return runs.map(([s, e]) => "M" + s.toFixed(1) + " " + lv.y.toFixed(1) + " L" + e.toFixed(1) + " " + lv.y.toFixed(1)).join(" ");
+  };
   const buildPerform = (st, scene, pg) => {
     const P = !!st.portrait, fs = P ? 40 : 26, fss = P ? 32 : 20, G = st.geom || { W: 1000, H: 560 };
     /* P48 T7: on a page with chart STATES the perform layer (brackets, figures, spreads) draws on its OWN svg above every
@@ -19277,8 +19489,9 @@ async function mount(doc) {
        before the first tag's glyph (viewBox units), at least this far past its data, and its ticks stop this short of them */
     const brackets = pageSpecies(scene, "bracket").map((sp, bi) => {
       if (sp.form === "brace") return lpBraceBuild(st, sp, bi, surf, { P, fs, fss, pg });   /* P70 T5: ONE bar braced into its parts - its own geometry */
+      if (sp.form === "group") return lpGroupBuild(st, sp, bi, surf, { P, fs, fss, pg });   /* P72 T53 (b): one span over a group of bars */
       if ((sp.from && typeof sp.from === "object") || (sp.to && typeof sp.to === "object")) return lpLagBuild(st, sp, bi, surf, { P, fs, fss, pg }, scene);   /* P71 T27: two series - the lag, its own geometry */
-      let pts = (st.linePts || [])[sp.series | 0] || [], barSide = 0, barInkTop = Infinity;
+      let pts = (st.linePts || [])[sp.series | 0] || [], barSide = 0, barInkTop = Infinity, barTops = null;
       /* P69 T50 / R26-272: a BARS page has no `linePts`, and a bracket from bar 0 to bar 1 used to build nothing. Its
          data are the bars' TOPS - the one datum rule lpMarkDatumOn reads for a bar (`b:<i>`: [cx, end]), series 0 only
          as a bars page has one - and the span stands beside the bars' own SIDES (`barSide` = the wider of its two bars'
@@ -19292,6 +19505,7 @@ async function mount(doc) {
           pts = tops.map((q) => [q.cx, q.end]);
           const f = Math.max(0, Math.min(tops.length - 1, sp.from | 0)), g = Math.max(0, Math.min(tops.length - 1, sp.to | 0));
           barSide = Math.max(tops[f].w || 0, tops[g].w || 0) / 2;
+          if (tops.every((q) => Math.abs(q.cx - (q.x + q.w / 2)) < 0.5)) barTops = tops;   /* P72 T53 (e): upright bars - a level can run across them */
           for (const rec of st.bars || []) { const vb = rec && rec.val ? lpLabelBox(rec.val) : null; if (vb) barInkTop = Math.min(barInkTop, vb[1] - fss * BRACKET_BAR_DESC); }   /* the stacked sub's descenders clear it too */
         }
       }
@@ -19326,7 +19540,9 @@ async function mount(doc) {
         const yClear = barSide ? Math.min(y0, barInkTop, ...ptsNow.map((q) => q[1])) : Math.min(y0, ...ptsNow.map((q) => q[1]));   /* a stacked label clears the WHOLE series - a record before the span can stand higher than the span's top (R26-272: and every bar's value) */
         const half = sp.form === "bar" ? PS.BRACKET_BAR_W / 2 : 0;   /* P50 T9: a bar has width, and its label is written clear of it, not on it */
         const lx = fits ? x + 12 + half : x - 4 - half, ly = fits ? ym + fs * 0.35 : yClear - (sp.sub ? fss * 1.3 : 0) - 10;   /* beside, or stacked above the whole line */
-        return { x, dir, fits, anchor: fits ? "start" : "end", y0, y1, lx, ly, sy: fits ? ly + fss * 1.3 : yClear - 10, tw, stepped };
+        const out = { x, dir, fits, anchor: fits ? "start" : "end", y0, y1, lx, ly, sy: fits ? ly + fss * 1.3 : yClear - 10, tw, stepped };
+        out.level = lpBracketLevel(out, ptsNow, barTops, Math.max(0, Math.min(ptsNow.length - 1, sp.from | 0)), Math.max(0, Math.min(ptsNow.length - 1, sp.to | 0)));   /* P72 T53 (e) */
+        return out;
       };
       const g0 = geomOf(A, B, pts);
       const base = st.paths.filter((pp) => (pp.si | 0) === (sp.series | 0) && !pp.muted).map((pp) => pp.p.getAttribute("stroke"))[0] || "var(--lp-chalk)";
@@ -19348,15 +19564,16 @@ async function mount(doc) {
         line.setAttribute("stroke-dasharray", len); line.setAttribute("stroke-dashoffset", len);
         const tick = (y) => lpEl("path", "bk", g, { d: "M" + g0.x.toFixed(1) + " " + y.toFixed(1) + " l" + (g0.dir * g0.tw).toFixed(1) + " 0", stroke, "transform-origin": g0.x.toFixed(1) + "px " + y.toFixed(1) + "px" });
         const t0 = tick(g0.y0), t1 = tick(g0.y1);
+        const level = g0.level ? lpEl("path", "bk bklevel", g, { d: "", stroke, "stroke-dasharray": BRACKET_LEVEL.DASH }) : null;   /* P72 T53 (e): the far bar's level */
         const label = lpEl("text", "bklab", g, { x: g0.lx.toFixed(1), y: g0.ly.toFixed(1), "text-anchor": g0.anchor, style: "font-size:" + fs + "px;fill:" + stroke });   /* inline fill: the chart's class CSS outranks a fill attribute */
         const lg = [...String(sp.label || "")].map((ch) => { const ts = lpEl("tspan", "", label, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; });
         let sub = null, sg = [];
         if (sp.sub) { sub = lpEl("text", "bksub", g, { x: g0.lx.toFixed(1), y: g0.sy.toFixed(1), "text-anchor": g0.anchor, style: "font-size:" + fss + "px;fill:" + stroke });
           sg = [...String(sp.sub)].map((ch) => { const ts = lpEl("tspan", "", sub, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; }); }
-        return { g, line, len, t0, t1, label, lg, sub, sg };
+        return { g, line, len, t0, t1, label, lg, sub, sg, level };
       };
       const main = mk("main", col, 0), glow = mk("glow", PS.RELIGHT_COL, 0);   /* the sunflower twin ABOVE the base: at full it covers span and label alike */
-      return { sp, x: g0.x, y0: g0.y0, y1: g0.y1, A, B, fits: g0.fits, main, glow, bi, si: sp.series | 0, geomOf, applyGeom, key: "" };
+      return { sp, x: g0.x, y0: g0.y0, y1: g0.y1, A, B, fits: g0.fits, main, glow, bi, si: sp.series | 0, geomOf, applyGeom, key: "", lv: g0.level };
     }).filter(Boolean);
     const retitles = pageSpecies(scene, "retitle").map((sp, ri) => {
       const div = lpEl("div", "lp-ink lp-title lp-retitle", st.page);
@@ -19923,13 +20140,14 @@ async function mount(doc) {
   const paintBracket = (b, t, ud, st) => {
     if (b.brace) return paintBrace(b, t, ud, st);   /* P70 T5: one bar braced into its parts */
     if (b.lag) return paintLag(b, t, ud, st);       /* P71 T27: two series - the lag */
+    if (b.group) return paintGroup(b, t, ud);       /* P72 T53 (b): one span over a group of bars */
     const sp = b.sp, dur = Math.max(0.001, sp.dur || 1);
     if (st && (st.states || []).length > 1) {   /* R26-28: the two anchors and the series' points, this frame, on the active state (lerped across a rescale / extend) */
       const Ap = lpDatumNow(st, b.si, sp.from | 0), Bp = lpDatumNow(st, b.si, sp.to | 0);
       if (!Ap || !Bp) { b.main.g.setAttribute("opacity", 0); b.glow.g.setAttribute("opacity", 0); b.hidden = true; return; }   /* a datum the window dropped: nothing to measure */
       b.hidden = false;
       const q = b.geomOf(Ap, Bp, lpPointsNow(st, b.si).map((e) => e.p)), key = [q.x, q.y0, q.y1, q.lx, q.ly, q.anchor].map((v) => typeof v === "number" ? v.toFixed(1) : v).join("|");
-      if (key !== b.key) { b.applyGeom(b.main, q); b.applyGeom(b.glow, q); b.key = key; b.x = q.x; b.y0 = q.y0; b.y1 = q.y1; b.fits = q.fits; }
+      if (key !== b.key) { b.applyGeom(b.main, q); b.applyGeom(b.glow, q); b.key = key; b.x = q.x; b.y0 = q.y0; b.y1 = q.y1; b.fits = q.fits; b.lv = q.level; }
     }
     let u = clamp01((t - sp.at) / dur);
     /* E50: an UNDRAW (no series named) after the bracket's word takes the bracket with the line - the label un-writes,
@@ -19940,6 +20158,7 @@ async function mount(doc) {
       side.line.setAttribute("stroke-dashoffset", (side.len * (1 - draw)).toFixed(1));
       const tk = (kin("analytic_spring") ? springPop : stagePop)(clamp01((u - PS.BRACKET_DRAW) / PS.BRACKET_TICK));
       for (const tp of [side.t0, side.t1]) tp.setAttribute("transform", "scale(" + tk.toFixed(4) + " 1)");
+      if (side.level) side.level.setAttribute("d", lpBracketLevelPath(b.lv, segEase(clamp01((u - PS.BRACKET_DRAW) / BRACKET_LEVEL.SHARE))));   /* P72 T53 (e): after the span, across to the far bar */
       const nl = Math.max(1, side.lg.length), perL = (1 - PS.BRACKET_LABEL) * 0.7 / nl, uL = u - PS.BRACKET_LABEL;
       side.lg.forEach((ts, j) => ts.setAttribute("opacity", clamp01((uL - j * perL) / (perL * 1.6)).toFixed(3)));
       const ns = Math.max(1, side.sg.length), perS = (1 - PS.BRACKET_LABEL) * 0.3 / ns, uS = u - PS.BRACKET_LABEL - (1 - PS.BRACKET_LABEL) * 0.7;
@@ -20822,7 +21041,7 @@ async function mount(doc) {
       /* P72 T46a (R26-402): the rule's reveal is written on its STYLE - the template's `.lp-chart .hrule { opacity: .9 }` outranks
          an attribute, so the fade-in never showed (the rule stood at .9 from the page's first frame). Whole (k 1) the style is
          handed back ("") and the template's .9 stands, exactly as before; the attribute keeps its value for its readers. */
-      for (const hr of cs.hlines || []) { const k = clamp01(c / 0.25); hr.line.setAttribute("opacity", (0.9 * k).toFixed(3)); { const v = k < 1 ? (0.9 * k).toFixed(3) : ""; if (hr.line.style.opacity !== v) hr.line.style.opacity = v; } if (hr.lab) hr.lab.setAttribute("opacity", clamp01((c - 0.25) / 0.2).toFixed(2)); }
+      for (const hr of cs.hlines || []) { const k = clamp01(c / 0.25); if (hr.water) hr.water.setAttribute("fill-opacity", (LP_WATER.ALPHA * k).toFixed(3)); hr.line.setAttribute("opacity", (0.9 * k).toFixed(3)); { const v = k < 1 ? (0.9 * k).toFixed(3) : ""; if (hr.line.style.opacity !== v) hr.line.style.opacity = v; } if (hr.lab) hr.lab.setAttribute("opacity", clamp01((c - 0.25) / 0.2).toFixed(2)); }
       if (cs.paint) cs.paint(cs, c, t3, scene, t);   /* the builder's own build step (race / decline / combo / share); P73 T2: the timeline's events land on the row's words, so it reads the scene and t (every other painter ignores them) */
       if (cs.labelFollow) lpLabelFollow(cs);   /* P71 T31: a category pill and a logo arrive, leave and move with the name they label */
       if (cs.share) {   /* P48 T4: the piece the sentence is about leaves the pie on its word */
@@ -22639,6 +22858,24 @@ async function mount(doc) {
   };
   let camArr = null;   /* P49 T5: this frame's camera arrival, when one is on - set by render, read by camNow for the outgoing scene */
   let cardHandK = 0;   /* P69 T10c: how far this frame's card-profile card has handed over to its page (0 on every other frame) */
+  /* P72 T53 (a) (R26-412 (a); CAPABILITIES' pedestal row: "Open: the pedestal has no sky above y 0") - THE TALL STAGE. A
+     raised pedestal looks at a world point above the stage's centre, so the band over the page showed the stage's navy
+     void and the ledger world's cream mount (T34's strip at 1.6 s): the page had nothing above y 0, where BUB's sky is
+     continuous. On a row whose camera names a pedestal the LEDGER world's ground IS its page's ground (the page's own
+     computed colour), carried up by the pedestal's reach (a box-shadow the world's own size, `by` of the stage above it),
+     so the frame opens on the page's sky and lands on the page it always drew. Every other row hands the world its
+     stylesheet ground back ("" - the cream mount), so nothing else moves. Idempotent: a seek is the play. */
+  const lpPedestalSky = (el, scene, isLedger) => {
+    const ped = isLedger && scene && scene.camera && scene.camera.pedestal, by = ped ? +ped.by : 0;
+    const page = ped && by > 0 && by < 1 ? el.querySelector(".lp-page") || el.querySelector(".lp") : null;   /* the page's ground is .lp-page's (the long form's charcoal) */
+    const ground = page ? getComputedStyle(page).backgroundColor : "";
+    const sky = ground && ground !== "transparent" && !/rgba\([^)]*,\s*0\)$/.test(ground) ? ground : "";
+    const shadow = sky ? "0 " + (-(by * STAGE_H + 2)).toFixed(1) + "px 0 0 " + sky : "";
+    if (el.style.getPropertyValue("background-color") !== sky) {
+      if (sky) el.style.setProperty("background-color", sky, "important"); else el.style.removeProperty("background-color"); }
+    if (el.style.boxShadow !== shadow && (sky || el.dataset.pedSky)) el.style.boxShadow = shadow;
+    if (sky) el.dataset.pedSky = "1"; else delete el.dataset.pedSky;
+  };
   const camNow = (sc, t) => {
     if (camArr && camArr.scene === sc) return camArr.state;   /* the eye is going to the card: the outgoing world rides the arrival */
     if (!kin("camera")) return camXf(sc, t);
@@ -28888,6 +29125,7 @@ async function mount(doc) {
         el.style.transform = camCss(camXfNow) + restFlat;
       }
       if (isLedger && !surfaceArrival) lpPaintChrome(el, scene, t);   /* P69 T26f: the page's chrome, re-seated against the camera it now stands under */
+      lpPedestalSky(el, scene, isLedger && !surfaceArrival);   /* P72 T53 (a): the tall stage - the page's own sky over a raised camera */
     };
     const prev = TL.scenes[si - 1];
     wA.style.display = "";

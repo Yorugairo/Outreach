@@ -2469,7 +2469,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T34: The Bravos recipes - the ratio in the gap, the epoch walk, peak-fall-magnitude, isolate-then-quantify, the formula by its words, the hidden base; plus `the-bar-halves-its-number` (was P69 T44)
-- Status: done (six of seven) - lane B (the T34 commit): six candidate recipes proved on H rows 9/14/16/18 by `proof_t34.py`; `the-hidden-base` STOPPED (the pedestal on a full-stage page shows the void; a tall iceberg stage is a form slice, R26-412); the group bracket (A16) failed discovery (R26-412); R24 moved to row 14
+- Status: done - lane B (the T34 commit): six candidate recipes proved on H rows 9/14/16/18 by `proof_t34.py`; `the-hidden-base` landed with P72 T53 (a)'s iceberg stage; the group bracket (A16) failed discovery (R26-412); R24 moved to row 14
 - Owner: implementation_luna (LANE B)
 - Depends on: T9 (the axis tag), T10 (the level join), T24 (the re-value), T29 (the glow, for R1), T32 (the pedestal,
   for R1), P70 T6 (the equation, for R25), T21 (A45's underwater fill, for the epoch walk) and P70 T10 (A44's in-place

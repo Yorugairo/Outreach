@@ -312,3 +312,60 @@ test("A56: the PAINTER draws the box as ink ON the page - never a shade, never s
   assert.equal(sd.label.at.x, (r.x + r.w / 2).toFixed(1));
   assert.deepEqual(sd.lg.map((g) => g.at.opacity), ["1.000", "1.000", "1.000", "1.000"]);
 });
+
+// ---------------------------------------------------------------- P72 T53 (c) (R26-412 (c)): the NAME clears the page's rules
+// P71 T34's epoch walk (the base frame, 10.86 s): a chart that fills its box writes the name INSIDE the band's top, and
+// the page's "Q2 2000 peak - 11.54%" rule stood exactly there - "DOT-COM" and "AI" both written ON its dashes. The name
+// now steps off a rule it would cross: above it where that is clear, else below it, least overlap with the page's own
+// words (the rule's label, the series' tags) and the drawn points. A name that crosses no rule stands where it stood.
+const { SPAN_NAME, spanNameBox, spanNameY } = SPAN_MOD;
+const recEl = () => ({ at: {}, setAttribute(k, v) { this.at[k] = v; } });
+/* the base frame's page, read off the served probe (logs/base-epoch-probe.log): the rule at y 63.04 across x 70-780,
+   its label's box [525.1, 29, 254.9, 27] ("Q2 2000 peak - 11.54%"), the two names' baseline 73.7 at size 26 */
+const RULE = { role: "rule", geom: { y: 63.0357, v: 11.54, x1: 70, x2: 780 }, el: { textContent: "" } };
+const RULELAB = { role: "rulelabel", geom: { x: 780, y: 51.04 }, el: { textContent: "Q2 2000 peak - 11.54%", getBBox: () => ({ x: 525.1, y: 29, width: 254.9, height: 27 }) } };
+const flat = (n, y) => Array.from({ length: n }, (_, j) => ({ i: j, p: [100 + 680 * j / (n - 1), y] }));
+
+test("T53 (c): a name that would cross a page rule steps off it - and a name that crosses none stands where it stood", () => {
+  const fs = 26, n = 7, cx = 455;
+  assert.ok(SPAN_NAME && SPAN_NAME.ASC > 0 && SPAN_NAME.DESC > 0 && SPAN_NAME.AIR > 0, "the name's box dials are the span's");
+  const onRule = spanNameBox(cx, 73.7, fs, n);
+  assert.ok(onRule[1] < 63.04 && onRule[1] + onRule[3] > 63.04, "the base frame's geometry: the name's box straddles the rule");
+  const rules = [[70, 61.5, 710, 3]];
+  const y = spanNameY(73.7, cx, fs, n, rules, [[525.1, 29, 254.9, 27]], [], 560);
+  const b = spanNameBox(cx, y, fs, n);
+  assert.ok(b[1] + b[3] <= 61.5 || b[1] >= 64.5, ["the name's box clears the rule's ink", b]);
+  assert.ok(y < 63.04, "above it, where that is clear of the rule's label and inside the chart");
+  assert.equal(spanNameY(200, cx, fs, n, rules, [], [], 560), 200, "a name clear of every rule is not moved (the goldens)");
+  assert.equal(spanNameY(73.7, cx, fs, n, [], [], [], 560), 73.7, "no rule on the page: the law's own place");
+});
+
+test("T53 (c): where above meets the rule's own label the name goes below the rule - never on a drawn point", () => {
+  const fs = 26, n = 2, cx = 740;
+  const rules = [[70, 61.5, 710, 3]], words = [[525.1, 29, 254.9, 27]];
+  const y = spanNameY(73.7, cx, fs, n, rules, words, [], 560);
+  const b = spanNameBox(cx, y, fs, n);
+  assert.ok(b[1] >= 64.5, ["below the rule: above it the 'Q2 2000 peak' label stands", b]);
+  const inkUnder = [[730, b[1] + 8], [745, b[1] + 12]];
+  const y2 = spanNameY(73.7, cx, fs, n, rules, words, inkUnder, 560);
+  const b2 = spanNameBox(cx, y2, fs, n);
+  assert.ok(!inkUnder.some(([x, yy]) => x >= b2[0] && x <= b2[0] + b2[2] && yy >= b2[1] && yy <= b2[1] + b2[3]) || y2 === y,
+            "a drawn point under the rule is weighed too - the least-crowded side");
+});
+
+test("T53 (c): THE PAINTER reads the page's rules off the active state's marks and writes the name clear of them", () => {
+  const pts = flat(101, 20);   /* a line at the chart's top: the band is clipped at 0 and the name is written inside it */
+  const sd = { sp: sp({ from: 40, to: 60 }), si: 0, rect: recEl(), label: recEl(), lg: Array.from({ length: 7 }, recEl), fs: 26 };
+  const st = { linePts: [pts], geom: { H: 560 }, marks: [RULE, RULELAB] };
+  const ctx = { pointsNow: () => pts };
+  paintSpan(sd, sd.sp.at + 4, st, ctx);
+  const band = spanBand(pts, [pts], 40, 60, 560);
+  const law = spanLabelY(band, sd.fs), y = +sd.label.at.y;
+  const lb = spanNameBox(band.cx, law, 26, 7);
+  assert.ok(lb[1] < 63 && lb[1] + lb[3] > 63, "the fixture: the law's own place crosses the rule (the base frame's defect)");
+  const b = spanNameBox(band.cx, y, 26, 7);
+  assert.ok(b[1] + b[3] <= 61.6 || b[1] >= 64.4, ["painted clear of the rule", b, y, law]);
+  const bare = { sd: { sp: sp({ from: 40, to: 60 }), si: 0, rect: recEl(), label: recEl(), lg: [], fs: 26 }, st: { linePts: [pts], geom: { H: 560 } } };
+  paintSpan(bare.sd, bare.sd.sp.at + 4, bare.st, ctx);
+  assert.equal(bare.sd.label.at.y, law.toFixed(1), "a page with no rule: the name where the law puts it, to the byte");
+});

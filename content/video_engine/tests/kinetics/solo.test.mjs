@@ -234,3 +234,24 @@ test("P71 T30: a short's page (no long-form type) and a panels page's key are le
   paintSolo({ evs: soloEvents([solo()], []), lits: [] }, 11, lf, {});
   for (const kp of lf.keyPills) assert.ok(!("box-shadow" in kp.el.style.props) && kp.el.style.opacity === "1");
 });
+
+// ---------------------------------------------------------------- P72 T53 (d) (R26-412 (d)): the box waits for its tag
+// P71 T34's isolate beat, draft 1 (the golden `solo-badge-waits`): the page built to the dot-com high, the tech line's
+// solo landed, and the lines carried on to today AFTER it - T46d's accent box stood filled and EMPTY at the plot's right
+// while the tag (opacity 0 until its line arrives) waited. The box takes the tag's own visibility: no tag, no box.
+test("T53 (d): the end badge's box is not drawn while its tag is off the page, and fills with the tag as it arrives", () => {
+  const withBox = (tagOp, styleOp = "") => {
+    const st = lfPage(), pp = st.paths[1];
+    pp.name.a.opacity = tagOp;
+    pp.name.style.opacity = styleOp;
+    pp.name.getBBox = () => ({ x: 100, y: 50, width: 200, height: 30 });
+    pp.badge = styled();
+    paintSolo({ evs: soloEvents([solo()], []), lits: [] }, 11, st, {});
+    return pp.badge;
+  };
+  assert.equal(withBox("0").getAttribute("opacity"), "0.000", "the tag waits for its line: the accent box is not drawn");
+  assert.equal(withBox("1", "0").getAttribute("opacity"), "0.000", "nor while the tag is hidden by its style (a transition's hand-over)");
+  assert.equal(withBox("0.5").getAttribute("opacity"), "0.500", "the box arrives WITH the tag, never ahead of it");
+  assert.equal(withBox("1").getAttribute("opacity"), "1.000", "a standing tag: T46d's box, to the byte");
+  assert.equal(withBox(undefined).getAttribute("opacity"), "1.000", "a tag with no opacity of its own is on the page");
+});

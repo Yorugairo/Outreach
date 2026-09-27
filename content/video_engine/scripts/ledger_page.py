@@ -1912,6 +1912,27 @@ def _y2_rule_errors(series: dict) -> list[str]:
     return errs
 
 
+# P72 T53 (a) (R26-412 (a); Bravos BUB 0:00-0:48, BRAVOS-USE-WHEN T1 "partitioned pyramid 'iceberg' at a waterline") -
+# THE WATERLINE. `hlines[i].water: true` on a BARS page: the region under that rule is WATER - a translucent tint from the
+# rule down past the page's foot (the engine's `lpWater`), so the rule reads as the surface and what stands under it as
+# submerged. One per page (one surface), `true` or absent (s106: a key accepted and silently dropped is neither advice nor
+# refusal), and a bars page's alone: a line page's stretch under a level is the spread's fill (`spread` to a rule, A45).
+WATER_KEY = "water"
+
+
+def water_errors(series: dict, variant: str) -> list[str]:
+    rules = [(i, r) for i, r in enumerate(_y2_rules(series)) if isinstance(r, dict) and WATER_KEY in r]
+    errs = [f"hlines[{i}]: water is `true` or absent (the rule is the water's surface), not {r[WATER_KEY]!r}"
+            for i, r in rules if r[WATER_KEY] is not True]
+    wet = [i for i, r in rules if r[WATER_KEY] is True]
+    if wet and variant != "bars":
+        errs.append(f"hlines[{wet[0]}]: water stands under a rule on a bars page (the iceberg, BUB 0:00) - a {variant} page's "
+                    "stretch under a level is the spread's fill to a rule (A45)")
+    if len(wet) > 1:
+        errs.append(f"hlines{wet}: {len(wet)} water rules - a page has one surface; name one rule the waterline")
+    return errs
+
+
 def _validate_y2(series: dict, variant: str) -> list[str]:
     """R26-307 / s102: `y2` draws on a dense line page with its claim and both units named, or it is refused BY NAME.
     Without `y2` a co-movement `claim` or a page-level `invert` is refused as well (each names what it would need)."""
@@ -2867,6 +2888,7 @@ def validate(series: dict, variant: str) -> list[str]:
     errors += _validate_segments(series, variant)   # P69 T64: a stack of values is true to its total, one key per page
     errors += _validate_unit_suffix(series, variant)   # P72 T13 / R26-287: a prefix AND a suffix ($...B), refused by name when malformed
     errors += _validate_y2(series, variant)         # P71 T13 / R26-307: a second axis draws (a line page) or is refused by name
+    errors += water_errors(series, variant)         # P72 T53 (a): the waterline - one, `true`, a bars page's
     errors += _validate_projection(series, variant)   # P71 T16 / E77: a projection is labelled, tiered, sourced and opens from the last actual
     errors += _validate_series_dash(series, variant)   # P72 T46a / R26-386: a series' dash, well-formed and drawn
     errors += _validate_ink_from(series, variant)     # P71 T28 / E28: the line changes ink at a point - never a sign ink on the wrong sign

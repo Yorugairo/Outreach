@@ -463,11 +463,11 @@ def test_every_wired_card_is_in_a_recipe():
     # P70 T9's chapter pill (species:chapter) is tested alone in test_chapter_pill.py and pinned by the chapter-held golden
     # (H's act "The turn", held across the cut into row 15); no H body row adopts act markers before P70-HG1 (harvest v2
     # :274), so no recipe is invented for it here.
-    # P71 T32's pedestal (camera:pedestal) and lens (page_species:lens) are tested alone in test_pedestal_and_lens.py (the
-    # lens pinned by the lens-over-the-line golden, H row 22's soft June); the pedestal's recipe was to be P71 T34's
-    # `the-hidden-base`, STOPPED by that slice's discovery (on a full-stage ledger page the raised camera shows the void
-    # above the page, and the base is not below the frame - the iceberg needs a taller stage, a form slice), and no body
-    # row adopts either before P71-HG1.
+    # P71 T32's lens (page_species:lens) is tested alone in test_pedestal_and_lens.py (pinned by the lens-over-the-line
+    # golden, H row 22's soft June); no body row adopts it before P71-HG1. Its pedestal (camera:pedestal) and T64's stacked
+    # bar (page_builder:bars+segments) are composed by P72 T53 (a)'s candidate recipe:the-hidden-base (the iceberg stage:
+    # the tip over the water, the pedestal down to the base, the light on the hidden part - harvest R1), proved as a
+    # private test-bed beat on H row 16 (projects/_proofs/p72-t53/proof_t53.py), so they are no longer excepted.
     # P71 T20's datum badge (page_species:datum_badge) is tested alone in test_schematic_illustrations.py and pinned by the
     # schematic-motif golden (H row 24's "not a house of cards", the X on the motif's troughs); no committed beat plays it
     # and no recipe composes it before P71-HG1 (its candidate recipes are R14's two verdict panels and R19, P71 T34 / T35).
@@ -484,7 +484,7 @@ def test_every_wired_card_is_in_a_recipe():
     # P73 T2's dated event timeline (page_builder:timeline) is tested alone in test_event_timeline.py and pinned by the
     # event-timeline goldens (the AMD RFSoC story's dates); no committed beat plays it until that episode's row, so no recipe
     # is invented for it here.
-    assert uncovered == ["camera:pedestal", "dock_option:moves", "page_builder:bars+segments",
+    assert uncovered == ["dock_option:moves",
                          "page_builder:combo+segments", "page_builder:line+break", "page_builder:line+schematic",
                          "page_builder:progress", "page_builder:timeline",
                          "page_enter:surface", "page_enter:trace",

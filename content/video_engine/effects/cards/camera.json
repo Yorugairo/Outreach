@@ -179,6 +179,11 @@
           "token": "ease",
           "means": "`ease: cubic|inout|linear` (absent = inout); `hold` is refused - a step is a cut.",
           "source_set": null
+        },
+        {
+          "token": "sky",
+          "means": "no key (P72 T53 (a)): on a pedestal row the ledger world wears its page's ground, carried up by `by` - the raised frame opens on the page's own sky, never the stage's void.",
+          "source_set": null
         }
       ],
       "dials": {
@@ -196,11 +201,12 @@
         "E38",
         "E59",
         "29 s9.28 C3",
-        "R26-209"
+        "R26-209",
+        "BACKLOG R26-412 (a) (P72 T53: the tall stage's sky)"
       ],
       "status": "wired",
       "proof": {
-        "golden": null,
+        "golden": "iceberg-tip",
         "test": "content/video_engine/tests/test_pedestal_and_lens.py::test_the_pedestal_on_the_served_player_raises_then_lands_on_the_identity",
         "first_use": null
       },

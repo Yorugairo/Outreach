@@ -163,6 +163,16 @@ export const soloStyle = (el, props) => {
   for (const [k, v] of props) el.style.setProperty(k, v);
 };
 
+/* P72 T53 (d) (R26-412 (d); P71 T34's isolate beat, draft 1 - the golden `solo-badge-waits`): how much of the TAG is on
+   the page this frame - its own opacity attribute (the line builder's: 0 until its line arrives) times its style's (a
+   transition's hand-over writes that one); absent, whole. The box is drawn at no more than this: a filled accent box
+   with no tag in it read as an empty yellow bar at the plot's right while the tag waited for the line. */
+export const soloTagShown = (nm) => {
+  if (!nm) return 0;
+  const num = (v) => { const n = v === null || v === undefined || v === "" ? 1 : +v; return Number.isFinite(n) ? Math.min(1, Math.max(0, n)) : 1; };
+  return num(nm.getAttribute ? nm.getAttribute("opacity") : null) * num(nm.style ? nm.style.opacity : null);
+};
+
 /* ... the END BADGE at lift `u`: its words (the value and its chip's) ease from their series' ink to the accent - or,
    P72 T46d (R26-396), where the line builder drew the badge its BOX (`pp.badge`, buildLedgerLine's rect under the tag,
    long form only), the box fills with the accent round the tag's measured box and the type eases to the key's charcoal
@@ -185,7 +195,7 @@ export const soloBadge = (pp, u) => {
     const r = nm.getBBox(), q = soloBadgeBox([r.x, r.y, r.width, r.height]);
     for (const [k, v] of [["x", q.x], ["y", q.y], ["width", q.w], ["height", q.h], ["rx", q.rx]]) bx.setAttribute(k, v.toFixed(2));
     bx.setAttribute("style", "fill:" + SOLO_ACCENT.FILL);   /* the style, not the attribute: the chart's class rules outrank a presentation fill */
-    bx.setAttribute("opacity", Math.min(1, u).toFixed(3));
+    bx.setAttribute("opacity", (Math.min(1, u) * soloTagShown(nm)).toFixed(3));   /* P72 T53 (d): never ahead of its tag */
   }
 };
 

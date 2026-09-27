@@ -740,6 +740,11 @@
           "token": "segments",
           "means": "a bar's `segments` [{name, value, value_string?, color?}] (2-4) summing to its written total; a mismatch, a negative or zero part, two units on one axis are refused",
           "source_set": "SEGMENTS_KEY"
+        },
+        {
+          "token": "water",
+          "means": "`hlines[i].water: true` (P72 T53 (a), BUB 0:00): the rule is the surface - the page under it tinted as water, over the bars, under their words; one per page, a bars page's.",
+          "source_set": null
         }
       ],
       "dials": null,

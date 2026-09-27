@@ -1,0 +1,62 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:the-hidden-base",
+ "title": "The hidden base",
+ "aliases": [
+  {
+   "name": "R1 The hidden base",
+   "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:501"
+  }
+ ],
+ "acts": [
+  "DIVIDES"
+ ],
+ "members": [
+  {
+   "card": "page_builder:bars+segments",
+   "offset_s": 0.0,
+   "role": "ONE stacked bar in true proportion - the hidden part at the base under a `water` rule at its top, the visible part above it - every figure written, the page opening with the camera raised on the tip"
+  },
+  {
+   "card": "camera:pedestal",
+   "offset_s": 3.76,
+   "options": {
+    "dur": 2.4,
+    "by": 0.45
+   },
+   "role": "as the voice goes into the filings ('there's another eight hundred', the first word after the page's build has settled - M14), the camera drops once through the water to the base, then holds"
+  },
+  {
+   "card": "page_species:glow",
+   "offset_s": 12.26,
+   "options": {
+    "segment": 0,
+    "dur": 0.68
+   },
+   "role": "on the words that name what is hidden, the light falls on the hidden part only - never the whole bar"
+  }
+ ],
+ "window_s": 16.19,
+ "does": "The tip stands over a waterline with the base below the frame; the camera drops through the water to the hidden base in true proportion, and the light falls on the hidden part.",
+ "use_when": {
+  "act": "DIVIDES - the hidden part is bigger than the visible part (BRAVOS-USE-WHEN R1 / T1)",
+  "moment": "hook",
+  "shape": "parts of a whole: two stocks of one unit, one on the books and one off, both sourced",
+  "use": "the tip, the waterline, the base under the water, the light on the hidden part, every figure written (H row 16: $261B of bonds over $822B of lease commitments, ev-leases-iceberg-v1)",
+  "dont": "draw it without its figures written (s100 (b)); light the whole bar; move the camera over the page's build (M14); type a total - derive it into a committed object"
+ },
+ "doctrine": [
+  "E99 s100",
+  "E99 s106",
+  "E99 s60",
+  "E99 s70",
+  "E28",
+  "M14 (47 s2 G-a)",
+  "P71 T32",
+  "P71 T29",
+  "P69 T64"
+ ],
+ "status": "candidate",
+ "source": "P72 T53 (a) (R26-412 (a); harvest R1 / T1 / A33, BUB 0:00-0:48; P71 T34's stopped recipe); proved as a private test-bed beat by projects/_proofs/p72-t53/proof_t53.py on Steel and Paper H row 16 ('And that's the borrowing you can see ... never landed on a balance sheet') on the committed ev-leases-iceberg-v1 (derive_iceberg.py) - no approved cut carries it",
+ "count": 0
+}

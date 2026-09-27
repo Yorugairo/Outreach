@@ -314,6 +314,16 @@
           "token": "elbow",
           "means": "`form: \"elbow\"` on a lag (BOOM 16:27): from `from` along its x to `to`'s level, then across, a head at each tip, the vertical grown from its middle; the figure beside it; a tip clears a ring",
           "source_set": null
+        },
+        {
+          "token": "group",
+          "means": "`form: \"group\"` on a bars page (A16, CHN 18:18): ONE span over bars from..to, clear of their ink, a tick at each end, its label (a NAME) centred above; refused off a bars page or on one bar",
+          "source_set": null
+        },
+        {
+          "token": "level",
+          "means": "no key (Bravos STK 2:16): bars two or more apart - the far bar's level runs dashed from the span across to it after the span, broken behind a bar between; adjacent bars draw none",
+          "source_set": null
         }
       ],
       "dials": null,
@@ -326,7 +336,8 @@
         "CAPABILITIES Build-on",
         "BACKLOG R26-272",
         "P70 T5 (Bravos RST 05:40)",
-        "P71 T27 (Bravos BOOM 16:13 / 16:27, VERIFY.md A53)"
+        "P71 T27 (Bravos BOOM 16:13 / 16:27, VERIFY.md A53)",
+        "BACKLOG R26-412 (b) (e) (P72 T53)"
       ],
       "status": "wired",
       "proof": {
@@ -1517,7 +1528,8 @@
       },
       "doctrine": [
         "E67",
-        "P69 T37"
+        "P69 T37",
+        "BACKLOG R26-412 (d) (P72 T53: the end badge's box waits for its tag)"
       ],
       "status": "wired",
       "proof": {
@@ -1604,7 +1616,8 @@
       "doctrine": [
         "CAPABILITIES SPAN",
         "BACKLOG R26-25",
-        "BACKLOG R26-407"
+        "BACKLOG R26-407",
+        "BACKLOG R26-412 (c) (P72 T53: the name clears the page's rules)"
       ],
       "status": "wired",
       "proof": {
@@ -1969,6 +1982,11 @@
         {
           "token": "pulse",
           "means": "`true` blinks the edge (the chip's lit pulse: motion); absent, it holds (an annotation).",
+          "source_set": "GLOW_KEYS"
+        },
+        {
+          "token": "segment",
+          "means": "with `bar`: ONE part of a stacked bar (bottom-up) - the edge round that part only, the iceberg's hidden part (P72 T53 (a), BUB #3); a part the bar lacks is refused.",
           "source_set": "GLOW_KEYS"
         }
       ],

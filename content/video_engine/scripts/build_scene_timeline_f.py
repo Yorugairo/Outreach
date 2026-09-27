@@ -706,12 +706,16 @@ SPECIES_KINDS += (SPECIES_CROSS,)   # Bravos shots 89-91). ONE species carries b
 TIER_SPECIES = ("build_to", "undraw", "figure", "bracket")   # P50 T9: the page species that may name a TIER - which on a
                               # tiers page IS a series index. One resolution, not two: `tier` is the word the author writes
                               # (a band, not a line), `series` is what the player reads, and the two may not disagree.
-BRACKET_FORMS = ("span", "bar", "brace", "elbow")   # P50 T9 / Bravos shot 36: the same measured span drawn as a hairline with ticks, or as a
+BRACKET_FORMS = ("span", "bar", "brace", "elbow", "group")   # P50 T9 / Bravos shot 36: the same measured span drawn as a hairline with ticks, or as a
                               # BAR in the accent - the drop of one tier. A form, not a kind (P50 T3's precedent, the underline).
                               # P70 T5 (Bravos RST 05:40): `brace` - ONE stacked bar braced into its named parts, from zero
                               # to its top: it names `bar` (never two data), its cusp toward the whole's name, a part's
                               # name written beside its own span on its word (`parts_at`) - check_brace holds its truth.
                               # P71 T27 (harvest v2 A53; BOOM 16:27): `elbow` - the LAG across two series (below).
+                              # P72 T53 (b) (R26-412 (b); harvest A16, CHN 18:18 "Decades"): `group` - ONE span over
+                              # several bars under one label, `from` .. `to` two bars of a BARS page (every bar between
+                              # them inside); its label NAMES the group - check_brace refuses it off a bars page.
+GROUP_FORM = "group"
 # P71 T27 (was P69 T75; harvest v2 A53, VERIFY.md: BOOM 16:12.5 "1-2 Years" crest to crest, 16:25.5-16:27 the "1.5 Years"
 # elbow): THE LAG - a bracket whose two ends are data of TWO series, `from: {series, datum}` / `to: {series, datum}`. Its
 # label IS the lag, the time between the two data's x (a line page's x is a decimal year): written by the compiler when
@@ -1153,7 +1157,7 @@ PAGE_BOUND_SPECIES += (SPECIES_GLOW,)   # R26-219: an edge on the page's mark le
 SPECIES_WHEN[SPECIES_GLOW] = ("RANKS, at the reveal: the ONE bar (or shaded stretch) the sentence names must read as LIT, "
                               "not just coloured ('twenty percent' on the index's 20 bar) - one per row, never a light "
                               "standing in for a thing that should ARRIVE (E99 s71)")
-GLOW_KEYS = ("kind", "at", "dur", "bar", "span", "pulse", "keep", *ROW_PATH_KEYS, "leave_at", "leave_s", "leave_clamped")
+GLOW_KEYS = ("kind", "at", "dur", "bar", "span", "segment", "pulse", "keep", *ROW_PATH_KEYS, "leave_at", "leave_s", "leave_clamped")   # P72 T53 (a): `segment` - one part of a stacked bar
 GLOW_BUILDERS = ("story",)                        # a `bar` glow: the pages whose marks are plain bars
 GLOW_REFUSED_FORMS = ("gauge", "extruded_bar")    # ... and not these forms of them (a capsule's fill, a prism)
 
@@ -3496,6 +3500,9 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
                     errs.append(f"bracket: {f!r} must be a non-negative integer datum index")
             errs += [f"bracket: {k!r} is the brace's (form: brace) - a span or bar bracket measures from/to and would "
                      "drop it" for k in BRACE_KEYS if k in entry]
+            if entry.get("form") == GROUP_FORM and is_idx(entry.get("from")) and entry.get("from") == entry.get("to"):
+                errs.append("bracket: a group (form: group) spans at least two bars - from and to name its first and "
+                            "last bar; one bar's parts are the brace's (form: brace)")
         lag_label = is_lag(entry) and entry.get("form") != BRACE_FORM   # P71 T27: a lag's label is _validate_lag's (absent: computed)
         if not lag_label and (not isinstance(entry.get("label"), str) or not entry["label"].strip()):
             errs.append("bracket: needs a non-empty string label (the measured span says what it measures)")
@@ -5718,6 +5725,18 @@ def check_brace(page: dict | None, species: list, aspect: str | None = None) -> 
     ValueError names it; a row with no brace is untouched.
     P72 T43: then every bracket's LABEL ROOM at 16:9 (`bracket_room_notes`, at `aspect`, else the build's ASPECT) - the
     WARNs returned, never a refusal (E99 s106)."""
+    for sp in (species or []):   # P72 T53 (b): a GROUP spans bars - it stands only on a bars page, on bars the page has
+        if not (isinstance(sp, dict) and sp.get("kind") == "bracket" and sp.get("form") == GROUP_FORM):
+            continue
+        where = f"bracket (form: group) at {sp.get('at')}"
+        vals = page.get("values") if isinstance(page, dict) and page.get("variant") == "bars" else None
+        if not isinstance(vals, list) or not vals or page.get("panels") or page.get("builder") == "combo":
+            raise ValueError(f"{where}: a group spans several BARS under one label (A16) - it stands on a bars page of "
+                             "its own; a line, a panels page, a combo or a plate has no group of bars to span")
+        for f in ("from", "to"):
+            v = sp.get(f)
+            if not (isinstance(v, int) and not isinstance(v, bool) and 0 <= v < len(vals)):
+                raise ValueError(f"{where}: {f} is bar {v}, not a bar of this page (0..{len(vals) - 1})")
     braces = [sp for sp in (species or []) if isinstance(sp, dict) and sp.get("kind") == "bracket"
               and sp.get("form") == BRACE_FORM]
     for sp in braces:
@@ -8968,6 +8987,11 @@ def _validate_glow(entry: dict) -> list[str]:
     for k in named:
         if not _is_index(entry[k]):
             errs.append(f"glow: {k} must be a non-negative integer - the {k} it lights, not {entry[k]!r}")
+    if "segment" in entry:   # P72 T53 (a) (R26-412 (a)): the light on ONE part of the bar - the iceberg's hidden part
+        if "bar" not in entry:
+            errs.append("glow: segment names a part of a stacked BAR - name its `bar` too (a span's region has no parts)")
+        elif not _is_index(entry["segment"]):
+            errs.append(f"glow: segment must be a non-negative integer - the bar's part, bottom-up, not {entry['segment']!r}")
     if "pulse" in entry and entry["pulse"] is not True:
         errs.append(f"glow: pulse is `true` or absent - `true` blinks the edge (the chip's lit pulse: motion, E99 s99); "
                     f"absent, it holds (an annotation, s91); not {entry['pulse']!r}")
@@ -9025,6 +9049,14 @@ def check_glow(world: dict, row_species: list) -> list[str]:
         n, i = len(page.get("values") or []), int(sp["bar"])
         if i >= n:
             raise ValueError(f"{where}: bar {i} is not on the page (its bars are 0..{n - 1})")
+        if "segment" in sp:   # P72 T53 (a): the part it lights is one the bar is stacked of
+            parts = (page.get(LPG.SEGMENTS_KEY) or [None] * n)[i] or []
+            j = int(sp["segment"])
+            if not parts:
+                raise ValueError(f"{where}: bar {i} has no parts - a `segment` glow lights one part of a STACKED bar "
+                                 "(T64's `segments`); light the whole bar without it")
+            if j >= len(parts):
+                raise ValueError(f"{where}: segment {j} is not a part of bar {i} (its parts are 0..{len(parts) - 1}, bottom-up)")
     if len(sps) > 1:
         notes.append(f"{len(sps)} glows on one row (at {', '.join(str(s.get('at')) for s in sps)}) - one lit mark a row "
                      "(BRAVOS-USE-WHEN F14's don't: with every mark lit, the glow stops meaning anything); keep the one "
