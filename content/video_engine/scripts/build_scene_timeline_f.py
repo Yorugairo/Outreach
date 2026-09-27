@@ -664,6 +664,10 @@ SPECIES_KINDS += (SPECIES_CHIP,)   # P50 T2: THE ICON CHIP (the Bravos icon boar
                                    # operator's module rule (2026-09-11): the painter is scripts/species/chip.mjs, not a branch in the
                                    # template's body; this file still owns its grammar, its targets and its glyph's provenance.
 SPECIES_KINDS += (SPECIES_FLOW, SPECIES_SPAN)   # P50 T4 (2026-09-11), both under the module rule
+SPAN_FORMS = ("shade", "box")   # P72 T46g (R26-407; Bravos A56): a span SHADES its stretch (the default) or BOXES it - a dashed
+                               # rectangle round the named series' own ink over the stretch, drawn on its word, leaving at the end
+                               # of its dur; species/span.mjs SPAN_FORMS, verbatim (the test pins the two). Anything else is refused
+                               # by name - an option accepted and silently dropped is R26-307's class (E99 s106)
 FLOW_NODES = (2, 6)   # a mechanism with ONE part is a chip; with seven it is a diagram nobody reads at phone size
 # P71 T11: THE LOOP and THE TOKENS (the Bravos loop, BUB frame_0058 / RST 9:30; A27 money on the arrows, DOM 03:30, BOOM 08:19).
 FLOW_LAYOUTS = ("row", "ring", "hub")   # `layout`: absent IS the row (a column in a tall box); "ring" lays a CLOSED chain on an
@@ -3513,7 +3517,15 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
                 errs.append("span: name BOTH edges the same way - two datum indices, or two 0..1 fractions")
             elif not edges["from"] < edges["to"]:
                 errs.append(f"span: from {edges['from']} is not before to {edges['to']} - a span names a stretch, not a point")
-        if not isinstance(entry.get("label"), str) or not entry["label"].strip():
+        form = entry.get("form", SPAN_FORMS[0])
+        if "form" in entry and (not isinstance(form, str) or form not in SPAN_FORMS):
+            errs.append(f"span: form {form!r} is not one of {'|'.join(SPAN_FORMS)} (R26-407: `shade` darkens the stretch "
+                        "behind the line, `box` draws a dashed box round the series' own ink over it - Bravos A56)")
+        if form == "box":   # P72 T46g: a box names the MOVE - its name is optional (Bravos A56 writes none), never an empty one
+            if "label" in entry and (not isinstance(entry["label"], str) or not entry["label"].strip()):
+                errs.append("span: a box's label, when given, must be a non-empty string - a box names the move by "
+                            "framing it, and may carry no name at all (leave `label` out)")
+        elif not isinstance(entry.get("label"), str) or not entry["label"].strip():
             errs.append("span: needs a non-empty string label - a span NAMES a stretch of time (a bracket MEASURES two data)")
         if "color" in entry and entry["color"] not in BRACKET_COLORS:
             errs.append(f"span: color must be one of {'|'.join(BRACKET_COLORS)}")
@@ -8679,6 +8691,9 @@ def check_glow(world: dict, row_species: list) -> list[str]:
             if k >= len(spans):
                 raise ValueError(f"{where}: span {k} is not on the row (it shades {len(spans)} span(s)"
                                  + (f", 0..{len(spans) - 1}" if spans else "") + ") - a glow edges a region the row shades")
+            if spans[k].get("form") == "box":   # P72 T46g (R26-407): the glow edges a SHADE's rect; a box draws its own edge
+                raise ValueError(f"{where}: span {k} is a box - it draws its own dashed edge round the move, and a glow "
+                                 "edges a SHADED span's region (R26-407); glow the shade, or let the box stand alone")
             if float(spans[k]["at"]) > float(sp["at"]):
                 notes.append(f"{where}: span {k} shades in at {float(spans[k]['at']):.1f} - the edge lands before its region "
                              f"has arrived ({float(sp['at']):.1f}); a light is never the move when its thing should arrive "

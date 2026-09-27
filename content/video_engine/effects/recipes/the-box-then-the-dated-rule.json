@@ -1,0 +1,99 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:the-box-then-the-dated-rule",
+ "title": "The box round the last move, then the dated rule",
+ "aliases": [
+  {
+   "name": "A56 A dashed box frames the future space",
+   "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:421"
+  }
+ ],
+ "acts": [
+  "COMPARES"
+ ],
+ "members": [
+  {
+   "card": "page_builder:line",
+   "offset_s": 0.0,
+   "role": "the page lands on its axes, the projected year already on the axis as the estimate it is (its tick labelled so) - the future's room in view"
+  },
+  {
+   "card": "page_species:build_to",
+   "offset_s": [
+    2.0,
+    9.0
+   ],
+   "options": {
+    "dur": 1.0
+   },
+   "role": "the actuals draw on their own words, the last move landing on the number the sentence says"
+  },
+  {
+   "card": "page_species:span",
+   "offset_s": [
+    8.0,
+    10.5
+   ],
+   "options": {
+    "form": "box",
+    "dur": 2.1
+   },
+   "role": "on the move's number a dashed box goes round the last actual move's own ink - the box names the move - and leaves as the next sentence opens"
+  },
+  {
+   "card": "page_species:figure",
+   "offset_s": [
+    8.0,
+    10.5
+   ],
+   "options": {
+    "dur": 1.5
+   },
+   "optional": true,
+   "role": "the move's number is written by the hand at its datum, clear of the box and of the estimate to come"
+  },
+  {
+   "card": "chart_to:extend",
+   "offset_s": [
+    11.0,
+    13.0
+   ],
+   "options": {
+    "dur": 1.7
+   },
+   "role": "on the projection's word the dashed, unbloomed estimate draws from the last actual, tagged with its label and tier"
+  },
+  {
+   "card": "page_species:axis_tag",
+   "offset_s": [
+    12.5,
+    14.5
+   ],
+   "options": {
+    "dur": 1.0
+   },
+   "role": "as the estimate lands, the dated rule: the projected year's tick springs into the accent pill - the rule names the date, as an estimate"
+  }
+ ],
+ "window_s": 16.0,
+ "does": "A dashed box goes round the last actual move on its number and leaves; then the dashed estimate draws from the last actual and its date springs into an accent pill on the axis.",
+ "use_when": {
+  "act": "COMPARES (projecting) - the latest move, carried forward to a date (BRAVOS-USE-WHEN A56, VERIFY.md's rescope)",
+  "moment": "turn",
+  "shape": "a series of actuals whose LAST move the sentence carries forward, and ONE sourced projected point at a named date",
+  "use": "the box names the move, the rule names the date ('Last year: a hundred and twenty-one billion. This year they're tracking toward a hundred and fifty.'; BOOM 'could actually continue until June of 2027')",
+  "dont": "a box round empty future space (it bounds drawn actual ink only); a box standing when the date lands (it leaves first); an undated or unlabelled projection (E77); a short projection whose dash alone says it"
+ },
+ "doctrine": [
+  "E77",
+  "E53",
+  "E99 s60",
+  "E99 s106",
+  "E99 s109",
+  "P71 T16",
+  "P71 T9"
+ ],
+ "status": "candidate",
+ "source": "P72 T46g (harvest v2 A56; BOOM 17:55.5-18:00.5, VERIFY.md A56_future_box); R26-407's span box form. Proved as a private test-bed beat by projects/_proofs/p71-recipes/proof_t26.py --beat the-box-then-the-dated-rule on Steel and Paper H row 16 ('Then the bills got bigger than the cash ... tracking toward a hundred and fifty', take 254.41 s) on P71 T16's golden composition of ev-debt-issuance-line-v1 with the committed object's own 2026E tick - no approved cut carries it",
+ "count": 0
+}

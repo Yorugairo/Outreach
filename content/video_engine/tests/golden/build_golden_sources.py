@@ -6446,6 +6446,32 @@ SURFACES.update({"story-bars-pills": story_bars_pills})
 FRAME_T.update({"story-bars-pills": 6.0})   # at rest: the build (3.0 s) landed, both names in their pills
 
 
+# ---- P72 T46g (R26-407; Bravos A56, BOOM 17:55.5-17:58.5): THE BOX ROUND THE LAST MOVE -------------------------------------
+#   box-the-last-move  `span-decade`'s own page (the memory-makers line and its three peers, no emphasis) carrying a span in
+#                      the BOX form round the memory-makers' LAST MOVE - its fall from the Aug 2025 peak (datum 191, the
+#                      1,074 the `ring-dashed-chip` golden rings) to today (234): a dashed rectangle round that series' own
+#                      ink over the stretch, x from..to and y the stretch's own min..max, both padded - never the plot, never
+#                      the other three lines. Drawn round by length on its word (8.0 + DRAW_S), standing for its `dur` (3.0),
+#                      then leaving for the dated rule. Judged standing whole (9.2 s), the page built (7.4) and the box closed.
+BOX_SPAN = {"kind": "span", "form": "box", "at": 8.0, "dur": 3.0, "from": 191, "to": 234}
+
+
+def box_the_last_move() -> tuple[dict, dict]:
+    import build_scene_timeline_f as BST
+    species = [dict(BOX_SPAN)]
+    assert not BST._validate_entry(species[0]), BST._validate_entry(species[0])   # the grammar's own word: a box, no name
+    series = LPG.load_series(SERIES)
+    page = LPG.build_spec(series, "line", None, "right")
+    page["field"] = "scribble"
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: the box round the last move (A56)", scenes, {}, None), _base_uris()
+
+
+SURFACES.update({"box-the-last-move": box_the_last_move})
+FRAME_T.update({"box-the-last-move": 9.2})   # the box drawn whole (8.0 + DRAW_S) and standing - its leave begins at 10.65
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

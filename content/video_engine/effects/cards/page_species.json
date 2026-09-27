@@ -1585,7 +1585,13 @@
           "tie": "recorded"
         }
       ],
-      "options": [],
+      "options": [
+        {
+          "token": "box",
+          "means": "`form: \"box\"` (R26-407, Bravos A56): a dashed box round the named series' own ink over the stretch, drawn on its word, leaving at the end of `dur`; no shade, label optional",
+          "source_set": null
+        }
+      ],
       "dials": {
         "module": "content/video_engine/scripts/species/span.mjs",
         "object": "SPAN"
@@ -1597,7 +1603,8 @@
       },
       "doctrine": [
         "CAPABILITIES SPAN",
-        "BACKLOG R26-25"
+        "BACKLOG R26-25",
+        "BACKLOG R26-407"
       ],
       "status": "wired",
       "proof": {

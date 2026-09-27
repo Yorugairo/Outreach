@@ -148,6 +148,29 @@ export const figurePlace = (D, fs, dy, W, gap, room) => {
            yA: D[1] + fs * FIGURE.BASE_DY + (Number(dy) || 0) * fs * FIGURE.LINE };
 };
 
+/* P72 T46g (R26-409) - THE PLACE ON ONE STATE: the authored place off the datum (figurePlace), then R26-71's step-off on
+   that state's own points and R26-191's labels - the builder's two laws in the builder's order, so the painter's place on
+   a state standing alone is the one it always painted. */
+export const figureLinePlace = (fg, D, pts, avoid, PS) => {
+  const q = figurePlace(D, fg.fs, fg.sp.dy, fg.W, PS.BRACKET_GAP, PS.BRACKET_ROOM);
+  return { x: q.x, y: figClearY(q.x, q.yA, fg.tw, fg.fs, q.anchor, fg.sp.dy, pts, fg.subH || 0, fg.H, avoid), anchor: q.anchor, fits: q.fits };
+};
+
+/* R26-409 (2026-09-26, H row 16's "$121B": it held its old place for the whole of the extend's rescale, then jumped ~180 px
+   and changed side) - THE FIGURE BETWEEN TWO STATES. `pa` / `pb` are its places on the leaving and the arriving state, `u`
+   the datum's own eased clock (lpDatumNow's). Exactly each place at its two ends; between them the text's LEFT EDGE and its
+   baseline lerp (`tw` is the measured advance), so a figure that is written leftward at the page's edge and rightward
+   after the re-fit slides from one to the other instead of flipping, and a step-off quantum is crossed, never jumped. */
+const figLerp = (a, b, u) => a + (b - a) * u;
+export const figureTween = (pa, pb, u, tw) => {
+  if (!(u > 0)) return pa;
+  if (u >= 1) return pb;
+  const y = figLerp(pa.y, pb.y, u), fits = u < 0.5 ? pa.fits : pb.fits;
+  if (pa.anchor === pb.anchor) return { x: figLerp(pa.x, pb.x, u), y, anchor: pa.anchor, fits };
+  const left = (p) => (p.anchor === "end" ? p.x - tw : p.x);
+  return { x: figLerp(left(pa), left(pb), u), y, anchor: "start", fits };
+};
+
 /* one glyph of the FIGURE as the hand writes it: each glyph over its share of WRITE, fading over OVERLAP
    shares, so the last glyph is still arriving as the word ends and the line never reads as a ticker */
 export const figureGlyph = (u, j, n) => {
@@ -213,10 +236,16 @@ export const paintFigure = (fg, t, st, ctx) => {
       figSet(fg, x, y, "middle");
       fg.D = D; fg.x = x; fg.y = y;
     } else {
-      const q = figurePlace(D, fg.fs, sp.dy, fg.W, ctx.PS.BRACKET_GAP, ctx.PS.BRACKET_ROOM);
-      const y = figClearY(q.x, q.yA, fg.tw, fg.fs, q.anchor, sp.dy, ctx.pointsNow(st, fg.si).map((e) => e.p), fg.subH || 0, fg.H, st.labBoxes);   /* R26-71: the same step-off on the ACTIVE state's own points - and R26-191's labels, the list the BUILD measured (pure in t) */
-      figSet(fg, q.x, y, q.anchor);
-      fg.D = D; fg.x = q.x; fg.y = y; fg.fits = q.fits;   /* the record species/compare.mjs reads (PF.figures) - the same fields, in the same place */
+      /* R26-409 (P72 T46g): across a rescale / extend the figure rides its datum - its place on the leaving state tweened to
+         its place on the arriving one on the datum's own clock (ctx.xfClock, lpDatumNow's), each place read on that state
+         alone (a view of the page on state k). No re-fit, or a datum one side lacks: the ACTIVE state's, as it always was. */
+      const xc = ctx.xfClock ? ctx.xfClock(st) : null, on = (k) => ({ states: st.states, active: k });
+      const A = xc ? ctx.markDatum(on(xc.from), fg.si, fg.idx) : null, B = xc ? ctx.markDatum(on(xc.to), fg.si, fg.idx) : null;
+      const placeOn = (v, Dv) => figureLinePlace(fg, Dv, ctx.pointsNow(v, fg.si).map((e) => e.p), st.labBoxes, ctx.PS);   /* R26-71 + R26-191 on that state's own points (pure in t) */
+      const q = A && B ? figureTween(placeOn(on(xc.from), A), placeOn(on(xc.to), B), xc.u, fg.tw) : placeOn(st, D);
+      figSet(fg, q.x, q.y, q.anchor);
+      fg.D = A && B ? [figLerp(A[0], B[0], xc.u), figLerp(A[1], B[1], xc.u)] : D;
+      fg.x = q.x; fg.y = q.y; fg.fits = q.fits;   /* the record species/compare.mjs reads (PF.figures) - the same fields, in the same place */
     }
   }
   fg.lg.forEach((ts, j) => ts.setAttribute("opacity", figureGlyph(uw, j, fg.lg.length).toFixed(3)));

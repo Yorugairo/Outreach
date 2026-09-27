@@ -6,6 +6,7 @@
 // on recorders with no DOM: it reaches the engine only through its page ctx (markDatum, pointsNow, PS).
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import * as FIG_MOD from "../../scripts/species/figure.mjs";
 import { FIGURE, segMeetsBox, boxMeetsBox, figBox, figWidth, figClearY, figurePlace, figureGlyph, figureSubGlyph,
          figureHandOver, figureHandBack, paintFigure } from "../../scripts/species/figure.mjs";
 
@@ -355,4 +356,81 @@ test("R26-255: on a page with STATES a centred bar figure keeps its anchor and r
   const gone = built({ anchor: "middle", bar: {}, D: [500, 300], x: 500, y: 280 });
   paintFigure(gone, 12, st, { PS, markDatum: () => null, pointsNow: () => [] });
   assert.equal(gone.g.a.opacity, 0, "a bar the state dropped shows nothing");
+});
+
+// ---------------------------------------------------------------- P72 T46g (R26-409): a figure on a MOVING datum
+// H row 16's "$121B" held its old place for the whole of the extend's rescale (12.2-13.0 s) while its datum travelled
+// 180 px left and 90 px down, then JUMPED - and changed side (written leftward at the page's edge, rightward after). A
+// figure now tweens from its place on the leaving state to its place on the arriving one, on the datum's own eased clock
+// (the engine's `xfClock`, the one lpDatumNow lerps on), so it rides its datum and never jumps - its side included.
+const { figureTween, figureLinePlace } = FIG_MOD;
+const S_A = { name: "leaving" }, S_B = { name: "arriving" };
+const D_A = [900, 100], D_B = [500, 300];   /* at the page's right edge (no room: leftward), then with room (rightward) */
+const moving = (u, o = {}) => {
+  const st = { states: [S_A, S_B], active: o.active ?? 0, labBoxes: [] };
+  const on = (v) => v.states[v.active | 0];
+  const ctx = { PS,
+    markDatum: (v, si, i) => { assert.equal(i, 191); const S = on(v);
+      if (o.dropOn === S) return null; return S === S_A ? D_A : D_B; },
+    pointsNow: () => [],
+    datumNow: () => { throw new Error("the line figure reads the two states' places, not the lerped datum alone"); },
+    xfClock: (v) => (v === st && u !== null ? { from: 0, to: 1, u } : null) };
+  return { st, ctx };
+};
+const placeOn = (fg, D) => figureLinePlace(fg, D, [], [], PS);
+const leftOf = (p, tw) => (p.anchor === "end" ? p.x - tw : p.x);
+
+test("R26-409: the place on ONE state is the builder's law - figurePlace, then R26-71's step-off", () => {
+  const fg = built();
+  const p = placeOn(fg, D_A), q = figurePlace(D_A, fg.fs, fg.sp.dy, fg.W, PS.BRACKET_GAP, PS.BRACKET_ROOM);
+  assert.deepEqual(p, { x: q.x, y: q.yA, anchor: q.anchor, fits: q.fits });
+  assert.equal(p.anchor, "end", "the datum at the page's edge writes leftward");
+  assert.equal(placeOn(fg, D_B).anchor, "start");
+});
+
+test("R26-409: the tween is EXACTLY each state's place at its two ends, and the left edge lerps between", () => {
+  const fg = built(), pa = placeOn(fg, D_A), pb = placeOn(fg, D_B);
+  assert.deepEqual(figureTween(pa, pb, 0, fg.tw), pa, "u = 0 is the leaving state's place, anchor and all");
+  assert.deepEqual(figureTween(pa, pb, 1, fg.tw), pb, "u = 1 is the arriving state's");
+  const m = figureTween(pa, pb, 0.5, fg.tw);
+  assert.equal(m.anchor, "start", "across a change of side the text is placed by its LEFT edge ...");
+  assert.ok(near(m.x, (leftOf(pa, fg.tw) + leftOf(pb, fg.tw)) / 2), "... which lerps");
+  assert.ok(near(m.y, (pa.y + pb.y) / 2));
+  const same = figureTween(pb, Object.assign({}, pb, { x: pb.x + 100, y: pb.y - 50 }), 0.25, fg.tw);
+  assert.equal(same.anchor, "start"); assert.ok(near(same.x, pb.x + 25) && near(same.y, pb.y - 12.5));
+});
+
+test("R26-409: the painter RIDES the datum through the re-fit - no frame jumps, its side change included", () => {
+  let prev = null, worst = 0;
+  for (let k = 0; k <= 100; k++) {
+    const u = k / 100, fg = built(), { st, ctx } = moving(u, { active: u >= 0.5 ? 1 : 0 });
+    paintFigure(fg, 12, st, ctx);
+    const x = +fg.label.a.x, y = +fg.label.a.y, L = fg.label.a["text-anchor"] === "end" ? x - fg.tw : x;
+    if (prev) worst = Math.max(worst, Math.hypot(L - prev[0], y - prev[1]));
+    prev = [L, y];
+    assert.equal(fg.g.a.opacity, 1);
+  }
+  const span = Math.hypot(leftOf(placeOn(built(), D_B), 140) - leftOf(placeOn(built(), D_A), 140), 200);
+  assert.ok(worst <= span / 100 + 0.2, `the biggest step between two hundredths of the move: ${worst} px of ${span}`);
+});
+
+test("R26-409: the record compare.mjs reads is the datum THIS frame, and the ends are the states' own", () => {
+  const fg = built(), { st, ctx } = moving(0.25);
+  paintFigure(fg, 12, st, ctx);
+  assert.deepEqual(fg.D, [800, 150], "the lerped datum - lpDatumNow's own arithmetic");
+  const a = built(), A = moving(0);
+  paintFigure(a, 12, A.st, A.ctx);
+  const pa = placeOn(built(), D_A);
+  assert.deepEqual([a.label.a.x, a.label.a.y, a.label.a["text-anchor"]], [pa.x.toFixed(1), pa.y.toFixed(1), pa.anchor],
+                   "u = 0: the frame the base painted, to the attribute");
+});
+
+test("R26-409: no re-fit, or a datum one side lacks - the ACTIVE state's datum, as before", () => {
+  for (const [u, o] of [[null, {}], [0.5, { dropOn: S_B }], [0.5, { dropOn: S_A, active: 1 }]]) {
+    const fg = built(), { st, ctx } = moving(u, o);
+    paintFigure(fg, 12, st, ctx);
+    const D = o.active === 1 ? D_B : D_A, q = placeOn(built(), D);
+    assert.equal(fg.label.a.x, q.x.toFixed(1), JSON.stringify([u, o]));
+    assert.equal(fg.label.a["text-anchor"], q.anchor);
+  }
 });

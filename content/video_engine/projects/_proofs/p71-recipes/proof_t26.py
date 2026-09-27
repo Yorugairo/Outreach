@@ -30,6 +30,13 @@ THE TWO BEATS (E99 s60 - each a beat a cut could carry, on its own words):
                                         imported, never re-typed: the committed `ev-debt-issuance-line-v1` read in place,
                                         its `$150B` edge as the labelled projection) written into this beat's PRIVATE
                                         episode dir (`build-lab-<recipe>/ep/evidence/objects/`), never the project's.
+  the-box-then-the-dated-rule           P72 T46g (Bravos A56, BOOM 17:55.5-18:00.5; R26-407's box form): the SAME row 16
+                                        words and page. On "a hundred and twenty-one" a dashed BOX goes round the last actual
+                                        move (2024 -> 2025, the leap) - the box names the move - and leaves on "This year";
+                                        on "tracking toward" the extend re-fits the page and draws the dashed 2026E from the
+                                        last actual, and as the dash lands the DATED RULE lands: the axis's own "2026E" tick
+                                        (the committed object's, put back on this beat's private copy) springs into T9's
+                                        `axis_tag` pill - the rule names the date, as the estimate it is (E77).
 """
 from __future__ import annotations
 
@@ -147,6 +154,63 @@ def _evidence_strip(ws: list) -> list:
             (round(t_50 + 1.4, 2), "landed: dashed, unbloomed, '2026E' + tier")]
 
 
+BOX_FIG_DY = -2.4        # this page's axis carries 2026 from birth, so the estimate climbs more steeply off the tip: at R26's
+                         # -1.4 the dash ran through "$121B" (frames/crop-boxbeat-14.90.png) - two more lines up, clear of it
+DEBT_2026 = 2026         # the projection's own x - the date the rule names (the object's 2026E, never typed from memory: asserted below)
+
+
+def _box_row(ws: list, runtime: float) -> tuple:
+    """P72 T46g: R26's page and words; the box round the last actual move, then the dated rule with the forward draw."""
+    t_avg, t_28, t_last, t_121, t_track, t_50 = _evidence_times(ws)
+    t_this = T.at(ws, "This year")
+    obj = _debt_object()
+    assert obj["series"][1]["pts"][-1][0] == DEBT_2026, obj["series"][1]["pts"]   # the rule's date is the object's own
+    _, tip_text = _debt_texts(obj)
+    extend_dur = round(t_50 + 0.4 - t_track, 2)
+    species = [
+        {"kind": "build_to", "at": 0.0, "dur": 0.4, "series": 0, "target": P69._datum(0, 0)},
+        {"kind": "build_to", "at": t_avg, "dur": AVG_S, "series": 0, "target": P69._datum(DEBT_AVG_END, 0)},
+        {"kind": "build_to", "at": t_last, "dur": TIP_S, "series": 0, "target": P69._datum(DEBT_TIP, 0)},
+        {"kind": "figure", "at": t_121, "dur": FIG_S, "target": P69._datum(DEBT_TIP, 0), "text": tip_text, "dy": BOX_FIG_DY},
+        # A56: the box names the MOVE on its number, and leaves as the next sentence opens
+        {"kind": "span", "form": "box", "at": t_121, "dur": round(t_this - t_121, 2), "from": DEBT_AVG_END, "to": DEBT_TIP},
+        {"kind": "chart_to", "at": t_track, "dur": extend_dur, "to": "extend", "series": 1},
+        # ... and the rule names the DATE as the forward draw lands on it (an axis tag pops when its page stands - the
+        # extend's end; earlier it is WARNed and waits, P71 T9)
+        {"kind": "axis_tag", "at": round(t_track + extend_dur, 2), "dur": round(runtime - t_track - extend_dur, 2),
+         "x": DEBT_2026},
+    ]
+    return (0.0, runtime, DEBT_PLATE, (0, 0, 0), [], None, species)
+
+
+def _box_object() -> dict:
+    """T16's composition with the COMMITTED object's own estimate tick put back ([2026, '2026E'] - read off
+    ev-debt-issuance-line-v1, never typed): the axis carries the projected year, labelled as the estimate it is, so the
+    dated rule stands on a date the page draws (s109) and names it as an estimate (E77) - Bravos's axis runs to 2028 with
+    the future's room in view (BOOM 17:56.5)."""
+    import build_golden_sources as G
+    obj = _debt_object()
+    committed = json.loads(G.PROJ_OBJECT.read_text(encoding="utf-8"))
+    est = [t for t in committed["xticks"] if t[0] == DEBT_2026]
+    assert est and str(est[0][1]).endswith("E"), committed["xticks"]   # the committed tick names itself an estimate
+    obj["xticks"] = obj["xticks"] + est
+    return obj
+
+
+def _box_objects(ep: Path) -> None:
+    objects = ep / "evidence/objects"
+    objects.mkdir(parents=True, exist_ok=True)
+    (objects / f"{DEBT_ID}.series.json").write_text(json.dumps(_box_object(), indent=1), encoding="utf-8")
+
+
+def _box_strip(ws: list) -> list:
+    t_avg, t_28, t_last, t_121, t_track, t_50 = _evidence_times(ws)
+    return [(round(t_121 + 0.3, 2), "the box goes round the last move (the pen)"),
+            (round(t_121 + 1.2, 2), "the box stands round 2024 -> 2025"),
+            (round(T.at(ws, "This year") + 0.2, 2), "the box has left"),
+            (round(t_50 + 1.4, 2), "the dated rule (2026E) and the dashed estimate to it")]
+
+
 def _evidence_objects(ep: Path) -> None:
     objects = ep / "evidence/objects"
     objects.mkdir(parents=True, exist_ok=True)
@@ -167,6 +231,8 @@ BEATS = {b.slug: b for b in (
     Beat("push-to-now-then-the-unknown", "That's the July release", "and so am I", _push_row, _push_strip),
     Beat("evidence-then-the-conditional-future", "Then the bills got bigger", "tracking toward a hundred",
          _evidence_row, _evidence_strip, _evidence_objects),
+    Beat("the-box-then-the-dated-rule", "Then the bills got bigger", "tracking toward a hundred",
+         _box_row, _box_strip, _box_objects),   # P72 T46g: A56 on R26's page and words
 )}
 
 

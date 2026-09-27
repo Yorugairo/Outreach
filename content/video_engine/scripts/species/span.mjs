@@ -64,6 +64,24 @@ export const SPAN = Object.freeze({
 
 const span01 = (v) => Math.min(1, Math.max(0, v));
 
+/* P72 T46g (R26-407; Bravos A56, BOOM 17:55.5-17:58.5 - VERIFY.md's rescope) - THE FORMS. A span is a SHADE (the
+   default, every span before this slice): the stretch's ground darkened behind every line, its name above. Or a BOX: a
+   dashed rectangle round the NAMED series' own ink over the stretch - the box names the latest actual MOVE ("could
+   continue until June of 2027": the box round the upswing, then the dated rule) - drawn round by length on its word,
+   standing for its `dur`, then leaving so the date can be named. The compiler mirrors SPAN_FORMS
+   (build_scene_timeline_f.SPAN_FORMS) and refuses anything else by name: an option accepted and silently dropped is
+   R26-307's class (E99 s106). */
+export const SPAN_FORMS = Object.freeze(["shade", "box"]);
+export const SPAN_BOX = Object.freeze({
+  PAD: 14,          /* the daylight round the stretch's own ink, in the chart's viewBox units (~ stage px on a 16:9 page: 1.08-1.33 px a unit) - Bravos keeps 11-20 px at 1920 (BOOM 17:56.5) */
+  WIDTH: 3,         /* the dashed outline's weight - Bravos's ~4 px at 1920, under the series' own 4 */
+  DASH: "12 8",     /* the dash and its gap - Bravos's ~14 / 8 px at 1920: a box that is plainly drawn, never a second line */
+  DRAW_S: 0.5,      /* the pen goes round the box over this, from the span's `at` */
+  LEAVE_S: 0.35,    /* ... and the box leaves over the last of its own `dur` (A56: gone before the dated rule lands) */
+  LABEL_GAP: 4,     /* the box's right edge stops this short of a page label standing past the stretch's end (the end tag's column - R26-219's lesson for the shade: the memory-makers' tag stands 12 units past its last datum, inside the box's pad) */
+});
+export const spanIsBox = (sp) => !!sp && sp.form === "box";
+
 /* is this edge a DATUM INDEX (an integer) or an X-FRACTION? */
 export const spanIsIndex = (v) => Number.isInteger(v);
 
@@ -190,6 +208,63 @@ export const spanAlphaOf = (sd) => {
   return spanToneIsDark(sd && sd.tone) ? SPAN.ALPHA_DARK : SPAN.ALPHA;
 };
 
+/* A56 - THE STRETCH'S OWN BOX: x from..to, y the NAMED series' own min..max over it (the line's own value at an edge
+   that falls between two data - the ink the eye sees there), both padded by `pad`, clipped to the chart's box. One series
+   only: a box names ONE move, and another line far above it never widens it. null when an edge has left the window
+   (R26-28: nothing to name, nothing drawn) or the stretch is narrower than MIN_W (two adjacent data are a bracket's).
+   `labels` (spanPageLabels: the page's own direct labels, {x, y} baselines) and `fs` their size: a label standing past
+   the stretch's end at the box's height pulls the box's right edge back to LABEL_GAP before its first glyph - never
+   inside the stretch itself - so a box round the last move never runs into the series' own end tag. */
+export const spanStretch = (entries, from, to, pad, H, labels, fs) => {
+  const a = spanEdgeX(entries, from), b = spanEdgeX(entries, to);
+  if (a === null || b === null) return null;
+  const x0 = Math.min(a, b), x1 = Math.max(a, b);
+  if (!(x1 - x0 >= SPAN.MIN_W)) return null;
+  const at = (x) => {   /* the line's own y at x: a datum, or the segment that crosses x */
+    for (let k = 1; k < entries.length; k++) { const p = entries[k - 1].p, q = entries[k].p;
+      if (x >= p[0] && x <= q[0]) return q[0] === p[0] ? p[1] : p[1] + (q[1] - p[1]) * (x - p[0]) / (q[0] - p[0]); }
+    return null;
+  };
+  const ys = [at(x0), at(x1)].filter((v) => v !== null);
+  for (const e of entries) if (e.p[0] >= x0 && e.p[0] <= x1) ys.push(e.p[1]);
+  if (!ys.length) return null;
+  const d = +pad || 0, lo = Math.min(...ys) - d, hi = Math.max(...ys) + d;
+  const y = Number.isFinite(H) ? Math.max(0, lo) : lo, yb = Number.isFinite(H) ? Math.min(H, hi) : hi;
+  if (!(yb > y)) return null;
+  let xr = x1 + d;
+  const up = +fs > 0 ? +fs : 0;
+  for (const L of labels || []) {   /* the label's own line: its baseline, a size of ascent above it, a third below */
+    if (!L || !(L.x >= x1) || !(L.y + up / 3 >= y && L.y - up <= yb)) continue;
+    xr = Math.min(xr, Math.max(x1, L.x - SPAN_BOX.LABEL_GAP));
+  }
+  return { x: x0 - d, y, w: xr - (x0 - d), h: yb - y };
+};
+
+/* the box's POSE at t: up from its word, the pen round it over DRAW_S, and its leave over the last LEAVE_S of `dur`
+   (a box shorter than the two together still draws and leaves - it simply never stands whole). The name, if the box
+   carries one, is written after the pen has gone round, over WRITE of the word, the shade's own hand. */
+export const spanBoxPose = (sp, t) => {
+  const at = +sp.at, dur = Math.max(0.001, +sp.dur || 1), d = t - at;
+  const fade = 1 - span01((d - (dur - SPAN_BOX.LEAVE_S)) / SPAN_BOX.LEAVE_S);
+  return { on: d >= 0 && fade > 0, draw: span01(d / SPAN_BOX.DRAW_S), fade: d >= 0 ? fade : 0,
+           write: span01((d - SPAN_BOX.DRAW_S) / (dur * SPAN.WRITE)) };
+};
+
+/* the outline drawn ROUND BY LENGTH, from the top-left corner clockwise - the top, the right, the bottom, the left - `u`
+   of its perimeter: a pen's path, not a fade, and closed (Z) once whole so the last corner joins. A pure string of t. */
+export const spanBoxPath = (r, u) => {
+  if (!r || !(u > 0)) return "";
+  const P = [[r.x, r.y], [r.x + r.w, r.y], [r.x + r.w, r.y + r.h], [r.x, r.y + r.h], [r.x, r.y]];
+  const f = (p) => p[0].toFixed(1) + " " + p[1].toFixed(1);
+  let left = Math.min(1, u) * 2 * (r.w + r.h), d = "M" + f(P[0]);
+  for (let k = 1; k < P.length && left > 1e-9; k++) {
+    const a = P[k - 1], b = P[k], len = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    if (left >= len - 1e-9) { d += " L" + f(b); left -= len; continue; }
+    const s = left / len; d += " L" + f([a[0] + (b[0] - a[0]) * s, a[1] + (b[1] - a[1]) * s]); left = 0;
+  }
+  return u >= 1 ? d + " Z" : d;
+};
+
 /* THE POSE at t: is it up, how deep is the shade, how far has the hand written. */
 export const spanPose = (sp, t) => {
   const at = +sp.at, dur = Math.max(0.001, +sp.dur || 1), d = t - at;
@@ -207,6 +282,26 @@ export const spanGlyph = (write, j, n) => {
   return span01((write - j * per) / (per * 1.6));
 };
 
+/* A56 - THE BOX'S PAINTER. Ink ON the page, in the perform layer the builder put it in - never sunk to the ground as a
+   shade is, and the shade's rect stays empty. Re-read on the live points every frame, so a box follows a re-fit and
+   hides with an edge the window drops. A name, if the box carries one, stands over the box's own top. */
+export const paintSpanBox = (sd, t, st, ctx) => {
+  const pose = spanBoxPose(sd.sp, t);
+  sd.rect.setAttribute("fill-opacity", 0);
+  const hide = () => { if (sd.box) sd.box.setAttribute("opacity", 0); sd.label.setAttribute("opacity", 0); };
+  if (!pose.on || !sd.box) { hide(); return; }
+  const r = spanStretch(ctx.pointsNow(st, sd.si) || [], sd.sp.from, sd.sp.to, SPAN_BOX.PAD, (st.geom || {}).H,
+                        spanPageLabels(st), sd.fs);   /* the box stops short of the series' own end tag */
+  if (!r) { hide(); return; }   /* R26-28: an edge the window dropped names nothing */
+  sd.box.setAttribute("d", spanBoxPath(r, pose.draw));
+  sd.box.setAttribute("opacity", pose.fade.toFixed(3));
+  if (!sd.lg.length) { sd.label.setAttribute("opacity", 0); return; }
+  sd.label.setAttribute("opacity", pose.fade.toFixed(3));
+  sd.label.setAttribute("x", (r.x + r.w / 2).toFixed(1));
+  sd.label.setAttribute("y", spanLabelY({ yTop: r.y, y: r.y }, sd.fs).toFixed(1));
+  sd.lg.forEach((ts, j) => ts.setAttribute("opacity", spanGlyph(pose.write, j, sd.lg.length).toFixed(3)));
+};
+
 /* THE PAINTER (P52 T5; R26-41). The band re-read on the LIVE scale every frame, the shade fading in under the
    lines, the name written above it by the hand - every number of it is the law above; this is the DOM.
    `sd` is the perform layer's built span (rect, label, the label's glyphs `lg`, its size `fs`, the series `si`
@@ -214,6 +309,7 @@ export const spanGlyph = (write, j, n) => {
    painter (see PAGE_PAINTERS in the engine): the engine's helpers arrive BY NAME - `pointsNow` is the perform
    layer's lpPointsNow - never as a free identifier, so `node --test` can call this with recorders and no DOM. */
 export const paintSpan = (sd, t, st, ctx) => {
+  if (spanIsBox(sd.sp)) { paintSpanBox(sd, t, st, ctx); return; }   /* P72 T46g (R26-407): the box form, A56 */
   const pose = spanPose(sd.sp, t);
   const hide = () => { sd.rect.setAttribute("fill-opacity", 0); sd.label.setAttribute("opacity", 0); };
   if (!pose.on) { hide(); return; }

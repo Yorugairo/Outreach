@@ -5,6 +5,7 @@
 // recorders with no DOM - it reaches the engine's perform layer only through its ctx.
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import * as SPAN_MOD from "../../scripts/species/span.mjs";
 import { SPAN, spanIsIndex, spanEdgeX, spanExtent, spanBand, spanLabelY, spanPose, spanGlyph, paintSpan,
          spanToneIsDark, spanGround, spanAlphaOf } from "../../scripts/species/span.mjs";
 
@@ -202,4 +203,112 @@ test("the painter reaches the engine ONLY through ctx - no free identifier, no D
     "no DOM and no clock of its own - the perform layer hands it both elements and t: " + src);
   assert.equal(typeof paintSpan, "function");
   assert.equal(paintSpan.length, 4, "paint(sd, t, st, ctx) - the page registry's own signature");
+});
+
+// ---------------------------------------------------------------- P72 T46g (R26-407): the BOX form (Bravos A56)
+// A56 (BOOM 17:55.5-17:58.5, VERIFY.md's rescope): a dashed box round the LATEST ACTUAL stretch's own ink - the box
+// names the move - which leaves, and then a dated rule names the date. `form` is the span's: `shade` (the default, every
+// span before this slice) or `box`; anything else is refused by the compiler by name (R26-307's class).
+const { SPAN_FORMS, SPAN_BOX, spanIsBox, spanStretch, spanBoxPose, spanBoxPath } = SPAN_MOD;
+
+test("A56: the span has TWO forms, the shade the default, and the box's dials are its own", () => {
+  assert.deepEqual([...SPAN_FORMS], ["shade", "box"]);
+  assert.equal(spanIsBox({ form: "box" }), true);
+  for (const f of [undefined, "shade", "zzz", null]) assert.equal(spanIsBox({ form: f }), false, String(f));
+  assert.ok(SPAN_BOX.PAD > 0 && SPAN_BOX.DRAW_S > 0 && SPAN_BOX.LEAVE_S > 0 && SPAN_BOX.WIDTH > 0);
+  assert.match(SPAN_BOX.DASH, /^\d+(\.\d+)? \d+(\.\d+)?$/, "a dashed box, as Bravos draws it");
+});
+
+test("A56: the box bounds the NAMED series' own ink over the stretch - not every series, not the plot", () => {
+  const a = line(11, 0, 100, 600, (j) => 300 - 10 * j);          /* the named series: 300 -> 200 */
+  const b = line(11, 0, 100, 600, () => 40);                      /* another line far above: not the box's */
+  const r = spanStretch(a, 6, 10, SPAN_BOX.PAD, 560);
+  assert.ok(r, "a stretch the window carries is boxed");
+  assert.ok(near(r.x, 400 - SPAN_BOX.PAD) && near(r.x + r.w, 600 + SPAN_BOX.PAD), JSON.stringify(r));
+  assert.ok(near(r.y, 200 - SPAN_BOX.PAD) && near(r.y + r.h, 240 + SPAN_BOX.PAD), "the stretch's own min..max: " + JSON.stringify(r));
+  assert.ok(r.y > 40, "the other series never widens the box");
+  void b;
+  /* a fraction edge between two data takes the line's own value there (the ink the eye sees), not the next datum's */
+  const f = spanStretch(a, 0.55, 0.95, 0, 560);   /* (1.0 would be the datum INDEX 1: an integer edge is an index) */
+  assert.ok(near(f.x, 375) && near(f.x + f.w, 575) && near(f.y, 205) && near(f.y + f.h, 245), JSON.stringify(f));
+  /* clipped to the chart's own box */
+  const c = spanStretch(line(5, 0, 100, 500, (j) => (j === 4 ? 5 : 300)), 3, 4, SPAN_BOX.PAD, 560);
+  assert.equal(c.y, 0);
+});
+
+test("A56: the box's right edge stops short of a page label past the stretch's end - never inside the stretch", () => {
+  const a = line(11, 0, 100, 600, (j) => 300 - 10 * j);           /* the stretch 6..10 ends at x 600, y 200 */
+  const free = spanStretch(a, 6, 10, SPAN_BOX.PAD, 560, [], 26);
+  assert.ok(near(free.x + free.w, 600 + SPAN_BOX.PAD));
+  const tag = { x: 610, y: 205 };                                 /* the series' own end tag, 10 units past its last datum */
+  const r = spanStretch(a, 6, 10, SPAN_BOX.PAD, 560, [tag], 26);
+  assert.ok(near(r.x + r.w, 610 - SPAN_BOX.LABEL_GAP), JSON.stringify(r));
+  assert.ok(near(r.x, free.x) && near(r.y, free.y) && near(r.h, free.h), "only the right edge yields");
+  assert.ok(near(spanStretch(a, 6, 10, SPAN_BOX.PAD, 560, [{ x: 601, y: 205 }], 26).x + spanStretch(a, 6, 10, SPAN_BOX.PAD, 560, [{ x: 601, y: 205 }], 26).w, 600),
+            "a label hard on the tip: the edge stands ON the stretch's end, never inside it");
+  assert.ok(near(spanStretch(a, 6, 10, SPAN_BOX.PAD, 560, [{ x: 610, y: 500 }], 26).w, free.w), "a label far below does not pull it");
+  assert.ok(near(spanStretch(a, 6, 10, SPAN_BOX.PAD, 560, [{ x: 300, y: 205 }], 26).w, free.w), "a label before the stretch's end does not");
+});
+
+test("A56: an edge the window dropped boxes nothing, and two adjacent data are not a stretch", () => {
+  assert.equal(spanStretch(line(41, 60), 10, 70, SPAN_BOX.PAD, 560), null, "R26-28: nothing to name, nothing drawn");
+  assert.equal(spanStretch(line(3, 0, 100, 102), 0, 2, SPAN_BOX.PAD, 560), null, "narrower than MIN_W");
+  assert.equal(spanStretch([], 0, 2, SPAN_BOX.PAD, 560), null);
+});
+
+test("A56: the box DRAWS round on its word, holds, and LEAVES over the end of its own dur", () => {
+  const s = sp({ form: "box", at: 10, dur: 3 });
+  assert.equal(spanBoxPose(s, 9.99).on, false);
+  const p0 = spanBoxPose(s, 10);
+  assert.equal(p0.on, true); assert.equal(p0.draw, 0); assert.equal(p0.fade, 1);
+  assert.ok(near(spanBoxPose(s, 10 + SPAN_BOX.DRAW_S / 2).draw, 0.5));
+  assert.equal(spanBoxPose(s, 10 + SPAN_BOX.DRAW_S).draw, 1);
+  assert.equal(spanBoxPose(s, 13 - SPAN_BOX.LEAVE_S - 0.01).fade, 1, "it stands until its leave begins");
+  assert.ok(near(spanBoxPose(s, 13 - SPAN_BOX.LEAVE_S / 2).fade, 0.5));
+  assert.equal(spanBoxPose(s, 13).fade, 0, "gone at at + dur - the dated rule's turn (A56)");
+  assert.equal(spanBoxPose(s, 20).fade, 0);
+  /* a seek is the play */
+  assert.deepEqual(spanBoxPose(s, 11.3), spanBoxPose(s, 11.3));
+});
+
+test("A56: the box's outline is drawn ROUND by length - the top, the right, the bottom, the left - and closes", () => {
+  const r = { x: 100, y: 50, w: 200, h: 100 };                     /* perimeter 600 */
+  assert.equal(spanBoxPath(r, 0), "", "nothing before the pen moves");
+  assert.equal(spanBoxPath(r, 1 / 6), "M100.0 50.0 L200.0 50.0", "a sixth of the way: half the top");
+  assert.equal(spanBoxPath(r, 0.5), "M100.0 50.0 L300.0 50.0 L300.0 150.0", "half: the top and the right, to the corner");
+  assert.equal(spanBoxPath(r, 1), "M100.0 50.0 L300.0 50.0 L300.0 150.0 L100.0 150.0 L100.0 50.0 Z", "whole, and closed");
+  assert.equal(spanBoxPath(r, 2), spanBoxPath(r, 1));
+  assert.equal(spanBoxPath(null, 1), "");
+});
+
+test("A56: the PAINTER draws the box as ink ON the page - never a shade, never sunk to the ground", () => {
+  const rec = () => ({ at: {}, setAttribute(k, v) { this.at[k] = v; } });
+  const pts = line(101);
+  const mk = (o = {}) => {
+    const sd = { sp: sp(Object.assign({ form: "box", at: 8, dur: 3, from: 60, to: 90 }, o)), si: 0, rect: rec(), label: rec(),
+                 lg: [], fs: 26, box: rec() };
+    const st = { linePts: [pts], geom: { H: 560 } };
+    return { sd, st, ctx: { pointsNow: () => pts } };
+  };
+  let { sd, st, ctx } = mk();
+  paintSpan(sd, 7.9, st, ctx);
+  assert.equal(sd.box.at.opacity, 0); assert.equal(sd.rect.at["fill-opacity"], 0);
+  ({ sd, st, ctx } = mk());
+  paintSpan(sd, 8 + SPAN_BOX.DRAW_S + 0.5, st, ctx);
+  const r = spanStretch(pts, 60, 90, SPAN_BOX.PAD, 560);
+  assert.equal(sd.box.at.d, spanBoxPath(r, 1), "the whole box, round the stretch");
+  assert.equal(sd.box.at.opacity, "1.000");
+  assert.equal(sd.rect.at["fill-opacity"], 0, "a box is not a shade: the ground stays untouched");
+  assert.equal(sd.rect.at.x, undefined);
+  assert.equal(sd.label.at.opacity, 0, "a box with no name writes nothing");
+  ({ sd, st, ctx } = mk());
+  paintSpan(sd, 11.5, st, ctx);
+  assert.equal(sd.box.at.opacity, 0, "after its dur the box has left");
+  /* a NAMED box writes its name over the box's own top, glyph by glyph, and leaves with it */
+  ({ sd, st, ctx } = mk());
+  sd.lg = Array.from({ length: 4 }, rec);
+  paintSpan(sd, 8 + SPAN_BOX.DRAW_S + 3 * SPAN.WRITE, st, ctx);
+  assert.equal(sd.label.at.y, spanLabelY({ yTop: r.y, y: r.y }, sd.fs).toFixed(1));
+  assert.equal(sd.label.at.x, (r.x + r.w / 2).toFixed(1));
+  assert.deepEqual(sd.lg.map((g) => g.at.opacity), ["1.000", "1.000", "1.000", "1.000"]);
 });

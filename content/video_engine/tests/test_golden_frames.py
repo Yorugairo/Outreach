@@ -141,7 +141,8 @@ SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pa
             "vecmap-transship",   # P73 T5: MAP POINTS - the AMD RFSoC route framed tight on the United States and China: the US lit, the route landed on HONG KONG (a named point from the gazetteer - a dot and its name in the light's ink), the second leg on to China lit, one dot of the part on each leg (its ping rides PROOF_FRAMES)
             "vecmap-place-singapore",   # P73 T5: SINGAPORE lit at the foot of the peninsula and HSINCHU in Taiwan, framed tight on Southeast Asia to Taiwan; a test-bed beat (Singapore's ping rides PROOF_FRAMES)
             "vecmap-pacific",   # P73 T6 (R26-406): A PACIFIC-CENTRED MAP - the transship row on `;meridian=150`: the United States at the right, the route WEST across the Pacific to Hong Kong and on to China, Russia whole across 180
-            "vecmap-seam-split"]   # P73 T6: a country the SEAM cuts renders clean - `vecmap;meridian=-90`, Russia lit as two halves at the two edges, no ring streaking across the frame
+            "vecmap-seam-split",   # P73 T6: a country the SEAM cuts renders clean - `vecmap;meridian=-90`, Russia lit as two halves at the two edges, no ring streaking across the frame
+            "box-the-last-move"]   # P72 T46g (R26-407; Bravos A56): THE BOX ROUND THE LAST MOVE - span-decade's page, a `span` in the BOX form round the memory-makers' fall from its peak (191-234): dashed, round that series' own ink over the stretch, its right edge short of the series' end tag, standing whole before its leave
 
 
 # P61 T9 (b): THE PAGES. A golden need not be a timeline - the effects gallery is a static review
