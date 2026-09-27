@@ -460,6 +460,58 @@ async function mount(doc) {
     return { pts: out, s: x, hw };
   };
 
+  /* P72 T46f (R26-106 (b)) - THE CHART'S OWN SERIES AS THE BRUSH. A chart line is a polyline whose VERTICES are data, and
+     the equal-arclength samples (`pts`, taken at len * i / (n - 1) along the path, strokeProfile's input) cut each corner
+     at the sample pitch - a datum's peak would be drawn short of its value. So the outline walks the samples AND every
+     vertex of `verts` (the path's own points, in order), merged by arclength along the path, each vertex exactly where
+     its datum is (a sample within VERT_EPS of a vertex yields to it), then the tip at `s1` on the polyline. Each point's
+     half-width is sw / 2 x w(s) / wMean, as strokeWidths reads it (the profile's arclength is the samples' chord length,
+     so s is carried across by L / len). `len` the path's own length. DOM-free. */
+  const VERT_EPS = 0.5;   /* [DERIVED: under a sample pitch's tenth (SAMPLE_PX 6) - a coincident sample adds no shape, only a kink in the tangent] */
+  const strokeWidthsPoly = (prof, pts, len, verts, s1, sw) => {
+    const out = [], hw = [], join = [], half = (+sw || 0) / 2, wm = prof.wMean || 1, k = len > 0 ? prof.L / len : 0, n = pts.length;
+    const x = Math.max(0, Math.min(len, +s1 || 0));
+    if (!(x > 0) || prof.n < 2 || !(verts && verts.length >= 2)) return { pts: out, s: 0, hw, join };
+    const vs = [0];
+    for (let i = 1; i < verts.length; i++) vs.push(vs[i - 1] + Math.hypot(verts[i].x - verts[i - 1].x, verts[i].y - verts[i - 1].y));
+    const all = verts.map((v, i) => ({ s: vs[i], x: v.x, y: v.y, v: true }));
+    for (let i = 0; i < n; i++) {
+      const s = n > 1 ? len * i / (n - 1) : 0;
+      if (!all.some((q) => q.v && Math.abs(q.s - s) < VERT_EPS)) all.push({ s, x: pts[i].x, y: pts[i].y, v: false });
+    }
+    all.sort((a, b) => a.s - b.s || (b.v - a.v));
+    const add = (q, s) => { out.push({ x: q.x, y: q.y }); hw.push(half * strokeAt(prof, prof.w, s * k) / wm); join.push(!!q.v); };
+    for (const q of all) if (q.s < x - 1e-9) add(q, q.s);
+    let j = 1; while (j < verts.length - 1 && vs[j] < x) j++;
+    const seg = vs[j] - vs[j - 1], u = seg > 0 ? Math.min(1, (x - vs[j - 1]) / seg) : 0;
+    add({ x: verts[j - 1].x + u * (verts[j].x - verts[j - 1].x), y: verts[j - 1].y + u * (verts[j].y - verts[j - 1].y) }, x);
+    return { pts: out, s: x, hw, join };   /* join: the point is a datum (a vertex) - where the line turns */
+  };
+
+  /* ... and a chart line's INK as a union of capsules (P72 T46f). A data line turns sharp corners (a one-month spike is a V
+     a few px wide), where strokeOutline's two offset walks fold across each other and the fill's winding cancels at the
+     tip: the datum itself fell outside the ink. So each segment is its own quad (its ends offset along the SEGMENT's
+     normal by the two half-widths) and each point its own disc of its half-width - a round join and a round cap - every
+     piece wound the same way (positive shoelace area in the path's own y-down units, the way an SVG arc with sweep-flag 1
+     runs), so under the nonzero rule they only ever add: the union is exactly the variable-width round-joined stroke.
+     `join` (optional, strokeWidthsPoly's): a disc only where the line can turn - a datum - and at both ends; a sample
+     inside a straight segment shares its neighbours' normal, so its quads meet edge to edge and need none. */
+  const strokeCapsules = (pts, hw, join = null) => {
+    const quads = [], discs = [], n = pts.length;
+    for (let i = 0; i < n; i++) if (hw[i] > 0 && (!join || join[i] || i === 0 || i === n - 1)) discs.push({ x: pts[i].x, y: pts[i].y, r: hw[i] });
+    for (let i = 1; i < pts.length; i++) {
+      const a = pts[i - 1], b = pts[i], dx = b.x - a.x, dy = b.y - a.y, m = Math.hypot(dx, dy);
+      if (!(m > 1e-9)) continue;
+      const nx = -dy / m, ny = dx / m, h0 = hw[i - 1], h1 = hw[i];
+      let q = [{ x: a.x + nx * h0, y: a.y + ny * h0 }, { x: b.x + nx * h1, y: b.y + ny * h1 },
+               { x: b.x - nx * h1, y: b.y - ny * h1 }, { x: a.x - nx * h0, y: a.y - ny * h0 }];
+      let area = 0; for (let k = 0; k < 4; k++) { const p = q[k], r = q[(k + 1) % 4]; area += p.x * r.y - r.x * p.y; }
+      if (area < 0) q = q.reverse();
+      quads.push(q);
+    }
+    return { quads, discs };
+  };
+
   /* ... and its OUTLINE: each point offset along its normal by its half-width, out along one side and back along the other
      (the tangent a central difference, one-sided at the ends; a repeated point keeps the tangent before it). The caller
      closes it with a round cap at each end - the marker's nib. */
@@ -20053,9 +20105,11 @@ async function mount(doc) {
             if (u >= 1) prev = to;
           }
         }
-        if (cs.extendCap && (!cs.extendCap.bySeries || (pp.si | 0) === (cs.extendCap.si | 0))) {   /* P48 T3: a window that grows grows for EVERY series (the golden's four lines caught a cap on the first alone); a later series caps itself. The muted history and the highlighted tail alike are drawn to the pen: the shared part stands, the new part follows the nib */
-          const c0 = cs.extendCap.bySeries ? 0 : capFrac(pp, cs.extendCap.idx), pen = strokeFrac(pp.p, pp.len, cs.extendCap.u2);
-          f = Math.min(f, c0 + (1 - c0) * (pen == null ? expoOut(cs.extendCap.u2) : pen));
+        if (cs.extendCap && (!cs.extendCap.bySeries || cs.extendCap.grown || (pp.si | 0) === (cs.extendCap.si | 0))) {   /* P48 T3: a window that grows grows for EVERY series (the golden's four lines caught a cap on the first alone); a later series caps itself. The muted history and the highlighted tail alike are drawn to the pen: the shared part stands, the new part follows the nib */
+          const ec = cs.extendCap, own = ec.bySeries && (pp.si | 0) === (ec.si | 0);
+          const u2 = ec.grown ? (own ? ec.u2r : ec.u2s) : ec.u2;   /* P72 T46f: a grown reveal's standing lines cap at the shared datum and draw first; the reveal continues from their end */
+          const c0 = own ? 0 : capFrac(pp, ec.idx), pen = strokeFrac(pp.p, pp.len, u2);
+          f = Math.min(f, c0 + (1 - c0) * (pen == null ? expoOut(u2) : pen));
         }
         pp.p.setAttribute("stroke-dashoffset", (pp.len * (1 - f)).toFixed(1));
         pp.p.style.opacity = f > 0.004 ? "" : "0";   /* E50 (the third watch: "dots that linger"): a zero-length round-capped dash paints a dot at the path's start - an un-drawn line shows nothing */
@@ -20295,6 +20349,19 @@ async function mount(doc) {
      the NEW segment draws from the last shared datum at the pen's speed (strokeFrac, the two-thirds law) with the nib visible
      - or, for a later series, that series draws from its first point. Nothing pops: at the phase boundary the standing line's
      re-projected geometry IS the target's, so the hand-over is invisible. Bravos 29-30: production first, consumption on its word. */
+  /* ... ONE PEN (E77 / E99 s93: an estimate opens from the real line, never from nowhere): the standing lines' new data
+     draw first and the revealed series continues from where they end, on one clock split by length - the standing share
+     `a` is the longest standing line's new length over that plus the longest revealed path. A grown reveal whose standing
+     lines add nothing (a = 0) draws the reveal on the extend's own clock, as an ungrown one does. */
+  const lpGrownPen = (Bs, ec) => {
+    let ls = 0, lr = 0;
+    for (const pp of Bs.paths || []) {
+      if ((pp.si | 0) === (ec.si | 0)) lr = Math.max(lr, pp.len || 0);
+      else ls = Math.max(ls, (pp.len || 0) * (1 - capFrac(pp, ec.idx)));
+    }
+    const a = ls + lr > 0 ? ls / (ls + lr) : 0;
+    return { grown: true, u2s: a > 0 ? clamp01(ec.u2 / a) : 1, u2r: a < 1 ? clamp01((ec.u2 - a) / (1 - a)) : 1 };
+  };
   const XF_EXTEND = Object.freeze({ RESCALE: 0.45 });   /* the share of an extend's clock spent retargeting the axes before the pen moves [DERIVED: the axis settles before the eye follows the nib] */
   const lpPaintExtend = (states, xf, t3, scene, t) => {
     if (((states[xf.from] || {}).scale || {}).kind === "bars" && xf.sp && (xf.sp.field != null || xf.sp.bar != null)) return lpPaintExtendBars(states, xf, t3, scene, t);   /* P71 T25: the field, or a projected bar */
@@ -20304,6 +20371,10 @@ async function mount(doc) {
     const u2 = clamp01((xf.u - R) / (1 - R));
     const bySeries = xf.sp.from_series != null, si = bySeries ? xf.sp.from_series | 0 : 0;
     Bs.extendCap = { si, bySeries, idx: (xf.sp.from_index | 0) - ((Bs.windowOffsets || [])[0] | 0), u2 };   /* each path of the series caps itself at its own shared datum (lpPaintChart) */
+    /* P72 T46f (R26-385 clause 2): a reveal after a WINDOWED rescale grows the window to the revealed series' last datum
+       (the compiler), so the standing lines may hold data past the old window's end - they cap at their shared datum
+       (`from_index`) and draw on at the same pen as the reveal, never popped on. Only a grown reveal names one. */
+    if (bySeries && xf.sp.from_index != null) Bs.extendCap = Object.assign(Bs.extendCap, lpGrownPen(Bs, Bs.extendCap));
     for (let i = 0; i < states.length; i++) lpPaintChart(states[i], i === xf.to ? 1 : 0, t3, scene, t);
   };
   /* P48 T2b - PARK. The active chart shrinks toward one corner of its own box by ONE affine transform on a min-jerk clock and
@@ -21142,6 +21213,7 @@ async function mount(doc) {
     paintPerform(st, scene, t, pg);
     for (const S of st.states || [st]) if (S.soft) lpBarSoftPaint(S);   /* P69 T10b */
     for (const S of st.states || [st]) if (S.segs) lpSegPaint(S);   /* P69 T64: each stack mirrors its bar */
+    if (kin("stroke_width")) for (const S of lpBrushStates(st)) lpBrushSync(S);   /* P72 T46f (R26-106 (b)) */
     paintSurfaceFrame(st, frame);
     page.dataset.surfaceProgress = String(frame.progress);
   };
@@ -21392,6 +21464,7 @@ async function mount(doc) {
     for (const S of st.states || [st]) if (S.soft) lpBarSoftPaint(S);   /* P69 T10b: the soft bars' feet and shadows, off what every painter wrote at t */
     for (const S of st.states || [st]) if (S.segs) lpSegPaint(S);   /* P69 T64: ... and each stack, off its bar as drawn at t */
     for (const S of st.states || [st]) if (S.inkFrom) lpInkFromSync(S);   /* P71 T28: LAST - the twin wears what every painter wrote on its line */
+    if (kin("stroke_width")) for (const S of lpBrushStates(st)) lpBrushSync(S);   /* P72 T46f (R26-106 (b)): ... and the brush, what every painter wrote on its line */
   };
 
   /* ================= P69 T26f / E99 s108 - THE PAGE'S CHROME IS OBJECTS =================
@@ -21776,6 +21849,26 @@ async function mount(doc) {
     return null;
   };
   const centre = (b) => ({ cx: b.x + b.w / 2, cy: b.y + b.h / 2 });
+  /* P72 T46f (R26-373 (c)) - A CAMERA MOVE ON A DOCKED CHART'S DATUM. The camera resolves in render()'s world paint, BEFORE
+     the dock loop lays the frame's docks out (DOCK_LIVE, each card's transform), so a punch / focus_zoom naming a datum on
+     a card aimed at last frame's card - or, on a cold seek, at nothing (the eye stood still). render() now lays the docks
+     out FIRST on such a frame (camDockFirst: a pass with the camera still, which is every card's pre-camera place - a card
+     at a depth rides no camera in it), and the move reads the datum off that layout, once per frame (camDockBox), so the
+     world, a depth card's share and the probe all see one look. A frame with no such move is painted exactly as before. */
+  const CAM_DOCK_MOVES = [];   /* [at, end] of every camera move whose target is a datum on a dock - filled once TL is read */
+  let camDockPass = false;     /* the layout pass: the camera stands still, so the docks are laid out where the eye will read them */
+  const camDockMemo = new Map();   /* this frame's resolved dock datums (a target object -> its box), cleared per real pass */
+  const camIsDockDatum = (tg) => !!(tg && tg.kind === "datum" && tg.dock != null);
+  const camTarget = (tg) => {
+    if (!camIsDockDatum(tg)) return resolveTarget(tg);
+    if (camDockPass) return null;
+    if (!camDockMemo.has(tg)) camDockMemo.set(tg, dockDatumBox(tg));
+    return camDockMemo.get(tg);
+  };
+  const camDockFirst = (t) => CAM_DOCK_MOVES.some(([a, b]) => t >= a && t <= b);
+  TL.scenes.forEach((sc) => (sc.species || []).forEach((sp) => {
+    if (CAMERA.has(sp.kind) && camIsDockDatum(sp.target)) CAM_DOCK_MOVES.push([+sp.at, +sp.at + Math.max(0.001, +sp.dur || 1)]);
+  }));
   /* the camera: one world transform for this window, about the resolved target */
   const camXf = (sc, t) => {
     let xf = { s: 1, ox: STAGE_W / 2, oy: STAGE_H / 2 };   /* the stage's centre, not the landscape's (2026-09-08: 960/540 zoomed a portrait short about the wrong point) */
@@ -21783,7 +21876,7 @@ async function mount(doc) {
       if (!CAMERA.has(sp.kind)) continue;
       const k = (t - sp.at) / Math.max(0.001, sp.dur || 1);
       if (k < 0 || k > 1) continue;
-      const b = resolveTarget(sp.target); if (!b) continue;
+      const b = camTarget(sp.target); if (!b) continue;   /* P72 T46f: a dock datum reads the docks as this frame laid them out */
       const { cx, cy } = centre(b);
       if (sp.kind === "punch") {           /* in - hold - out, cubic ease (yt-camera-move) */
         const tin = SP.PUNCH_IN / (sp.dur || 1), tout = SP.PUNCH_OUT / (sp.dur || 1);
@@ -21822,7 +21915,7 @@ async function mount(doc) {
       for (const sp of (sc.species || [])) {
         if (!CAMERA.has(sp.kind)) continue;
         const k = (t - sp.at) / Math.max(0.001, sp.dur || 1); if (k < 0 || k > 1) continue;
-        const b = resolveTarget(sp.target); if (!b) continue; const { cx, cy } = centre(b);
+        const b = camTarget(sp.target); if (!b) continue; const { cx, cy } = centre(b);   /* P72 T46f */
         const s2 = camSpeciesState(sp.kind, k, [cx, cy], sp.dur || 1, spCamP(sp)); if (s2) st = s2;   /* R26-220: the row's own zoom rides the module's own dial door (its 5th argument) */
       }
       if (!st) st = camIdentity(STAGE_W, STAGE_H);
@@ -21947,6 +22040,59 @@ async function mount(doc) {
     b.dataset.drawn = s1.toFixed(2);
     path.style.visibility = "hidden";   /* the centreline is the outline's guide, never ink */
   };
+  /* P72 T46f (R26-106 (b), grill Q4 (b): "a substitution: `d` on a fill where drawOn set a dash") - THE CHART'S OWN SERIES
+     AS THE BRUSH. Under kinetics.stroke_width a ledger page's series line is drawn as its width profile too: a filled
+     outline regrown every frame from what every painter wrote on the line this frame (its d - a rescale re-projects it -
+     and its dash: the drawn prefix), so no painter changes and a seek is the play. The outline is strokeWidthsPoly's: the
+     profile's samples AND every datum as a vertex (a peak is never drawn short of its value). It is the line's sibling
+     (`lp-brush`, right after it, under the nib), filled in the line's computed ink at its stroke opacity, wearing its
+     opacity, bloom filter, clip and transform; the centreline is hidden and keeps every attribute its readers read (the
+     dash offset the gates, the probe and lpPlotEmpty measure). A line the brush cannot stand for keeps its stroke: a
+     patterned dash (an estimate, an authored `dash`, an apex window), a masked line (ink_from's twin), a non-polyline d.
+     Flag off this is never called: the pages are the dash they always were, to the byte. */
+  const LP_BRUSHES = new WeakMap();
+  const LP_BRUSH_ATTRS = ["clip-path", "transform", "opacity", "filter"];
+  const lpBrushVerts = (d) => {
+    if (!/^M[\d\s.eL+-]+$/.test(d)) return null;
+    const n = d.match(/-?\d+(?:\.\d+)?(?:e[+-]?\d+)?/g) || [], v = [];
+    for (let i = 0; i + 1 < n.length; i += 2) v.push({ x: +n[i], y: +n[i + 1] });
+    return v.length >= 2 ? v : null;
+  };
+  const lpBrushD = (w) => {   /* the capsules as one path: every quad and disc its own subpath, all wound one way (nonzero: a union) */
+    const f = (v) => v.toFixed(2), c = strokeCapsules(w.pts, w.hw, w.join);
+    let d = "";
+    for (const q of c.quads) d += "M" + f(q[0].x) + " " + f(q[0].y) + "L" + f(q[1].x) + " " + f(q[1].y) + "L" + f(q[2].x) + " " + f(q[2].y) + "L" + f(q[3].x) + " " + f(q[3].y) + "Z";
+    for (const k of c.discs) d += "M" + f(k.x - k.r) + " " + f(k.y) + "A" + f(k.r) + " " + f(k.r) + " 0 1 1 " + f(k.x + k.r) + " " + f(k.y)
+      + "A" + f(k.r) + " " + f(k.r) + " 0 1 1 " + f(k.x - k.r) + " " + f(k.y) + "Z";
+    return d;
+  };
+  const lpBrushOff = (p, b) => {
+    if (b && b.style.display !== "none") b.style.display = "none";
+    if (p.__lpBrushed) { p.style.visibility = ""; p.__lpBrushed = false; }
+  };
+  const lpBrushSync = (S) => {
+    for (const pp of (S && S.paths) || []) {
+      const p = pp.p; if (!p || !p.parentNode || !p.getPointAtLength) continue;
+      const b0 = LP_BRUSHES.get(p), da = String(p.getAttribute("stroke-dasharray") || "").trim().split(/[\s,]+/).filter(Boolean).map(Number);
+      const len = p.getTotalLength(), verts = lpBrushVerts(p.getAttribute("d") || "");
+      if (!(len > 0) || !verts || p.hasAttribute("mask") || da.length !== 1 || !(da[0] >= len - 0.5)) { lpBrushOff(p, b0); continue; }
+      const s1 = Math.max(0, Math.min(len, da[0] - (parseFloat(p.getAttribute("stroke-dashoffset")) || 0)));
+      const g = strokeGeom(p, len), cs = getComputedStyle(p), sw = parseFloat(cs.strokeWidth) || 1;
+      const w = strokeWidthsPoly(g.prof, g.pts, len, verts, s1, sw);
+      let b = b0;
+      if (!b || b.parentNode !== p.parentNode) { b = document.createElementNS(p.namespaceURI, "path"); LP_BRUSHES.set(p, b); p.parentNode.insertBefore(b, p.nextSibling); }
+      b.setAttribute("class", "lp-brush");
+      b.style.display = p.style.display; b.style.fill = cs.stroke; b.style.fillOpacity = cs.strokeOpacity; b.style.stroke = "none";
+      b.style.opacity = p.style.opacity; b.style.filter = p.style.filter;
+      for (const a of LP_BRUSH_ATTRS) { const v = p.getAttribute(a); if (v == null) b.removeAttribute(a); else b.setAttribute(a, v); }
+      b.setAttribute("d", lpBrushD(w));
+      const ws = w.hw.map((h) => 2 * h);
+      b.dataset.wMin = (ws.length ? Math.min(...ws) : 0).toFixed(3); b.dataset.wMax = (ws.length ? Math.max(...ws) : 0).toFixed(3);
+      b.dataset.drawn = s1.toFixed(2);
+      p.style.visibility = "hidden"; p.__lpBrushed = true;   /* the centreline is the outline's guide, never ink */
+    }
+  };
+  const lpBrushStates = (st) => (st.panels || [st]).flatMap((P) => (P && P.states) || [P]);
   const drawOn = (path, k) => { const len = path.getTotalLength ? path.getTotalLength() : 1000;
     if (kin("stroke_width") && HAND_BRUSH.has(path.getAttribute("class")) && path.getPointAtLength && len > 0) return drawBrush(path, len, k);
     path.setAttribute("stroke-dasharray", len);
@@ -27901,6 +28047,11 @@ async function mount(doc) {
   window.__lpMeltHand = () => MELT_HAND_LAST;
   const render = (t) => {
     { const pre = boundaryFirst(t); if (pre !== null) render(pre); }   /* P72 T21: a boundary's inputs are read AT the boundary */
+    if (!camDockPass && camDockFirst(t)) {   /* P72 T46f (R26-373 (c)): the docks are laid out before the camera that names one reads it */
+      camDockPass = true;
+      try { render(t); } finally { camDockPass = false; }
+    }
+    if (camDockMemo.size) camDockMemo.clear();
     pmHideAll();   /* P69 T26e: a prop morph's mesh shows only on a frame that paints it */
     let si = 0;
     for (let i = 0; i < TL.scenes.length; i++) if (t >= TL.scenes[i].span[0]) si = i;

@@ -8,8 +8,9 @@ datum could not be named on a DOCKED chart at all: the engine resolved a datum o
 What this file holds the compiler, the engine and the probe to:
 
   (1) THE TARGET    `{"kind": "datum", "dock": <the row's dock index | its evidence id>, "series", "index"}` names a
-                    datum on THAT docked chart - for the painted marks alone (callout, ring, spotlight, squiggle): a
-                    camera move (punch, focus) resolves before the frame's docks are laid out, so it is refused by name.
+                    datum on THAT docked chart - for the painted marks (callout, ring, spotlight, squiggle) and, since
+                    P72 T46f (R26-373 (c)), punch / focus_zoom (render() lays the docks out before such a move reads
+                    it - test_wave3_carries.py); any other kind is refused by name.
   (2) TRUTH         the dock must be on the row, on the stage at the mark's `at`, and carry a drawn chart; the series and
                     the index must exist on it - a target that resolves to nothing is refused by name (a truth rule).
   (3) THE ENGINE    resolves it against the dock's own drawn line through the dock's transform at t, and paints it
@@ -68,7 +69,7 @@ def test_a_painted_mark_may_name_a_datum_on_a_dock(kind, dock):
     assert B._validate_target(kind, tgt, B.SPECIES_TARGETS[kind]) == []
 
 
-@pytest.mark.parametrize("kind", ["punch", "focus_zoom", "build_to", "figure", "camera"])
+@pytest.mark.parametrize("kind", ["pull_back", "build_to", "figure", "camera"])   # P72 T46f: punch / focus_zoom admitted (R26-373 (c))
 def test_any_other_datum_on_a_dock_is_refused_by_name(kind):
     allowed = B.SPECIES_TARGETS.get(kind, B.TARGET_KINDS)
     errs = B._validate_target(kind, dict(BOUND), allowed)

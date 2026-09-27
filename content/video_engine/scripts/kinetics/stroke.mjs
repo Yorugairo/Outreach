@@ -87,6 +87,58 @@ export const strokeWidths = (prof, pts, s1, sw, tip = null) => {
   return { pts: out, s: x, hw };
 };
 
+/* P72 T46f (R26-106 (b)) - THE CHART'S OWN SERIES AS THE BRUSH. A chart line is a polyline whose VERTICES are data, and
+   the equal-arclength samples (`pts`, taken at len * i / (n - 1) along the path, strokeProfile's input) cut each corner
+   at the sample pitch - a datum's peak would be drawn short of its value. So the outline walks the samples AND every
+   vertex of `verts` (the path's own points, in order), merged by arclength along the path, each vertex exactly where
+   its datum is (a sample within VERT_EPS of a vertex yields to it), then the tip at `s1` on the polyline. Each point's
+   half-width is sw / 2 x w(s) / wMean, as strokeWidths reads it (the profile's arclength is the samples' chord length,
+   so s is carried across by L / len). `len` the path's own length. DOM-free. */
+const VERT_EPS = 0.5;   /* [DERIVED: under a sample pitch's tenth (SAMPLE_PX 6) - a coincident sample adds no shape, only a kink in the tangent] */
+export const strokeWidthsPoly = (prof, pts, len, verts, s1, sw) => {
+  const out = [], hw = [], join = [], half = (+sw || 0) / 2, wm = prof.wMean || 1, k = len > 0 ? prof.L / len : 0, n = pts.length;
+  const x = Math.max(0, Math.min(len, +s1 || 0));
+  if (!(x > 0) || prof.n < 2 || !(verts && verts.length >= 2)) return { pts: out, s: 0, hw, join };
+  const vs = [0];
+  for (let i = 1; i < verts.length; i++) vs.push(vs[i - 1] + Math.hypot(verts[i].x - verts[i - 1].x, verts[i].y - verts[i - 1].y));
+  const all = verts.map((v, i) => ({ s: vs[i], x: v.x, y: v.y, v: true }));
+  for (let i = 0; i < n; i++) {
+    const s = n > 1 ? len * i / (n - 1) : 0;
+    if (!all.some((q) => q.v && Math.abs(q.s - s) < VERT_EPS)) all.push({ s, x: pts[i].x, y: pts[i].y, v: false });
+  }
+  all.sort((a, b) => a.s - b.s || (b.v - a.v));
+  const add = (q, s) => { out.push({ x: q.x, y: q.y }); hw.push(half * strokeAt(prof, prof.w, s * k) / wm); join.push(!!q.v); };
+  for (const q of all) if (q.s < x - 1e-9) add(q, q.s);
+  let j = 1; while (j < verts.length - 1 && vs[j] < x) j++;
+  const seg = vs[j] - vs[j - 1], u = seg > 0 ? Math.min(1, (x - vs[j - 1]) / seg) : 0;
+  add({ x: verts[j - 1].x + u * (verts[j].x - verts[j - 1].x), y: verts[j - 1].y + u * (verts[j].y - verts[j - 1].y) }, x);
+  return { pts: out, s: x, hw, join };   /* join: the point is a datum (a vertex) - where the line turns */
+};
+
+/* ... and a chart line's INK as a union of capsules (P72 T46f). A data line turns sharp corners (a one-month spike is a V
+   a few px wide), where strokeOutline's two offset walks fold across each other and the fill's winding cancels at the
+   tip: the datum itself fell outside the ink. So each segment is its own quad (its ends offset along the SEGMENT's
+   normal by the two half-widths) and each point its own disc of its half-width - a round join and a round cap - every
+   piece wound the same way (positive shoelace area in the path's own y-down units, the way an SVG arc with sweep-flag 1
+   runs), so under the nonzero rule they only ever add: the union is exactly the variable-width round-joined stroke.
+   `join` (optional, strokeWidthsPoly's): a disc only where the line can turn - a datum - and at both ends; a sample
+   inside a straight segment shares its neighbours' normal, so its quads meet edge to edge and need none. */
+export const strokeCapsules = (pts, hw, join = null) => {
+  const quads = [], discs = [], n = pts.length;
+  for (let i = 0; i < n; i++) if (hw[i] > 0 && (!join || join[i] || i === 0 || i === n - 1)) discs.push({ x: pts[i].x, y: pts[i].y, r: hw[i] });
+  for (let i = 1; i < pts.length; i++) {
+    const a = pts[i - 1], b = pts[i], dx = b.x - a.x, dy = b.y - a.y, m = Math.hypot(dx, dy);
+    if (!(m > 1e-9)) continue;
+    const nx = -dy / m, ny = dx / m, h0 = hw[i - 1], h1 = hw[i];
+    let q = [{ x: a.x + nx * h0, y: a.y + ny * h0 }, { x: b.x + nx * h1, y: b.y + ny * h1 },
+             { x: b.x - nx * h1, y: b.y - ny * h1 }, { x: a.x - nx * h0, y: a.y - ny * h0 }];
+    let area = 0; for (let k = 0; k < 4; k++) { const p = q[k], r = q[(k + 1) % 4]; area += p.x * r.y - r.x * p.y; }
+    if (area < 0) q = q.reverse();
+    quads.push(q);
+  }
+  return { quads, discs };
+};
+
 /* ... and its OUTLINE: each point offset along its normal by its half-width, out along one side and back along the other
    (the tangent a central difference, one-sided at the ends; a repeated point keeps the tangent before it). The caller
    closes it with a round cap at each end - the marker's nib. */

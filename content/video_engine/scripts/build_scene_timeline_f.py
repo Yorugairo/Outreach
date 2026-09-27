@@ -2392,10 +2392,12 @@ FRACTION_FIELDS = ("x", "y", "x0", "y0", "x1", "y1")   # plate coordinates as fr
 DATUM_DOCK_KEY = "dock"   # P72 T48 / R26-367: a DATUM on a DOCKED chart - {"kind": "datum", "dock": <the row's dock index |
                           # its evidence id>, "series", "index"[, "panel"]}; the engine resolves it against that card's own
                           # drawn line at t and paints it ABOVE the card (the mark annotates the card - E49's layer rule)
-DATUM_ON_DOCK_KINDS = ("callout", SPECIES_RING, "spotlight", "squiggle")   # ... the PAINTED marks alone: a camera move
-                          # (punch, focus_zoom, pull_back, a camera key) resolves its target before the frame's docks are
-                          # laid out (engine render(): camNow before the dock loop), so it would aim at last frame's card
-R26_367 = "R26-367"
+DATUM_ON_DOCK_KINDS = ("callout", SPECIES_RING, "spotlight", "squiggle", "punch", "focus_zoom")   # ... the PAINTED marks,
+                          # and since P72 T46f (R26-373 (c)) the two camera moves: render() lays the frame's docks out before
+                          # a punch / focus_zoom that names a dock datum reads it. A pull_back and a camera key are not
+                          # admitted (no row has asked; each would take the same door)
+DATUM_ON_DOCK_CAMERA = ("punch", "focus_zoom")   # ... which read their datum on EVERY frame of their window (the dock must stand through it)
+R26_367, R26_373 = "R26-367", "R26-373"
 DATUM_PART_KEY = "part"      # P72 T18 / R26-288: a datum names a PART of its bar - {"kind": "datum", "index": i, "part": "value"}
 DATUM_PARTS = ("value",)     # ... the bar's printed number (its value label; an emphasized bar's pill), as drawn at t - the one
                              # part a ring may circle there (E56: a number on a chart); absent = the bar, as before
@@ -2406,9 +2408,9 @@ R26_284, R26_288 = "R26-284", "R26-288"
 def _datum_dock_shape_errors(kind: str, dock) -> list[str]:
     """P72 T48: a datum's `dock` - who may name one, and what it may be (a key the slice adds is refused BY NAME)."""
     if kind not in DATUM_ON_DOCK_KINDS:
-        return [f"{kind}: target datum 'dock' names a datum on a docked chart, which only a painted mark "
-                f"({'|'.join(DATUM_ON_DOCK_KINDS)}) may ring - a {kind} resolves before the frame's docks are laid out "
-                f"({R26_367})"]
+        return [f"{kind}: target datum 'dock' names a datum on a docked chart, which only a painted mark or a camera move "
+                f"({'|'.join(DATUM_ON_DOCK_KINDS)}) may name - a {kind} does not read a docked card's datum "
+                f"({R26_367}, {R26_373} (c))"]
     ok = (isinstance(dock, int) and not isinstance(dock, bool) and dock >= 0) or (isinstance(dock, str) and dock.strip())
     return [] if ok else [f"{kind}: target datum 'dock' must be the row's dock index (a non-negative integer) or the "
                           f"dock's evidence id, not {dock!r} ({R26_367})"]
@@ -2465,6 +2467,10 @@ def _dock_datum_error(entry: dict, docks: list[dict], evidence: dict, where: str
         return f"{tag}: the dock has not arrived (it enters at {float(d['enter']):g}s) - the datum is not on the stage"
     if at >= float(d["exit"]) - 1e-9:
         return f"{tag}: the dock has LEFT (at {float(d['exit']):g}s) - the datum is not on the stage"
+    end = at + float(entry.get("dur") or 0.0)
+    if kind in DATUM_ON_DOCK_CAMERA and end > float(d["exit"]) + 1e-9:   # P72 T46f: the eye holds the datum every frame of the move
+        return (f"{tag}: the move runs to {end:g}s and the dock LEAVES at {float(d['exit']):g}s - the camera would lose its "
+                f"datum mid-move (the zoom dropping to 1 in one frame); end the move by the dock's leave ({R26_373} (c))")
     ev = evidence.get(d.get("slide")) or {}
     chart = ev.get("chart")
     if not isinstance(chart, dict) or ev.get("record"):
@@ -8986,6 +8992,29 @@ def check_claims(world: dict, row_species: list) -> None:
                 raise ValueError(err)
 
 
+def extend_reveal_window(plate_id: str, ep_dir: Path, cur_window: list | None, reveal: int) -> tuple[list | None, int | None]:
+    """P72 T46f (R26-385 clause 2): the window an extend that REVEALS series `reveal` draws in. With no windowed rescale
+    before it the page's own domain stands (`cur_window` None, nothing named). After one, the revealed series is NEW data
+    and the extend GROWS the standing window to its last datum - it was sliced to the old window, so a 2026E estimate
+    that leaves the 2025 actual lost its 2026 point (or, with one point left, was refused as a rescale). A series that
+    ends inside the window keeps it (the story's window stands). When the window grows, the standing series' own data
+    past its old end draw on at the pen with the reveal from their last shared datum - returned in the page's index space
+    (the `to_index` form's `from_index`). A series index the file does not have is `rescale_state`'s refusal, not ours.
+    Returns (window | None, shared index | None)."""
+    if not cur_window:
+        return cur_window, None
+    series_id = parse_ledger_id(split_plate_opts(plate_id)[0])[0]
+    sers = LPG.load_series(Path(ep_dir) / "evidence/objects" / f"{series_id}.series.json").get("series") or []
+    pts = ((sers[reveal] or {}).get("pts") or []) if 0 <= reveal < len(sers) else []
+    lo, hi = float(cur_window[0]), float(cur_window[1])
+    top = max((float(p[0]) for p in pts), default=hi)
+    if top <= hi + 1e-9:
+        return cur_window, None
+    first = (sers[0] or {}).get("pts") or []
+    shared = max((i for i, p in enumerate(first) if float(p[0]) <= hi + 1e-9), default=0)
+    return [lo, top], shared
+
+
 def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir: Path, sid: str | None = None) -> None:
     """Append one derived page state per `chart_to rescale` / `extend` on the row, in time order, and point each species
     at its state. An extend grows the CURRENT window (the page's whole series, or the last rescale's window) to
@@ -9189,9 +9218,13 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
                 sp["from_index"] = shared
                 cur_window = [lo, hi]
             else:
-                spec = rescale_state(plate_id, ep_dir, {"window": cur_window} if cur_window else {}, reveal=int(sp["series"]))
+                win, shared = extend_reveal_window(plate_id, ep_dir, cur_window, int(sp["series"]))
+                spec = rescale_state(plate_id, ep_dir, {"window": win} if win else {}, reveal=int(sp["series"]))
                 spec["derived"] = "extend"
                 sp["from_series"] = int(sp["series"])
+                if shared is not None:   # P72 T46f (R26-385 clause 2): the window grew - the standing lines cap at their shared datum
+                    sp["from_index"] = shared
+                    cur_window = win
             states.append(spec)
         sp["state"] = len(states)
 

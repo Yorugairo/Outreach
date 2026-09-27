@@ -364,6 +364,7 @@ an unresolved source anomaly; this pass does not synthesize a task from it.
 | R26-402 | The reference rule pops in at .9. Closed by P72 T46a. | lane B `81f39ae`: it fades with its page's build. |
 | R26-380 | (a) A portrait bars page has no room for a name's second line. Closed by P72 T51b. | lane B `c5b508c`: `lpBarNameRoom` raises the floor one name line when a name wraps; (b) the placement cost order waits for a ruling. |
 | R26-406 | The map has no Pacific centre. Closed by P73 T6. | lane B: `;meridian=<deg>` - the US -> Hong Kong arc crosses the Pacific at 150; the seam's countries split, the 180 cut joined. |
+| R26-385 | (clause 2) An extend after a windowed rescale cuts the series to the old window. Closed by P72 T46f. | lane B: `extend_reveal_window` + `lpGrownPen`. (Clause 1 closed by T46a.) |
 | R26-284 | A figure double-prints its bar's value. Closed by P72 T18. | lane B `4b07424`: the figure hands over in place; a restating figure WARNs (s106). |
 | R26-288 | A ring on a bar has no value target. Closed by P72 T18. | lane B `4b07424`: `part: value` rings the printed value as drawn. |
 | R26-255 | A bar figure drifts on a page with states. Closed by P72 T18. | lane B `4b07424`: it rides its bar through a rescale. |

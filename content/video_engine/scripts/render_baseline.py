@@ -313,6 +313,7 @@ PROOF_FRAMES = {
 # `frames/press-stack.png` (house), and these two.
 FLAG_FRAMES["press-stack@face-serif"] = ("press-stack", {"press_face": "serif"}, 11.4)
 FLAG_FRAMES["press-stack@face-condensed"] = ("press-stack", {"press_face": "condensed"}, 11.4)
+FLAG_FRAMES["ledger-page-mid-build@stroke_width"] = ("ledger-page-mid-build", {"curvature_stroke": True, "stroke_width": True}, 5.6)   # P72 T46f / R26-106 (b): the page's series mid-draw as the brush (every datum a vertex of the ink); appended here, not in the dict above - test_shape_skeletons cites this file by line (:282)
 # P73 T3: THE POST CARD's second instant - AMD's reply landed (11.0 + LAND_S) as the second card of the pile, its
 # underline drawn (11.6 + SQUIG_DRAW), the post pushed one step back and dimmed with its post header read above it
 PROOF_FRAMES["press-post@proof-reply"] = ("press-post", {}, 12.6)
