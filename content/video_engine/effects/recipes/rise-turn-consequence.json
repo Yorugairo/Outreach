@@ -1,0 +1,102 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:rise-turn-consequence",
+ "title": "Rise, turn, consequence",
+ "aliases": [
+  {
+   "name": "R19 Rise, turn, consequence",
+   "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:721"
+  }
+ ],
+ "acts": [
+  "EXPLAINS",
+  "TURNS"
+ ],
+ "members": [
+  {
+   "card": "species:ring",
+   "offset_s": 0.0,
+   "options": {
+    "form": "dashed"
+   },
+   "role": "R18 first: a dashed ring lands on the peak as the climb reaches it and holds (E56: a ring on a chart circles a datum)"
+  },
+  {
+   "card": "page_species:build_to",
+   "offset_s": 3.05,
+   "options": {
+    "dur": 1.2
+   },
+   "role": "R18 first: on the fall's verb the line draws on from the peak to the trough"
+  },
+  {
+   "card": "page_species:lit_stretch",
+   "offset_s": 3.66,
+   "option": "comet",
+   "options": {
+    "dur": 1.56
+   },
+   "role": "R18 first: a light runs the fall from the peak to the trough, its comet head leading, as the size of the fall is said"
+  },
+  {
+   "card": "page_species:figure",
+   "offset_s": 4.91,
+   "options": {
+    "dur": 1.4,
+    "color": "neg"
+   },
+   "role": "R18 first: the fall's size is written at the trough, in neg ink below the point, as the light arrives - the page's own arithmetic"
+  },
+  {
+   "card": "chart_to:park",
+   "offset_s": 6.0,
+   "options": {
+    "dur": 1.0,
+    "scale": 0.55,
+    "anchor": "left"
+   },
+   "role": "as the turn is spoken the chart makes room - one affine shrink toward its anchor, every mark (ring, light, drop) kept in place"
+  },
+  {
+   "card": "species:flow",
+   "offset_s": 6.0,
+   "option": "layout",
+   "options": {
+    "layout": "hub"
+   },
+   "role": "a hub lands in the room - the thing that survived - and what hangs off it branches out, each rim node on the word that names it"
+  },
+  {
+   "card": "species:flow",
+   "offset_s": 15.52,
+   "option": "fail",
+   "role": "on the consequence's last word the link that did NOT survive fails - the X on its spoke (T17), the rest standing"
+  }
+ ],
+ "window_s": 17.0,
+ "does": "After the fall is quantified the chart parks to make room, a hub lands for what survived and its consequences branch out on their words, and the one link that did not survive fails.",
+ "use_when": {
+  "act": "EXPLAINS - after a quantified fall, what survived it (BRAVOS-USE-WHEN R19)",
+  "moment": "turn",
+  "shape": "series -> named things: a line with its fall already ringed, lit and written, then 3-8 named consequences",
+  "use": "the sentence after a crash names what kept working (H row 13: 'It was the steel ... The trains ran ... the towns kept growing ... The paper stopped pretending')",
+  "dont": "the consequences are unsourced (the guide's don't); the fall has not been quantified on screen first (run peak-fall-magnitude on its own sentence); a consequence the sentence does not name"
+ },
+ "doctrine": [
+  "E56",
+  "E77",
+  "E28",
+  "E99 s60",
+  "E99 s70",
+  "E99 s74",
+  "E99 s99",
+  "E99 s104",
+  "P48 T2b",
+  "P69 T36",
+  "P71 T17",
+  "P71 T34"
+ ],
+ "status": "candidate",
+ "source": "P71 T35 (harvest v2 R19; HIS 05:50-06:19: the fall lit, the chart dims, 'Railways' branches to three with a check on each); proved as a private test-bed beat by projects/_proofs/p71-recipes/proof_t35.py on Steel and Paper H ROW 13 ('And in 1849 the answer wasn't the paper ... The paper stopped pretending', take 147.22 s) on ev-railway-index-v1 opened in R18's end state (row 13 does not re-say the fall; R18's own beat is proof_t34.py's); the R18 -> park gap is Bravos's (+6 s), the rest the beat's. T12's check on each survivor does not compose (a flow rim node takes no tick) and the park keeps the chart's ink (no dim) - both filed; no approved cut carries it",
+ "count": 0
+}

@@ -1,0 +1,68 @@
+{
+ "schema_version": "effect_recipes.v1",
+ "id": "recipe:doubt-then-the-budget-evidence",
+ "title": "The doubt, then the budget evidence",
+ "aliases": [
+  {
+   "name": "R34 Doubt -> the budget evidence",
+   "source": "docs/research/bravos-style/BRAVOS-USE-WHEN.md:733"
+  }
+ ],
+ "acts": [
+  "EXPLAINS",
+  "QUOTES"
+ ],
+ "members": [
+  {
+   "card": "species:flow",
+   "offset_s": 0.0,
+   "role": "the doubt drawn ABOVE as a chain (who pays -> what they buy -> what it should return), on the claim's words"
+  },
+  {
+   "card": "species:flow",
+   "offset_s": 2.43,
+   "option": "fail",
+   "role": "on 'no value' the last link fails - the X on its arrow; the diagram stands above for the rest of the beat"
+  },
+  {
+   "card": "chart_dock:bars",
+   "offset_s": 5.86,
+   "role": "the evidence answers BELOW: the budget as bars in one unit (what it was for, how long it lasted), growing in the card as the spender is named"
+  },
+  {
+   "card": "species:flow",
+   "offset_s": 7.29,
+   "option": "tokens",
+   "role": "on the spend's verb the money runs into the middle node along the standing arrow (coins)",
+   "optional": true
+  },
+  {
+   "card": "dock_payload:record",
+   "offset_s": 12.3,
+   "role": "the source card LAST, in the bars' slot: the record types and its own highlighted phrase lands as the narrator says it"
+  }
+ ],
+ "window_s": 20.7,
+ "does": "The doubt is drawn as a diagram above with its failing link, the budget answers as bars below, and the source's own record lands last in the same slot, its phrase highlighted on the word.",
+ "use_when": {
+  "act": "EXPLAINS - a doubt answered by a budget, then by its source (BRAVOS-USE-WHEN R34)",
+  "moment": "proof",
+  "shape": "named things + two numbers: a 2-4 node chain, two bars in one unit, one sourced record",
+  "use": "a claim that spend creates no value, then the spender's own numbers, then an insider's words (H row 11: Karp's tokens, Uber's budget spent by April, the COO's 'harder to justify')",
+  "dont": "the diagram is not the question the bars answer (the guide's don't); a dollar figure the record does not carry (the budget is in months here); the record's highlighted phrase is not the one the narrator says"
+ },
+ "doctrine": [
+  "E56",
+  "E77",
+  "E99 s60",
+  "E99 s70",
+  "E99 s71",
+  "E99 s80",
+  "B3",
+  "P71 T11",
+  "P71 T17"
+ ],
+ "status": "candidate",
+ "source": "P71 T35 (harvest v2 R34; HIS 02:02-02:14: Corporations -> AI Token -> ROI '?' above, Uber's budget bars below, the Yahoo card last with its phrase highlighted); proved as a private test-bed beat by projects/_proofs/p71-recipes/proof_t35.py on Steel and Paper H ROW 11 ('Alex Karp of Palantir ... the spend gets harder to justify', take 106.49 s) on the records' desk (MEMO_PLATE): the budget bars derived in months from H's Uber badge ('spent by April', The Information) on the calendar, the COO's record read off evidence/ev-doc-macdonald.html - no approved cut carries it",
+ "count": 0
+}

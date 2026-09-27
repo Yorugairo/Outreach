@@ -2540,7 +2540,7 @@ frame file named. For BOOM it means `scratch/jx3Ll_full.mp4` at VERIFY.md's TRUE
 - Evidence: pending
 
 ### T35: Chart-and-diagram recipes - rise, turn, consequence; the doubt then the budget evidence; the total that points back (was P69 T70)
-- Status: pending
+- Status: done (two of three) - lane B (the T35 commit): `rise-turn-consequence` (R19, on row 13 - row 12 speaks no fall) and `doubt-then-the-budget-evidence` (R34, on the desk plate) candidates, proved by `proof_t35.py`; R35 STOPPED at the bounded discovery - no card draws a leader from a figure to a datum (R26-414, P72 T53 (h))
 - Owner: implementation_luna (LANE B)
 - Depends on: T34 (R19 extends R18's peak-fall-magnitude); T12 (the ✓ on what survived); T15 (`under: blur`, s124)
 - Harvest: v2 R19 "Rise, turn, consequence" (HIS 05:50-06:07); R34 "Doubt -> the budget evidence" (HIS 02:02-02:14);
