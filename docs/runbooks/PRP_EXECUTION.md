@@ -26,8 +26,7 @@ multiple coherent slices.
 | Agent | Use | Hard stop |
 | --- | --- | --- |
 | `speedster` | Exact microtask, tiny write set, exact validation | Ambiguity, architecture, security, release |
-| `junior_developer` | Limited implementation, scoped fixes, explicit line changes, small reads/writes | Expanding write set, cross-module design, unclear acceptance |
-| `implementation_luna` | Bounded moderate implementation with tests | Major refactor or unclear contract |
+| `implementation_luna` | Bounded implementation with tests, from one small fix to a coherent moderate slice | Major refactor or unclear contract |
 | `architect_sol` | SigMap-led research and PRP draft | Product implementation or self-approval |
 | `explorer` | Read-only repository trace and evidence pack | Any write or implementation decision |
 | `docs_researcher` | Read-only primary documentation verification | Product implementation or undocumented inference |
@@ -41,14 +40,15 @@ handles approval gates. Claude's same-named role keeps the model specified in
 `.claude/agents/architect_sol.md`. Keep concurrency at four threads and depth
 one. Do not overlap write sets.
 
-Use `speedster` only when judgment is unnecessary. Prefer `junior_developer`
-for a small bounded fix that still requires implementation reasoning, and
-`implementation_luna` for coherent moderate slices. Use `explorer`,
+Use `speedster` only when judgment is unnecessary. Use `implementation_luna`
+for any bounded fix or slice that needs implementation reasoning, small or
+moderate (the Claude lane retired `junior_developer` on 2026-09-29: same model,
+tools and effort as Luna, no distinct work; the Codex lane keeps its own). Use `explorer`,
 `docs_researcher`, and `reviewer` as read-only evidence producers.
 
 ### Dispatch mapping
 
-**Since 2026-09-05 the eight roles ARE dispatchable types on both sides.**
+**Since 2026-09-05 the roles ARE dispatchable types on both sides (2026-09-29: the Claude lane has seven - `junior_developer` retired; the Codex lane still lists it).**
 Codex: `.codex/config.toml` + `.codex/agents/<role>.toml` (OpenAI models).
 Codex model policy was updated by the operator on 2026-09-22 through 2026-09-24: Luna 6/max is the parent default and handles execution and professional/computer-use work; Sol 6/high independently reviews acceptance and integration gates; Sol 6/xhigh handles planning and diagnosis after three consecutive substantive Luna task failures; optional Astra 6/high diagnoses after three consecutive substantive Sol-xhigh failures on the same bounded task. The parent retains integration, protected actions, and human gates regardless of model. Tool-call mistakes have a separate three-consecutive-error local recovery trigger and do not by themselves cause a model switch. A setup/spec failure may receive one Sol-directed Luna retry under the same ledger; Sol need not automatically produce the artifact. Astra is asked for independent diagnosis and a viable alternative when one exists, even if that challenges the failed approach. It may propose a wider design, but execution authority changes only through a parent-approved revised order. This is not an automatic retry or an increase in authority. See `docs/agent-context/SKILL_ROUTER.md`; the Claude model/effort tables below do not override Codex routing. Already-running tasks and agents keep their current models until restarted or explicitly changed.
 Claude Code: `.claude/agents/<role>.md` (project scope, committed) — pass the
@@ -67,7 +67,6 @@ back into the parent to "save a dispatch" - the dispatch is the saving.
 | Role | Claude type | Starts on | Steps up to Opus when | Write access |
 | --- | --- | --- | --- | --- |
 | `speedster` | `speedster` | Sonnet (effort low) | never - re-scope instead | Yes - the slice's write set only |
-| `junior_developer` | same name | Sonnet | a trigger below | Yes - the slice's write set only |
 | `implementation_luna` | same name | Sonnet | a trigger below | Yes - the slice's write set only |
 | `explorer`, `docs_researcher` | same name | Sonnet | an open-ended hunt with judgement in it ("what is documented but unbuilt", a research bundle) | No (read-only Bash: git/sigmap/tests) |
 | `reviewer` | `reviewer` | Sonnet | a high-risk diff: the engine's shared painters or compiler grammar, a lane merge, a pre-push review | No |
@@ -80,7 +79,7 @@ back into the parent to "save a dispatch" - the dispatch is the saving.
    dock loop, the compiler's grammar / placement) where a wrong local fix breaks other species;
 2. the slice is a DESIGN call inside an implementation (a layout redesign, a new form, a stop condition that asks
    "which way?") - better still, send it to `architect_sol` first and dispatch the build on Sonnet;
-3. **three consecutive substantive failures of a Sonnet developer role (`speedster`, `junior_developer`,
+3. **three consecutive substantive failures of a Sonnet developer role (`speedster`,
    `implementation_luna`) on the same bounded task** - the Codex lane's Luna -> Sol rule mirrored (the operator,
    2026-09-29): Opus (`architect_sol`) takes the planning and diagnosis, then either re-scopes the order for Sonnet
    or the build steps up to Opus under a parent-approved revised order. A failure is substantive when the slice's
@@ -173,11 +172,11 @@ slice's validation itself before integrating.
 | model | use | evidence |
 | --- | --- | --- |
 | Fable 5.1 | the parent only: design, planning, animation reasoning, the operator's conversation, briefs, JUDGE verdicts, diff review | it is the scarce model; nothing delegated runs on it |
-| Opus 5 | `explorer` for any hunt with judgement in it (evidence layer, research bundle, open-ended "what is documented but unbuilt"); `implementation_luna` / `junior_developer` for slices; `reviewer`; `architect_sol`; `release_steward` | round 1: 5/5 at 36 % fewer tokens than Fable; round 2 (hard): 4.5/5 at 26 % fewer and half the time; one false negative |
+| Opus 5 | `explorer` for any hunt with judgement in it (evidence layer, research bundle, open-ended "what is documented but unbuilt"); `implementation_luna` for slices; `reviewer`; `architect_sol`; `release_steward` | round 1: 5/5 at 36 % fewer tokens than Fable; round 2 (hard): 4.5/5 at 26 % fewer and half the time; one false negative |
 | Sonnet 5 | `searcher` - well-specified lookups where the file is nameable and the index or memory points at it | round 3: fast (9-20 s) but mislabelled a ruling (E46 for E38) and answered "which build turns it on" with the default only; tokens per dispatch NOT lower than Opus (the fixed overhead dominates) - use for volume, verify the labels |
 | Sonnet 5 (`speedster`) | deterministic edits with the exact line given; never a lookup with a judgement in it | Haiku did the one sampled edit correctly at 23 k tokens, but the overhead is the whole cost, so the cheaper model saves nothing and a plausible wrong edit costs a review round - Sonnet (operator, 2026-09-05) |
 | Sonnet 5.5 / Opus 5.5 (2026-09-29) | the table above supersedes the Opus 5 / Sonnet 5 rows: Sonnet 5.5 starts every bounded role, Opus 5.5 starts `architect_sol` and takes the step-ups | the Sonnet 5 lookup errors above (a mislabelled ruling) were measured on Sonnet 5, not 5.5 - re-measure on the first Sonnet 5.5 dispatches (`evals/DISPATCH-LOG.jsonl`) and verify labels until then |
-| Haiku 4.5 | nothing in this repo | — |
+| Haiku 4.5 | nothing in this repo; the Claude lane's small-fix role (`junior_developer`) was retired 2026-09-29 as a duplicate of Luna - revisit only as a MEASURED trial if a Haiku 5.5 ships and matches Sonnet 5.5 on the small-slice dispatches in `evals/DISPATCH-LOG.jsonl` | — |
 
 **Effort (operator, 2026-09-05; 2026-09-29 the same for the Sonnet roles that were Opus):** `effort: high` on Fable, every Opus role and every Sonnet role but `speedster` - high is the efficient frontier and
 governs how deep research goes and how well attention holds over a long integration; `effort: low` on the Sonnet

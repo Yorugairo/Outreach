@@ -37,8 +37,7 @@ Choose the smallest role that can complete the bounded assignment:
 | Work | Role |
 | --- | --- |
 | Exact mechanical microtask | `speedster` |
-| Small scoped fix, explicit line change, or limited implementation | `junior_developer` |
-| Moderate well-defined implementation with focused tests | `implementation_luna` |
+| Small scoped fix, explicit line change, limited or moderate well-defined implementation with focused tests | `implementation_luna` (Codex lane only: `junior_developer` for the small end) |
 | Read-only repository trace | `explorer` |
 | Read-only primary documentation verification | `docs_researcher` |
 | Read-only correctness/security/regression review | `reviewer` |
