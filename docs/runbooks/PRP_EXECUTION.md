@@ -59,7 +59,7 @@ and the role's stop conditions, so a slice no longer has to be squeezed into
 **Model policy (operator, 2026-09-29: Sonnet 5.5 by default, Opus 5.5 by step-up).** The parent keeps judgement,
 integration, protected actions, the operator's conversation and completion truth. Delegated roles START on Sonnet
 (`model: sonnet`, the latest Sonnet - 5.5 at this writing); Opus (`model: opus`, 5.5) STARTS only for architecture
-and plan-writing (`architect_sol`) and the bridge's decision handler (`bridge_handler`). Every other role is stepped
+and plan-writing (`architect_sol`). Every other role is stepped
 UP to Opus by the parent for one dispatch - the Agent call's `model: "opus"` overrides the definition - when a step-up
 trigger fires. Never launch a delegated role with `model: fable` / an inherited Fable model; never pull a role's work
 back into the parent to "save a dispatch" - the dispatch is the saving.
@@ -73,15 +73,19 @@ back into the parent to "save a dispatch" - the dispatch is the saving.
 | `reviewer` | `reviewer` | Sonnet | a high-risk diff: the engine's shared painters or compiler grammar, a lane merge, a pre-push review | No |
 | `release_steward` | `release_steward` | Sonnet | never - git steps are exact | `git add <paths>` / `git commit`; push only with the operator's CURRENT authorization quoted in the brief |
 | `architect_sol` | `architect_sol` | **Opus** | - | `.claude/PRPs/plans/` and named planning evidence only |
-| `bridge_handler` | `bridge_handler` | **Opus** | - | none (reads, reports) |
+| `bridge_handler` | `bridge_handler` | Sonnet | a reply whose disagreement it cannot resolve from the record | none (reads, reports) |
 
 **Step-up triggers (the parent re-dispatches with `model: "opus"`, and says why in the brief):**
 1. the slice touches more than one subsystem, or a SHARED engine surface (the page painters, `lpPaintStates`, the
    dock loop, the compiler's grammar / placement) where a wrong local fix breaks other species;
 2. the slice is a DESIGN call inside an implementation (a layout redesign, a new form, a stop condition that asks
    "which way?") - better still, send it to `architect_sol` first and dispatch the build on Sonnet;
-3. the Sonnet run stopped at its turn limit twice, failed the slice's own validation twice, or returned a diagnosis
-   the parent cannot verify;
+3. **three consecutive substantive failures of a Sonnet developer role (`speedster`, `junior_developer`,
+   `implementation_luna`) on the same bounded task** - the Codex lane's Luna -> Sol rule mirrored (the operator,
+   2026-09-29): Opus (`architect_sol`) takes the planning and diagnosis, then either re-scopes the order for Sonnet
+   or the build steps up to Opus under a parent-approved revised order. A failure is substantive when the slice's
+   own validation fails, the turn limit is hit, or the returned diagnosis cannot be verified; tool-call mistakes
+   do not count, and a setup/spec failure may get one Opus-directed Sonnet retry under the same ledger;
 4. a cross-lane integration or a golden re-pin that spans most of the suite (R26-397 / R26-357 class).
 
 **Sonnet-sized slices (how a brief is cut for Sonnet):** one backlog item or a tight cluster sharing ONE function;
@@ -172,7 +176,7 @@ slice's validation itself before integrating.
 | Opus 5 | `explorer` for any hunt with judgement in it (evidence layer, research bundle, open-ended "what is documented but unbuilt"); `implementation_luna` / `junior_developer` for slices; `reviewer`; `architect_sol`; `release_steward` | round 1: 5/5 at 36 % fewer tokens than Fable; round 2 (hard): 4.5/5 at 26 % fewer and half the time; one false negative |
 | Sonnet 5 | `searcher` - well-specified lookups where the file is nameable and the index or memory points at it | round 3: fast (9-20 s) but mislabelled a ruling (E46 for E38) and answered "which build turns it on" with the default only; tokens per dispatch NOT lower than Opus (the fixed overhead dominates) - use for volume, verify the labels |
 | Sonnet 5 (`speedster`) | deterministic edits with the exact line given; never a lookup with a judgement in it | Haiku did the one sampled edit correctly at 23 k tokens, but the overhead is the whole cost, so the cheaper model saves nothing and a plausible wrong edit costs a review round - Sonnet (operator, 2026-09-05) |
-| Sonnet 5.5 / Opus 5.5 (2026-09-29) | the table above supersedes the Opus 5 / Sonnet 5 rows: Sonnet 5.5 starts every bounded role, Opus 5.5 starts `architect_sol` / `bridge_handler` and takes the step-ups | the Sonnet 5 lookup errors above (a mislabelled ruling) were measured on Sonnet 5, not 5.5 - re-measure on the first Sonnet 5.5 dispatches (`evals/DISPATCH-LOG.jsonl`) and verify labels until then |
+| Sonnet 5.5 / Opus 5.5 (2026-09-29) | the table above supersedes the Opus 5 / Sonnet 5 rows: Sonnet 5.5 starts every bounded role, Opus 5.5 starts `architect_sol` and takes the step-ups | the Sonnet 5 lookup errors above (a mislabelled ruling) were measured on Sonnet 5, not 5.5 - re-measure on the first Sonnet 5.5 dispatches (`evals/DISPATCH-LOG.jsonl`) and verify labels until then |
 | Haiku 4.5 | nothing in this repo | — |
 
 **Effort (operator, 2026-09-05; 2026-09-29 the same for the Sonnet roles that were Opus):** `effort: high` on Fable, every Opus role and every Sonnet role but `speedster` - high is the efficient frontier and

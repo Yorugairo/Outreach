@@ -2,7 +2,7 @@
 name: bridge_handler
 description: The tier-1 handler for a landed bridge reply that Python could not close (a failed verification, a reply with disagreements, a decision). Runs headlessly by name from bridge_daemon; never for lookups or implementation. P46 T6.
 tools: Read, Grep, Glob, Bash
-model: opus
+model: sonnet
 maxTurns: 40
 effort: high
 ---
