@@ -2,7 +2,7 @@
 name: implementation_luna
 description: Bounded implementation agent for well-defined moderate features and fixes. Use for the `implementation_luna` role named in docs/runbooks/PRP_EXECUTION.md.
 tools: Read, Grep, Glob, Edit, Write, Bash
-model: opus
+model: sonnet
 skills: [quality-rules]
 maxTurns: 200
 effort: high

@@ -2,7 +2,7 @@
 name: explorer
 description: Read-only codebase explorer for gathering evidence before changes are proposed. Use for the `explorer` role named in docs/runbooks/PRP_EXECUTION.md.
 tools: Read, Grep, Glob, Bash
-model: opus
+model: sonnet
 memory: local
 skills: [retrieval-layers]
 maxTurns: 120

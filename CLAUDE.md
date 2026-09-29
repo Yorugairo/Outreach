@@ -42,8 +42,9 @@ rather than restating it.
   recollection and the code in front of me. Inspect AND measure before delivering or saying
   "fixed": the rendered frames at the instants that matter, and the geometry behind them.
   The order, the receipt and its hook: `docs/runbooks/RECALL-RECEIPT.md`.
-- **Delegate, don't do** → the eight roles in `.claude/agents/` run on Opus 5
-  (`speedster` Sonnet); the Fable parent keeps judgement, integration and the
+- **Delegate, don't do** → the roles in `.claude/agents/` START on Sonnet 5.5
+  (bounded, Sonnet-sized slices) and step UP to Opus 5.5 by trigger; Opus starts only
+  `architect_sol` (plans) and `bridge_handler`; the parent keeps judgement, integration and the
   operator. Recall = `explorer`, review = `reviewer`, git = `release_steward`.
   Policy: `docs/runbooks/PRP_EXECUTION.md` "Dispatch mapping".
 - **A second agent, a worktree, a merge to main** → `docs/WORKTREE-REGISTER.md` first (read at start; your row

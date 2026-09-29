@@ -94,7 +94,7 @@ LEAD_LIMIT = 80          # a runaway guard, not a budget: 40 cut doc 29 at 9.30,
                          # newest section of a long doc is always the one at the end
 SENTENCE_MIN = 40        # below this a "sentence" is a stub ("Hand-maintained.") - read on
 
-MD_MAX_BYTES = 80_000   # 2026-09-05: the roots grew to 241 documents (projects' evidence layer); a grep target, so the ceiling is a runaway guard, not a reading budget
+MD_MAX_BYTES = 90_000   # 2026-09-05: the roots grew to 241 documents (projects' evidence layer); a grep target, so the ceiling is a runaway guard, not a reading budget. 2026-09-29: 680 documents reached 80,194 bytes (the week's research verify record, the AMD hand-off, the Debt Trap advice) - raised to 90,000, still a runaway guard
 # (title, purpose, key terms, defines) budgets for one Markdown line; the first rung whose whole
 # file fits MD_MAX_BYTES wins, so the artifact stays cheap to grep as the docs tree grows. The
 # untruncated record is always in the JSONL.

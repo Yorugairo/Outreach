@@ -115,3 +115,4 @@
 - [AMD RFSoC episode](amd-rfsoc-episode.md) — 09-26 next video: Patel says AMD should be investigated for "treason" ($36k RFSoC quoted ~$1k in China); stable point -> build gaps -> merge main -> episode worktree
 - [AMD episode title ruling](amd-episode-title-ruling.md) — 09-26: title + hook stand ("Tried for Treason"); the story is Patel SAYING it; my job = attribution/figure accuracy, not caution
 - [Resume 2026-09-27](resume-2026-09-27.md) — PAUSED ~48h: origin/main c652f6a pushed; amd-rfsoc merged main; R26-357 parked (breaks 4 rulings); GPT produces the AMD episode from HANDOFF-2026-09-27.md; owed: the YouTube voice
+- [Sonnet-first roles](sonnet-first-roles.md) — 09-29: roles START on Sonnet 5.5, step up to Opus 5.5 by trigger; Opus starts only architect_sol + bridge_handler; Sonnet gets one-item, exactly scoped slices

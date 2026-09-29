@@ -2,7 +2,7 @@
 name: reviewer
 description: Read-only reviewer focused on correctness, security, regressions, and missing tests. Use for the `reviewer` role named in docs/runbooks/PRP_EXECUTION.md.
 tools: Read, Grep, Glob, Bash
-model: opus
+model: sonnet
 memory: local
 skills: [quality-rules, retrieval-layers]
 maxTurns: 120

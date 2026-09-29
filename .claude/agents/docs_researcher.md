@@ -2,7 +2,7 @@
 name: docs_researcher
 description: Read-only documentation specialist for APIs, framework behavior, and release notes. Use for the `docs_researcher` role named in docs/runbooks/PRP_EXECUTION.md.
 tools: Read, Grep, Glob, Bash, WebFetch, WebSearch
-model: opus
+model: sonnet
 memory: local
 skills: [retrieval-layers]
 maxTurns: 120
