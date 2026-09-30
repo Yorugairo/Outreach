@@ -18,7 +18,9 @@ decisions and human gates, and does not treat an architect's draft as approval.
 5. Have the planning owner write dependency-aware slices with bounded write
    sets, exact validation, and the smallest capable owner: `speedster` for deterministic microtasks,
    `junior_developer` for limited scoped implementation,
-   `implementation_luna` for moderate implementation, `explorer` or
+   `implementation_luna` for moderate implementation, `lead_developer`
+   (Codex, Sol 6.1/high) for larger implementation, refactors, high-risk source
+   changes, or less structured orders, `explorer` or
    `docs_researcher` for read-only research, and `reviewer` for independent
    review. Keep final architecture authority and integration in the parent.
 6. Run `python scripts/prp_validate.py <plan>`.

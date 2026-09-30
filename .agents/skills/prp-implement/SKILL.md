@@ -12,6 +12,8 @@ Read the named PRP and `docs/runbooks/PRP_EXECUTION.md`.
 3. Execute ready slices in order; delegate only disjoint bounded work. Use
    `speedster` for mechanical microtasks, `junior_developer` for limited
    scoped fixes, `implementation_luna` for moderate implementation,
+   `lead_developer` (Codex, Sol 6.1/high) directly for larger implementation,
+   refactors, high-risk source changes, or less structured orders,
    `explorer`/`docs_researcher` for read-only evidence, `reviewer` for
    independent review, and `release_steward` only for authorized Git
    mechanics.

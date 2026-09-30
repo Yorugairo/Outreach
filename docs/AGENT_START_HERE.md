@@ -40,12 +40,15 @@ Choose the smallest role that can complete the bounded assignment:
 | Small scoped fix, explicit line change, limited or moderate well-defined implementation with focused tests | `implementation_luna` (Codex lane only: `junior_developer` for the small end) |
 | Read-only repository trace | `explorer` |
 | Read-only primary documentation verification | `docs_researcher` |
-| Read-only correctness/security/regression review | `reviewer` |
+| Larger implementation, refactors, high-risk source changes, less structured orders | `lead_developer` (Codex, Sol 6.1/high) |
+| Correctness/security/regression review and scoped quick repairs | `reviewer` (Codex); Claude reviewer remains read-only |
 | Architecture research and PRP drafting | `architect_sol` |
 | Reviewed Git mechanics after explicit authorization | `release_steward` |
 
 The parent retains architecture, integration, protected actions, and the final
-completion claim. Do not give write work to read-only roles or expand a
+completion claim. Reviewer repairs receive parent review or a fresh independent
+review before integration; a reviewer cannot approve its own repairs. Explicit
+read-only orders remain binding. Do not give write work to read-only roles or expand a
 delegated write set without returning it to the parent.
 
 ### Pipeline, Fetching, And Scoring

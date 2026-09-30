@@ -27,8 +27,12 @@ description = "GPT-6 Luna-max implementation worker for well-defined moderate fe
 config_file = "agents/implementation_luna.toml"
 
 [agents.architect_sol]
-description = "GPT-6 Sol-xhigh architect for repository research and implementation-ready PRP drafts."
+description = "GPT-6.1 Sol-xhigh architect for repository research and implementation-ready PRP drafts."
 config_file = "agents/architect_sol.toml"
+
+[agents.lead_developer]
+description = "GPT-6.1 Sol-high lead developer for larger implementation, refactors, high-risk source changes, and less structured orders."
+config_file = "agents/lead_developer.toml"
 
 [agents.release_steward]
 description = "GPT-6 Luna-max Git steward for reviewed commits and explicitly authorized pushes."
@@ -43,7 +47,7 @@ description = "GPT-6 Luna-max read-only documentation researcher for primary-sou
 config_file = "agents/docs_researcher.toml"
 
 [agents.reviewer]
-description = "GPT-6 Sol-high independent read-only reviewer for correctness, security, and missing tests."
+description = "GPT-6.1 Sol-high reviewer and judge with scoped quick fixes; repair diffs receive parent or fresh independent review."
 config_file = "agents/reviewer.toml"
 
 [agents.professional_worker]
@@ -55,7 +59,7 @@ description = "Scoped browser and computer-use execution worker."
 config_file = "agents/computer_use_worker.toml"
 
 [agents.execution_sol]
-description = "Implementation/execution escalation after three consecutive substantive Luna task failures."
+description = "Sol-xhigh execution diagnosis after three substantive Luna or Sol-high lead-development failures."
 config_file = "agents/execution_sol.toml"
 
 [agents.professional_sol]

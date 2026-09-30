@@ -12,9 +12,12 @@ Read `docs/runbooks/PRP_EXECUTION.md` and `docs/AGENT_START_HERE.md`.
 3. Keep small work in the parent; use a PRP for multi-slice or risky work.
 4. Route exact mechanical microtasks to `speedster`; scoped fixes, explicit
    line changes, and limited implementation to `junior_developer`; bounded
-   moderate implementation to `implementation_luna`; read-only code tracing to
+   moderate implementation to `implementation_luna`; larger implementation,
+   refactors, high-risk source changes, and less structured orders directly to
+   `lead_developer` (Codex, Sol 6.1/high); read-only code tracing to
    `explorer`; primary-doc verification to `docs_researcher`; review to
-   `reviewer`; planning to `architect_sol`; and reviewed Git mechanics to
+   `reviewer` (Codex allows scoped quick repairs, with parent or fresh independent
+   review of the repairs; explicit read-only orders win); planning to `architect_sol`; and reviewed Git mechanics to
    `release_steward`.
 5. State owner, write boundaries, acceptance, validation, exclusions, and
    human gates.

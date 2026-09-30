@@ -27,10 +27,11 @@ multiple coherent slices.
 | --- | --- | --- |
 | `speedster` | Exact microtask, tiny write set, exact validation | Ambiguity, architecture, security, release |
 | `implementation_luna` | Bounded implementation with tests, from one small fix to a coherent moderate slice | Major refactor or unclear contract |
+| `lead_developer` (Codex) | Sol 6.1/high for larger implementation, refactors, high-risk source changes, less structured orders | Material scope change, missing product decision, protected action without authority |
 | `architect_sol` | SigMap-led research and PRP draft | Product implementation or self-approval |
 | `explorer` | Read-only repository trace and evidence pack | Any write or implementation decision |
 | `docs_researcher` | Read-only primary documentation verification | Product implementation or undocumented inference |
-| `reviewer` | Read-only correctness, security, regression, and test review | Editing or integrating its own findings |
+| `reviewer` | Codex review and scoped quick repairs; Claude review is read-only | Repair outside reviewed paths/ownership, substantial redesign, self-approval or integration |
 | `release_steward` | Reviewed stage/commit/authorized push mechanics | Unexpected diff, conflict, absent approval |
 
 The parent owns final architecture decisions, integration, protected actions,
@@ -43,14 +44,24 @@ one. Do not overlap write sets.
 Use `speedster` only when judgment is unnecessary. Use `implementation_luna`
 for any bounded fix or slice that needs implementation reasoning, small or
 moderate (the Claude lane retired `junior_developer` on 2026-09-29: same model,
-tools and effort as Luna, no distinct work; the Codex lane keeps its own). Use `explorer`,
-`docs_researcher`, and `reviewer` as read-only evidence producers.
+tools and effort as Luna, no distinct work; the Codex lane keeps its own). Use `explorer`
+and `docs_researcher` as read-only evidence producers. Codex routes larger,
+higher-risk, or less structured implementation directly to `lead_developer`
+(Sol 6.1/high), without requiring failed Luna attempts. Missing product decisions
+and unresolved architecture still return to the parent and `architect_sol`.
+
+The Codex reviewer can fix clear local defects in its named reviewed paths,
+unless its order is explicitly read-only or narrows the repair write set. Check
+active ownership before editing. Return each repair diff and authorized validation;
+the parent reviews repairs or assigns a fresh independent review before integration.
+A reviewer cannot approve its own repairs. Substantial changes go to an
+implementation role. Claude reviewer permissions remain read-only.
 
 ### Dispatch mapping
 
 **Since 2026-09-05 the roles ARE dispatchable types on both sides (2026-09-29: the Claude lane has seven - `junior_developer` retired; the Codex lane still lists it).**
 Codex: `.codex/config.toml` + `.codex/agents/<role>.toml` (OpenAI models).
-Codex model policy was updated by the operator on 2026-09-22 through 2026-09-24: Luna 6/max is the parent default and handles execution and professional/computer-use work; Sol 6/high independently reviews acceptance and integration gates; Sol 6/xhigh handles planning and diagnosis after three consecutive substantive Luna task failures; optional Astra 6/high diagnoses after three consecutive substantive Sol-xhigh failures on the same bounded task. The parent retains integration, protected actions, and human gates regardless of model. Tool-call mistakes have a separate three-consecutive-error local recovery trigger and do not by themselves cause a model switch. A setup/spec failure may receive one Sol-directed Luna retry under the same ledger; Sol need not automatically produce the artifact. Astra is asked for independent diagnosis and a viable alternative when one exists, even if that challenges the failed approach. It may propose a wider design, but execution authority changes only through a parent-approved revised order. This is not an automatic retry or an increase in authority. See `docs/agent-context/SKILL_ROUTER.md`; the Claude model/effort tables below do not override Codex routing. Already-running tasks and agents keep their current models until restarted or explicitly changed.
+Codex model policy was updated by the operator through 2026-09-29: Luna 6/max is the parent default and handles execution and professional/computer-use work; Sol 6.1/high lead_developer directly handles larger implementation, refactors, high-risk source changes and less structured work orders; Sol 6.1/high reviewer handles review and scoped quick fixes with parent or fresh independent review of its repairs; Sol 6.1/xhigh handles planning and diagnosis after three consecutive substantive Luna task failures or three substantive lead_developer failures at Sol high; optional Astra 6/high diagnoses after three consecutive substantive Sol-xhigh failures on the same bounded task. The parent retains integration, protected actions, and human gates regardless of model. Tool-call mistakes have a separate three-consecutive-error local recovery trigger and do not by themselves cause a model switch. A setup/spec failure may receive one Sol-directed Luna retry under the same ledger; Sol need not automatically produce the artifact. Astra is asked for independent diagnosis and a viable alternative when one exists, even if that challenges the failed approach. It may propose a wider design, but execution authority changes only through a parent-approved revised order. This is not an automatic retry or an increase in authority. See `docs/agent-context/SKILL_ROUTER.md`; the Claude model/effort tables below do not override Codex routing. Already-running tasks and agents keep their current models until restarted or explicitly changed.
 Claude Code: `.claude/agents/<role>.md` (project scope, committed) — pass the
 bare role name as `subagent_type`. Each definition carries its own model, tools
 and the role's stop conditions, so a slice no longer has to be squeezed into
