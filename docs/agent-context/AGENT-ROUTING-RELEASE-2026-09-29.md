@@ -1,6 +1,6 @@
 # Agent routing release — 2026-09-29
 
-Status: running
+Status: complete
 
 Authorization: operator requested, "commit/psuh deploy agent changes from today
 to main". This authorizes the reviewed agent changes, integration, and a normal
@@ -38,11 +38,27 @@ Completed configuration evidence is in
 `LEAD-DEVELOPER-REVIEWER-ROUTING-2026-09-29.md`. Independent review closed its
 one checker finding. Project 15-role and global 13-role checks pass.
 
-Next runnable steps: review/stage the explicit agent paths; commit;
-fast-forward main; recheck;
-push; verify the remote SHA and preserve the source dirty changes.
+## Published result
 
-Commit attempt 1 failed with an existing index.lock. Inspection found the lock
-had cleared, no Git process remained, HEAD was still ea582cd, and all 26
-allowlisted files remained staged. No lock was deleted. Retry is authorized.
-Live jobs: none; worktree creation is complete.
+- Source commit: `4086277c73a2dc7b30d11604a6d0101d36bcee36`, 26 allowlisted
+  agent/routing/evidence files, independently reviewed and checked.
+- Main took the source branch by `git merge --ff-only codex/VideoWorktree`.
+- Normal `git push origin main` published the source commit and the three earlier
+  agent commits from today. `git ls-remote origin refs/heads/main` returned the
+  same full source SHA immediately after push.
+- Both source and clean main passed the 15-role project routing check; the
+  machine-wide 13-role routing check passed. Global config, global AGENTS and
+  existing global role files were already applied on disk.
+- Unrelated tracked source edits match their before-state binary patch exactly:
+  SHA-256 `b386faf94b09871d4a2a974a258bfb19e798ca9beb86dcb7b978b00f1bce55d9`.
+  Nothing outside the explicit allowlist was staged. The source index is empty.
+- One initial commit attempt encountered a transient index.lock; inspection
+  found it had cleared and HEAD was unchanged, then the guarded retry succeeded.
+  No lock was deleted and no force, stash, or destructive cleanup was used.
+- This release applies agent definitions and routing. New sessions load them;
+  current running sessions/agents keep their existing loaded definitions.
+
+The main integration checkout is retained clean for future authorized main work.
+No separate application deployment is part of these configuration changes.
+No required release work remains; this receipt records the verified code push.
+Live jobs: none.
